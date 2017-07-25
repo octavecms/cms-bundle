@@ -1,0 +1,65 @@
+<?php
+
+namespace VideInfra\CMSBundle\Form;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use VideInfra\CMSBundle\Entity\Page;
+
+/**
+ * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ */
+class CustomPageType extends AbstractType
+{
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $isAdmin = $options['is_admin'];
+
+        if ($isAdmin) {
+            $builder
+                ->add('name', TextType::class);
+        }
+
+        $builder
+            ->add('title', TextType::class)
+            ->add('active', CheckboxType::class, [
+                'required' => false
+            ])
+            ->add('path', TextType::class);
+
+        if ($isAdmin) {
+            $builder
+                ->add('controller', TextType::class);
+        }
+
+        $builder
+            ->add('metaTitle', TextType::class, [
+                'required' => false
+            ])
+            ->add('metaKeywords', TextareaType::class, [
+                'required' => false
+            ])
+            ->add('metaDescription', TextareaType::class, [
+                'required' => false
+            ]);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => Page::class,
+            'is_admin' => false
+        ));
+    }
+}

@@ -1,0 +1,57 @@
+parameters:
+
+    vig.cms.super_admin_role: 'ROLE_SUPER_ADMIN'
+
+services:
+
+    vig.cms.page.repository:
+        class: VideInfra\CMSBundle\Repository\PageRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        arguments: [ VideInfraCMSBundle:Page ]
+
+    vig.cms.page.create.command:
+        class: VideInfra\CMSBundle\Command\CreatePageCommand
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vig.cms.page.repository'
+        tags:
+            - { name: console.command }
+        public: false
+
+    vig.cms.page.loader:
+        class: VideInfra\CMSBundle\Routing\PageLoader
+        arguments:
+            - '@vig.cms.page.manager'
+        tags:
+            - { name: routing.loader }
+
+    vig.cms.custom_page.type:
+        class: VideInfra\CMSBundle\PageType\CustomPageType
+        tags:
+            - { name: vig.page.type }
+
+    vig.cms.page.manager:
+        class: VideInfra\CMSBundle\Service\PageManager
+        arguments:
+            - '@vig.cms.page.repository'
+            - '@request_stack'
+
+    vig.cms.page.factory:
+        class: VideInfra\CMSBundle\Factory\PageFactory
+        arguments:
+            - '@vig.cms.page.manager'
+
+    vig.cms.page.admin:
+        class: VideInfra\CMSBundle\Admin\PageAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: "CMS"
+              label: "Pages"
+              label_catalogue: "admin"
+        arguments: [~, 'VideInfra\CMSBundle\Entity\Page', 'VideInfraCMSBundle:PageAdmin']
+        calls:
+            - [ 'setTemplate', ['list', 'VideInfraCMSBundle:Page:list.html.twig']]
+            - [ 'setTranslationDomain', ['VideInfraCMSBundle']]
+            - [ 'setPageManager', ['@vig.cms.page.manager']]
+            - [ 'setAuthorizationChecker', ['@security.authorization_checker']]

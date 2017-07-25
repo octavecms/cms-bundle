@@ -1,0 +1,54 @@
+{% extends 'SonataAdminBundle:CRUD:list.html.twig' %}
+
+{% block sonata_page_content_nav %}
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            {% block tab_menu_navbar_header %}
+                {% if _navbar_title is not empty %}
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">{{ _navbar_title|raw }}</a>
+                    </div>
+                {% endif %}
+            {% endblock %}
+
+            <div class="navbar-collapse">
+                {% if _tab_menu is not empty %}
+                    <div class="navbar-left">
+                        {{ _tab_menu|raw }}
+                    </div>
+                {% endif %}
+
+                {% if admin is defined and action is defined and action == 'list' and admin.listModes|length > 1 %}
+                    <div class="nav navbar-right btn-group">
+                        {% for mode, settings in admin.listModes %}
+                            <a href="{{ admin.generateUrl('list', app.request.query.all|merge({_list_mode: mode})) }}" class="btn btn-default navbar-btn btn-sm{% if admin.getListMode() == mode %} active{% endif %}"><i class="{{ settings.class }}"></i></a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% block sonata_admin_content_actions_wrappers %}
+
+                    {% set types = admin.getPageTypes() %}
+
+                    {% if types|length %}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown sonata-actions">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    {{ 'create_page'|trans({}, 'VideInfraCMSBundle') }} <b class="caret"></b></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for type in types %}
+                                        <li><a href="{{ admin.generateUrl('create_type', {'type': type.name}) }}">{{ type.name | capitalize }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endif %}
+                {% endblock sonata_admin_content_actions_wrappers %}
+
+                {% if _list_filters_actions is not empty %}
+                    {{ _list_filters_actions|raw }}
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{% endblock sonata_page_content_nav %}

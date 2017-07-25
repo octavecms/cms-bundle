@@ -1,0 +1,17 @@
+create_page: Add a new page
+create_and_list: Create and return to list
+create_and_create: Create and add another
+update_and_list: Update and close
+update_and_edit: Update
+edit: Edit
+add_new: Add new
+return_to_list: Return to list
+actions: Actions
+option_name: Option name
+option_value: Option value
+general: General
+options: Options
+seo: SEO
+meta.title: Title
+meta.keywords: Keywords
+meta.description: Description

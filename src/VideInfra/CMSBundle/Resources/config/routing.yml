@@ -1,0 +1,3 @@
+vig.cms.routing:
+    resource: .
+    type: vigcmsrouting
