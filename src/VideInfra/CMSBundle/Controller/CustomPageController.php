@@ -22,8 +22,10 @@ class CustomPageController extends Controller
     {
         $isNew = !$page;
         $repository = $this->get('vig.cms.page.repository');
-        $isAdmin = $this->get('security.authorization_checker')
-            ->isGranted($this->getParameter('vig.cms.super_admin_role'));
+        $isAdmin = ($this->getParameter('vig.cms.super_admin_role'))
+            ? $this->get('security.authorization_checker')
+                ->isGranted($this->getParameter('vig.cms.super_admin_role'))
+            : true;
 
         if (!$page) {
             $page = $repository->create();
@@ -32,7 +34,8 @@ class CustomPageController extends Controller
 
         $form = $this->createForm(CustomPageType::class, $page, [
             'method' => 'post',
-            'is_admin' => $isAdmin
+            'is_admin' => $isAdmin,
+            'locales' => $this->getParameter('locales')
         ]);
         $form->handleRequest($request);
 
@@ -51,7 +54,7 @@ class CustomPageController extends Controller
             }
             $page->setOptions($options);
 
-            $em->flush($page);
+            $em->flush();
 
             if (!$isNew) {
 

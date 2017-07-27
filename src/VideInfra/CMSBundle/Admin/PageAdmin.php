@@ -80,7 +80,7 @@ class PageAdmin extends AbstractAdmin
 
         /** @var PageTypeInterface $type */
         foreach ($types as $type) {
-            if ($this->authorizationChecker->isGranted($type->canCreateRole())) {
+            if (!$type->canCreateRole() || $this->authorizationChecker->isGranted($type->canCreateRole())) {
                 $output[] = $type;
             }
         }

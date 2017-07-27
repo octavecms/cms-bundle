@@ -3,6 +3,7 @@
 namespace VideInfra\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Page
 {
+    use ORMBehaviors\Translatable\Translatable;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -63,24 +66,6 @@ class Page
      * @ORM\Column(type="array", nullable=true)
      */
     private $options = [];
-
-    /**
-     * @var string
-     * @ORM\Column(name="meta_title", type="string", length=512, nullable=true)
-     */
-    private $metaTitle;
-
-    /**
-     * @var string
-     * @ORM\Column(name="meta_keywords", type="text", nullable=true)
-     */
-    private $metaKeywords;
-
-    /**
-     * @var string
-     * @ORM\Column(name="meta_description", type="text", nullable=true)
-     */
-    private $metaDescription;
 
     /**
      * @var \DateTime
@@ -286,53 +271,5 @@ class Page
     public function addOption($name, $value)
     {
         $this->options[$name] = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaTitle()
-    {
-        return $this->metaTitle;
-    }
-
-    /**
-     * @param string $metaTitle
-     */
-    public function setMetaTitle($metaTitle)
-    {
-        $this->metaTitle = $metaTitle;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaKeywords()
-    {
-        return $this->metaKeywords;
-    }
-
-    /**
-     * @param string $metaKeywords
-     */
-    public function setMetaKeywords($metaKeywords)
-    {
-        $this->metaKeywords = $metaKeywords;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->metaDescription;
-    }
-
-    /**
-     * @param string $metaDescription
-     */
-    public function setMetaDescription($metaDescription)
-    {
-        $this->metaDescription = $metaDescription;
     }
 }
