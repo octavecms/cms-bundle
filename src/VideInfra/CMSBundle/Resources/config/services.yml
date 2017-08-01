@@ -1,6 +1,8 @@
 parameters:
 
     vig.cms.super_admin_role: 'ROLE_SUPER_ADMIN'
+    vig.cms.simple_text_controller: 'VideInfraCMSBundle:SimpleText:show'
+    vig.cms.simple_text_template: 'VideInfraCMSBundle:SimpleText:show.html.twig'
 
 services:
 
@@ -8,6 +10,11 @@ services:
         class: VideInfra\CMSBundle\Repository\PageRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ VideInfraCMSBundle:Page ]
+
+    vig.cms.content.repository:
+        class: VideInfra\CMSBundle\Repository\ContentRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        arguments: [ VideInfraCMSBundle:Content ]
 
     vig.cms.page.create.command:
         class: VideInfra\CMSBundle\Command\CreatePageCommand
@@ -27,6 +34,11 @@ services:
 
     vig.cms.custom_page.type:
         class: VideInfra\CMSBundle\PageType\CustomPageType
+        tags:
+            - { name: vig.page.type }
+
+    vig.cms.simple_text.type:
+        class: VideInfra\CMSBundle\PageType\SimpleTextPageType
         tags:
             - { name: vig.page.type }
 

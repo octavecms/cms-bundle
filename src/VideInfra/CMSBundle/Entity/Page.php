@@ -17,6 +17,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 class Page
 {
     use ORMBehaviors\Translatable\Translatable;
+    use TranslatableEntityTrait;
 
     /**
      * @ORM\Id
@@ -27,7 +28,7 @@ class Page
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
      */
     private $name;
 
@@ -66,6 +67,12 @@ class Page
      * @ORM\Column(type="array", nullable=true)
      */
     private $options = [];
+
+    /**
+     * @var Content
+     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Content", mappedBy="page", fetch="EXTRA_LAZY", cascade={"persist"})
+     */
+    private $content;
 
     /**
      * @var \DateTime
@@ -271,5 +278,39 @@ class Page
     public function addOption($name, $value)
     {
         $this->options[$name] = $value;
+    }
+
+    /**
+     * @param $name
+     * @return mixed|null
+     */
+    public function getOption($name)
+    {
+        return $this->options[$name] ?? null;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function setOption($name, $value)
+    {
+        $this->options[$name] = $value;
+    }
+
+    /**
+     * @return Content
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param Content $content
+     */
+    public function setContent(Content $content)
+    {
+        $this->content = $content;
     }
 }
