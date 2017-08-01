@@ -37,7 +37,7 @@
                                     {{ 'create_page'|trans({}, 'VideInfraCMSBundle') }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu" role="menu">
                                     {% for type in types %}
-                                        <li><a href="{{ admin.generateUrl('create_type', {'type': type.name}) }}">{{ type.name | capitalize }}</a></li>
+                                        <li><a href="{{ admin.generateUrl('create_type', {'type': type.name}) }}">{{ (type.name ~ '_label') | trans({}, 'VideInfraCMSBundle') }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>

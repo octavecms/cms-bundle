@@ -28,7 +28,7 @@ class Content
     /**
      * @var Page
      *
-     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Page")
+     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Page", inversedBy="content")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $page;
