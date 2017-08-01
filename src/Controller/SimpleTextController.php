@@ -22,6 +22,7 @@ class SimpleTextController extends Controller
             ? $this->get('security.authorization_checker')
                 ->isGranted($this->getParameter('vig.cms.super_admin_role'))
             : true;
+        $templates = $this->get('vig.cms.page.manager')->getSimpleTextTemplatesAsChoices();
 
         if (!$page) {
             $page = $pageRepository->create();
@@ -31,7 +32,8 @@ class SimpleTextController extends Controller
         $form = $this->createForm(SimpleTextType::class, $page, [
             'method' => 'post',
             'is_admin' => $isAdmin,
-            'locales' => $this->getParameter('locales')
+            'locales' => $this->getParameter('locales'),
+            'templates' => $templates
         ]);
         $form->handleRequest($request);
 
@@ -91,7 +93,9 @@ class SimpleTextController extends Controller
      */
     public function showAction(Page $page)
     {
-        $template = $this->getParameter('vig.cms.simple_text_template');
+        $template = $page->getContent()->getTemplate()
+            ? $page->getContent()->getTemplate()
+            : $this->getParameter('vig.cms.simple_text_template');
 
         return $this->render($template, [
             'page' => $page

@@ -13,6 +13,9 @@ class PageManager
     /** @var array */
     private $types = [];
 
+    /** @var array */
+    private $simpleTextTemplates = [];
+
     /** @var bool|array */
     private $pages = false;
 
@@ -55,6 +58,36 @@ class PageManager
     public function addType($type)
     {
         $this->types[] = $type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSimpleTextTemplates()
+    {
+        return $this->simpleTextTemplates;
+    }
+
+    /**
+     * @param array $simpleTextTemplates
+     */
+    public function setSimpleTextTemplates($simpleTextTemplates)
+    {
+        $this->simpleTextTemplates = $simpleTextTemplates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSimpleTextTemplatesAsChoices()
+    {
+        $choices = [];
+
+        foreach ($this->simpleTextTemplates as $simpleTextTemplate) {
+            $choices[$simpleTextTemplate['label']] = $simpleTextTemplate['path'];
+        }
+
+        return $choices;
     }
 
     /**

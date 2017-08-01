@@ -37,7 +37,8 @@ class SimpleTextType extends AbstractType
 
         $builder
             ->add('content', SimpleTextContentType::class, [
-                'locales' => $options['locales']
+                'locales' => $options['locales'],
+                'templates' => $options['templates']
             ])
         ;
 
@@ -70,7 +71,8 @@ class SimpleTextType extends AbstractType
         $resolver->setDefaults(array(
             'is_admin' => false,
             'data_class' => Page::class,
-            'locales' => ['en']
+            'locales' => ['en'],
+            'templates' => false
         ));
     }
 }

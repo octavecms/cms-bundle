@@ -20,5 +20,13 @@ class VideInfraCMSExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $definition = $container->getDefinition('vig.cms.page.manager');
+        if (isset($config['simple_text_templates'])) {
+            $definition->addMethodCall('setSimpleTextTemplates', [$config['simple_text_templates']]);
+        }
     }
 }

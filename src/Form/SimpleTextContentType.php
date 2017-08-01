@@ -4,6 +4,7 @@ namespace VideInfra\CMSBundle\Form;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use VideInfra\CMSBundle\Entity\Content;
@@ -19,6 +20,12 @@ class SimpleTextContentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if ($options['templates']) {
+            $builder->add('template', ChoiceType::class, [
+                'choices' => $options['templates']
+            ]);
+        }
+
         $builder
             ->add('translations', TranslationsType::class, [
                 'label' => false,
@@ -38,7 +45,8 @@ class SimpleTextContentType extends AbstractType
     {
         $resolver->setDefaults(array(
             'locales' => ['en'],
-            'data_class' => Content::class
+            'data_class' => Content::class,
+            'templates' => false
         ));
     }
 }

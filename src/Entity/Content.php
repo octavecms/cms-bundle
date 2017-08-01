@@ -34,6 +34,12 @@ class Content
     private $page;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $template;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -63,5 +69,21 @@ class Content
     public function setPage(Page $page)
     {
         $this->page = $page;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 }
