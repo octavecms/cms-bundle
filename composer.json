@@ -1,0 +1,28 @@
+{
+  "name": "vig/cms-bundle",
+  "type": "library",
+  "description": "Symfony3 CMS",
+  "license": "MIT",
+  "keywords": ["cms"],
+  "homepage": "http://videinfra.com",
+  "authors": [
+    {
+      "name": "Igor Lukashov",
+      "email": "igor.lukashov@videinfra.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.1",
+    "symfony/symfony": "~3.0",
+    "sonata-project/admin-bundle": "^3.4",
+    "a2lix/translation-form-bundle": "~2.0",
+    "egeloen/ckeditor-bundle": "~4.0",
+    "knplabs/doctrine-behaviors": "~1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "VideInfra\\CMSBundle\\": "src/"
+    }
+  }
+}
