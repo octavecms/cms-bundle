@@ -4,6 +4,7 @@ namespace VideInfra\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -13,6 +14,8 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *     name="vig_pages"
  * )
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
+ * @UniqueEntity("path")
  */
 class Page
 {

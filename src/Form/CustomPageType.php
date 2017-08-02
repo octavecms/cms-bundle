@@ -43,6 +43,7 @@ class CustomPageType extends AbstractType
         $builder
 
             ->add('translations', TranslationsType::class, [
+                'label' => false,
                 'locales' => $options['locales'],
                 'fields' => [
                     'metaTitle' => [
