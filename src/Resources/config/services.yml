@@ -42,6 +42,11 @@ services:
         tags:
             - { name: vig.page.type }
 
+    vig.cms.block.type:
+        class: VideInfra\CMSBundle\PageType\BlockPageType
+        tags:
+            - { name: vig.page.type }
+
     vig.cms.page.manager:
         class: VideInfra\CMSBundle\Service\PageManager
         arguments:

@@ -79,7 +79,7 @@ class SimpleTextController extends Controller
             }
         }
 
-        return $this->render('VideInfraCMSBundle:Page:create_simple_txt.html.twig', [
+        return $this->render('VideInfraCMSBundle:SimpleText:create_simple_txt.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
