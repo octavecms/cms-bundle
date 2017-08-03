@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Form\SimpleTextType;
+use VideInfra\CMSBundle\Form\Type\SimpleTextType;
 use VideInfra\CMSBundle\PageType\SimpleTextPageType;
 
 /**

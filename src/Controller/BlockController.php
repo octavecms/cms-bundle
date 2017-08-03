@@ -5,7 +5,7 @@ namespace VideInfra\CMSBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Form\CustomPageType;
+use VideInfra\CMSBundle\Form\Type\CustomPageType;
 use VideInfra\CMSBundle\PageType\BlockPageType;
 
 /**
