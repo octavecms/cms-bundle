@@ -1,0 +1,26 @@
+{% macro block_list_start () %}
+    <div class="well well-small">
+        <div data-widget="blocks-list">
+{% endmacro %}
+
+{% macro block_list_end () %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro block_start (title) %}
+    <div class="box box-success">
+        <div class="box-header">
+            <i class="fa fa-reorder"></i>
+            <h3 class="box-title">{{ title }}</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+{% endmacro %}
+
+{% macro block_end () %}
+        </div>
+    </div>
+{% endmacro %}

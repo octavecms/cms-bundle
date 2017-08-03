@@ -1,5 +1,8 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 
+{% import 'VideInfraCMSBundle:Block:macros.html.twig' as blocks %}
+
+
 {% block sonata_page_content_header %}
 
     <nav class="navbar navbar-default" role="navigation" style="width: auto;">
@@ -22,24 +25,15 @@
                     {# New Text block template #}
                     {# This is the same HTML as in block list, but with name containing __name__ #}
                     {% set input_block_html %}
-                        <div class="box box-success">
-                            <div class="box-header">
-                                <i class="fa fa-reorder"></i>
-                                <h3 class="box-title">Line input</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <input type="hidden" name="blocks[__name__][order]" value="__order__" />
+                        {{ blocks.block_start('Line input') }}
+                            <input type="hidden" name="blocks[__name__][order]" value="__order__" />
 
-                                {# Standard form_row(...) but with name containing __name__ #}
-                                <div class="form-group" id="sonata-ba-field-container-blocks___name___text"><label class="control-label" for="blocks___name___text">Text</label><div class="sonata-ba-field"><input type="text" id="blocks___name___text" name="blocks[__name__][text]" maxlength="64" class="form-control"></div></div>
+                            {# Standard form_row(...) but with name containing __name__ #}
+                            <div class="form-group" id="sonata-ba-field-container-blocks___name___text"><label class="control-label" for="blocks___name___text">Text</label><div class="sonata-ba-field"><input type="text" id="blocks___name___text" name="blocks[__name__][text]" maxlength="64" class="form-control"></div></div>
 
-                                {# ... other block inputs ... #}
+                            {# ... other block inputs ... #}
 
-                            </div>
-                        </div>
+                        {{ blocks.block_end() }}
                     {% endset %}
 
                     {# New Text block link #}
@@ -57,24 +51,14 @@
                     {# New TextArea block template #}
                     {# This is the same HTML as in block list, but with name containing __name__ #}
                     {% set text_block_html %}
-                        <div class="box box-success">
-                            <div class="box-header">
-                                <i class="fa fa-reorder"></i>
-                                <h3 class="box-title">Line input</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <input type="hidden" name="blocks[__name__][order]" value="__order__" />
+                        {{ blocks.block_start('Text') }}
+                            <input type="hidden" name="blocks[__name__][order]" value="__order__" />
 
-                                {# Standard form_row(...) but with name and id containing __name__ #}
-                                <div class="form-group" id="sonata-ba-field-container-blocks___name___text"><label class=" control-label" for="blocks___name___text">Text</label><div class="sonata-ba-field"><textarea id="blocks___name___text" name="blocks[__name__][text]" class="form-control"></textarea></div></div>
+                            {# Standard form_row(...) but with name and id containing __name__ #}
+                            <div class="form-group" id="sonata-ba-field-container-blocks___name___text"><label class=" control-label" for="blocks___name___text">Text</label><div class="sonata-ba-field"><textarea id="blocks___name___text" name="blocks[__name__][text]" class="form-control"></textarea></div></div>
 
-                                {# ... other block inputs ... #}
-
-                            </div>
-                        </div>
+                            {# ... other block inputs ... #}
+                        {{ blocks.block_end() }}
                     {% endset %}
 
                     {# New TextArea block link #}
@@ -92,24 +76,14 @@
                     {# New CKEditor block template #}
                     {# This is the same HTML as in block list, but with name containing __name__ #}
                     {% set ckeditor_block_html %}
-                        <div class="box box-success">
-                            <div class="box-header">
-                                <i class="fa fa-reorder"></i>
-                                <h3 class="box-title">Line input</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <input type="hidden" name="blocks[__name__][order]" value="__order__" />
+                        {{ blocks.block_start('CKEditor') }}
+                            <input type="hidden" name="blocks[__name__][order]" value="__order__" />
 
-                                {# Standard form_row(...) but with name containing __name__ #}
-                                <div class="form-group" id="sonata-ba-field-container-blocks___name___text"><label class=" control-label" for="blocks___name___text">Text</label><div class="sonata-ba-field"><textarea id="blocks___name___text" name="blocks[__name__][text]"></textarea><script type="text/javascript">var CKEDITOR_BASEPATH = "/bundles/app/js/ckeditor/";</script><script type="text/javascript" src="/bundles/app/js/ckeditor/ckeditor.js?v=1501666090"></script><script type="text/javascript"> if (CKEDITOR.instances["blocks___name___text"]) { delete CKEDITOR.instances["blocks___name___text"]; } if (CKEDITOR.stylesSet.get("default") === null) { CKEDITOR.stylesSet.add("default", [{"name":"Lead","element":"p","attributes":{"class":"lead"}},{"name":"Lead simple","element":"p","attributes":{"class":"lead lead--simple"}},{"name":"Title","element":"h2","attributes":{"class":"h1"}},{"name":"Unordered small list","element":"ul","attributes":{"class":"list--small list--without-border"}}]); } CKEDITOR.replace("blocks___name___text", {"allowedContent":true,"bodyClass":"text","contentsCss":["\/assets\/stylesheets\/global.css","\/bundles\/app\/css\/ckeditor.css"],"height":460,"stylesSet":"default","format_ul":{"element":"ul","attributes":{"class":"list list-disc"}},"toolbar":[["Styles","Format"],["Bold","Italic","Underline","-","RemoveFormat"],["JustifyLeft","JustifyCenter","JustifyRight","JustifyBlock"],["NumberedList","BulletedList"],["Link","Unlink"],["Image","Table","HorizontalRule"],["Source","ShowBlocks","Maximize"],["Gallery"]],"language":"en","filebrowserUploadUrl":"\/admin\/ckeditor_upload"});</script></div></div>
+                            {# Standard form_row(...) but with name containing __name__ #}
+                            <div class="form-group" id="sonata-ba-field-container-blocks___name___text"><label class=" control-label" for="blocks___name___text">Text</label><div class="sonata-ba-field"><textarea id="blocks___name___text" name="blocks[__name__][text]"></textarea><script type="text/javascript">var CKEDITOR_BASEPATH = "/bundles/app/js/ckeditor/";</script><script type="text/javascript" src="/bundles/app/js/ckeditor/ckeditor.js?v=1501666090"></script><script type="text/javascript"> if (CKEDITOR.instances["blocks___name___text"]) { delete CKEDITOR.instances["blocks___name___text"]; } if (CKEDITOR.stylesSet.get("default") === null) { CKEDITOR.stylesSet.add("default", [{"name":"Lead","element":"p","attributes":{"class":"lead"}},{"name":"Lead simple","element":"p","attributes":{"class":"lead lead--simple"}},{"name":"Title","element":"h2","attributes":{"class":"h1"}},{"name":"Unordered small list","element":"ul","attributes":{"class":"list--small list--without-border"}}]); } CKEDITOR.replace("blocks___name___text", {"allowedContent":true,"bodyClass":"text","contentsCss":["\/assets\/stylesheets\/global.css","\/bundles\/app\/css\/ckeditor.css"],"height":460,"stylesSet":"default","format_ul":{"element":"ul","attributes":{"class":"list list-disc"}},"toolbar":[["Styles","Format"],["Bold","Italic","Underline","-","RemoveFormat"],["JustifyLeft","JustifyCenter","JustifyRight","JustifyBlock"],["NumberedList","BulletedList"],["Link","Unlink"],["Image","Table","HorizontalRule"],["Source","ShowBlocks","Maximize"],["Gallery"]],"language":"en","filebrowserUploadUrl":"\/admin\/ckeditor_upload"});</script></div></div>
 
-                                {# ... other block inputs ... #}
-
-                            </div>
-                        </div>
+                            {# ... other block inputs ... #}
+                        {{ blocks.block_end() }}
                     {% endset %}
 
                     {# New CKEditor block link #}
@@ -198,50 +172,29 @@
     </div>
 
     {# Placeholder for blocks #}
-    <div class="well well-small">
-        <div data-widget="blocks-list">
-            <h4 class="blocks-list-empty-message">
-                @TODO Message when there are no blocks
-            </h4>
+    {{ blocks.block_list_start() }}
 
-            {# Text block start #}
-            <div class="box box-success">
-                <div class="box-header">
-                    <i class="fa fa-reorder"></i>
-                    <h3 class="box-title">Line input</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <input type="hidden" name="blocks[0][order]" value="0" />
+        <h4 class="blocks-list-empty-message">
+            @TODO Message when there are no blocks
+        </h4>
 
-                    {# Standard form_row(...) but with name containing [0] #}
-                    <div class="form-group" id="sonata-ba-field-container-blocks_0_text"><label class="control-label" for="blocks_0_text">Text</label><div class="sonata-ba-field"><input type="text" id="blocks_0_text" name="blocks[0][text]" maxlength="64" class="form-control"></div></div>
+        {# Text block start #}
+        {{ blocks.block_start('Line input') }}
+            <input type="hidden" name="blocks[0][order]" value="0" />
 
-                </div>
-            </div>
+            {# Standard form_row(...) but with name containing [0] #}
+            <div class="form-group" id="sonata-ba-field-container-blocks_0_text"><label class="control-label" for="blocks_0_text">Text</label><div class="sonata-ba-field"><input type="text" id="blocks_0_text" name="blocks[0][text]" maxlength="64" class="form-control"></div></div>
+        {{ blocks.block_end() }}
 
-            {# TextArea block start #}
-            <div class="box box-success">
-                <div class="box-header">
-                    <i class="fa fa-reorder"></i>
-                    <h3 class="box-title">Text</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <input type="hidden" name="blocks[1][order]" value="1" />
+        {# TextArea block start #}
+        {{ blocks.block_start('Text') }}
+            <input type="hidden" name="blocks[1][order]" value="1" />
 
-                    {# Standard form_row(...) but with name containing [1] #}
-                    <div class="form-group" id="sonata-ba-field-container-blocks_[1]_text"><label class="control-label" for="blocks_[1]_text">Text</label><div class="sonata-ba-field"><textarea id="blocks_[1]_text" name="blocks[[1]][text]" class="form-control"></textarea></div></div>
+            {# Standard form_row(...) but with name containing [1] #}
+            <div class="form-group" id="sonata-ba-field-container-blocks_[1]_text"><label class="control-label" for="blocks_[1]_text">Text</label><div class="sonata-ba-field"><textarea id="blocks_[1]_text" name="blocks[[1]][text]" class="form-control"></textarea></div></div>
+        {{ blocks.block_end() }}
 
-                </div>
-            </div>
-
-        </div>
-    </div>
+    {{ blocks.block_list_end() }}
 
 
     <div class="sonata-ba-form-actions well well-small form-actions">
@@ -259,10 +212,10 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="/bundles/videinfracms/css/blocks.css" />
+    <link rel="stylesheet" type="text/css" href="/bundles/videinfracms/blocks/dist/main.css" />
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="/bundles/videinfracms/js/blocks.js"></script>
+    <script src="/bundles/videinfracms/blocks/dist/main.js"></script>
 {% endblock %}
