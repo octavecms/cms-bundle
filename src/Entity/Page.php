@@ -78,6 +78,12 @@ class Page
     private $content;
 
     /**
+     * @var array
+     * @ORM\OneToMany(targetEntity="Block", mappedBy="page")
+     */
+    private $blocks;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -315,5 +321,21 @@ class Page
     public function setContent(Content $content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBlocks()
+    {
+        return $this->blocks;
+    }
+
+    /**
+     * @param array $blocks
+     */
+    public function setBlocks($blocks)
+    {
+        $this->blocks = $blocks;
     }
 }

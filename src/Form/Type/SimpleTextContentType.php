@@ -1,6 +1,7 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form;
+namespace VideInfra\CMSBundle\Form\Type;
+
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
