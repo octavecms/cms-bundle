@@ -72,3 +72,13 @@ services:
             - [ 'setTranslationDomain', ['VideInfraCMSBundle']]
             - [ 'setPageManager', ['@vig.cms.page.manager']]
             - [ 'setAuthorizationChecker', ['@security.authorization_checker']]
+
+    vig.cms.media.admin:
+        class: VideInfra\CMSBundle\Admin\MediaAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: "CMS"
+              label: "Media"
+              label_catalogue: "admin"
+        arguments: [~, ~, 'VideInfraCMSBundle:Media']
