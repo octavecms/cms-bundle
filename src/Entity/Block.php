@@ -35,9 +35,15 @@ class Block
     private $content;
 
     /**
+     * @var int
+     * @ORM\Column(name="`order`", type="integer")
+     */
+    private $order = 0;
+
+    /**
      * @var Page
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="blocks", cascade={"persist"})
-     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCASE")
+     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $page;
 
@@ -87,5 +93,37 @@ class Block
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param Page $page
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 }

@@ -53,6 +53,9 @@ services:
             - '@vig.cms.page.repository'
             - '@request_stack'
 
+    vig.cms.block.manager:
+        class: VideInfra\CMSBundle\Service\BlockManager
+
     vig.cms.page.factory:
         class: VideInfra\CMSBundle\Factory\PageFactory
         arguments:

@@ -2,6 +2,7 @@
 
 namespace VideInfra\CMSBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -79,7 +80,7 @@ class Page
 
     /**
      * @var array
-     * @ORM\OneToMany(targetEntity="Block", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="Block", mappedBy="page", fetch="EXTRA_LAZY", cascade={"persist", "remove"})
      */
     private $blocks;
 
@@ -118,6 +119,14 @@ class Page
     public function __toString()
     {
         return (string) $this->title;
+    }
+
+    /**
+     * Page constructor.
+     */
+    public function __construct()
+    {
+        $this->blocks = new ArrayCollection();
     }
 
     /**
