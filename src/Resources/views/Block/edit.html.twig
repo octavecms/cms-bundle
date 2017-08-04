@@ -124,7 +124,7 @@
     {{ blocks.block_list_start() }}
 
         <h4 class="blocks-list-empty-message">
-            @TODO Message when there are no blocks
+            {{ 'add_block' | trans({}, 'VideInfraCMSBundle') }}
         </h4>
 
         {% for block in form.blocks %}
