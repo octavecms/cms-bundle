@@ -1,1 +1,99 @@
-!function e(t,n,r){function i(o,c){if(!n[o]){if(!t[o]){var l="function"==typeof require&&require;if(!c&&l)return l(o,!0);if(a)return a(o,!0);var d=new Error("Cannot find module '"+o+"'");throw d.code="MODULE_NOT_FOUND",d}var u=n[o]={exports:{}};t[o][0].call(u.exports,function(e){var n=t[o][1][e];return i(n?n:e)},u,u.exports,e,t,n,r)}return n[o].exports}for(var a="function"==typeof require&&require,o=0;o<r.length;o++)i(r[o]);return i}({1:[function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),a=jQuery,o='[data-widget="blocks-list"]',c='[data-widget="blocks-add"]',l='input[type="hidden"][name*="[order]"]',d=function(){function e(t){r(this,e),this.$container=t,this.index=t.find(l).length,t.addClass("blocks-list").sortable({placeholder:"sort-highlight",handle:".box-header",forcePlaceholderSize:!0,zIndex:999999,axis:"y",update:this.handleBlockAdd.bind(this),change:this.updateBlockOrder.bind(this)}),t.on("click",'[data-widget="block-remove"]',this.handleBlockRemove.bind(this))}return i(e,[{key:"updateList",value:function(){this.$container.sortable("refresh"),this.updateBlockOrder()}},{key:"updateBlockOrder",value:function(){var e=this.$container.find(l);e.each(function(e,t){a(t).val(e)})}},{key:"generateBlockHTML",value:function(e){var t=this.index++;return e.replace(/__name__/g,t)}},{key:"handleBlockAdd",value:function(e,t){var n=t.item.data("prototype");t.item.is(c)&&n&&(t.item.replaceWith(this.generateBlockHTML(n)),this.updateList())}},{key:"handleBlockRemove",value:function(e){var t=a(e.target).closest(this.$container.children());t.length&&t.slideUp("fast",function(){t.remove(),this.updateList()}.bind(this))}}]),e}();a(function(){a(o).each(function(){new d(a(this))}),a(c).addClass("blocks-add").draggable({connectToSortable:a(o),helper:"clone",placeholder:"sort-highlight",zIndex:999999})})},{}]},{},[1]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var $ = jQuery;
+
+var BLOCKS_LIST_SELECTOR = '[data-widget="blocks-list"]';
+var ADD_BLOCK_SELECTOR = '[data-widget="blocks-add"]';
+
+var ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[order]"]';
+
+var BlocksList = function () {
+    function BlocksList($container) {
+        _classCallCheck(this, BlocksList);
+
+        this.$container = $container;
+        this.index = $container.find(ORDER_INPUT_CSS_SELECTOR).length;
+
+        $container.addClass('blocks-list').sortable({
+            placeholder: 'sort-highlight',
+            handle: '.box-header',
+            forcePlaceholderSize: true,
+            zIndex: 999999,
+            axis: 'y',
+            update: this.handleBlockAdd.bind(this),
+            stop: this.updateBlockOrder.bind(this)
+        });
+
+        $container.on('click', '[data-widget="block-remove"]', this.handleBlockRemove.bind(this));
+    }
+
+    _createClass(BlocksList, [{
+        key: 'updateList',
+        value: function updateList() {
+            this.$container.sortable('refresh');
+            this.updateBlockOrder();
+        }
+    }, {
+        key: 'updateBlockOrder',
+        value: function updateBlockOrder() {
+            var $inputs = this.$container.find(ORDER_INPUT_CSS_SELECTOR);
+
+            $inputs.each(function (index, input) {
+                $(input).val(index);
+            });
+        }
+    }, {
+        key: 'generateBlockHTML',
+        value: function generateBlockHTML(html) {
+            var index = this.index++;
+            return html.replace(/__name__/g, index);
+        }
+    }, {
+        key: 'handleBlockAdd',
+        value: function handleBlockAdd(event, ui) {
+            var html = ui.item.data('prototype');
+            if (ui.item.is(ADD_BLOCK_SELECTOR) && html) {
+                ui.item.replaceWith(this.generateBlockHTML(html));
+                this.updateList();
+            }
+        }
+    }, {
+        key: 'handleBlockRemove',
+        value: function handleBlockRemove(event) {
+            var $item = $(event.target).closest(this.$container.children());
+
+            if ($item.length) {
+                $item.slideUp('fast', function () {
+                    $item.remove();
+                    this.updateList();
+                }.bind(this));
+            }
+        }
+    }]);
+
+    return BlocksList;
+}();
+
+$(function () {
+    // Make blocks sortable Using jquery UI
+    $(BLOCKS_LIST_SELECTOR).each(function () {
+        new BlocksList($(this));
+    });
+
+    //
+    $(ADD_BLOCK_SELECTOR).addClass('blocks-add').draggable({
+        connectToSortable: $(BLOCKS_LIST_SELECTOR),
+        helper: 'clone',
+        placeholder: 'sort-highlight',
+        zIndex: 999999
+    });
+});
+
+},{}]},{},[1])
+
+//# sourceMappingURL=main.js.map

@@ -20,7 +20,7 @@ class BlocksList {
                 zIndex              : 999999,
                 axis                : 'y',
                 update              : this.handleBlockAdd.bind(this),
-                change              : this.updateBlockOrder.bind(this)
+                stop                : this.updateBlockOrder.bind(this)
             });
 
             $container.on('click', '[data-widget="block-remove"]', this.handleBlockRemove.bind(this));
@@ -33,6 +33,7 @@ class BlocksList {
 
     updateBlockOrder () {
         var $inputs = this.$container.find(ORDER_INPUT_CSS_SELECTOR);
+
         $inputs.each(function (index, input) {
             $(input).val(index);
         });
@@ -45,7 +46,6 @@ class BlocksList {
 
     handleBlockAdd (event, ui) {
         var html   = ui.item.data('prototype');
-
         if (ui.item.is(ADD_BLOCK_SELECTOR) && html) {
             ui.item.replaceWith(this.generateBlockHTML(html));
             this.updateList();

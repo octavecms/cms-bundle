@@ -1,0 +1,33 @@
+{% macro navigate_child(collection, admin, root, current_category_id, depth) %}
+    {% import _self as tree %}
+
+    <ul{% if root %} class="sonata-tree sonata-tree--small js-treeview sonata-tree--toggleable" data-widget="media-treeview"{% endif %}>
+        {% for element in collection if element is not null %}
+            <li>
+                <div class="sonata-tree__item{% if element.id == current_category_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
+                    <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
+                    <a class="sonata-tree__item__edit" href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({category: element.id})) }}">{{ element.name }}</a>
+                </div>
+
+                {% if element.children|length %}
+                    {{ tree.navigate_child(element.children, admin, false, current_category_id, depth + 1) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+
+        {% if root %}
+            {{ tree.navigate_child_js_template() }}
+        {% endif %}
+    </ul>
+{% endmacro %}
+
+{% macro navigate_child_js_template () %}
+    <script type="text/template">
+        <li>
+            <div class="sonata-tree__item" data-id="<%= data.id %>">
+                <i class="fa fa-caret-right hidden" data-treeview-toggler></i>
+                <a class="sonata-tree__item__edit" href="#"><%= data.name %></a>
+            </div>
+        </li>
+    </script>
+{% endmacro %}
