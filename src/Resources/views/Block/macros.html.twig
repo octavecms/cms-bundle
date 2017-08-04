@@ -11,7 +11,11 @@
 {% macro block_start (title) %}
     <div class="box box-success">
         <div class="box-header">
-            <i class="fa fa-reorder"></i>
+            <i class="fa">
+                <span class="fa fa-ellipsis-v"></span>
+                <span class="fa fa-ellipsis-v"></span>
+            </i>
+
             <h3 class="box-title">{{ title }}</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-times"></i></button>
