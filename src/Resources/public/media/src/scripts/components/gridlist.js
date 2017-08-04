@@ -90,12 +90,16 @@ export default class MediaGridList {
 
     handleSelectItem (e, ui) {
         const id = this.getItemId({'target': ui.selected || ui.selecting});
-        store.dispatch(addSelectedItems([id]));
+        if (id) {
+            store.dispatch(addSelectedItems([id]));
+        }
     }
 
     handleUnselectItem (e, ui) {
         const id = this.getItemId({'target': ui.unselected || ui.unselecting});
-        store.dispatch(removeSelectedItems([id]));
+        if (id) {
+            store.dispatch(removeSelectedItems([id]));
+        }
     }
 
     handleUnselectAllItems (e) {

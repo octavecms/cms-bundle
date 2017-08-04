@@ -1,6 +1,6 @@
 import map from 'lodash/map';
 import difference from 'lodash/difference';
-import { setCategory, fetchFilesIfNeeded } from '../modules/actions';
+import { setCategory, fetchFilesIfNeeded, moveFiles, moveFolder } from '../modules/actions';
 
 import microtemplate from '../utils/micro-template';
 
@@ -30,6 +30,8 @@ export default class MediaTreeView {
         $container.addClass(options.className);
 
         $container.on('click', options.itemSelector + ' a', this.handleItemClick.bind(this));
+
+        $container.find(options.itemSelector).each((index, item) => this.setupDroppable($(item)));
 
         store.subscribePath('categoryId', this.handleCategoryChange.bind(this));
         store.subscribePath('tree.folders', this.handleFolderChange.bind(this));
@@ -75,13 +77,69 @@ export default class MediaTreeView {
                 $list = $('<ul></ul>').appendTo($parent);
             }
 
-            $(this.template({'data': folder})).appendTo($list);
+            const $folder = $(this.template({'data': folder})).appendTo($list);
+            this.setupDroppable($folder.find(this.options.itemSelector));
         }
 
         for (let i = 0; i < removed.length; i++) {
             let folder = folders[removed[i]];
-            console.log('REMOVE SUBFOLDER...', folder);
+            console.log('@TODO REMOVE SUBFOLDER...', folder);
         }
+    }
+
+    setupDroppable ($element) {
+        $element.draggable({
+            scope   : 'mediaitem',
+            helper  : 'clone',
+            zIndex  : 999999,
+            cursorAt: { left: -10, top: -10 },
+            start   : this.handleTreeItemDragStart.bind(this),
+            stop    : this.handleTreeItemDragEnd.bind(this),
+            appendTo: this.$container
+        });
+
+        $element.droppable({
+            scope    : 'mediaitem',
+            tolerance: 'pointer',
+            drop     : this.handleDropDrop.bind(this),
+            over     : this.handleDropOver.bind(this),
+            out      : this.handleDropOut.bind(this)
+        });
+    }
+
+    handleDropOver (e, ui) {
+        $(e.target).addClass('ui-draggable-target');
+    }
+
+    handleDropOut (e, ui) {
+        $(e.target).removeClass('ui-draggable-target');
+    }
+
+    handleDropDrop (e, ui) {
+        this.handleDropOut(e, ui);
+
+        const store = this.store;
+        const id = ui.draggable.data('id');
+        const parent = $(e.target).data('id');
+
+        console.log(parent);
+
+        if (id in store.getState().files) {
+            // Files
+            const files = store.getState().grid.dragging;
+            store.dispatch(moveFiles(files, parent));
+        } else {
+            // Folder
+            store.dispatch(moveFolder(id, parent));
+        }
+    }
+
+    handleTreeItemDragStart () {
+
+    }
+
+    handleTreeItemDragEnd () {
+
     }
 
 }

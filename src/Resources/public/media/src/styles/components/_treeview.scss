@@ -8,4 +8,29 @@
         right: 0;
         bottom: 0;
     }
+
+    .sonata-tree__item.ui-draggable-dragging {
+        width: 75%;
+        white-space: nowrap;
+        opacity: 0.75;
+
+        &:before,
+        &:after {
+            display: none;
+        }
+    }
+
+    .ui-draggable-target {
+        border-color: #3c8dbc;
+        background-color: #3c8dbc;
+        color: #fff;
+
+        a {
+            color: #fff;
+        }
+
+        &.is-active:after {
+            border-left-color: #3c8dbc;
+        }
+    }
 }

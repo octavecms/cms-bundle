@@ -5604,6 +5604,39 @@ function uniq(array) {
 module.exports = uniq;
 
 },{"./_baseUniq":65}],191:[function(require,module,exports){
+var baseDifference = require('./_baseDifference'),
+    baseRest = require('./_baseRest'),
+    isArrayLikeObject = require('./isArrayLikeObject');
+
+/**
+ * Creates an array excluding all given values using
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * for equality comparisons.
+ *
+ * **Note:** Unlike `_.pull`, this method returns a new array.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Array
+ * @param {Array} array The array to inspect.
+ * @param {...*} [values] The values to exclude.
+ * @returns {Array} Returns the new array of filtered values.
+ * @see _.difference, _.xor
+ * @example
+ *
+ * _.without([2, 1, 2, 3], 1, 2);
+ * // => [3]
+ */
+var without = baseRest(function(array, values) {
+  return isArrayLikeObject(array)
+    ? baseDifference(array, values)
+    : [];
+});
+
+module.exports = without;
+
+},{"./_baseDifference":32,"./_baseRest":60,"./isArrayLikeObject":168}],192:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -5789,7 +5822,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],192:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5813,7 +5846,7 @@ var thunk = createThunkMiddleware();
 thunk.withExtraArgument = createThunkMiddleware;
 
 exports['default'] = thunk;
-},{}],193:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5872,7 +5905,7 @@ function applyMiddleware() {
     };
   };
 }
-},{"./compose":196}],194:[function(require,module,exports){
+},{"./compose":197}],195:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5924,7 +5957,7 @@ function bindActionCreators(actionCreators, dispatch) {
   }
   return boundActionCreators;
 }
-},{}],195:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6071,7 +6104,7 @@ function combineReducers(reducers) {
 }
 }).call(this,require('_process'))
 
-},{"./createStore":197,"./utils/warning":199,"_process":191,"lodash/isPlainObject":174}],196:[function(require,module,exports){
+},{"./createStore":198,"./utils/warning":200,"_process":192,"lodash/isPlainObject":174}],197:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -6108,7 +6141,7 @@ function compose() {
     };
   });
 }
-},{}],197:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6370,7 +6403,7 @@ var ActionTypes = exports.ActionTypes = {
     replaceReducer: replaceReducer
   }, _ref2[_symbolObservable2['default']] = observable, _ref2;
 }
-},{"lodash/isPlainObject":174,"symbol-observable":200}],198:[function(require,module,exports){
+},{"lodash/isPlainObject":174,"symbol-observable":201}],199:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6420,7 +6453,7 @@ exports.applyMiddleware = _applyMiddleware2['default'];
 exports.compose = _compose2['default'];
 }).call(this,require('_process'))
 
-},{"./applyMiddleware":193,"./bindActionCreators":194,"./combineReducers":195,"./compose":196,"./createStore":197,"./utils/warning":199,"_process":191}],199:[function(require,module,exports){
+},{"./applyMiddleware":194,"./bindActionCreators":195,"./combineReducers":196,"./compose":197,"./createStore":198,"./utils/warning":200,"_process":192}],200:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6446,10 +6479,10 @@ function warning(message) {
   } catch (e) {}
   /* eslint-enable no-empty */
 }
-},{}],200:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 module.exports = require('./lib/index');
 
-},{"./lib/index":201}],201:[function(require,module,exports){
+},{"./lib/index":202}],202:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -6482,7 +6515,7 @@ var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./ponyfill":202}],202:[function(require,module,exports){
+},{"./ponyfill":203}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6506,7 +6539,7 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
-},{}],203:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6570,7 +6603,8 @@ var MediaGridListItem = function () {
                 zIndex: 999999,
                 cursorAt: { left: -10, top: -10 },
                 start: this.handleMoveStart.bind(this),
-                stop: this.handleMoveEnd.bind(this)
+                stop: this.handleMoveEnd.bind(this),
+                scope: 'mediaitem'
             });
 
             // Popover
@@ -6717,11 +6751,12 @@ var MediaGridListItem = function () {
                 list = (0, _map2.default)(selected, function (item, id) {
                     return id;
                 });
-                console.log(selected, list);
 
                 if (list.length > 1) {
                     ui.helper.append('<span class="label bg-blue">' + list.length + '</span>');
                 }
+            } else {
+                store.dispatch((0, _actions.setSelectedListItem)(id));
             }
 
             store.dispatch((0, _actions.setDraggingListItems)(list));
@@ -6739,7 +6774,7 @@ var MediaGridListItem = function () {
 
 exports.default = MediaGridListItem;
 
-},{"../modules/actions":207,"lodash/each":156,"lodash/map":179}],204:[function(require,module,exports){
+},{"../modules/actions":208,"lodash/each":156,"lodash/map":179}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6866,13 +6901,17 @@ var MediaGridList = function () {
         key: 'handleSelectItem',
         value: function handleSelectItem(e, ui) {
             var id = this.getItemId({ 'target': ui.selected || ui.selecting });
-            store.dispatch((0, _actions.addSelectedItems)([id]));
+            if (id) {
+                store.dispatch((0, _actions.addSelectedItems)([id]));
+            }
         }
     }, {
         key: 'handleUnselectItem',
         value: function handleUnselectItem(e, ui) {
             var id = this.getItemId({ 'target': ui.unselected || ui.unselecting });
-            store.dispatch((0, _actions.removeSelectedItems)([id]));
+            if (id) {
+                store.dispatch((0, _actions.removeSelectedItems)([id]));
+            }
         }
     }, {
         key: 'handleUnselectAllItems',
@@ -6913,7 +6952,7 @@ var MediaGridList = function () {
 
 exports.default = MediaGridList;
 
-},{"../modules/actions":207,"../utils/micro-template":212,"./gridlist-item":203,"lodash/difference":155,"lodash/filter":158,"lodash/reduce":183,"lodash/uniq":190}],205:[function(require,module,exports){
+},{"../modules/actions":208,"../utils/micro-template":213,"./gridlist-item":204,"lodash/difference":155,"lodash/filter":158,"lodash/reduce":183,"lodash/uniq":190}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6965,12 +7004,18 @@ var MediaTreeView = function () {
     _createClass(MediaTreeView, [{
         key: 'init',
         value: function init() {
+            var _this = this;
+
             var $container = this.$container;
             var options = this.options;
 
             $container.addClass(options.className);
 
             $container.on('click', options.itemSelector + ' a', this.handleItemClick.bind(this));
+
+            $container.find(options.itemSelector).each(function (index, item) {
+                return _this.setupDroppable($(item));
+            });
 
             store.subscribePath('categoryId', this.handleCategoryChange.bind(this));
             store.subscribePath('tree.folders', this.handleFolderChange.bind(this));
@@ -7020,14 +7065,72 @@ var MediaTreeView = function () {
                     $list = $('<ul></ul>').appendTo($parent);
                 }
 
-                $(this.template({ 'data': folder })).appendTo($list);
+                var $folder = $(this.template({ 'data': folder })).appendTo($list);
+                this.setupDroppable($folder.find(this.options.itemSelector));
             }
 
             for (var _i = 0; _i < removed.length; _i++) {
                 var _folder = folders[removed[_i]];
-                console.log('REMOVE SUBFOLDER...', _folder);
+                console.log('@TODO REMOVE SUBFOLDER...', _folder);
             }
         }
+    }, {
+        key: 'setupDroppable',
+        value: function setupDroppable($element) {
+            $element.draggable({
+                scope: 'mediaitem',
+                helper: 'clone',
+                zIndex: 999999,
+                cursorAt: { left: -10, top: -10 },
+                start: this.handleTreeItemDragStart.bind(this),
+                stop: this.handleTreeItemDragEnd.bind(this),
+                appendTo: this.$container
+            });
+
+            $element.droppable({
+                scope: 'mediaitem',
+                tolerance: 'pointer',
+                drop: this.handleDropDrop.bind(this),
+                over: this.handleDropOver.bind(this),
+                out: this.handleDropOut.bind(this)
+            });
+        }
+    }, {
+        key: 'handleDropOver',
+        value: function handleDropOver(e, ui) {
+            $(e.target).addClass('ui-draggable-target');
+        }
+    }, {
+        key: 'handleDropOut',
+        value: function handleDropOut(e, ui) {
+            $(e.target).removeClass('ui-draggable-target');
+        }
+    }, {
+        key: 'handleDropDrop',
+        value: function handleDropDrop(e, ui) {
+            this.handleDropOut(e, ui);
+
+            var store = this.store;
+            var id = ui.draggable.data('id');
+            var parent = $(e.target).data('id');
+
+            console.log(parent);
+
+            if (id in store.getState().files) {
+                // Files
+                var files = store.getState().grid.dragging;
+                store.dispatch((0, _actions.moveFiles)(files, parent));
+            } else {
+                // Folder
+                store.dispatch((0, _actions.moveFolder)(id, parent));
+            }
+        }
+    }, {
+        key: 'handleTreeItemDragStart',
+        value: function handleTreeItemDragStart() {}
+    }, {
+        key: 'handleTreeItemDragEnd',
+        value: function handleTreeItemDragEnd() {}
     }]);
 
     return MediaTreeView;
@@ -7035,7 +7138,7 @@ var MediaTreeView = function () {
 
 exports.default = MediaTreeView;
 
-},{"../modules/actions":207,"../utils/micro-template":212,"lodash/difference":155,"lodash/map":179}],206:[function(require,module,exports){
+},{"../modules/actions":208,"../utils/micro-template":213,"lodash/difference":155,"lodash/map":179}],207:[function(require,module,exports){
 'use strict';
 
 var _treeview = require('./components/treeview');
@@ -7082,13 +7185,13 @@ $(function () {
     });
 });
 
-},{"./components/gridlist":204,"./components/treeview":205,"./modules/actions":207,"./modules/store":210}],207:[function(require,module,exports){
+},{"./components/gridlist":205,"./components/treeview":206,"./modules/actions":208,"./modules/store":211}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.SET_CATEGORY = exports.TOGGLE_OPENED_ITEM = exports.SET_OPENED_ITEM = exports.REMOVE_FILES = exports.RECEIVE_FILES = exports.REQUEST_FILES = exports.RECEIVE_FOLDER = exports.UNSET_ALL_SELECTED_ITEMS = exports.REMOVE_SELECTED_ITEMS = exports.ADD_SELECTED_ITEMS = exports.TOGGLE_SELECTED_ITEM = exports.SET_SELECTED_ITEM = exports.UNSET_SELECTED_ITEM = exports.DELETE_SELECTED_ITEMS = exports.SET_DRAGGING_ITEMS = exports.SET_GRID_LOADING = exports.SET_GRID_LIST = undefined;
+exports.SET_CATEGORY = exports.TOGGLE_OPENED_ITEM = exports.SET_OPENED_ITEM = exports.MOVED_FILES = exports.REMOVE_FILES = exports.RECEIVE_FILES = exports.REQUEST_FILES = exports.MOVED_FOLDER = exports.RECEIVE_FOLDER = exports.UNSET_ALL_SELECTED_ITEMS = exports.REMOVE_SELECTED_ITEMS = exports.ADD_SELECTED_ITEMS = exports.TOGGLE_SELECTED_ITEM = exports.SET_SELECTED_ITEM = exports.UNSET_SELECTED_ITEM = exports.DELETE_SELECTED_ITEMS = exports.SET_DRAGGING_ITEMS = exports.SET_GRID_LOADING = exports.SET_GRID_LIST = undefined;
 exports.setSelectedItem = setSelectedItem;
 exports.toggleSelectedItem = toggleSelectedItem;
 exports.addSelectedItems = addSelectedItems;
@@ -7133,10 +7236,12 @@ var REMOVE_SELECTED_ITEMS = exports.REMOVE_SELECTED_ITEMS = 'REMOVE_SELECTED_ITE
 var UNSET_ALL_SELECTED_ITEMS = exports.UNSET_ALL_SELECTED_ITEMS = 'UNSET_ALL_SELECTED_ITEMS';
 
 var RECEIVE_FOLDER = exports.RECEIVE_FOLDER = 'RECEIVE_FOLDER';
+var MOVED_FOLDER = exports.MOVED_FOLDER = 'MOVED_FOLDER';
 
 var REQUEST_FILES = exports.REQUEST_FILES = 'REQUEST_FILES';
 var RECEIVE_FILES = exports.RECEIVE_FILES = 'RECEIVE_FILES';
 var REMOVE_FILES = exports.REMOVE_FILES = 'REMOVE_FILES';
+var MOVED_FILES = exports.MOVED_FILES = 'MOVED_FILES';
 
 var SET_OPENED_ITEM = exports.SET_OPENED_ITEM = 'SET_OPENED_ITEM';
 var TOGGLE_OPENED_ITEM = exports.TOGGLE_OPENED_ITEM = 'TOGGLE_OPENED_ITEM';
@@ -7193,7 +7298,32 @@ function addFolder(name) {
     };
 }
 
-function moveFolder(folderId, parentId) {}
+function movedFolder(id, parent) {
+    return {
+        type: MOVED_FOLDER,
+        id: id,
+        parent: parent
+    };
+}
+
+function moveFolder(id, parent) {
+    return function (dispatch) {
+        dispatch(setGridLoading(true));
+
+        return fetch('/bundles/videinfracms/media/json/move-folder.json', {
+            'method': 'POST',
+            'headers': {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            'body': decodeURIComponent($.param({ id: id, parent: parent }))
+        }).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            dispatch(setGridLoading(false));
+            dispatch(movedFolder(id, parent));
+        });
+    };
+}
 
 /*
  * Files
@@ -7251,26 +7381,29 @@ function deleteSelectedListItems() {
         var ids = (0, _map2.default)(getState().selected, function (value, key) {
             return key;
         });
-        var confirmation = confirm('Are you sure you want to delete the selected assets?');
 
-        if (ids.length && confirmation) {
-            dispatch(setGridLoading(true));
+        if (ids.length) {
+            var confirmation = confirm('Are you sure you want to delete the selected assets?');
 
-            return fetch('/bundles/videinfracms/media/json/delete-files.json', {
-                'method': 'POST',
-                'headers': {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                },
-                'body': decodeURIComponent($.param({ 'files': ids }))
-            }).then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                dispatch(setGridLoading(false));
-                dispatch(removeFiles(ids));
-            });
-        } else {
-            return Promise.resolve();
+            if (confirmation) {
+                dispatch(setGridLoading(true));
+
+                return fetch('/bundles/videinfracms/media/json/delete-files.json', {
+                    'method': 'POST',
+                    'headers': {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    'body': decodeURIComponent($.param({ 'files': ids }))
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (json) {
+                    dispatch(setGridLoading(false));
+                    dispatch(removeFiles(ids));
+                });
+            }
         }
+
+        return Promise.resolve();
     };
 };
 
@@ -7328,7 +7461,7 @@ function setDraggingListItems(ids) {
     return { type: SET_DRAGGING_ITEMS, ids: ids };
 };
 
-},{"lodash/map":179}],208:[function(require,module,exports){
+},{"lodash/map":179}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7421,7 +7554,7 @@ exports.default = transformTreeRoot($.extend(true, {
     'opened': null
 }, MEDIA_INITIAL_STATE));
 
-},{"lodash/map":179,"lodash/reduce":183}],209:[function(require,module,exports){
+},{"lodash/map":179,"lodash/reduce":183}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7452,6 +7585,10 @@ var _filter = require('lodash/filter');
 
 var _filter2 = _interopRequireDefault(_filter);
 
+var _without = require('lodash/without');
+
+var _without2 = _interopRequireDefault(_without);
+
 var _setImmutable = require('../utils/set-immutable');
 
 var _setImmutable2 = _interopRequireDefault(_setImmutable);
@@ -7464,10 +7601,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * action creators
  */
 
-/*
- * action types
- */
-
 function gridReducer(state, action) {
     switch (action.type) {
         case _actions.SET_GRID_LIST:
@@ -7477,7 +7610,9 @@ function gridReducer(state, action) {
         default:
             return state;
     }
-}
+} /*
+   * action types
+   */
 
 function dragReducer(state, action) {
     switch (action.type) {
@@ -7551,12 +7686,25 @@ function categoryReducer(state, action) {
 }
 
 function folderReducer(state, action) {
+    var parentChildren = void 0;
+
     switch (action.type) {
         case _actions.RECEIVE_FOLDER:
-            var parentChildren = state.tree.folders[action.folder.parent].children || [];
+            parentChildren = state.tree.folders[action.folder.parent].children || [];
 
             state = (0, _setImmutable2.default)(state, ['tree', 'folders', action.folder.id], action.folder);
             state = (0, _setImmutable2.default)(state, ['tree', 'folders', action.folder.parent, 'children'], [].concat(parentChildren, action.folder.id));
+
+            return state;
+        case _actions.MOVED_FOLDER:
+            parentChildren = state.tree.folders[action.parent].children || [];
+
+            var prevParent = state.tree.folders[action.id].parent;
+            var prevParentChildren = state.tree.folders[prevParent].children || [];
+
+            state = (0, _setImmutable2.default)(state, ['tree', 'folders', prevParent, 'children'], (0, _without2.default)(prevParentChildren, action.id));
+            state = (0, _setImmutable2.default)(state, ['tree', 'folders', action.parent, 'children'], [].concat(parentChildren, action.id));
+            state = (0, _setImmutable2.default)(state, ['tree', 'folders', action.id, 'parent'], action.parent);
 
             return state;
         default:
@@ -7609,7 +7757,7 @@ exports.default = function (state, action) {
     }, state);
 };
 
-},{"../utils/set-immutable":213,"./actions":207,"lodash/filter":158,"lodash/find":159,"lodash/findIndex":160,"lodash/map":179,"lodash/reduce":183,"lodash/uniq":190}],210:[function(require,module,exports){
+},{"../utils/set-immutable":214,"./actions":208,"lodash/filter":158,"lodash/find":159,"lodash/findIndex":160,"lodash/map":179,"lodash/reduce":183,"lodash/uniq":190,"lodash/without":191}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7678,7 +7826,7 @@ $(function () {
 
 exports.default = store;
 
-},{"./actions":207,"./initial-state":208,"./reducers":209,"lodash/get":162,"redux":198,"redux-thunk":192}],211:[function(require,module,exports){
+},{"./actions":208,"./initial-state":209,"./reducers":210,"lodash/get":162,"redux":199,"redux-thunk":193}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7725,7 +7873,7 @@ exports.default = {
 
 };
 
-},{}],212:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7782,7 +7930,7 @@ function tmpl(str, data) {
     return data ? emptyBlockWhiteSpace(fn(data)) : fn;
 };
 
-},{"./escape":211}],213:[function(require,module,exports){
+},{"./escape":212}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7813,6 +7961,6 @@ function setImmutable(source, keyString, value) {
     return cloned;
 }
 
-},{"lodash/clone":153,"lodash/isArray":166}]},{},[206])
+},{"lodash/clone":153,"lodash/isArray":166}]},{},[207])
 
 //# sourceMappingURL=main.js.map

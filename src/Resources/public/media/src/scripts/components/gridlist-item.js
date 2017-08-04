@@ -47,7 +47,8 @@ export default class MediaGridListItem {
             zIndex  : 999999,
             cursorAt: { left: -10, top: -10 },
             start   : this.handleMoveStart.bind(this),
-            stop    : this.handleMoveEnd.bind(this)
+            stop    : this.handleMoveEnd.bind(this),
+            scope   : 'mediaitem',
         });
 
         // Popover
@@ -176,11 +177,12 @@ export default class MediaGridListItem {
 
         if (id in selected) {
             list = map(selected, (item, id) => id);
-            console.log(selected, list);
 
             if (list.length > 1) {
                 ui.helper.append('<span class="label bg-blue">' + list.length + '</span>');
             }
+        } else {
+            store.dispatch(setSelectedListItem(id));
         }
 
         store.dispatch(setDraggingListItems(list));

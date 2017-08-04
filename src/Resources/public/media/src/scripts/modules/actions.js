@@ -18,10 +18,12 @@ export const REMOVE_SELECTED_ITEMS = 'REMOVE_SELECTED_ITEMS';
 export const UNSET_ALL_SELECTED_ITEMS = 'UNSET_ALL_SELECTED_ITEMS';
 
 export const RECEIVE_FOLDER = 'RECEIVE_FOLDER';
+export const MOVED_FOLDER = 'MOVED_FOLDER';
 
 export const REQUEST_FILES = 'REQUEST_FILES';
 export const RECEIVE_FILES = 'RECEIVE_FILES';
 export const REMOVE_FILES = 'REMOVE_FILES';
+export const MOVED_FILES = 'MOVED_FILES';
 
 export const SET_OPENED_ITEM = 'SET_OPENED_ITEM'
 export const TOGGLE_OPENED_ITEM = 'TOGGLE_OPENED_ITEM'
@@ -80,8 +82,32 @@ export function addFolder(name) {
     };
 }
 
-export function moveFolder(folderId, parentId) {
 
+function movedFolder (id, parent) {
+    return {
+        type: MOVED_FOLDER,
+        id,
+        parent
+    };
+}
+
+export function moveFolder(id, parent) {
+    return (dispatch) => {
+        dispatch(setGridLoading(true));
+
+        return fetch('/bundles/videinfracms/media/json/move-folder.json', {
+            'method': 'POST',
+            'headers': {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            'body': decodeURIComponent($.param({id, parent}))
+        })
+            .then(response => response.json())
+            .then(json => {
+                dispatch(setGridLoading(false));
+                dispatch(movedFolder(id, parent));
+            })
+    };
 }
 
 
@@ -143,26 +169,29 @@ function removeFiles (ids) {
 export function deleteSelectedListItems () {
     return (dispatch, getState) => {
         const ids = map(getState().selected, (value, key) => key);
-        const confirmation = confirm('Are you sure you want to delete the selected assets?');
 
-        if (ids.length && confirmation) {
-            dispatch(setGridLoading(true));
+        if (ids.length) {
+            const confirmation = confirm('Are you sure you want to delete the selected assets?');
 
-            return fetch('/bundles/videinfracms/media/json/delete-files.json', {
-                'method': 'POST',
-                'headers': {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                },
-                'body': decodeURIComponent($.param({'files': ids}))
-            })
-                .then(response => response.json())
-                .then(json => {
-                    dispatch(setGridLoading(false));
-                    dispatch(removeFiles(ids));
-                });
-        } else {
-            return Promise.resolve();
+            if (confirmation) {
+                dispatch(setGridLoading(true));
+
+                return fetch('/bundles/videinfracms/media/json/delete-files.json', {
+                    'method': 'POST',
+                    'headers': {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    'body': decodeURIComponent($.param({'files': ids}))
+                })
+                    .then(response => response.json())
+                    .then(json => {
+                        dispatch(setGridLoading(false));
+                        dispatch(removeFiles(ids));
+                    });
+            }
         }
+
+        return Promise.resolve();
     };
 };
 

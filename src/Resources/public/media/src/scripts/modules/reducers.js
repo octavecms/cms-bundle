@@ -8,6 +8,7 @@ import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';
+import without from 'lodash/without';
 
 import setImmutable from '../utils/set-immutable';
 
@@ -15,8 +16,8 @@ import {
     SET_GRID_LIST, SET_GRID_LOADING,
     DELETE_SELECTED_ITEMS, UNSET_SELECTED_ITEM, SET_SELECTED_ITEM, TOGGLE_SELECTED_ITEM, ADD_SELECTED_ITEMS, REMOVE_SELECTED_ITEMS, UNSET_ALL_SELECTED_ITEMS,
     SET_DRAGGING_ITEMS,
-    RECEIVE_FILES, REMOVE_FILES,
-    RECEIVE_FOLDER,
+    RECEIVE_FILES, REMOVE_FILES, MOVED_FILES,
+    RECEIVE_FOLDER, MOVED_FOLDER,
     SET_OPENED_ITEM, TOGGLE_OPENED_ITEM,
     SET_CATEGORY
 } from './actions';
@@ -109,12 +110,25 @@ function categoryReducer (state, action) {
 }
 
 function folderReducer (state, action) {
+    let parentChildren;
+
     switch (action.type) {
         case RECEIVE_FOLDER:
-            const parentChildren = state.tree.folders[action.folder.parent].children || [];
+            parentChildren = state.tree.folders[action.folder.parent].children || [];
 
             state = setImmutable(state, ['tree', 'folders', action.folder.id], action.folder);
             state = setImmutable(state, ['tree', 'folders', action.folder.parent, 'children'], [].concat(parentChildren, action.folder.id));
+
+            return state;
+        case MOVED_FOLDER:
+            parentChildren = state.tree.folders[action.parent].children || [];
+
+            const prevParent = state.tree.folders[action.id].parent;
+            const prevParentChildren = state.tree.folders[prevParent].children || [];
+
+            state = setImmutable(state, ['tree', 'folders', prevParent, 'children'], without(prevParentChildren, action.id));
+            state = setImmutable(state, ['tree', 'folders', action.parent, 'children'], [].concat(parentChildren, action.id));
+            state = setImmutable(state, ['tree', 'folders', action.id, 'parent'], action.parent);
 
             return state;
         default:
