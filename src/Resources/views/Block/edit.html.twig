@@ -130,12 +130,7 @@
         {% for block in form.blocks %}
 
             {% set blockType = block.vars.block_type %}
-            {% set blockData = null %}
-            {% for data in blockTypes %}
-                {% if blockType == data.name %}
-                    {% set blockData = data %}
-                {% endif %}
-            {% endfor %}
+            {% set blockData = blockTypes[blockType] %}
 
             {% if blockData %}
                 {{ blocks.block_start(blockData.label) }}

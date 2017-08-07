@@ -16,7 +16,7 @@ class BlockManager
      */
     public function addBlock(BlockInterface $block)
     {
-        $this->blocks[$block->getFormType()] = $block;
+        $this->blocks[$block->getName()] = $block;
     }
 
     /**

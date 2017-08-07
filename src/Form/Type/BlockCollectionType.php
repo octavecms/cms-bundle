@@ -38,16 +38,16 @@ class BlockCollectionType extends AbstractType
 
             $blockPrototypes = [];
             /**
-             * @var string $blockType
+             * @var string $blockName
              * @var BlockInterface $typeData
              */
-            foreach ($blockTypes as $blockType => $typeData) {
+            foreach ($blockTypes as $blockName => $typeData) {
 
-                $prototypeOptions['content_type'] = $blockType;
+                $prototypeOptions['content_type'] = $typeData->getFormType();
                 $prototypeOptions['block_type'] = $typeData->getName();
 
                 $prototype = $builder->create($options['prototype_name'], $options['entry_type'], $prototypeOptions);
-                $blockPrototypes[$blockType] = $prototype->getForm();
+                $blockPrototypes[$blockName] = $prototype->getForm();
             }
 
             $builder->setAttribute('block_prototypes', $blockPrototypes);
@@ -67,17 +67,7 @@ class BlockCollectionType extends AbstractType
                 $options = $form->get($name)->getConfig()->getOptions();
                 $type = $value->getType();
                 $options['block_type'] = $type;
-
-                /**
-                 * @var string $blockType
-                 * @var BlockInterface $blockData
-                 */
-                foreach ($blockTypes as $blockType => $blockData) {
-                    if ($blockData->getName() == $type) {
-                        $options['content_type'] = $blockType;
-                        break;
-                    }
-                }
+                $options['content_type'] = $blockTypes[$type]->getFormType();
 
                 $form->remove($name);
                 $form->add($name, BlockItemType::class, $options);
