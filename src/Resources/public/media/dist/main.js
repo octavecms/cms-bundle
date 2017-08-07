@@ -6985,8 +6985,14 @@ var MediaTreeView = function () {
         get: function get() {
             return {
                 'className': 'media-tree-view',
+                'instanceAttribute': 'data-treeview-instance',
                 'itemSelector': '.sonata-tree__item',
-                'store': null
+                'store': null,
+
+                'togglersSelector': '[data-treeview-toggler]',
+                'toggledSelector': '[data-treeview-toggled]',
+                'toggledClassName': 'is-toggled',
+                'activeClassName': 'is-active'
             };
         }
     }]);
@@ -6998,28 +7004,32 @@ var MediaTreeView = function () {
         this.template = (0, _microTemplate2.default)($container.find('script[type="text/template"]').remove().html());
         this.options = $.extend({}, this.constructor.defaultOptions, options);
         this.store = this.options.store;
+        this.states = {};
+
         this.init();
     }
 
     _createClass(MediaTreeView, [{
         key: 'init',
         value: function init() {
-            var _this = this;
-
             var $container = this.$container;
             var options = this.options;
 
-            $container.addClass(options.className);
+            $container.addClass(options.className).attr(options.instanceAttribute, true);
 
             $container.on('click', options.itemSelector + ' a', this.handleItemClick.bind(this));
-
-            $container.find(options.itemSelector).each(function (index, item) {
-                return _this.setupDroppable($(item));
-            });
+            $container.on('click', options.togglersSelector, this.handleTogglerClick.bind(this));
 
             store.subscribePath('categoryId', this.handleCategoryChange.bind(this));
             store.subscribePath('tree.folders', this.handleFolderChange.bind(this));
+
+            this.restoreTreeState();
         }
+
+        /**
+         * On item click change active category
+         */
+
     }, {
         key: 'handleItemClick',
         value: function handleItemClick(e) {
@@ -7032,6 +7042,31 @@ var MediaTreeView = function () {
             store.dispatch((0, _actions.setCategory)(categoryId));
             store.dispatch((0, _actions.fetchFilesIfNeeded)(categoryId));
         }
+
+        /**
+         * On toggler click expand / collapse folder list
+         */
+
+    }, {
+        key: 'handleTogglerClick',
+        value: function handleTogglerClick(e) {
+            var options = this.options;
+            var $item = $(e.target).closest(options.itemSelector);
+            var categoryId = $item.data('id');
+            var states = this.states;
+
+            e.preventDefault();
+
+            $item.toggleClass(options.toggledClassName);
+            $item.next('ul').slideToggle();
+
+            states[categoryId] = !states[categoryId];
+        }
+
+        /*
+         * Handle state change
+         */
+
     }, {
         key: 'handleCategoryChange',
         value: function handleCategoryChange(categoryId) {
@@ -7040,40 +7075,13 @@ var MediaTreeView = function () {
     }, {
         key: 'handleFolderChange',
         value: function handleFolderChange(folders, prevFolders) {
-            var $container = this.$container;
-            var foldersIDs = (0, _map2.default)(folders, function (folder) {
-                return folder.id;
-            });
-            var prevFoldersIDs = (0, _map2.default)(prevFolders, function (folder) {
-                return folder.id;
-            });
-
-            // // List of ids added / removed, these are objects {"fileIdA": 1, "fileIdB": 1}
-            // const added   = reduce(difference(folders, prevFolders), (list, id) => { list[id] = 1; return list; }, {});
-            // const removed = reduce(difference(prevFolders, folders), (list, id) => { list[id] = 1; return list; }, {});
-
-            var added = (0, _difference2.default)(foldersIDs, prevFoldersIDs);
-            var removed = (0, _difference2.default)(prevFoldersIDs, foldersIDs);
-
-            for (var i = 0; i < added.length; i++) {
-                var folder = folders[added[i]];
-
-                var $parent = $container.find('[data-id="' + encodeURIComponent(folder.parent) + '"]').parent();
-                var $list = $parent.find('ul').eq(0);
-
-                if (!$list.length) {
-                    $list = $('<ul></ul>').appendTo($parent);
-                }
-
-                var $folder = $(this.template({ 'data': folder })).appendTo($list);
-                this.setupDroppable($folder.find(this.options.itemSelector));
-            }
-
-            for (var _i = 0; _i < removed.length; _i++) {
-                var _folder = folders[removed[_i]];
-                console.log('@TODO REMOVE SUBFOLDER...', _folder);
-            }
+            this.renderTree();
         }
+
+        /*
+         * Drag and drop suppoer
+         */
+
     }, {
         key: 'setupDroppable',
         value: function setupDroppable($element) {
@@ -7131,6 +7139,94 @@ var MediaTreeView = function () {
     }, {
         key: 'handleTreeItemDragEnd',
         value: function handleTreeItemDragEnd() {}
+
+        /*
+         * Tree rendering
+         */
+
+    }, {
+        key: 'generateTree',
+        value: function generateTree(list) {
+            if (list && list.length) {
+                var folders = store.getState().tree.folders;
+                var tree = [];
+
+                for (var i = 0; i < list.length; i++) {
+                    var folder = folders[list[i]];
+
+                    tree.push($.extend({}, folder, {
+                        'children': folder.children && this.generateTree(folder.children)
+                    }));
+                }
+
+                return tree;
+            } else {
+                return [];
+            }
+        }
+    }, {
+        key: 'renderTree',
+        value: function renderTree() {
+            var $container = this.$container;
+            var options = this.options;
+            var state = this.store.getState();
+            var folders = state.tree.folders;
+            var folder = folders[state.tree.root];
+
+            var root = $.extend({}, folder, {
+                'children': folder.children && this.generateTree(folder.children)
+            });
+
+            var html = this.template({
+                'data': root,
+                'template': this.template,
+                'root': true,
+                'depth': 1,
+                'currentCategoryId': store.getState().categoryId
+            });
+
+            // Render
+            $container.html(html);
+            this.restoreTreeState();
+        }
+
+        /*
+         * Restore tree active element states
+         */
+
+    }, {
+        key: 'restoreTreeState',
+        value: function restoreTreeState() {
+            var _this = this;
+
+            var options = this.options;
+            var $container = this.$container;
+            var $active = $container.find('.' + options.activeClassName);
+            var $lists = $active.parents('[' + options.instanceAttribute + '] ul, [' + options.instanceAttribute + ']');
+
+            $lists.show();
+            $lists.prev().addClass(options.toggledClassName);
+
+            // Restore state
+            var states = this.states;
+            for (var id in states) {
+                if (states[id]) {
+                    var $item = $container.find('[data-id="' + encodeURIComponent(id) + '"]');
+                    $item.addClass(this.options.toggledClassName);
+                    $item.next('ul').show();
+                }
+            }
+
+            // Restore toggled elements
+            var $toggled = $container.find(options.toggledSelector);
+            $toggled.addClass(options.toggledClassName);
+            $toggled.next('ul').show();
+
+            // Enable drag and drop
+            $container.find(options.itemSelector).each(function (index, item) {
+                return _this.setupDroppable($(item));
+            });
+        }
     }]);
 
     return MediaTreeView;

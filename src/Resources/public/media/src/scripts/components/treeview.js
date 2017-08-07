@@ -10,8 +10,14 @@ export default class MediaTreeView {
     static get defaultOptions () {
         return {
             'className': 'media-tree-view',
+            'instanceAttribute': 'data-treeview-instance',
             'itemSelector': '.sonata-tree__item',
-            'store': null
+            'store': null,
+
+            'togglersSelector': '[data-treeview-toggler]',
+            'toggledSelector':  '[data-treeview-toggled]',
+            'toggledClassName': 'is-toggled',
+            'activeClassName': 'is-active'
         };
     }
 
@@ -20,6 +26,8 @@ export default class MediaTreeView {
         this.template = microtemplate($container.find('script[type="text/template"]').remove().html());
         this.options = $.extend({}, this.constructor.defaultOptions, options);
         this.store = this.options.store;
+        this.states = {};
+
         this.init();
     }
 
@@ -27,16 +35,22 @@ export default class MediaTreeView {
         const $container = this.$container;
         const options    = this.options;
 
-        $container.addClass(options.className);
+        $container
+            .addClass(options.className)
+            .attr(options.instanceAttribute, true);
 
         $container.on('click', options.itemSelector + ' a', this.handleItemClick.bind(this));
-
-        $container.find(options.itemSelector).each((index, item) => this.setupDroppable($(item)));
+        $container.on('click', options.togglersSelector, this.handleTogglerClick.bind(this));
 
         store.subscribePath('categoryId', this.handleCategoryChange.bind(this));
         store.subscribePath('tree.folders', this.handleFolderChange.bind(this));
+
+        this.restoreTreeState();
     }
 
+    /**
+     * On item click change active category
+     */
     handleItemClick (e) {
         const $item = $(e.target).closest(this.options.itemSelector);
         const categoryId = $item.data('id');
@@ -48,6 +62,29 @@ export default class MediaTreeView {
         store.dispatch(fetchFilesIfNeeded(categoryId));
     }
 
+    /**
+     * On toggler click expand / collapse folder list
+     */
+    handleTogglerClick (e) {
+        const options    = this.options;
+        const $item      = $(e.target).closest(options.itemSelector);
+        const categoryId = $item.data('id');
+        const states     = this.states;
+
+        e.preventDefault();
+
+        $item.toggleClass(options.toggledClassName);
+        $item.next('ul').slideToggle();
+
+        states[categoryId] = !states[categoryId];
+    }
+
+
+    /*
+     * Handle state change
+     */
+
+
     handleCategoryChange (categoryId) {
         this.$container.find(this.options.itemSelector)
             .removeClass('is-active')
@@ -56,36 +93,14 @@ export default class MediaTreeView {
     }
 
     handleFolderChange (folders, prevFolders) {
-        const $container = this.$container;
-        const foldersIDs = map(folders, folder => folder.id);
-        const prevFoldersIDs = map(prevFolders, folder => folder.id);
-
-        // // List of ids added / removed, these are objects {"fileIdA": 1, "fileIdB": 1}
-        // const added   = reduce(difference(folders, prevFolders), (list, id) => { list[id] = 1; return list; }, {});
-        // const removed = reduce(difference(prevFolders, folders), (list, id) => { list[id] = 1; return list; }, {});
-
-        const added   = difference(foldersIDs, prevFoldersIDs);
-        const removed = difference(prevFoldersIDs, foldersIDs);
-
-        for (let i = 0; i < added.length; i++) {
-            let folder = folders[added[i]];
-
-            let $parent = $container.find('[data-id="' + encodeURIComponent(folder.parent) + '"]').parent();
-            let $list   = $parent.find('ul').eq(0);
-
-            if (!$list.length) {
-                $list = $('<ul></ul>').appendTo($parent);
-            }
-
-            const $folder = $(this.template({'data': folder})).appendTo($list);
-            this.setupDroppable($folder.find(this.options.itemSelector));
-        }
-
-        for (let i = 0; i < removed.length; i++) {
-            let folder = folders[removed[i]];
-            console.log('@TODO REMOVE SUBFOLDER...', folder);
-        }
+        this.renderTree();
     }
+
+
+    /*
+     * Drag and drop suppoer
+     */
+
 
     setupDroppable ($element) {
         $element.draggable({
@@ -140,6 +155,85 @@ export default class MediaTreeView {
 
     handleTreeItemDragEnd () {
 
+    }
+
+
+    /*
+     * Tree rendering
+     */
+
+    generateTree (list) {
+        if (list && list.length) {
+            const folders = store.getState().tree.folders;
+            const tree = [];
+
+            for (let i = 0; i < list.length; i++) {
+                let folder = folders[list[i]];
+
+                tree.push($.extend({}, folder, {
+                    'children': folder.children && this.generateTree(folder.children)
+                }));
+            }
+
+            return tree;
+        } else {
+            return [];
+        }
+    }
+
+    renderTree () {
+        const $container = this.$container;
+        const options = this.options;
+        const state = this.store.getState();
+        const folders = state.tree.folders;
+        const folder = folders[state.tree.root];
+
+        const root = $.extend({}, folder, {
+            'children': folder.children && this.generateTree(folder.children)
+        });
+
+        const html = this.template({
+            'data': root,
+            'template': this.template,
+            'root': true,
+            'depth': 1,
+            'currentCategoryId': store.getState().categoryId
+        });
+
+        // Render
+        $container.html(html);
+        this.restoreTreeState();
+    }
+
+    /*
+     * Restore tree active element states
+     */
+    restoreTreeState () {
+        const options = this.options;
+        const $container = this.$container;
+        const $active = $container.find('.' + options.activeClassName);
+        const $lists = $active.parents('[' + options.instanceAttribute + '] ul, [' + options.instanceAttribute + ']');
+
+        $lists.show();
+        $lists.prev().addClass(options.toggledClassName);
+
+        // Restore state
+        const states = this.states;
+        for (let id in states) {
+            if (states[id]) {
+                let $item = $container.find('[data-id="' + encodeURIComponent(id) + '"]');
+                $item.addClass(this.options.toggledClassName);
+                $item.next('ul').show();
+            }
+        }
+
+        // Restore toggled elements
+        const $toggled = $container.find(options.toggledSelector);
+        $toggled.addClass(options.toggledClassName);
+        $toggled.next('ul').show();
+
+        // Enable drag and drop
+        $container.find(options.itemSelector).each((index, item) => this.setupDroppable($(item)));
     }
 
 }
