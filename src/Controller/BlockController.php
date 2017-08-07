@@ -51,7 +51,7 @@ class BlockController extends Controller
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
 
-            $page->setController($this->getParameter('vig.cms.simple_text_controller'));
+            $page->setController($this->getParameter('vig.cms.block_controller'));
             $page->setOption('id', $page->getId());
 
             foreach ($originalBlocks as $originalBlock) {
@@ -93,6 +93,19 @@ class BlockController extends Controller
             'form' => $form->createView(),
             'isNew' => $isNew,
             'isAdmin' => $isAdmin
+        ]);
+    }
+
+    /**
+     * @param Page $page
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showAction(Page $page)
+    {
+        $template = $this->getParameter('vig.cms.block_template');
+        return $this->render($template, [
+            'page' => $page,
+            'content' => $this->get('vig.cms.block.manager')->renderPage($page)
         ]);
     }
 }

@@ -9,6 +9,18 @@ use Ivory\CKEditorBundle\Form\Type\CKEditorType;
  */
 class EditorBlock extends AbstractBlock
 {
+    /** @var string */
+    private $template;
+
+    /**
+     * EditorBlock constructor.
+     * @param string $template
+     */
+    public function __construct($template)
+    {
+        $this->template = $template;
+    }
+
     /**
      * @return string
      */
@@ -39,5 +51,13 @@ class EditorBlock extends AbstractBlock
     public function getFormType()
     {
         return CKEditorType::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentTemplate()
+    {
+        return $this->template;
     }
 }

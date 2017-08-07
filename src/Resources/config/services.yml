@@ -4,6 +4,12 @@ parameters:
     vig.cms.simple_text_controller: 'VideInfraCMSBundle:SimpleText:show'
     vig.cms.simple_text_template: 'VideInfraCMSBundle:SimpleText:show.html.twig'
 
+    vig.cms.block_controller: 'VideInfraCMSBundle:Block:show'
+    vig.cms.block_template: 'VideInfraCMSBundle:Block:show.html.twig'
+    vig.cms.text.block.template: 'VideInfraCMSBundle:Block:text.html.twig'
+    vig.cms.textarea.block.template: 'VideInfraCMSBundle:Block:textarea.html.twig'
+    vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
+
 services:
 
     vig.cms.page.repository:
@@ -49,16 +55,19 @@ services:
 
     vig.cms.text.block:
         class: VideInfra\CMSBundle\Page\Block\TextBlock
+        arguments: ['%vig.cms.text.block.template%']
         tags:
             - { name: vig.block.type }
 
     vig.cms.textarea.block:
         class: VideInfra\CMSBundle\Page\Block\TextareaBlock
+        arguments: ['%vig.cms.textarea.block.template%']
         tags:
             - { name: vig.block.type }
 
     vig.cms.editor.block:
         class: VideInfra\CMSBundle\Page\Block\EditorBlock
+        arguments: ['%vig.cms.editor.block.template%']
         tags:
             - { name: vig.block.type }
 
@@ -70,6 +79,7 @@ services:
 
     vig.cms.block.manager:
         class: VideInfra\CMSBundle\Service\BlockManager
+        arguments: ['@templating']
 
     vig.cms.page.factory:
         class: VideInfra\CMSBundle\Factory\PageFactory

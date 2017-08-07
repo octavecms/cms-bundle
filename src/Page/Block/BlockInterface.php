@@ -23,4 +23,9 @@ interface BlockInterface
      * @return string
      */
     public function getFormType();
+
+    /**
+     * @return string
+     */
+    public function getContentTemplate();
 }

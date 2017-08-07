@@ -9,6 +9,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
  */
 class TextareaBlock extends AbstractBlock
 {
+    /** @var string */
+    private $template;
+
+    /**
+     * EditorBlock constructor.
+     * @param string $template
+     */
+    public function __construct($template)
+    {
+        $this->template = $template;
+    }
+
     /**
      * @return string
      */
@@ -39,5 +51,13 @@ class TextareaBlock extends AbstractBlock
     public function getFormType()
     {
         return TextareaType::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentTemplate()
+    {
+        return $this->template;
     }
 }

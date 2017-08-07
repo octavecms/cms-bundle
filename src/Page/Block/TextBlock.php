@@ -9,6 +9,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class TextBlock extends AbstractBlock
 {
+    /** @var string */
+    private $template;
+
+    /**
+     * EditorBlock constructor.
+     * @param string $template
+     */
+    public function __construct($template)
+    {
+        $this->template = $template;
+    }
+
     /**
      * @return string
      */
@@ -39,5 +51,13 @@ class TextBlock extends AbstractBlock
     public function getFormType()
     {
         return TextType::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentTemplate()
+    {
+        return $this->template;
     }
 }
