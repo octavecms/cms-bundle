@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\PageType;
+namespace VideInfra\CMSBundle\Page\Type;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>

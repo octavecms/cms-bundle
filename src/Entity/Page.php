@@ -81,6 +81,7 @@ class Page
     /**
      * @var array
      * @ORM\OneToMany(targetEntity="Block", mappedBy="page", fetch="EXTRA_LAZY", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"order" = "ASC"})
      */
     private $blocks;
 

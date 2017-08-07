@@ -30,7 +30,7 @@
                             {% set data = blockTypes[type] %}
 
                             {% set html %}
-                                {{ blocks.block_start(data.title) }}
+                                {{ blocks.block_start(data.label) }}
                                 {{ form_widget(prototype) }}
                                 {{ blocks.block_end() }}
                             {% endset %}
@@ -41,7 +41,7 @@
                                    data-prototype="{{ html|e('html_attr') }}">
 
                                     <i class="{{ data.icon }}" aria-hidden="true"></i>
-                                    <span>{{ data.title }}</span>
+                                    <span>{{ data.label }}</span>
                                 </a>
                             </li>
 
@@ -138,9 +138,9 @@
             {% endfor %}
 
             {% if blockData %}
-            {{ blocks.block_start(blockData.title) }}
+                {{ blocks.block_start(blockData.label) }}
                 {{ form_widget(block) }}
-            {{ blocks.block_end() }}
+                {{ blocks.block_end() }}
             {% endif %}
 
         {% endfor %}

@@ -1,13 +1,13 @@
 <?php
 
-namespace VideInfra\CMSBundle\PageType;
+namespace VideInfra\CMSBundle\Page\Type;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
-class SimpleTextPageType extends BasePageType
+class BlockPageType extends BasePageType
 {
-    const TYPE = 'simple_text';
+    const TYPE = 'block';
 
     /**
      * @return string
@@ -22,7 +22,7 @@ class SimpleTextPageType extends BasePageType
      */
     public function getController()
     {
-        return 'VideInfraCMSBundle:SimpleText:edit';
+        return 'VideInfraCMSBundle:Block:edit';
     }
 
     /**
@@ -30,6 +30,6 @@ class SimpleTextPageType extends BasePageType
      */
     public function canCreateRole()
     {
-        return 'ROLE_SIMPLE_TEXT_PAGE_CREATE';
+        return 'ROLE_BLOCK_PAGE_CREATE';
     }
 }

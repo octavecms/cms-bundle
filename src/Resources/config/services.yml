@@ -33,19 +33,34 @@ services:
             - { name: routing.loader }
 
     vig.cms.custom_page.type:
-        class: VideInfra\CMSBundle\PageType\CustomPageType
+        class: VideInfra\CMSBundle\Page\Type\CustomPageType
         tags:
             - { name: vig.page.type }
 
     vig.cms.simple_text.type:
-        class: VideInfra\CMSBundle\PageType\SimpleTextPageType
+        class: VideInfra\CMSBundle\Page\Type\SimpleTextPageType
         tags:
             - { name: vig.page.type }
 
     vig.cms.block.type:
-        class: VideInfra\CMSBundle\PageType\BlockPageType
+        class: VideInfra\CMSBundle\Page\Type\BlockPageType
         tags:
             - { name: vig.page.type }
+
+    vig.cms.text.block:
+        class: VideInfra\CMSBundle\Page\Block\TextBlock
+        tags:
+            - { name: vig.block.type }
+
+    vig.cms.textarea.block:
+        class: VideInfra\CMSBundle\Page\Block\TextareaBlock
+        tags:
+            - { name: vig.block.type }
+
+    vig.cms.editor.block:
+        class: VideInfra\CMSBundle\Page\Block\EditorBlock
+        tags:
+            - { name: vig.block.type }
 
     vig.cms.page.manager:
         class: VideInfra\CMSBundle\Service\PageManager

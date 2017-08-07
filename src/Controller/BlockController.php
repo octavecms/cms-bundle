@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use VideInfra\CMSBundle\Entity\Block;
 use VideInfra\CMSBundle\Entity\Page;
 use VideInfra\CMSBundle\Form\Type\BlockType;
-use VideInfra\CMSBundle\PageType\BlockPageType;
+use VideInfra\CMSBundle\Page\Type\BlockPageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -42,7 +42,7 @@ class BlockController extends Controller
 
         $form = $this->createForm(BlockType::class, $page, [
             'method' => 'post',
-            'block_types' => $blockManager->getTypes()
+            'block_types' => $blockManager->getBlocks()
         ]);
         $form->handleRequest($request);
 

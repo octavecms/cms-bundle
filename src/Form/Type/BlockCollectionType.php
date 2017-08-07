@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use VideInfra\CMSBundle\Page\Block\BlockInterface;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -36,10 +37,14 @@ class BlockCollectionType extends AbstractType
             }
 
             $blockPrototypes = [];
+            /**
+             * @var string $blockType
+             * @var BlockInterface $typeData
+             */
             foreach ($blockTypes as $blockType => $typeData) {
 
                 $prototypeOptions['content_type'] = $blockType;
-                $prototypeOptions['block_type'] = $typeData['name'];
+                $prototypeOptions['block_type'] = $typeData->getName();
 
                 $prototype = $builder->create($options['prototype_name'], $options['entry_type'], $prototypeOptions);
                 $blockPrototypes[$blockType] = $prototype->getForm();
@@ -63,8 +68,12 @@ class BlockCollectionType extends AbstractType
                 $type = $value->getType();
                 $options['block_type'] = $type;
 
+                /**
+                 * @var string $blockType
+                 * @var BlockInterface $blockData
+                 */
                 foreach ($blockTypes as $blockType => $blockData) {
-                    if ($blockData['name'] == $type) {
+                    if ($blockData->getName() == $type) {
                         $options['content_type'] = $blockType;
                         break;
                     }
