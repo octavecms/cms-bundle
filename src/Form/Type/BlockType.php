@@ -37,9 +37,13 @@ class BlockType extends AbstractType
             ->add('path', TextType::class)
             ->add('blocks', BlockCollectionType::class, [
                 'entry_type' => BlockItemType::class,
+                'entry_options' => [
+                    'locales' => $options['locales']
+                ],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'block_types' => $options['block_types']
+                'block_types' => $options['block_types'],
+                'locales' => $options['locales']
             ])
         ;
 

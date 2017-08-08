@@ -42,7 +42,8 @@ class BlockController extends Controller
 
         $form = $this->createForm(BlockType::class, $page, [
             'method' => 'post',
-            'block_types' => $blockManager->getBlocks()
+            'block_types' => $blockManager->getBlocks(),
+            'locales' => $this->getParameter('locales')
         ]);
         $form->handleRequest($request);
 

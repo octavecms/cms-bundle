@@ -1,6 +1,7 @@
 <?php
 
 namespace VideInfra\CMSBundle\Form\Type;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,8 +30,12 @@ class BlockItemType extends AbstractType
             ->add('type', HiddenType::class, [
                 'data' => $type
             ])
-            ->add('content', $contentType, [
-                'label' => false
+            ->add('translations', TranslationsType::class, [
+                'label' => false,
+                'locales' => $options['locales'],
+                'fields' => [
+                    'content' => ['field_type' => $contentType, 'label' => false]
+                ]
             ])
         ;
     }
@@ -53,7 +58,8 @@ class BlockItemType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => Block::class,
             'block_type' => 'text',
-            'content_type' => TextType::class
+            'content_type' => TextType::class,
+            'locales' => ['en']
         ));
     }
 }

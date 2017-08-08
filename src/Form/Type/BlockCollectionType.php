@@ -45,6 +45,7 @@ class BlockCollectionType extends AbstractType
 
                 $prototypeOptions['content_type'] = $typeData->getFormType();
                 $prototypeOptions['block_type'] = $typeData->getName();
+                $prototypeOptions['locales'] = $options['locales'];
 
                 $prototype = $builder->create($options['prototype_name'], $options['entry_type'], $prototypeOptions);
                 $blockPrototypes[$blockName] = $prototype->getForm();
@@ -53,7 +54,7 @@ class BlockCollectionType extends AbstractType
             $builder->setAttribute('block_prototypes', $blockPrototypes);
         }
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($blockTypes) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($blockTypes, $options) {
 
             $data = $event->getData();
             $form = $event->getForm();
@@ -64,16 +65,16 @@ class BlockCollectionType extends AbstractType
 
             foreach ($data as $name => $value) {
 
-                $options = $form->get($name)->getConfig()->getOptions();
+                $childOptions = $form->get($name)->getConfig()->getOptions();
                 $type = $value->getType();
-                $options['block_type'] = $type;
-                $options['content_type'] = $blockTypes[$type]->getFormType();
+                $childOptions['block_type'] = $type;
+                $childOptions['content_type'] = $blockTypes[$type]->getFormType();
+                $childOptions['locales'] = $options['locales'];
 
                 $form->remove($name);
-                $form->add($name, BlockItemType::class, $options);
+                $form->add($name, BlockItemType::class, $childOptions);
             }
         });
-
     }
 
     /**
@@ -101,7 +102,8 @@ class BlockCollectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'block_types' => []
+            'block_types' => [],
+            'locales' => ['en']
         ));
     }
 

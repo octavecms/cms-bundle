@@ -4,6 +4,7 @@ namespace VideInfra\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use VideInfra\CMSBundle\Entity\Page;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -15,6 +16,9 @@ use VideInfra\CMSBundle\Entity\Page;
  */
 class Block
 {
+    use ORMBehaviors\Translatable\Translatable;
+    use TranslatableEntityTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -27,12 +31,6 @@ class Block
      * @ORM\Column(type="string", length=255)
      */
     private $type;
-
-    /**
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    private $content;
 
     /**
      * @var int
@@ -77,22 +75,6 @@ class Block
     public function setType($type)
     {
         $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
     }
 
     /**
