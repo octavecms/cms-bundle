@@ -28,4 +28,9 @@ interface BlockInterface
      * @return string
      */
     public function getContentTemplate();
+
+    /**
+     * @return array
+     */
+    public function getOptions();
 }

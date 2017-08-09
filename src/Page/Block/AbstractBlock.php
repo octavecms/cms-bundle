@@ -7,5 +7,11 @@ namespace VideInfra\CMSBundle\Page\Block;
  */
 abstract class AbstractBlock implements BlockInterface
 {
-
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return [];
+    }
 }

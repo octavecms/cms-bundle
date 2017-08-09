@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use VideInfra\CMSBundle\Entity\Block;
 use VideInfra\CMSBundle\Page\Block\BlockInterface;
 
 /**
@@ -43,9 +44,12 @@ class BlockCollectionType extends AbstractType
              */
             foreach ($blockTypes as $blockName => $typeData) {
 
+                $prototypeOptions = [];
                 $prototypeOptions['content_type'] = $typeData->getFormType();
                 $prototypeOptions['block_type'] = $typeData->getName();
                 $prototypeOptions['locales'] = $options['locales'];
+
+                $prototypeOptions = array_merge($prototypeOptions, $typeData->getOptions());
 
                 $prototype = $builder->create($options['prototype_name'], $options['entry_type'], $prototypeOptions);
                 $blockPrototypes[$blockName] = $prototype->getForm();
@@ -54,7 +58,7 @@ class BlockCollectionType extends AbstractType
             $builder->setAttribute('block_prototypes', $blockPrototypes);
         }
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($blockTypes, $options) {
+        $prepareFormFunction = function (FormEvent $event) use ($blockTypes, $options) {
 
             $data = $event->getData();
             $form = $event->getForm();
@@ -66,15 +70,24 @@ class BlockCollectionType extends AbstractType
             foreach ($data as $name => $value) {
 
                 $childOptions = $form->get($name)->getConfig()->getOptions();
-                $type = $value->getType();
+                $type = ($value instanceof Block) ? $value->getType() : $value['type'];
+
+                /** @var BlockInterface $block */
+                $block = $blockTypes[$type];
+
                 $childOptions['block_type'] = $type;
-                $childOptions['content_type'] = $blockTypes[$type]->getFormType();
+                $childOptions['content_type'] = $block->getFormType();
                 $childOptions['locales'] = $options['locales'];
+
+                $childOptions = array_merge($childOptions, $block->getOptions());
 
                 $form->remove($name);
                 $form->add($name, BlockItemType::class, $childOptions);
             }
-        });
+        };
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $prepareFormFunction);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, $prepareFormFunction);
     }
 
     /**

@@ -29,15 +29,24 @@ class BlockItemType extends AbstractType
             ->add('order', HiddenType::class)
             ->add('type', HiddenType::class, [
                 'data' => $type
-            ])
-            ->add('translations', TranslationsType::class, [
-                'label' => false,
-                'locales' => $options['locales'],
-                'fields' => [
-                    'content' => ['field_type' => $contentType, 'label' => false]
-                ]
-            ])
-        ;
+            ]);
+
+        if ($options['use_translation']) {
+            $builder
+                ->add('translations', TranslationsType::class, [
+                    'label' => false,
+                    'locales' => $options['locales'],
+                    'fields' => [
+                        'content' => ['field_type' => $contentType, 'label' => false]
+                    ]
+                ])
+            ;
+        }
+        else {
+            $builder->add('content', $contentType, [
+                'label' => false
+            ]);
+        }
     }
 
     /**
@@ -59,7 +68,8 @@ class BlockItemType extends AbstractType
             'data_class' => Block::class,
             'block_type' => 'text',
             'content_type' => TextType::class,
-            'locales' => ['en']
+            'locales' => ['en'],
+            'use_translation' => true
         ));
     }
 }
