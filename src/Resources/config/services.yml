@@ -9,6 +9,7 @@ parameters:
     vig.cms.text.block.template: 'VideInfraCMSBundle:Block:text.html.twig'
     vig.cms.textarea.block.template: 'VideInfraCMSBundle:Block:textarea.html.twig'
     vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
+    vig.cms.editor.image.template: 'VideInfraCMSBundle:Block:image.html.twig'
 
 services:
 
@@ -68,6 +69,12 @@ services:
     vig.cms.editor.block:
         class: VideInfra\CMSBundle\Page\Block\EditorBlock
         arguments: ['%vig.cms.editor.block.template%']
+        tags:
+            - { name: vig.block.type }
+
+    vig.cms.image.block:
+        class: VideInfra\CMSBundle\Page\Block\ImageBlock
+        arguments: ['%vig.cms.editor.image.template%']
         tags:
             - { name: vig.block.type }
 
