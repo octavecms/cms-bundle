@@ -96,6 +96,10 @@ gulp.task('jsmin', () => {
     return browserify({
         'entries': ['./src/scripts/main.js'],
         'debug': false,
+        'paths': [
+            './node_modules',
+            './src/scripts/lib'
+        ],
         'transform': [
             babelify.configure({
                 'presets': ['es2015']

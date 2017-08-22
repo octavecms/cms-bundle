@@ -1,0 +1,13 @@
+{
+    "files": [
+        {
+            "id": "a",
+            "image": "http://lorempixel.com/500/400/technics/?1999",
+            "width": 500,
+            "height": 400,
+            "filename": "abrakadabra.jpg",
+            "size": "500 Kb",
+            "parent": "hhh"
+        }
+    ]
+}

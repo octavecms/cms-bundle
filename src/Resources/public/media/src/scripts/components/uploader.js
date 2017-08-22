@@ -35,6 +35,7 @@ class Uploader {
             dataType: 'json',
             done: this.handleFileUploadComplete.bind(this),
             progressall: this.handleFileUploadProgress.bind(this),
+            submit: this.handleFileSubmit.bind(this),
             add: this.handleFileUpload.bind(this)
         });
 
@@ -117,6 +118,14 @@ class Uploader {
     }
 
     /**
+     * Change url
+     */
+    handleFileSubmit (e, data) {
+        // For file replace we use different url
+        data.url = data.info.replace ? API_ENDPOINTS.filesReplace : API_ENDPOINTS.filesUpload;
+    }
+
+    /**
      * Before file uploaded we want to add additional data
      * to the request
      */
@@ -136,7 +145,6 @@ class Uploader {
 
             if (info) {
                 data.formData = (typeof info === 'function' ? info() : info);
-                console.log(data.url);
                 data.submit();
             }
         }
