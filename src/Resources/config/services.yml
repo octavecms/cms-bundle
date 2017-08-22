@@ -23,6 +23,14 @@ services:
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ VideInfraCMSBundle:Content ]
 
+    vig.cms.media_category.repository:
+        class: VideInfra\CMSBundle\Repository\MediaCategoryRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        arguments: [ VideInfraCMSBundle:MediaCategory ]
+        calls:
+          - [ 'setTreeBuilder', ['@vig.cms.media_category.tree_builder']]
+
+
     vig.cms.page.create.command:
         class: VideInfra\CMSBundle\Command\CreatePageCommand
         arguments:
@@ -92,6 +100,9 @@ services:
         class: VideInfra\CMSBundle\Factory\PageFactory
         arguments:
             - '@vig.cms.page.manager'
+
+    vig.cms.media_category.tree_builder:
+        class: VideInfra\CMSBundle\Service\MediaCategoryTreeBuilder
 
     vig.cms.page.admin:
         class: VideInfra\CMSBundle\Admin\PageAdmin

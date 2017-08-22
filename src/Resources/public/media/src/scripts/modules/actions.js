@@ -74,7 +74,7 @@ export function addFolder(name) {
     return (dispatch) => {
         dispatch(setGridLoading(true));
 
-        return fetch('/bundles/videinfracms/media/json/add-folder.json', {
+        return fetch(API_ENDPOINTS.folderAdd, {
             'method': 'POST',
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -102,7 +102,7 @@ export function moveFolder(id, parent) {
     return (dispatch) => {
         dispatch(setGridLoading(true));
 
-        return fetch('/bundles/videinfracms/media/json/move-folder.json', {
+        return fetch(API_ENDPOINTS.folderMove, {
             'method': 'POST',
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -142,7 +142,7 @@ function fetchFiles (categoryId) {
         dispatch(requestFiles(categoryId));
         dispatch(setGridLoading(true));
 
-        return fetch(`/bundles/videinfracms/media/json/files.json?category=${ encodeURIComponent(categoryId) }`)
+        return fetch(`${ API_ENDPOINTS.filesList }?category=${ encodeURIComponent(categoryId) }`)
             .then(response => response.json())
             .then(json => {
                 dispatch(setGridLoading(false));
@@ -190,7 +190,7 @@ export function deleteSelectedListItems () {
             if (confirm(message)) {
                 dispatch(setGridLoading(true));
 
-                return fetch('/bundles/videinfracms/media/json/delete-files.json', {
+                return fetch(API_ENDPOINTS.filesRemove, {
                     'method': 'POST',
                     'headers': {
                         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -215,7 +215,7 @@ export function deleteSelectedListItems () {
                 if (confirmation) {
                     dispatch(setGridLoading(true));
 
-                    return fetch('/bundles/videinfracms/media/json/delete-folder.json', {
+                    return fetch(API_ENDPOINTS.folderRemove, {
                         'method': 'POST',
                         'headers': {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -288,7 +288,7 @@ export function moveFiles(ids, parentId) {
         if (ids.length) {
             dispatch(setGridLoading(true));
 
-            return fetch('/bundles/videinfracms/media/json/move-files.json', {
+            return fetch(API_ENDPOINTS.filesMove, {
                 'method': 'POST',
                 'headers': {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

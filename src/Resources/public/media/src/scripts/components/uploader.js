@@ -3,7 +3,6 @@ import fileupload from 'blueimp-file-upload';
 import { uploadedFiles, updatedFile } from '../modules/actions';
 
 
-const FILE_UPLOAD_URL = '/bundles/videinfracms/media/json/upload.json';
 let UID = 0;
 
 
@@ -32,7 +31,7 @@ class Uploader {
     create () {
         this.$input = $('<input class="media-out-of-screen" type="file" name="files[]" multiple="multiple" />').appendTo('body');
         this.$input.fileupload({
-            url: FILE_UPLOAD_URL,
+            url: API_ENDPOINTS.filesUpload,
             dataType: 'json',
             done: this.handleFileUploadComplete.bind(this),
             progressall: this.handleFileUploadProgress.bind(this),
@@ -137,6 +136,7 @@ class Uploader {
 
             if (info) {
                 data.formData = (typeof info === 'function' ? info() : info);
+                console.log(data.url);
                 data.submit();
             }
         }

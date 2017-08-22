@@ -68,6 +68,16 @@
     {{ parent() }}
 
     <script>
+        var API_ENDPOINTS = {
+            'folderAdd':    '/bundles/videinfracms/media/json/folder-add.json',
+            'folderRemove': '/bundles/videinfracms/media/json/folder-remove.json',
+            'folderMove':   '/bundles/videinfracms/media/json/folder-move.json',
+            'filesList':    '/bundles/videinfracms/media/json/files-list.json',
+            'filesUpload':  '/bundles/videinfracms/media/json/files-upload.json',
+            'filesRemove':  '/bundles/videinfracms/media/json/files-remove.json',
+            'filesMove':    '/bundles/videinfracms/media/json/files-move.json',
+        };
+
         var MEDIA_INITIAL_STATE = {
             'tree': {
                 'root': {{ root_category|json_encode|raw }}

@@ -6,6 +6,10 @@ import store from './modules/store';
 import { addFolder, deleteSelectedListItems } from './modules/actions';
 
 
+// Debug
+window.store = store;
+
+
 $(function () {
     uploader.init({'store': store});
 

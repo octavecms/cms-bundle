@@ -9,65 +9,24 @@ use Sonata\AdminBundle\Controller\CRUDController;
  */
 class MediaController extends CRUDController
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listAction()
     {
+        $categories = $this->get('vig.cms.media_category.repository')->getTree();
+        $request = $this->getRequest();
+        $currentCategory = $request->get('category', 'root');
+
         return $this->render('VideInfraCMSBundle:Media:list.html.twig', [
+
             'csrf_token' => 'NANANANANANANA BATMAAAAAAAAN',
-
-            'current_category_id' => 'hhh',
-
+            'current_category_id' => $currentCategory,
             'root_category' => [
-                'id' => 'aaa',
+                'id' => 'root',
                 'parent' => null,
                 'name' => 'Default Category',
-                'children' => [
-                    [
-                        'id' => 'bbb',
-                        'parent' => 'aaa',
-                        'name' => 'Inner Category',
-                        'children' => [
-                            [
-                                'id' => 'eee',
-                                'parent' => 'bbb',
-                                'name' => 'Deep Category',
-                                'children' => [
-                                    [
-                                        'id' => 'hhh',
-                                        'parent' => 'eee',
-                                        'name' => 'Deeper Category',
-                                        'children' => []
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                    [
-                        'id' => 'ccc',
-                        'parent' => 'aaa',
-                        'name' => 'Another Category',
-                        'children' => [
-                            [
-                                'id' => 'fff',
-                                'parent' => 'ccc',
-                                'name' => 'Deep Category',
-                                'children' => []
-                            ]
-                        ]
-                    ],
-                    [
-                        'id' => 'ddd',
-                        'parent' => 'aaa',
-                        'name' => 'Misc Category',
-                        'children' => [
-                            [
-                                'id' => 'ggg',
-                                'parent' => 'ddd',
-                                'name' => 'Deep Category',
-                                'children' => []
-                            ]
-                        ]
-                    ]
-                ]
+                'children' => $categories
             ]
         ]);
     }
