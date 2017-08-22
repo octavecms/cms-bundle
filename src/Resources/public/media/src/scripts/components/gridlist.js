@@ -37,6 +37,8 @@ export default class MediaGridList {
         $container.addClass(this.options.className);
 
         $container.on('mousedown', this.handleUnselectAllItems.bind(this));
+        $(document).on('mousedown', this.handleCloseListItem.bind(this));
+        $(document).on('keydown', this.handleCloseListItemKey.bind(this));
 
         $container.selectable({})
             .on('selectableselecting', this.handleSelectItem.bind(this))
@@ -138,6 +140,20 @@ export default class MediaGridList {
 
         if (!id) {
             this.store.dispatch(unsetAllSelectedListItems());
+            this.store.dispatch(setOpenedListItem(null));
+        }
+    }
+
+    handleCloseListItem (e) {
+        const id = this.getItemId(e);
+
+        if (!id) {
+            this.store.dispatch(setOpenedListItem(null));
+        }
+    }
+
+    handleCloseListItemKey (e) {
+        if (e.which == 27 && !$(e.target).is('input, select, textarea')) { // Escape key
             this.store.dispatch(setOpenedListItem(null));
         }
     }
