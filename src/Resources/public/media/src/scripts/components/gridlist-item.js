@@ -7,6 +7,8 @@ import {
     setDraggingListItems
 } from '../modules/actions';
 
+import uploader from './uploader';
+
 
 export default class MediaGridListItem {
 
@@ -23,7 +25,8 @@ export default class MediaGridListItem {
         }, this.constructor.defaultOptions, options);
         this.store = this.options.store;
 
-        this.popoverHTML = '<div class="media-gridlist-popover">' + $container.find('.media-gridlist-popover').html() + '</div>';
+        this.$popover    = $container.find('.media-gridlist-popover');
+        this.$replace    = null;
 
         this.init();
     }
@@ -41,6 +44,11 @@ export default class MediaGridListItem {
             store.subscribePath('grid.dragging', this.handleDraggingChange.bind(this))
         ];
 
+        // Already should be opened
+        if (store.getState().opened === this.options.id) {
+            this.handleOpenedChange(this.options.id, null);
+        }
+
         // Drag & drop
         $container.draggable({
             helper  : 'clone',
@@ -53,6 +61,17 @@ export default class MediaGridListItem {
 
         // Popover
         $container.on('click', this.handleClick.bind(this));
+    }
+
+    initPopover () {
+        // "Replace" button
+        this.$replace = this.$popover.find('.js-media-replace');
+        uploader.registerButton(this.$replace, {
+            'multiple': false,
+            'info': {
+                'replace': this.options.id
+            }
+        });
     }
 
     /**
@@ -72,8 +91,9 @@ export default class MediaGridListItem {
      * Destroy grid list item instance
      */
     destroy () {
+        uploader.unregisterButton(this.$replace || $());
         each(this.unsubscribers, unsubscribe => unsubscribe());
-        this.unsubscribers = this.$container = this.options = this.store = null;
+        this.unsubscribers = this.$container = this.$replace = this.options = this.store = null;
     }
 
 
@@ -136,11 +156,14 @@ export default class MediaGridListItem {
                     trigger: 'null',
                     html: true,
                     placement: 'bottom',
-                    content: () => this.popoverHTML
+                    content: this.$popover.removeClass('hidden')
                 });
+
+                this.initPopover();
             }
 
             this.$container.popover('show').addClass('is-active');
+
         } else if (prevOpened === id) {
             this.$container.popover('hide').removeClass('is-active');
         }
@@ -171,9 +194,11 @@ export default class MediaGridListItem {
      */
 
     handleMoveStart (event, ui) {
-        const selected = this.store.getState().selected;
-        const id = this.options.id;
-        let   list = [id];
+        const store    = this.store;
+        const selected = store.getState().selected;
+
+        const id       = this.options.id;
+        let   list     = [id];
 
         if (id in selected) {
             list = map(selected, (item, id) => id);
@@ -190,7 +215,7 @@ export default class MediaGridListItem {
     }
 
     handleMoveEnd (event, ui) {
-        store.dispatch(setDraggingListItems([]));
+        this.store.dispatch(setDraggingListItems([]));
     }
 
 }

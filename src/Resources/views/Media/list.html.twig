@@ -13,9 +13,8 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a class="sonata-action-element js-media-remove" href="#"><i class="fa fa-remove" aria-hidden="true"></i>
-                            {# {{ 'add_new' | trans({}, 'VideInfraCMSBundle') }} #}
-                            Delete
+                        <a class="sonata-action-element js-media-remove" href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                            {{ 'delete' | trans({}, 'VideInfraCMSBundle') }}
                         </a>
                     </li>
                     <li class="dropdown sonata-actions">
@@ -28,15 +27,13 @@
                             <li>
                                 <a class="sonata-action-element js-media-add-folder" href="#">
                                     <i class="fa fa-folder-o" aria-hidden="true"></i>
-                                    Folder
-                                    {# {{ 'add_new' | trans({}, 'VideInfraCMSBundle') }} #}
+                                    {{ 'folder' | trans({}, 'VideInfraCMSBundle') }}
                                 </a>
                             </li>
                             <li>
-                                <a class="sonata-action-element js-media-upload-file" href="#">
+                                <a class="sonata-action-element js-media-upload-file">
                                     <i class="fa fa-file-o" aria-hidden="true"></i>
-                                    Upload file
-                                    {# {{ 'return_to_list' | trans({}, 'VideInfraCMSBundle') }} #}
+                                    {{ 'upload_file' | trans({}, 'VideInfraCMSBundle') }}
                                 </a>
                             </li>
                         </ul>

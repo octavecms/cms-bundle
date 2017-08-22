@@ -13,8 +13,9 @@ export default class MediaGridList {
 
     static get defaultOptions () {
         return {
-            'className': 'media-grid-list',
+            'className': 'media-gridlist',
             'itemSelector': '.media-gridlist-box',
+            'popoverSelector': '.popover',
             'store': null
         };
     }
@@ -46,18 +47,20 @@ export default class MediaGridList {
 
         store.subscribePath('grid.files', this.handleGridChange.bind(this));
         store.subscribePath('grid.loading', this.handleGridLoading.bind(this));
+        store.subscribePath('files', this.handleFilesChange.bind(this));
     }
 
     handleGridChange (newFiles, prevFiles) {
-        const state        = this.store.getState();
+        const store   = this.store;
+        const state   = store.getState();
 
         // List of ids added / removed, these are objects {"fileIdA": 1, "fileIdB": 1}
-        const added        = reduce(difference(newFiles, prevFiles), (list, id) => { list[id] = 1; return list; }, {});
-        const removed      = reduce(difference(prevFiles, newFiles), (list, id) => { list[id] = 1; return list; }, {});
+        const added   = reduce(difference(newFiles, prevFiles), (list, id) => { list[id] = 1; return list; }, {});
+        const removed = reduce(difference(prevFiles, newFiles), (list, id) => { list[id] = 1; return list; }, {});
 
         // List of all files
-        const files        = filter(uniq([].concat(newFiles, prevFiles)));
-        const items        = this.mediaGridItems;
+        const files   = filter(uniq([].concat(newFiles, prevFiles)));
+        const items   = this.mediaGridItems;
         let prevItem;
 
         for (let i = 0; i < files.length; i++) {
@@ -65,6 +68,7 @@ export default class MediaGridList {
             let file = state.files[id];
 
             if (id in added) {
+                // New items which were added
                 let $element = $(this.template({'data': file}));
 
                 if (prevItem) {
@@ -75,10 +79,37 @@ export default class MediaGridList {
 
                 prevItem = items[file.id] = new MediaGridListItem($element, {store: store, id: id});
             } else if (id in removed) {
+                // Items which were removed
                 items[id].remove();
                 delete(items[id]);
             } else {
                 prevItem = items[id];
+            }
+        }
+    }
+
+    handleFilesChange (newFiles, prevFiles) {
+        const items = this.mediaGridItems;
+        const store = this.store;
+
+        for (let id in newFiles) {
+            let newFile  = newFiles[id];
+            let prevFile = prevFiles[id];
+
+            if (prevFile && prevFile !== newFile) {
+                for (let key in newFile) {
+                    if (newFile[key] !== prevFile[key]) {
+                        // Replace item
+                        let prevItem = items[newFile.id];
+                        let $element = $(this.template({'data': newFile}));
+
+                        prevItem.$container.after($element);
+                        items[newFile.id].remove();
+                        items[newFile.id] = new MediaGridListItem($element, {store: store, id: newFile.id});
+
+                        break;
+                    }
+                }
             }
         }
     }
@@ -91,14 +122,14 @@ export default class MediaGridList {
     handleSelectItem (e, ui) {
         const id = this.getItemId({'target': ui.selected || ui.selecting});
         if (id) {
-            store.dispatch(addSelectedItems([id]));
+            this.store.dispatch(addSelectedItems([id]));
         }
     }
 
     handleUnselectItem (e, ui) {
         const id = this.getItemId({'target': ui.unselected || ui.unselecting});
         if (id) {
-            store.dispatch(removeSelectedItems([id]));
+            this.store.dispatch(removeSelectedItems([id]));
         }
     }
 
@@ -106,8 +137,8 @@ export default class MediaGridList {
         const id = this.getItemId(e);
 
         if (!id) {
-            store.dispatch(unsetAllSelectedListItems());
-            store.dispatch(setOpenedListItem(null));
+            this.store.dispatch(unsetAllSelectedListItems());
+            this.store.dispatch(setOpenedListItem(null));
         }
     }
 
@@ -124,7 +155,19 @@ export default class MediaGridList {
 
     getItemElement (e) {
         if (e && e.target) {
-            return $(e.target).closest(this.options.itemSelector);
+            const $item = $(e.target).closest(this.options.itemSelector);
+
+            if ($item.length) {
+                return $item;
+            } else {
+                const $popover = $(e.target).closest(this.options.popoverSelector);
+
+                if ($popover.length) {
+                    return $popover.prev(this.options.itemSelector);
+                } else {
+                    return $();
+                }
+            }
         } else if (e instanceof jQuery) {
             return e;
         } else if (typeof e === 'string') {

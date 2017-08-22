@@ -1,0 +1,14 @@
+.media-upload-button {
+    position: relative;
+    overflow: hidden;
+
+    input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: scale(3) translate(-6px, -6px);
+        transform-origin: 0 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+}

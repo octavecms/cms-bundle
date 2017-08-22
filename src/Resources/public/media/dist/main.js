@@ -1,4 +1,2062 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/*
+ * jQuery File Upload Plugin
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+
+/* jshint nomen:false */
+/* global define, require, window, document, location, Blob, FormData */
+
+;(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define([
+            'jquery',
+            'jquery-ui/ui/widget'
+        ], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS:
+        factory(
+            require('jquery'),
+            require('./vendor/jquery.ui.widget')
+        );
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function ($) {
+    'use strict';
+
+    // Detect file input support, based on
+    // http://viljamis.com/blog/2012/file-upload-support-on-mobile/
+    $.support.fileInput = !(new RegExp(
+        // Handle devices which give false positives for the feature detection:
+        '(Android (1\\.[0156]|2\\.[01]))' +
+            '|(Windows Phone (OS 7|8\\.0))|(XBLWP)|(ZuneWP)|(WPDesktop)' +
+            '|(w(eb)?OSBrowser)|(webOS)' +
+            '|(Kindle/(1\\.0|2\\.[05]|3\\.0))'
+    ).test(window.navigator.userAgent) ||
+        // Feature detection for all other devices:
+        $('<input type="file">').prop('disabled'));
+
+    // The FileReader API is not actually used, but works as feature detection,
+    // as some Safari versions (5?) support XHR file uploads via the FormData API,
+    // but not non-multipart XHR file uploads.
+    // window.XMLHttpRequestUpload is not available on IE10, so we check for
+    // window.ProgressEvent instead to detect XHR2 file upload capability:
+    $.support.xhrFileUpload = !!(window.ProgressEvent && window.FileReader);
+    $.support.xhrFormDataFileUpload = !!window.FormData;
+
+    // Detect support for Blob slicing (required for chunked uploads):
+    $.support.blobSlice = window.Blob && (Blob.prototype.slice ||
+        Blob.prototype.webkitSlice || Blob.prototype.mozSlice);
+
+    // Helper function to create drag handlers for dragover/dragenter/dragleave:
+    function getDragHandler(type) {
+        var isDragOver = type === 'dragover';
+        return function (e) {
+            e.dataTransfer = e.originalEvent && e.originalEvent.dataTransfer;
+            var dataTransfer = e.dataTransfer;
+            if (dataTransfer && $.inArray('Files', dataTransfer.types) !== -1 &&
+                    this._trigger(
+                        type,
+                        $.Event(type, {delegatedEvent: e})
+                    ) !== false) {
+                e.preventDefault();
+                if (isDragOver) {
+                    dataTransfer.dropEffect = 'copy';
+                }
+            }
+        };
+    }
+
+    // The fileupload widget listens for change events on file input fields defined
+    // via fileInput setting and paste or drop events of the given dropZone.
+    // In addition to the default jQuery Widget methods, the fileupload widget
+    // exposes the "add" and "send" methods, to add or directly send files using
+    // the fileupload API.
+    // By default, files added via file input selection, paste, drag & drop or
+    // "add" method are uploaded immediately, but it is possible to override
+    // the "add" callback option to queue file uploads.
+    $.widget('blueimp.fileupload', {
+
+        options: {
+            // The drop target element(s), by the default the complete document.
+            // Set to null to disable drag & drop support:
+            dropZone: $(document),
+            // The paste target element(s), by the default undefined.
+            // Set to a DOM node or jQuery object to enable file pasting:
+            pasteZone: undefined,
+            // The file input field(s), that are listened to for change events.
+            // If undefined, it is set to the file input fields inside
+            // of the widget element on plugin initialization.
+            // Set to null to disable the change listener.
+            fileInput: undefined,
+            // By default, the file input field is replaced with a clone after
+            // each input field change event. This is required for iframe transport
+            // queues and allows change events to be fired for the same file
+            // selection, but can be disabled by setting the following option to false:
+            replaceFileInput: true,
+            // The parameter name for the file form data (the request argument name).
+            // If undefined or empty, the name property of the file input field is
+            // used, or "files[]" if the file input name property is also empty,
+            // can be a string or an array of strings:
+            paramName: undefined,
+            // By default, each file of a selection is uploaded using an individual
+            // request for XHR type uploads. Set to false to upload file
+            // selections in one request each:
+            singleFileUploads: true,
+            // To limit the number of files uploaded with one XHR request,
+            // set the following option to an integer greater than 0:
+            limitMultiFileUploads: undefined,
+            // The following option limits the number of files uploaded with one
+            // XHR request to keep the request size under or equal to the defined
+            // limit in bytes:
+            limitMultiFileUploadSize: undefined,
+            // Multipart file uploads add a number of bytes to each uploaded file,
+            // therefore the following option adds an overhead for each file used
+            // in the limitMultiFileUploadSize configuration:
+            limitMultiFileUploadSizeOverhead: 512,
+            // Set the following option to true to issue all file upload requests
+            // in a sequential order:
+            sequentialUploads: false,
+            // To limit the number of concurrent uploads,
+            // set the following option to an integer greater than 0:
+            limitConcurrentUploads: undefined,
+            // Set the following option to true to force iframe transport uploads:
+            forceIframeTransport: false,
+            // Set the following option to the location of a redirect url on the
+            // origin server, for cross-domain iframe transport uploads:
+            redirect: undefined,
+            // The parameter name for the redirect url, sent as part of the form
+            // data and set to 'redirect' if this option is empty:
+            redirectParamName: undefined,
+            // Set the following option to the location of a postMessage window,
+            // to enable postMessage transport uploads:
+            postMessage: undefined,
+            // By default, XHR file uploads are sent as multipart/form-data.
+            // The iframe transport is always using multipart/form-data.
+            // Set to false to enable non-multipart XHR uploads:
+            multipart: true,
+            // To upload large files in smaller chunks, set the following option
+            // to a preferred maximum chunk size. If set to 0, null or undefined,
+            // or the browser does not support the required Blob API, files will
+            // be uploaded as a whole.
+            maxChunkSize: undefined,
+            // When a non-multipart upload or a chunked multipart upload has been
+            // aborted, this option can be used to resume the upload by setting
+            // it to the size of the already uploaded bytes. This option is most
+            // useful when modifying the options object inside of the "add" or
+            // "send" callbacks, as the options are cloned for each file upload.
+            uploadedBytes: undefined,
+            // By default, failed (abort or error) file uploads are removed from the
+            // global progress calculation. Set the following option to false to
+            // prevent recalculating the global progress data:
+            recalculateProgress: true,
+            // Interval in milliseconds to calculate and trigger progress events:
+            progressInterval: 100,
+            // Interval in milliseconds to calculate progress bitrate:
+            bitrateInterval: 500,
+            // By default, uploads are started automatically when adding files:
+            autoUpload: true,
+
+            // Error and info messages:
+            messages: {
+                uploadedBytes: 'Uploaded bytes exceed file size'
+            },
+
+            // Translation function, gets the message key to be translated
+            // and an object with context specific data as arguments:
+            i18n: function (message, context) {
+                message = this.messages[message] || message.toString();
+                if (context) {
+                    $.each(context, function (key, value) {
+                        message = message.replace('{' + key + '}', value);
+                    });
+                }
+                return message;
+            },
+
+            // Additional form data to be sent along with the file uploads can be set
+            // using this option, which accepts an array of objects with name and
+            // value properties, a function returning such an array, a FormData
+            // object (for XHR file uploads), or a simple object.
+            // The form of the first fileInput is given as parameter to the function:
+            formData: function (form) {
+                return form.serializeArray();
+            },
+
+            // The add callback is invoked as soon as files are added to the fileupload
+            // widget (via file input selection, drag & drop, paste or add API call).
+            // If the singleFileUploads option is enabled, this callback will be
+            // called once for each file in the selection for XHR file uploads, else
+            // once for each file selection.
+            //
+            // The upload starts when the submit method is invoked on the data parameter.
+            // The data object contains a files property holding the added files
+            // and allows you to override plugin options as well as define ajax settings.
+            //
+            // Listeners for this callback can also be bound the following way:
+            // .bind('fileuploadadd', func);
+            //
+            // data.submit() returns a Promise object and allows to attach additional
+            // handlers using jQuery's Deferred callbacks:
+            // data.submit().done(func).fail(func).always(func);
+            add: function (e, data) {
+                if (e.isDefaultPrevented()) {
+                    return false;
+                }
+                if (data.autoUpload || (data.autoUpload !== false &&
+                        $(this).fileupload('option', 'autoUpload'))) {
+                    data.process().done(function () {
+                        data.submit();
+                    });
+                }
+            },
+
+            // Other callbacks:
+
+            // Callback for the submit event of each file upload:
+            // submit: function (e, data) {}, // .bind('fileuploadsubmit', func);
+
+            // Callback for the start of each file upload request:
+            // send: function (e, data) {}, // .bind('fileuploadsend', func);
+
+            // Callback for successful uploads:
+            // done: function (e, data) {}, // .bind('fileuploaddone', func);
+
+            // Callback for failed (abort or error) uploads:
+            // fail: function (e, data) {}, // .bind('fileuploadfail', func);
+
+            // Callback for completed (success, abort or error) requests:
+            // always: function (e, data) {}, // .bind('fileuploadalways', func);
+
+            // Callback for upload progress events:
+            // progress: function (e, data) {}, // .bind('fileuploadprogress', func);
+
+            // Callback for global upload progress events:
+            // progressall: function (e, data) {}, // .bind('fileuploadprogressall', func);
+
+            // Callback for uploads start, equivalent to the global ajaxStart event:
+            // start: function (e) {}, // .bind('fileuploadstart', func);
+
+            // Callback for uploads stop, equivalent to the global ajaxStop event:
+            // stop: function (e) {}, // .bind('fileuploadstop', func);
+
+            // Callback for change events of the fileInput(s):
+            // change: function (e, data) {}, // .bind('fileuploadchange', func);
+
+            // Callback for paste events to the pasteZone(s):
+            // paste: function (e, data) {}, // .bind('fileuploadpaste', func);
+
+            // Callback for drop events of the dropZone(s):
+            // drop: function (e, data) {}, // .bind('fileuploaddrop', func);
+
+            // Callback for dragover events of the dropZone(s):
+            // dragover: function (e) {}, // .bind('fileuploaddragover', func);
+
+            // Callback for the start of each chunk upload request:
+            // chunksend: function (e, data) {}, // .bind('fileuploadchunksend', func);
+
+            // Callback for successful chunk uploads:
+            // chunkdone: function (e, data) {}, // .bind('fileuploadchunkdone', func);
+
+            // Callback for failed (abort or error) chunk uploads:
+            // chunkfail: function (e, data) {}, // .bind('fileuploadchunkfail', func);
+
+            // Callback for completed (success, abort or error) chunk upload requests:
+            // chunkalways: function (e, data) {}, // .bind('fileuploadchunkalways', func);
+
+            // The plugin options are used as settings object for the ajax calls.
+            // The following are jQuery ajax settings required for the file uploads:
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 0
+        },
+
+        // A list of options that require reinitializing event listeners and/or
+        // special initialization code:
+        _specialOptions: [
+            'fileInput',
+            'dropZone',
+            'pasteZone',
+            'multipart',
+            'forceIframeTransport'
+        ],
+
+        _blobSlice: $.support.blobSlice && function () {
+            var slice = this.slice || this.webkitSlice || this.mozSlice;
+            return slice.apply(this, arguments);
+        },
+
+        _BitrateTimer: function () {
+            this.timestamp = ((Date.now) ? Date.now() : (new Date()).getTime());
+            this.loaded = 0;
+            this.bitrate = 0;
+            this.getBitrate = function (now, loaded, interval) {
+                var timeDiff = now - this.timestamp;
+                if (!this.bitrate || !interval || timeDiff > interval) {
+                    this.bitrate = (loaded - this.loaded) * (1000 / timeDiff) * 8;
+                    this.loaded = loaded;
+                    this.timestamp = now;
+                }
+                return this.bitrate;
+            };
+        },
+
+        _isXHRUpload: function (options) {
+            return !options.forceIframeTransport &&
+                ((!options.multipart && $.support.xhrFileUpload) ||
+                $.support.xhrFormDataFileUpload);
+        },
+
+        _getFormData: function (options) {
+            var formData;
+            if ($.type(options.formData) === 'function') {
+                return options.formData(options.form);
+            }
+            if ($.isArray(options.formData)) {
+                return options.formData;
+            }
+            if ($.type(options.formData) === 'object') {
+                formData = [];
+                $.each(options.formData, function (name, value) {
+                    formData.push({name: name, value: value});
+                });
+                return formData;
+            }
+            return [];
+        },
+
+        _getTotal: function (files) {
+            var total = 0;
+            $.each(files, function (index, file) {
+                total += file.size || 1;
+            });
+            return total;
+        },
+
+        _initProgressObject: function (obj) {
+            var progress = {
+                loaded: 0,
+                total: 0,
+                bitrate: 0
+            };
+            if (obj._progress) {
+                $.extend(obj._progress, progress);
+            } else {
+                obj._progress = progress;
+            }
+        },
+
+        _initResponseObject: function (obj) {
+            var prop;
+            if (obj._response) {
+                for (prop in obj._response) {
+                    if (obj._response.hasOwnProperty(prop)) {
+                        delete obj._response[prop];
+                    }
+                }
+            } else {
+                obj._response = {};
+            }
+        },
+
+        _onProgress: function (e, data) {
+            if (e.lengthComputable) {
+                var now = ((Date.now) ? Date.now() : (new Date()).getTime()),
+                    loaded;
+                if (data._time && data.progressInterval &&
+                        (now - data._time < data.progressInterval) &&
+                        e.loaded !== e.total) {
+                    return;
+                }
+                data._time = now;
+                loaded = Math.floor(
+                    e.loaded / e.total * (data.chunkSize || data._progress.total)
+                ) + (data.uploadedBytes || 0);
+                // Add the difference from the previously loaded state
+                // to the global loaded counter:
+                this._progress.loaded += (loaded - data._progress.loaded);
+                this._progress.bitrate = this._bitrateTimer.getBitrate(
+                    now,
+                    this._progress.loaded,
+                    data.bitrateInterval
+                );
+                data._progress.loaded = data.loaded = loaded;
+                data._progress.bitrate = data.bitrate = data._bitrateTimer.getBitrate(
+                    now,
+                    loaded,
+                    data.bitrateInterval
+                );
+                // Trigger a custom progress event with a total data property set
+                // to the file size(s) of the current upload and a loaded data
+                // property calculated accordingly:
+                this._trigger(
+                    'progress',
+                    $.Event('progress', {delegatedEvent: e}),
+                    data
+                );
+                // Trigger a global progress event for all current file uploads,
+                // including ajax calls queued for sequential file uploads:
+                this._trigger(
+                    'progressall',
+                    $.Event('progressall', {delegatedEvent: e}),
+                    this._progress
+                );
+            }
+        },
+
+        _initProgressListener: function (options) {
+            var that = this,
+                xhr = options.xhr ? options.xhr() : $.ajaxSettings.xhr();
+            // Accesss to the native XHR object is required to add event listeners
+            // for the upload progress event:
+            if (xhr.upload) {
+                $(xhr.upload).bind('progress', function (e) {
+                    var oe = e.originalEvent;
+                    // Make sure the progress event properties get copied over:
+                    e.lengthComputable = oe.lengthComputable;
+                    e.loaded = oe.loaded;
+                    e.total = oe.total;
+                    that._onProgress(e, options);
+                });
+                options.xhr = function () {
+                    return xhr;
+                };
+            }
+        },
+
+        _isInstanceOf: function (type, obj) {
+            // Cross-frame instanceof check
+            return Object.prototype.toString.call(obj) === '[object ' + type + ']';
+        },
+
+        _initXHRData: function (options) {
+            var that = this,
+                formData,
+                file = options.files[0],
+                // Ignore non-multipart setting if not supported:
+                multipart = options.multipart || !$.support.xhrFileUpload,
+                paramName = $.type(options.paramName) === 'array' ?
+                    options.paramName[0] : options.paramName;
+            options.headers = $.extend({}, options.headers);
+            if (options.contentRange) {
+                options.headers['Content-Range'] = options.contentRange;
+            }
+            if (!multipart || options.blob || !this._isInstanceOf('File', file)) {
+                options.headers['Content-Disposition'] = 'attachment; filename="' +
+                    encodeURI(file.name) + '"';
+            }
+            if (!multipart) {
+                options.contentType = file.type || 'application/octet-stream';
+                options.data = options.blob || file;
+            } else if ($.support.xhrFormDataFileUpload) {
+                if (options.postMessage) {
+                    // window.postMessage does not allow sending FormData
+                    // objects, so we just add the File/Blob objects to
+                    // the formData array and let the postMessage window
+                    // create the FormData object out of this array:
+                    formData = this._getFormData(options);
+                    if (options.blob) {
+                        formData.push({
+                            name: paramName,
+                            value: options.blob
+                        });
+                    } else {
+                        $.each(options.files, function (index, file) {
+                            formData.push({
+                                name: ($.type(options.paramName) === 'array' &&
+                                    options.paramName[index]) || paramName,
+                                value: file
+                            });
+                        });
+                    }
+                } else {
+                    if (that._isInstanceOf('FormData', options.formData)) {
+                        formData = options.formData;
+                    } else {
+                        formData = new FormData();
+                        $.each(this._getFormData(options), function (index, field) {
+                            formData.append(field.name, field.value);
+                        });
+                    }
+                    if (options.blob) {
+                        formData.append(paramName, options.blob, file.name);
+                    } else {
+                        $.each(options.files, function (index, file) {
+                            // This check allows the tests to run with
+                            // dummy objects:
+                            if (that._isInstanceOf('File', file) ||
+                                    that._isInstanceOf('Blob', file)) {
+                                formData.append(
+                                    ($.type(options.paramName) === 'array' &&
+                                        options.paramName[index]) || paramName,
+                                    file,
+                                    file.uploadName || file.name
+                                );
+                            }
+                        });
+                    }
+                }
+                options.data = formData;
+            }
+            // Blob reference is not needed anymore, free memory:
+            options.blob = null;
+        },
+
+        _initIframeSettings: function (options) {
+            var targetHost = $('<a></a>').prop('href', options.url).prop('host');
+            // Setting the dataType to iframe enables the iframe transport:
+            options.dataType = 'iframe ' + (options.dataType || '');
+            // The iframe transport accepts a serialized array as form data:
+            options.formData = this._getFormData(options);
+            // Add redirect url to form data on cross-domain uploads:
+            if (options.redirect && targetHost && targetHost !== location.host) {
+                options.formData.push({
+                    name: options.redirectParamName || 'redirect',
+                    value: options.redirect
+                });
+            }
+        },
+
+        _initDataSettings: function (options) {
+            if (this._isXHRUpload(options)) {
+                if (!this._chunkedUpload(options, true)) {
+                    if (!options.data) {
+                        this._initXHRData(options);
+                    }
+                    this._initProgressListener(options);
+                }
+                if (options.postMessage) {
+                    // Setting the dataType to postmessage enables the
+                    // postMessage transport:
+                    options.dataType = 'postmessage ' + (options.dataType || '');
+                }
+            } else {
+                this._initIframeSettings(options);
+            }
+        },
+
+        _getParamName: function (options) {
+            var fileInput = $(options.fileInput),
+                paramName = options.paramName;
+            if (!paramName) {
+                paramName = [];
+                fileInput.each(function () {
+                    var input = $(this),
+                        name = input.prop('name') || 'files[]',
+                        i = (input.prop('files') || [1]).length;
+                    while (i) {
+                        paramName.push(name);
+                        i -= 1;
+                    }
+                });
+                if (!paramName.length) {
+                    paramName = [fileInput.prop('name') || 'files[]'];
+                }
+            } else if (!$.isArray(paramName)) {
+                paramName = [paramName];
+            }
+            return paramName;
+        },
+
+        _initFormSettings: function (options) {
+            // Retrieve missing options from the input field and the
+            // associated form, if available:
+            if (!options.form || !options.form.length) {
+                options.form = $(options.fileInput.prop('form'));
+                // If the given file input doesn't have an associated form,
+                // use the default widget file input's form:
+                if (!options.form.length) {
+                    options.form = $(this.options.fileInput.prop('form'));
+                }
+            }
+            options.paramName = this._getParamName(options);
+            if (!options.url) {
+                options.url = options.form.prop('action') || location.href;
+            }
+            // The HTTP request method must be "POST" or "PUT":
+            options.type = (options.type ||
+                ($.type(options.form.prop('method')) === 'string' &&
+                    options.form.prop('method')) || ''
+                ).toUpperCase();
+            if (options.type !== 'POST' && options.type !== 'PUT' &&
+                    options.type !== 'PATCH') {
+                options.type = 'POST';
+            }
+            if (!options.formAcceptCharset) {
+                options.formAcceptCharset = options.form.attr('accept-charset');
+            }
+        },
+
+        _getAJAXSettings: function (data) {
+            var options = $.extend({}, this.options, data);
+            this._initFormSettings(options);
+            this._initDataSettings(options);
+            return options;
+        },
+
+        // jQuery 1.6 doesn't provide .state(),
+        // while jQuery 1.8+ removed .isRejected() and .isResolved():
+        _getDeferredState: function (deferred) {
+            if (deferred.state) {
+                return deferred.state();
+            }
+            if (deferred.isResolved()) {
+                return 'resolved';
+            }
+            if (deferred.isRejected()) {
+                return 'rejected';
+            }
+            return 'pending';
+        },
+
+        // Maps jqXHR callbacks to the equivalent
+        // methods of the given Promise object:
+        _enhancePromise: function (promise) {
+            promise.success = promise.done;
+            promise.error = promise.fail;
+            promise.complete = promise.always;
+            return promise;
+        },
+
+        // Creates and returns a Promise object enhanced with
+        // the jqXHR methods abort, success, error and complete:
+        _getXHRPromise: function (resolveOrReject, context, args) {
+            var dfd = $.Deferred(),
+                promise = dfd.promise();
+            context = context || this.options.context || promise;
+            if (resolveOrReject === true) {
+                dfd.resolveWith(context, args);
+            } else if (resolveOrReject === false) {
+                dfd.rejectWith(context, args);
+            }
+            promise.abort = dfd.promise;
+            return this._enhancePromise(promise);
+        },
+
+        // Adds convenience methods to the data callback argument:
+        _addConvenienceMethods: function (e, data) {
+            var that = this,
+                getPromise = function (args) {
+                    return $.Deferred().resolveWith(that, args).promise();
+                };
+            data.process = function (resolveFunc, rejectFunc) {
+                if (resolveFunc || rejectFunc) {
+                    data._processQueue = this._processQueue =
+                        (this._processQueue || getPromise([this])).then(
+                            function () {
+                                if (data.errorThrown) {
+                                    return $.Deferred()
+                                        .rejectWith(that, [data]).promise();
+                                }
+                                return getPromise(arguments);
+                            }
+                        ).then(resolveFunc, rejectFunc);
+                }
+                return this._processQueue || getPromise([this]);
+            };
+            data.submit = function () {
+                if (this.state() !== 'pending') {
+                    data.jqXHR = this.jqXHR =
+                        (that._trigger(
+                            'submit',
+                            $.Event('submit', {delegatedEvent: e}),
+                            this
+                        ) !== false) && that._onSend(e, this);
+                }
+                return this.jqXHR || that._getXHRPromise();
+            };
+            data.abort = function () {
+                if (this.jqXHR) {
+                    return this.jqXHR.abort();
+                }
+                this.errorThrown = 'abort';
+                that._trigger('fail', null, this);
+                return that._getXHRPromise(false);
+            };
+            data.state = function () {
+                if (this.jqXHR) {
+                    return that._getDeferredState(this.jqXHR);
+                }
+                if (this._processQueue) {
+                    return that._getDeferredState(this._processQueue);
+                }
+            };
+            data.processing = function () {
+                return !this.jqXHR && this._processQueue && that
+                    ._getDeferredState(this._processQueue) === 'pending';
+            };
+            data.progress = function () {
+                return this._progress;
+            };
+            data.response = function () {
+                return this._response;
+            };
+        },
+
+        // Parses the Range header from the server response
+        // and returns the uploaded bytes:
+        _getUploadedBytes: function (jqXHR) {
+            var range = jqXHR.getResponseHeader('Range'),
+                parts = range && range.split('-'),
+                upperBytesPos = parts && parts.length > 1 &&
+                    parseInt(parts[1], 10);
+            return upperBytesPos && upperBytesPos + 1;
+        },
+
+        // Uploads a file in multiple, sequential requests
+        // by splitting the file up in multiple blob chunks.
+        // If the second parameter is true, only tests if the file
+        // should be uploaded in chunks, but does not invoke any
+        // upload requests:
+        _chunkedUpload: function (options, testOnly) {
+            options.uploadedBytes = options.uploadedBytes || 0;
+            var that = this,
+                file = options.files[0],
+                fs = file.size,
+                ub = options.uploadedBytes,
+                mcs = options.maxChunkSize || fs,
+                slice = this._blobSlice,
+                dfd = $.Deferred(),
+                promise = dfd.promise(),
+                jqXHR,
+                upload;
+            if (!(this._isXHRUpload(options) && slice && (ub || mcs < fs)) ||
+                    options.data) {
+                return false;
+            }
+            if (testOnly) {
+                return true;
+            }
+            if (ub >= fs) {
+                file.error = options.i18n('uploadedBytes');
+                return this._getXHRPromise(
+                    false,
+                    options.context,
+                    [null, 'error', file.error]
+                );
+            }
+            // The chunk upload method:
+            upload = function () {
+                // Clone the options object for each chunk upload:
+                var o = $.extend({}, options),
+                    currentLoaded = o._progress.loaded;
+                o.blob = slice.call(
+                    file,
+                    ub,
+                    ub + mcs,
+                    file.type
+                );
+                // Store the current chunk size, as the blob itself
+                // will be dereferenced after data processing:
+                o.chunkSize = o.blob.size;
+                // Expose the chunk bytes position range:
+                o.contentRange = 'bytes ' + ub + '-' +
+                    (ub + o.chunkSize - 1) + '/' + fs;
+                // Process the upload data (the blob and potential form data):
+                that._initXHRData(o);
+                // Add progress listeners for this chunk upload:
+                that._initProgressListener(o);
+                jqXHR = ((that._trigger('chunksend', null, o) !== false && $.ajax(o)) ||
+                        that._getXHRPromise(false, o.context))
+                    .done(function (result, textStatus, jqXHR) {
+                        ub = that._getUploadedBytes(jqXHR) ||
+                            (ub + o.chunkSize);
+                        // Create a progress event if no final progress event
+                        // with loaded equaling total has been triggered
+                        // for this chunk:
+                        if (currentLoaded + o.chunkSize - o._progress.loaded) {
+                            that._onProgress($.Event('progress', {
+                                lengthComputable: true,
+                                loaded: ub - o.uploadedBytes,
+                                total: ub - o.uploadedBytes
+                            }), o);
+                        }
+                        options.uploadedBytes = o.uploadedBytes = ub;
+                        o.result = result;
+                        o.textStatus = textStatus;
+                        o.jqXHR = jqXHR;
+                        that._trigger('chunkdone', null, o);
+                        that._trigger('chunkalways', null, o);
+                        if (ub < fs) {
+                            // File upload not yet complete,
+                            // continue with the next chunk:
+                            upload();
+                        } else {
+                            dfd.resolveWith(
+                                o.context,
+                                [result, textStatus, jqXHR]
+                            );
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        o.jqXHR = jqXHR;
+                        o.textStatus = textStatus;
+                        o.errorThrown = errorThrown;
+                        that._trigger('chunkfail', null, o);
+                        that._trigger('chunkalways', null, o);
+                        dfd.rejectWith(
+                            o.context,
+                            [jqXHR, textStatus, errorThrown]
+                        );
+                    });
+            };
+            this._enhancePromise(promise);
+            promise.abort = function () {
+                return jqXHR.abort();
+            };
+            upload();
+            return promise;
+        },
+
+        _beforeSend: function (e, data) {
+            if (this._active === 0) {
+                // the start callback is triggered when an upload starts
+                // and no other uploads are currently running,
+                // equivalent to the global ajaxStart event:
+                this._trigger('start');
+                // Set timer for global bitrate progress calculation:
+                this._bitrateTimer = new this._BitrateTimer();
+                // Reset the global progress values:
+                this._progress.loaded = this._progress.total = 0;
+                this._progress.bitrate = 0;
+            }
+            // Make sure the container objects for the .response() and
+            // .progress() methods on the data object are available
+            // and reset to their initial state:
+            this._initResponseObject(data);
+            this._initProgressObject(data);
+            data._progress.loaded = data.loaded = data.uploadedBytes || 0;
+            data._progress.total = data.total = this._getTotal(data.files) || 1;
+            data._progress.bitrate = data.bitrate = 0;
+            this._active += 1;
+            // Initialize the global progress values:
+            this._progress.loaded += data.loaded;
+            this._progress.total += data.total;
+        },
+
+        _onDone: function (result, textStatus, jqXHR, options) {
+            var total = options._progress.total,
+                response = options._response;
+            if (options._progress.loaded < total) {
+                // Create a progress event if no final progress event
+                // with loaded equaling total has been triggered:
+                this._onProgress($.Event('progress', {
+                    lengthComputable: true,
+                    loaded: total,
+                    total: total
+                }), options);
+            }
+            response.result = options.result = result;
+            response.textStatus = options.textStatus = textStatus;
+            response.jqXHR = options.jqXHR = jqXHR;
+            this._trigger('done', null, options);
+        },
+
+        _onFail: function (jqXHR, textStatus, errorThrown, options) {
+            var response = options._response;
+            if (options.recalculateProgress) {
+                // Remove the failed (error or abort) file upload from
+                // the global progress calculation:
+                this._progress.loaded -= options._progress.loaded;
+                this._progress.total -= options._progress.total;
+            }
+            response.jqXHR = options.jqXHR = jqXHR;
+            response.textStatus = options.textStatus = textStatus;
+            response.errorThrown = options.errorThrown = errorThrown;
+            this._trigger('fail', null, options);
+        },
+
+        _onAlways: function (jqXHRorResult, textStatus, jqXHRorError, options) {
+            // jqXHRorResult, textStatus and jqXHRorError are added to the
+            // options object via done and fail callbacks
+            this._trigger('always', null, options);
+        },
+
+        _onSend: function (e, data) {
+            if (!data.submit) {
+                this._addConvenienceMethods(e, data);
+            }
+            var that = this,
+                jqXHR,
+                aborted,
+                slot,
+                pipe,
+                options = that._getAJAXSettings(data),
+                send = function () {
+                    that._sending += 1;
+                    // Set timer for bitrate progress calculation:
+                    options._bitrateTimer = new that._BitrateTimer();
+                    jqXHR = jqXHR || (
+                        ((aborted || that._trigger(
+                            'send',
+                            $.Event('send', {delegatedEvent: e}),
+                            options
+                        ) === false) &&
+                        that._getXHRPromise(false, options.context, aborted)) ||
+                        that._chunkedUpload(options) || $.ajax(options)
+                    ).done(function (result, textStatus, jqXHR) {
+                        that._onDone(result, textStatus, jqXHR, options);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        that._onFail(jqXHR, textStatus, errorThrown, options);
+                    }).always(function (jqXHRorResult, textStatus, jqXHRorError) {
+                        that._onAlways(
+                            jqXHRorResult,
+                            textStatus,
+                            jqXHRorError,
+                            options
+                        );
+                        that._sending -= 1;
+                        that._active -= 1;
+                        if (options.limitConcurrentUploads &&
+                                options.limitConcurrentUploads > that._sending) {
+                            // Start the next queued upload,
+                            // that has not been aborted:
+                            var nextSlot = that._slots.shift();
+                            while (nextSlot) {
+                                if (that._getDeferredState(nextSlot) === 'pending') {
+                                    nextSlot.resolve();
+                                    break;
+                                }
+                                nextSlot = that._slots.shift();
+                            }
+                        }
+                        if (that._active === 0) {
+                            // The stop callback is triggered when all uploads have
+                            // been completed, equivalent to the global ajaxStop event:
+                            that._trigger('stop');
+                        }
+                    });
+                    return jqXHR;
+                };
+            this._beforeSend(e, options);
+            if (this.options.sequentialUploads ||
+                    (this.options.limitConcurrentUploads &&
+                    this.options.limitConcurrentUploads <= this._sending)) {
+                if (this.options.limitConcurrentUploads > 1) {
+                    slot = $.Deferred();
+                    this._slots.push(slot);
+                    pipe = slot.then(send);
+                } else {
+                    this._sequence = this._sequence.then(send, send);
+                    pipe = this._sequence;
+                }
+                // Return the piped Promise object, enhanced with an abort method,
+                // which is delegated to the jqXHR object of the current upload,
+                // and jqXHR callbacks mapped to the equivalent Promise methods:
+                pipe.abort = function () {
+                    aborted = [undefined, 'abort', 'abort'];
+                    if (!jqXHR) {
+                        if (slot) {
+                            slot.rejectWith(options.context, aborted);
+                        }
+                        return send();
+                    }
+                    return jqXHR.abort();
+                };
+                return this._enhancePromise(pipe);
+            }
+            return send();
+        },
+
+        _onAdd: function (e, data) {
+            var that = this,
+                result = true,
+                options = $.extend({}, this.options, data),
+                files = data.files,
+                filesLength = files.length,
+                limit = options.limitMultiFileUploads,
+                limitSize = options.limitMultiFileUploadSize,
+                overhead = options.limitMultiFileUploadSizeOverhead,
+                batchSize = 0,
+                paramName = this._getParamName(options),
+                paramNameSet,
+                paramNameSlice,
+                fileSet,
+                i,
+                j = 0;
+            if (!filesLength) {
+                return false;
+            }
+            if (limitSize && files[0].size === undefined) {
+                limitSize = undefined;
+            }
+            if (!(options.singleFileUploads || limit || limitSize) ||
+                    !this._isXHRUpload(options)) {
+                fileSet = [files];
+                paramNameSet = [paramName];
+            } else if (!(options.singleFileUploads || limitSize) && limit) {
+                fileSet = [];
+                paramNameSet = [];
+                for (i = 0; i < filesLength; i += limit) {
+                    fileSet.push(files.slice(i, i + limit));
+                    paramNameSlice = paramName.slice(i, i + limit);
+                    if (!paramNameSlice.length) {
+                        paramNameSlice = paramName;
+                    }
+                    paramNameSet.push(paramNameSlice);
+                }
+            } else if (!options.singleFileUploads && limitSize) {
+                fileSet = [];
+                paramNameSet = [];
+                for (i = 0; i < filesLength; i = i + 1) {
+                    batchSize += files[i].size + overhead;
+                    if (i + 1 === filesLength ||
+                            ((batchSize + files[i + 1].size + overhead) > limitSize) ||
+                            (limit && i + 1 - j >= limit)) {
+                        fileSet.push(files.slice(j, i + 1));
+                        paramNameSlice = paramName.slice(j, i + 1);
+                        if (!paramNameSlice.length) {
+                            paramNameSlice = paramName;
+                        }
+                        paramNameSet.push(paramNameSlice);
+                        j = i + 1;
+                        batchSize = 0;
+                    }
+                }
+            } else {
+                paramNameSet = paramName;
+            }
+            data.originalFiles = files;
+            $.each(fileSet || files, function (index, element) {
+                var newData = $.extend({}, data);
+                newData.files = fileSet ? element : [element];
+                newData.paramName = paramNameSet[index];
+                that._initResponseObject(newData);
+                that._initProgressObject(newData);
+                that._addConvenienceMethods(e, newData);
+                result = that._trigger(
+                    'add',
+                    $.Event('add', {delegatedEvent: e}),
+                    newData
+                );
+                return result;
+            });
+            return result;
+        },
+
+        _replaceFileInput: function (data) {
+            var input = data.fileInput,
+                inputClone = input.clone(true),
+                restoreFocus = input.is(document.activeElement);
+            // Add a reference for the new cloned file input to the data argument:
+            data.fileInputClone = inputClone;
+            $('<form></form>').append(inputClone)[0].reset();
+            // Detaching allows to insert the fileInput on another form
+            // without loosing the file input value:
+            input.after(inputClone).detach();
+            // If the fileInput had focus before it was detached,
+            // restore focus to the inputClone.
+            if (restoreFocus) {
+                inputClone.focus();
+            }
+            // Avoid memory leaks with the detached file input:
+            $.cleanData(input.unbind('remove'));
+            // Replace the original file input element in the fileInput
+            // elements set with the clone, which has been copied including
+            // event handlers:
+            this.options.fileInput = this.options.fileInput.map(function (i, el) {
+                if (el === input[0]) {
+                    return inputClone[0];
+                }
+                return el;
+            });
+            // If the widget has been initialized on the file input itself,
+            // override this.element with the file input clone:
+            if (input[0] === this.element[0]) {
+                this.element = inputClone;
+            }
+        },
+
+        _handleFileTreeEntry: function (entry, path) {
+            var that = this,
+                dfd = $.Deferred(),
+                entries = [],
+                dirReader,
+                errorHandler = function (e) {
+                    if (e && !e.entry) {
+                        e.entry = entry;
+                    }
+                    // Since $.when returns immediately if one
+                    // Deferred is rejected, we use resolve instead.
+                    // This allows valid files and invalid items
+                    // to be returned together in one set:
+                    dfd.resolve([e]);
+                },
+                successHandler = function (entries) {
+                    that._handleFileTreeEntries(
+                        entries,
+                        path + entry.name + '/'
+                    ).done(function (files) {
+                        dfd.resolve(files);
+                    }).fail(errorHandler);
+                },
+                readEntries = function () {
+                    dirReader.readEntries(function (results) {
+                        if (!results.length) {
+                            successHandler(entries);
+                        } else {
+                            entries = entries.concat(results);
+                            readEntries();
+                        }
+                    }, errorHandler);
+                };
+            path = path || '';
+            if (entry.isFile) {
+                if (entry._file) {
+                    // Workaround for Chrome bug #149735
+                    entry._file.relativePath = path;
+                    dfd.resolve(entry._file);
+                } else {
+                    entry.file(function (file) {
+                        file.relativePath = path;
+                        dfd.resolve(file);
+                    }, errorHandler);
+                }
+            } else if (entry.isDirectory) {
+                dirReader = entry.createReader();
+                readEntries();
+            } else {
+                // Return an empy list for file system items
+                // other than files or directories:
+                dfd.resolve([]);
+            }
+            return dfd.promise();
+        },
+
+        _handleFileTreeEntries: function (entries, path) {
+            var that = this;
+            return $.when.apply(
+                $,
+                $.map(entries, function (entry) {
+                    return that._handleFileTreeEntry(entry, path);
+                })
+            ).then(function () {
+                return Array.prototype.concat.apply(
+                    [],
+                    arguments
+                );
+            });
+        },
+
+        _getDroppedFiles: function (dataTransfer) {
+            dataTransfer = dataTransfer || {};
+            var items = dataTransfer.items;
+            if (items && items.length && (items[0].webkitGetAsEntry ||
+                    items[0].getAsEntry)) {
+                return this._handleFileTreeEntries(
+                    $.map(items, function (item) {
+                        var entry;
+                        if (item.webkitGetAsEntry) {
+                            entry = item.webkitGetAsEntry();
+                            if (entry) {
+                                // Workaround for Chrome bug #149735:
+                                entry._file = item.getAsFile();
+                            }
+                            return entry;
+                        }
+                        return item.getAsEntry();
+                    })
+                );
+            }
+            return $.Deferred().resolve(
+                $.makeArray(dataTransfer.files)
+            ).promise();
+        },
+
+        _getSingleFileInputFiles: function (fileInput) {
+            fileInput = $(fileInput);
+            var entries = fileInput.prop('webkitEntries') ||
+                    fileInput.prop('entries'),
+                files,
+                value;
+            if (entries && entries.length) {
+                return this._handleFileTreeEntries(entries);
+            }
+            files = $.makeArray(fileInput.prop('files'));
+            if (!files.length) {
+                value = fileInput.prop('value');
+                if (!value) {
+                    return $.Deferred().resolve([]).promise();
+                }
+                // If the files property is not available, the browser does not
+                // support the File API and we add a pseudo File object with
+                // the input value as name with path information removed:
+                files = [{name: value.replace(/^.*\\/, '')}];
+            } else if (files[0].name === undefined && files[0].fileName) {
+                // File normalization for Safari 4 and Firefox 3:
+                $.each(files, function (index, file) {
+                    file.name = file.fileName;
+                    file.size = file.fileSize;
+                });
+            }
+            return $.Deferred().resolve(files).promise();
+        },
+
+        _getFileInputFiles: function (fileInput) {
+            if (!(fileInput instanceof $) || fileInput.length === 1) {
+                return this._getSingleFileInputFiles(fileInput);
+            }
+            return $.when.apply(
+                $,
+                $.map(fileInput, this._getSingleFileInputFiles)
+            ).then(function () {
+                return Array.prototype.concat.apply(
+                    [],
+                    arguments
+                );
+            });
+        },
+
+        _onChange: function (e) {
+            var that = this,
+                data = {
+                    fileInput: $(e.target),
+                    form: $(e.target.form)
+                };
+            this._getFileInputFiles(data.fileInput).always(function (files) {
+                data.files = files;
+                if (that.options.replaceFileInput) {
+                    that._replaceFileInput(data);
+                }
+                if (that._trigger(
+                        'change',
+                        $.Event('change', {delegatedEvent: e}),
+                        data
+                    ) !== false) {
+                    that._onAdd(e, data);
+                }
+            });
+        },
+
+        _onPaste: function (e) {
+            var items = e.originalEvent && e.originalEvent.clipboardData &&
+                    e.originalEvent.clipboardData.items,
+                data = {files: []};
+            if (items && items.length) {
+                $.each(items, function (index, item) {
+                    var file = item.getAsFile && item.getAsFile();
+                    if (file) {
+                        data.files.push(file);
+                    }
+                });
+                if (this._trigger(
+                        'paste',
+                        $.Event('paste', {delegatedEvent: e}),
+                        data
+                    ) !== false) {
+                    this._onAdd(e, data);
+                }
+            }
+        },
+
+        _onDrop: function (e) {
+            e.dataTransfer = e.originalEvent && e.originalEvent.dataTransfer;
+            var that = this,
+                dataTransfer = e.dataTransfer,
+                data = {};
+            if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
+                e.preventDefault();
+                this._getDroppedFiles(dataTransfer).always(function (files) {
+                    data.files = files;
+                    if (that._trigger(
+                            'drop',
+                            $.Event('drop', {delegatedEvent: e}),
+                            data
+                        ) !== false) {
+                        that._onAdd(e, data);
+                    }
+                });
+            }
+        },
+
+        _onDragOver: getDragHandler('dragover'),
+
+        _onDragEnter: getDragHandler('dragenter'),
+
+        _onDragLeave: getDragHandler('dragleave'),
+
+        _initEventHandlers: function () {
+            if (this._isXHRUpload(this.options)) {
+                this._on(this.options.dropZone, {
+                    dragover: this._onDragOver,
+                    drop: this._onDrop,
+                    // event.preventDefault() on dragenter is required for IE10+:
+                    dragenter: this._onDragEnter,
+                    // dragleave is not required, but added for completeness:
+                    dragleave: this._onDragLeave
+                });
+                this._on(this.options.pasteZone, {
+                    paste: this._onPaste
+                });
+            }
+            if ($.support.fileInput) {
+                this._on(this.options.fileInput, {
+                    change: this._onChange
+                });
+            }
+        },
+
+        _destroyEventHandlers: function () {
+            this._off(this.options.dropZone, 'dragenter dragleave dragover drop');
+            this._off(this.options.pasteZone, 'paste');
+            this._off(this.options.fileInput, 'change');
+        },
+
+        _destroy: function () {
+            this._destroyEventHandlers();
+        },
+
+        _setOption: function (key, value) {
+            var reinit = $.inArray(key, this._specialOptions) !== -1;
+            if (reinit) {
+                this._destroyEventHandlers();
+            }
+            this._super(key, value);
+            if (reinit) {
+                this._initSpecialOptions();
+                this._initEventHandlers();
+            }
+        },
+
+        _initSpecialOptions: function () {
+            var options = this.options;
+            if (options.fileInput === undefined) {
+                options.fileInput = this.element.is('input[type="file"]') ?
+                        this.element : this.element.find('input[type="file"]');
+            } else if (!(options.fileInput instanceof $)) {
+                options.fileInput = $(options.fileInput);
+            }
+            if (!(options.dropZone instanceof $)) {
+                options.dropZone = $(options.dropZone);
+            }
+            if (!(options.pasteZone instanceof $)) {
+                options.pasteZone = $(options.pasteZone);
+            }
+        },
+
+        _getRegExp: function (str) {
+            var parts = str.split('/'),
+                modifiers = parts.pop();
+            parts.shift();
+            return new RegExp(parts.join('/'), modifiers);
+        },
+
+        _isRegExpOption: function (key, value) {
+            return key !== 'url' && $.type(value) === 'string' &&
+                /^\/.*\/[igm]{0,3}$/.test(value);
+        },
+
+        _initDataAttributes: function () {
+            var that = this,
+                options = this.options,
+                data = this.element.data();
+            // Initialize options set via HTML5 data-attributes:
+            $.each(
+                this.element[0].attributes,
+                function (index, attr) {
+                    var key = attr.name.toLowerCase(),
+                        value;
+                    if (/^data-/.test(key)) {
+                        // Convert hyphen-ated key to camelCase:
+                        key = key.slice(5).replace(/-[a-z]/g, function (str) {
+                            return str.charAt(1).toUpperCase();
+                        });
+                        value = data[key];
+                        if (that._isRegExpOption(key, value)) {
+                            value = that._getRegExp(value);
+                        }
+                        options[key] = value;
+                    }
+                }
+            );
+        },
+
+        _create: function () {
+            this._initDataAttributes();
+            this._initSpecialOptions();
+            this._slots = [];
+            this._sequence = this._getXHRPromise(true);
+            this._sending = this._active = 0;
+            this._initProgressObject(this);
+            this._initEventHandlers();
+        },
+
+        // This method is exposed to the widget API and allows to query
+        // the number of active uploads:
+        active: function () {
+            return this._active;
+        },
+
+        // This method is exposed to the widget API and allows to query
+        // the widget upload progress.
+        // It returns an object with loaded, total and bitrate properties
+        // for the running uploads:
+        progress: function () {
+            return this._progress;
+        },
+
+        // This method is exposed to the widget API and allows adding files
+        // using the fileupload API. The data parameter accepts an object which
+        // must have a files property and can contain additional options:
+        // .fileupload('add', {files: filesList});
+        add: function (data) {
+            var that = this;
+            if (!data || this.options.disabled) {
+                return;
+            }
+            if (data.fileInput && !data.files) {
+                this._getFileInputFiles(data.fileInput).always(function (files) {
+                    data.files = files;
+                    that._onAdd(null, data);
+                });
+            } else {
+                data.files = $.makeArray(data.files);
+                this._onAdd(null, data);
+            }
+        },
+
+        // This method is exposed to the widget API and allows sending files
+        // using the fileupload API. The data parameter accepts an object which
+        // must have a files or fileInput property and can contain additional options:
+        // .fileupload('send', {files: filesList});
+        // The method returns a Promise object for the file upload call.
+        send: function (data) {
+            if (data && !this.options.disabled) {
+                if (data.fileInput && !data.files) {
+                    var that = this,
+                        dfd = $.Deferred(),
+                        promise = dfd.promise(),
+                        jqXHR,
+                        aborted;
+                    promise.abort = function () {
+                        aborted = true;
+                        if (jqXHR) {
+                            return jqXHR.abort();
+                        }
+                        dfd.reject(null, 'abort', 'abort');
+                        return promise;
+                    };
+                    this._getFileInputFiles(data.fileInput).always(
+                        function (files) {
+                            if (aborted) {
+                                return;
+                            }
+                            if (!files.length) {
+                                dfd.reject();
+                                return;
+                            }
+                            data.files = files;
+                            jqXHR = that._onSend(null, data);
+                            jqXHR.then(
+                                function (result, textStatus, jqXHR) {
+                                    dfd.resolve(result, textStatus, jqXHR);
+                                },
+                                function (jqXHR, textStatus, errorThrown) {
+                                    dfd.reject(jqXHR, textStatus, errorThrown);
+                                }
+                            );
+                        }
+                    );
+                    return this._enhancePromise(promise);
+                }
+                data.files = $.makeArray(data.files);
+                if (data.files.length) {
+                    return this._onSend(null, data);
+                }
+            }
+            return this._getXHRPromise(false, data && data.context);
+        }
+
+    });
+
+}));
+
+},{"./vendor/jquery.ui.widget":2,"jquery":212}],2:[function(require,module,exports){
+/*! jQuery UI - v1.11.4+CommonJS - 2015-08-28
+* http://jqueryui.com
+* Includes: widget.js
+* Copyright 2015 jQuery Foundation and other contributors; Licensed MIT */
+
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "jquery" ], factory );
+
+	} else if ( typeof exports === "object" ) {
+
+		// Node/CommonJS
+		factory( require( "jquery" ) );
+
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function( $ ) {
+/*!
+ * jQuery UI Widget 1.11.4
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/jQuery.widget/
+ */
+
+
+var widget_uuid = 0,
+	widget_slice = Array.prototype.slice;
+
+$.cleanData = (function( orig ) {
+	return function( elems ) {
+		var events, elem, i;
+		for ( i = 0; (elem = elems[i]) != null; i++ ) {
+			try {
+
+				// Only trigger remove when necessary to save time
+				events = $._data( elem, "events" );
+				if ( events && events.remove ) {
+					$( elem ).triggerHandler( "remove" );
+				}
+
+			// http://bugs.jquery.com/ticket/8235
+			} catch ( e ) {}
+		}
+		orig( elems );
+	};
+})( $.cleanData );
+
+$.widget = function( name, base, prototype ) {
+	var fullName, existingConstructor, constructor, basePrototype,
+		// proxiedPrototype allows the provided prototype to remain unmodified
+		// so that it can be used as a mixin for multiple widgets (#8876)
+		proxiedPrototype = {},
+		namespace = name.split( "." )[ 0 ];
+
+	name = name.split( "." )[ 1 ];
+	fullName = namespace + "-" + name;
+
+	if ( !prototype ) {
+		prototype = base;
+		base = $.Widget;
+	}
+
+	// create selector for plugin
+	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+		return !!$.data( elem, fullName );
+	};
+
+	$[ namespace ] = $[ namespace ] || {};
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
+		// allow instantiation without "new" keyword
+		if ( !this._createWidget ) {
+			return new constructor( options, element );
+		}
+
+		// allow instantiation without initializing for simple inheritance
+		// must use "new" keyword (the code above always passes args)
+		if ( arguments.length ) {
+			this._createWidget( options, element );
+		}
+	};
+	// extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+		// copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		_proto: $.extend( {}, prototype ),
+		// track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	});
+
+	basePrototype = new base();
+	// we need to make the options hash a property directly on the new instance
+	// otherwise we'll modify the options hash on the prototype that we're
+	// inheriting from
+	basePrototype.options = $.widget.extend( {}, basePrototype.options );
+	$.each( prototype, function( prop, value ) {
+		if ( !$.isFunction( value ) ) {
+			proxiedPrototype[ prop ] = value;
+			return;
+		}
+		proxiedPrototype[ prop ] = (function() {
+			var _super = function() {
+					return base.prototype[ prop ].apply( this, arguments );
+				},
+				_superApply = function( args ) {
+					return base.prototype[ prop ].apply( this, args );
+				};
+			return function() {
+				var __super = this._super,
+					__superApply = this._superApply,
+					returnValue;
+
+				this._super = _super;
+				this._superApply = _superApply;
+
+				returnValue = value.apply( this, arguments );
+
+				this._super = __super;
+				this._superApply = __superApply;
+
+				return returnValue;
+			};
+		})();
+	});
+	constructor.prototype = $.widget.extend( basePrototype, {
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
+		widgetEventPrefix: existingConstructor ? (basePrototype.widgetEventPrefix || name) : name
+	}, proxiedPrototype, {
+		constructor: constructor,
+		namespace: namespace,
+		widgetName: name,
+		widgetFullName: fullName
+	});
+
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var childPrototype = child.prototype;
+
+			// redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
+		});
+		// remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
+
+	return constructor;
+};
+
+$.widget.extend = function( target ) {
+	var input = widget_slice.call( arguments, 1 ),
+		inputIndex = 0,
+		inputLength = input.length,
+		key,
+		value;
+	for ( ; inputIndex < inputLength; inputIndex++ ) {
+		for ( key in input[ inputIndex ] ) {
+			value = input[ inputIndex ][ key ];
+			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+				// Clone objects
+				if ( $.isPlainObject( value ) ) {
+					target[ key ] = $.isPlainObject( target[ key ] ) ?
+						$.widget.extend( {}, target[ key ], value ) :
+						// Don't extend strings, arrays, etc. with objects
+						$.widget.extend( {}, value );
+				// Copy everything else by reference
+				} else {
+					target[ key ] = value;
+				}
+			}
+		}
+	}
+	return target;
+};
+
+$.widget.bridge = function( name, object ) {
+	var fullName = object.prototype.widgetFullName || name;
+	$.fn[ name ] = function( options ) {
+		var isMethodCall = typeof options === "string",
+			args = widget_slice.call( arguments, 1 ),
+			returnValue = this;
+
+		if ( isMethodCall ) {
+			this.each(function() {
+				var methodValue,
+					instance = $.data( this, fullName );
+				if ( options === "instance" ) {
+					returnValue = instance;
+					return false;
+				}
+				if ( !instance ) {
+					return $.error( "cannot call methods on " + name + " prior to initialization; " +
+						"attempted to call method '" + options + "'" );
+				}
+				if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) === "_" ) {
+					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
+				}
+				methodValue = instance[ options ].apply( instance, args );
+				if ( methodValue !== instance && methodValue !== undefined ) {
+					returnValue = methodValue && methodValue.jquery ?
+						returnValue.pushStack( methodValue.get() ) :
+						methodValue;
+					return false;
+				}
+			});
+		} else {
+
+			// Allow multiple hashes to be passed on init
+			if ( args.length ) {
+				options = $.widget.extend.apply( null, [ options ].concat(args) );
+			}
+
+			this.each(function() {
+				var instance = $.data( this, fullName );
+				if ( instance ) {
+					instance.option( options || {} );
+					if ( instance._init ) {
+						instance._init();
+					}
+				} else {
+					$.data( this, fullName, new object( options, this ) );
+				}
+			});
+		}
+
+		return returnValue;
+	};
+};
+
+$.Widget = function( /* options, element */ ) {};
+$.Widget._childConstructors = [];
+
+$.Widget.prototype = {
+	widgetName: "widget",
+	widgetEventPrefix: "",
+	defaultElement: "<div>",
+	options: {
+		disabled: false,
+
+		// callbacks
+		create: null
+	},
+	_createWidget: function( options, element ) {
+		element = $( element || this.defaultElement || this )[ 0 ];
+		this.element = $( element );
+		this.uuid = widget_uuid++;
+		this.eventNamespace = "." + this.widgetName + this.uuid;
+
+		this.bindings = $();
+		this.hoverable = $();
+		this.focusable = $();
+
+		if ( element !== this ) {
+			$.data( element, this.widgetFullName, this );
+			this._on( true, this.element, {
+				remove: function( event ) {
+					if ( event.target === element ) {
+						this.destroy();
+					}
+				}
+			});
+			this.document = $( element.style ?
+				// element within the document
+				element.ownerDocument :
+				// element is window or document
+				element.document || element );
+			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
+		}
+
+		this.options = $.widget.extend( {},
+			this.options,
+			this._getCreateOptions(),
+			options );
+
+		this._create();
+		this._trigger( "create", null, this._getCreateEventData() );
+		this._init();
+	},
+	_getCreateOptions: $.noop,
+	_getCreateEventData: $.noop,
+	_create: $.noop,
+	_init: $.noop,
+
+	destroy: function() {
+		this._destroy();
+		// we can probably remove the unbind calls in 2.0
+		// all event bindings should go through this._on()
+		this.element
+			.unbind( this.eventNamespace )
+			.removeData( this.widgetFullName )
+			// support: jquery <1.6.3
+			// http://bugs.jquery.com/ticket/9413
+			.removeData( $.camelCase( this.widgetFullName ) );
+		this.widget()
+			.unbind( this.eventNamespace )
+			.removeAttr( "aria-disabled" )
+			.removeClass(
+				this.widgetFullName + "-disabled " +
+				"ui-state-disabled" );
+
+		// clean up events and states
+		this.bindings.unbind( this.eventNamespace );
+		this.hoverable.removeClass( "ui-state-hover" );
+		this.focusable.removeClass( "ui-state-focus" );
+	},
+	_destroy: $.noop,
+
+	widget: function() {
+		return this.element;
+	},
+
+	option: function( key, value ) {
+		var options = key,
+			parts,
+			curOption,
+			i;
+
+		if ( arguments.length === 0 ) {
+			// don't return a reference to the internal hash
+			return $.widget.extend( {}, this.options );
+		}
+
+		if ( typeof key === "string" ) {
+			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
+			options = {};
+			parts = key.split( "." );
+			key = parts.shift();
+			if ( parts.length ) {
+				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
+				for ( i = 0; i < parts.length - 1; i++ ) {
+					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
+					curOption = curOption[ parts[ i ] ];
+				}
+				key = parts.pop();
+				if ( arguments.length === 1 ) {
+					return curOption[ key ] === undefined ? null : curOption[ key ];
+				}
+				curOption[ key ] = value;
+			} else {
+				if ( arguments.length === 1 ) {
+					return this.options[ key ] === undefined ? null : this.options[ key ];
+				}
+				options[ key ] = value;
+			}
+		}
+
+		this._setOptions( options );
+
+		return this;
+	},
+	_setOptions: function( options ) {
+		var key;
+
+		for ( key in options ) {
+			this._setOption( key, options[ key ] );
+		}
+
+		return this;
+	},
+	_setOption: function( key, value ) {
+		this.options[ key ] = value;
+
+		if ( key === "disabled" ) {
+			this.widget()
+				.toggleClass( this.widgetFullName + "-disabled", !!value );
+
+			// If the widget is becoming disabled, then nothing is interactive
+			if ( value ) {
+				this.hoverable.removeClass( "ui-state-hover" );
+				this.focusable.removeClass( "ui-state-focus" );
+			}
+		}
+
+		return this;
+	},
+
+	enable: function() {
+		return this._setOptions({ disabled: false });
+	},
+	disable: function() {
+		return this._setOptions({ disabled: true });
+	},
+
+	_on: function( suppressDisabledCheck, element, handlers ) {
+		var delegateElement,
+			instance = this;
+
+		// no suppressDisabledCheck flag, shuffle arguments
+		if ( typeof suppressDisabledCheck !== "boolean" ) {
+			handlers = element;
+			element = suppressDisabledCheck;
+			suppressDisabledCheck = false;
+		}
+
+		// no element argument, shuffle and use this.element
+		if ( !handlers ) {
+			handlers = element;
+			element = this.element;
+			delegateElement = this.widget();
+		} else {
+			element = delegateElement = $( element );
+			this.bindings = this.bindings.add( element );
+		}
+
+		$.each( handlers, function( event, handler ) {
+			function handlerProxy() {
+				// allow widgets to customize the disabled handling
+				// - disabled as an array instead of boolean
+				// - disabled class as method for disabling individual parts
+				if ( !suppressDisabledCheck &&
+						( instance.options.disabled === true ||
+							$( this ).hasClass( "ui-state-disabled" ) ) ) {
+					return;
+				}
+				return ( typeof handler === "string" ? instance[ handler ] : handler )
+					.apply( instance, arguments );
+			}
+
+			// copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || $.guid++;
+			}
+
+			var match = event.match( /^([\w:-]*)\s*(.*)$/ ),
+				eventName = match[1] + instance.eventNamespace,
+				selector = match[2];
+			if ( selector ) {
+				delegateElement.delegate( selector, eventName, handlerProxy );
+			} else {
+				element.bind( eventName, handlerProxy );
+			}
+		});
+	},
+
+	_off: function( element, eventName ) {
+		eventName = (eventName || "").split( " " ).join( this.eventNamespace + " " ) +
+			this.eventNamespace;
+		element.unbind( eventName ).undelegate( eventName );
+
+		// Clear the stack to avoid memory leaks (#10056)
+		this.bindings = $( this.bindings.not( element ).get() );
+		this.focusable = $( this.focusable.not( element ).get() );
+		this.hoverable = $( this.hoverable.not( element ).get() );
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
+	},
+
+	_hoverable: function( element ) {
+		this.hoverable = this.hoverable.add( element );
+		this._on( element, {
+			mouseenter: function( event ) {
+				$( event.currentTarget ).addClass( "ui-state-hover" );
+			},
+			mouseleave: function( event ) {
+				$( event.currentTarget ).removeClass( "ui-state-hover" );
+			}
+		});
+	},
+
+	_focusable: function( element ) {
+		this.focusable = this.focusable.add( element );
+		this._on( element, {
+			focusin: function( event ) {
+				$( event.currentTarget ).addClass( "ui-state-focus" );
+			},
+			focusout: function( event ) {
+				$( event.currentTarget ).removeClass( "ui-state-focus" );
+			}
+		});
+	},
+
+	_trigger: function( type, event, data ) {
+		var prop, orig,
+			callback = this.options[ type ];
+
+		data = data || {};
+		event = $.Event( event );
+		event.type = ( type === this.widgetEventPrefix ?
+			type :
+			this.widgetEventPrefix + type ).toLowerCase();
+		// the original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[ 0 ];
+
+		// copy original event properties over to the new event
+		orig = event.originalEvent;
+		if ( orig ) {
+			for ( prop in orig ) {
+				if ( !( prop in event ) ) {
+					event[ prop ] = orig[ prop ];
+				}
+			}
+		}
+
+		this.element.trigger( event, data );
+		return !( $.isFunction( callback ) &&
+			callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
+			event.isDefaultPrevented() );
+	}
+};
+
+$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+		if ( typeof options === "string" ) {
+			options = { effect: options };
+		}
+		var hasOptions,
+			effectName = !options ?
+				method :
+				options === true || typeof options === "number" ?
+					defaultEffect :
+					options.effect || defaultEffect;
+		options = options || {};
+		if ( typeof options === "number" ) {
+			options = { duration: options };
+		}
+		hasOptions = !$.isEmptyObject( options );
+		options.complete = callback;
+		if ( options.delay ) {
+			element.delay( options.delay );
+		}
+		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
+			element[ method ]( options );
+		} else if ( effectName !== method && element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
+		} else {
+			element.queue(function( next ) {
+				$( this )[ method ]();
+				if ( callback ) {
+					callback.call( element[ 0 ] );
+				}
+				next();
+			});
+		}
+	};
+});
+
+var widget = $.widget;
+
+
+
+}));
+
+},{"jquery":212}],3:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -7,7 +2065,7 @@ var DataView = getNative(root, 'DataView');
 
 module.exports = DataView;
 
-},{"./_getNative":95,"./_root":138}],2:[function(require,module,exports){
+},{"./_getNative":98,"./_root":141}],4:[function(require,module,exports){
 var hashClear = require('./_hashClear'),
     hashDelete = require('./_hashDelete'),
     hashGet = require('./_hashGet'),
@@ -41,7 +2099,7 @@ Hash.prototype.set = hashSet;
 
 module.exports = Hash;
 
-},{"./_hashClear":103,"./_hashDelete":104,"./_hashGet":105,"./_hashHas":106,"./_hashSet":107}],3:[function(require,module,exports){
+},{"./_hashClear":106,"./_hashDelete":107,"./_hashGet":108,"./_hashHas":109,"./_hashSet":110}],5:[function(require,module,exports){
 var listCacheClear = require('./_listCacheClear'),
     listCacheDelete = require('./_listCacheDelete'),
     listCacheGet = require('./_listCacheGet'),
@@ -75,7 +2133,7 @@ ListCache.prototype.set = listCacheSet;
 
 module.exports = ListCache;
 
-},{"./_listCacheClear":118,"./_listCacheDelete":119,"./_listCacheGet":120,"./_listCacheHas":121,"./_listCacheSet":122}],4:[function(require,module,exports){
+},{"./_listCacheClear":121,"./_listCacheDelete":122,"./_listCacheGet":123,"./_listCacheHas":124,"./_listCacheSet":125}],6:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -84,7 +2142,7 @@ var Map = getNative(root, 'Map');
 
 module.exports = Map;
 
-},{"./_getNative":95,"./_root":138}],5:[function(require,module,exports){
+},{"./_getNative":98,"./_root":141}],7:[function(require,module,exports){
 var mapCacheClear = require('./_mapCacheClear'),
     mapCacheDelete = require('./_mapCacheDelete'),
     mapCacheGet = require('./_mapCacheGet'),
@@ -118,7 +2176,7 @@ MapCache.prototype.set = mapCacheSet;
 
 module.exports = MapCache;
 
-},{"./_mapCacheClear":123,"./_mapCacheDelete":124,"./_mapCacheGet":125,"./_mapCacheHas":126,"./_mapCacheSet":127}],6:[function(require,module,exports){
+},{"./_mapCacheClear":126,"./_mapCacheDelete":127,"./_mapCacheGet":128,"./_mapCacheHas":129,"./_mapCacheSet":130}],8:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -127,7 +2185,7 @@ var Promise = getNative(root, 'Promise');
 
 module.exports = Promise;
 
-},{"./_getNative":95,"./_root":138}],7:[function(require,module,exports){
+},{"./_getNative":98,"./_root":141}],9:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -136,7 +2194,7 @@ var Set = getNative(root, 'Set');
 
 module.exports = Set;
 
-},{"./_getNative":95,"./_root":138}],8:[function(require,module,exports){
+},{"./_getNative":98,"./_root":141}],10:[function(require,module,exports){
 var MapCache = require('./_MapCache'),
     setCacheAdd = require('./_setCacheAdd'),
     setCacheHas = require('./_setCacheHas');
@@ -165,7 +2223,7 @@ SetCache.prototype.has = setCacheHas;
 
 module.exports = SetCache;
 
-},{"./_MapCache":5,"./_setCacheAdd":139,"./_setCacheHas":140}],9:[function(require,module,exports){
+},{"./_MapCache":7,"./_setCacheAdd":142,"./_setCacheHas":143}],11:[function(require,module,exports){
 var ListCache = require('./_ListCache'),
     stackClear = require('./_stackClear'),
     stackDelete = require('./_stackDelete'),
@@ -194,7 +2252,7 @@ Stack.prototype.set = stackSet;
 
 module.exports = Stack;
 
-},{"./_ListCache":3,"./_stackClear":144,"./_stackDelete":145,"./_stackGet":146,"./_stackHas":147,"./_stackSet":148}],10:[function(require,module,exports){
+},{"./_ListCache":5,"./_stackClear":147,"./_stackDelete":148,"./_stackGet":149,"./_stackHas":150,"./_stackSet":151}],12:[function(require,module,exports){
 var root = require('./_root');
 
 /** Built-in value references. */
@@ -202,7 +2260,7 @@ var Symbol = root.Symbol;
 
 module.exports = Symbol;
 
-},{"./_root":138}],11:[function(require,module,exports){
+},{"./_root":141}],13:[function(require,module,exports){
 var root = require('./_root');
 
 /** Built-in value references. */
@@ -210,7 +2268,7 @@ var Uint8Array = root.Uint8Array;
 
 module.exports = Uint8Array;
 
-},{"./_root":138}],12:[function(require,module,exports){
+},{"./_root":141}],14:[function(require,module,exports){
 var getNative = require('./_getNative'),
     root = require('./_root');
 
@@ -219,7 +2277,7 @@ var WeakMap = getNative(root, 'WeakMap');
 
 module.exports = WeakMap;
 
-},{"./_getNative":95,"./_root":138}],13:[function(require,module,exports){
+},{"./_getNative":98,"./_root":141}],15:[function(require,module,exports){
 /**
  * Adds the key-value `pair` to `map`.
  *
@@ -236,7 +2294,7 @@ function addMapEntry(map, pair) {
 
 module.exports = addMapEntry;
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * Adds `value` to `set`.
  *
@@ -253,7 +2311,7 @@ function addSetEntry(set, value) {
 
 module.exports = addSetEntry;
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`
  * with the `this` binding of `thisArg` and the arguments of `args`.
@@ -276,7 +2334,7 @@ function apply(func, thisArg, args) {
 
 module.exports = apply;
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * A specialized version of `_.forEach` for arrays without support for
  * iteratee shorthands.
@@ -300,7 +2358,7 @@ function arrayEach(array, iteratee) {
 
 module.exports = arrayEach;
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * A specialized version of `_.filter` for arrays without support for
  * iteratee shorthands.
@@ -327,7 +2385,7 @@ function arrayFilter(array, predicate) {
 
 module.exports = arrayFilter;
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var baseIndexOf = require('./_baseIndexOf');
 
 /**
@@ -346,7 +2404,7 @@ function arrayIncludes(array, value) {
 
 module.exports = arrayIncludes;
 
-},{"./_baseIndexOf":43}],19:[function(require,module,exports){
+},{"./_baseIndexOf":46}],21:[function(require,module,exports){
 /**
  * This function is like `arrayIncludes` except that it accepts a comparator.
  *
@@ -370,7 +2428,7 @@ function arrayIncludesWith(array, value, comparator) {
 
 module.exports = arrayIncludesWith;
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var baseTimes = require('./_baseTimes'),
     isArguments = require('./isArguments'),
     isArray = require('./isArray'),
@@ -421,7 +2479,7 @@ function arrayLikeKeys(value, inherited) {
 
 module.exports = arrayLikeKeys;
 
-},{"./_baseTimes":62,"./_isIndex":112,"./isArguments":165,"./isArray":166,"./isBuffer":169,"./isTypedArray":176}],21:[function(require,module,exports){
+},{"./_baseTimes":65,"./_isIndex":115,"./isArguments":169,"./isArray":170,"./isBuffer":173,"./isTypedArray":180}],23:[function(require,module,exports){
 /**
  * A specialized version of `_.map` for arrays without support for iteratee
  * shorthands.
@@ -444,7 +2502,7 @@ function arrayMap(array, iteratee) {
 
 module.exports = arrayMap;
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /**
  * Appends the elements of `values` to `array`.
  *
@@ -466,7 +2524,7 @@ function arrayPush(array, values) {
 
 module.exports = arrayPush;
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /**
  * A specialized version of `_.reduce` for arrays without support for
  * iteratee shorthands.
@@ -494,7 +2552,7 @@ function arrayReduce(array, iteratee, accumulator, initAccum) {
 
 module.exports = arrayReduce;
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * A specialized version of `_.some` for arrays without support for iteratee
  * shorthands.
@@ -519,7 +2577,7 @@ function arraySome(array, predicate) {
 
 module.exports = arraySome;
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var baseAssignValue = require('./_baseAssignValue'),
     eq = require('./eq');
 
@@ -549,7 +2607,7 @@ function assignValue(object, key, value) {
 
 module.exports = assignValue;
 
-},{"./_baseAssignValue":29,"./eq":157}],26:[function(require,module,exports){
+},{"./_baseAssignValue":31,"./eq":160}],28:[function(require,module,exports){
 var eq = require('./eq');
 
 /**
@@ -572,7 +2630,7 @@ function assocIndexOf(array, key) {
 
 module.exports = assocIndexOf;
 
-},{"./eq":157}],27:[function(require,module,exports){
+},{"./eq":160}],29:[function(require,module,exports){
 var copyObject = require('./_copyObject'),
     keys = require('./keys');
 
@@ -591,7 +2649,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"./_copyObject":78,"./keys":177}],28:[function(require,module,exports){
+},{"./_copyObject":81,"./keys":181}],30:[function(require,module,exports){
 var copyObject = require('./_copyObject'),
     keysIn = require('./keysIn');
 
@@ -610,7 +2668,7 @@ function baseAssignIn(object, source) {
 
 module.exports = baseAssignIn;
 
-},{"./_copyObject":78,"./keysIn":178}],29:[function(require,module,exports){
+},{"./_copyObject":81,"./keysIn":182}],31:[function(require,module,exports){
 var defineProperty = require('./_defineProperty');
 
 /**
@@ -637,7 +2695,7 @@ function baseAssignValue(object, key, value) {
 
 module.exports = baseAssignValue;
 
-},{"./_defineProperty":86}],30:[function(require,module,exports){
+},{"./_defineProperty":89}],32:[function(require,module,exports){
 var Stack = require('./_Stack'),
     arrayEach = require('./_arrayEach'),
     assignValue = require('./_assignValue'),
@@ -792,7 +2850,7 @@ function baseClone(value, bitmask, customizer, key, object, stack) {
 
 module.exports = baseClone;
 
-},{"./_Stack":9,"./_arrayEach":16,"./_assignValue":25,"./_baseAssign":27,"./_baseAssignIn":28,"./_cloneBuffer":70,"./_copyArray":77,"./_copySymbols":79,"./_copySymbolsIn":80,"./_getAllKeys":91,"./_getAllKeysIn":92,"./_getTag":100,"./_initCloneArray":108,"./_initCloneByTag":109,"./_initCloneObject":110,"./isArray":166,"./isBuffer":169,"./isObject":172,"./keys":177}],31:[function(require,module,exports){
+},{"./_Stack":11,"./_arrayEach":18,"./_assignValue":27,"./_baseAssign":29,"./_baseAssignIn":30,"./_cloneBuffer":73,"./_copyArray":80,"./_copySymbols":82,"./_copySymbolsIn":83,"./_getAllKeys":94,"./_getAllKeysIn":95,"./_getTag":103,"./_initCloneArray":111,"./_initCloneByTag":112,"./_initCloneObject":113,"./isArray":170,"./isBuffer":173,"./isObject":176,"./keys":181}],33:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** Built-in value references. */
@@ -824,7 +2882,7 @@ var baseCreate = (function() {
 
 module.exports = baseCreate;
 
-},{"./isObject":172}],32:[function(require,module,exports){
+},{"./isObject":176}],34:[function(require,module,exports){
 var SetCache = require('./_SetCache'),
     arrayIncludes = require('./_arrayIncludes'),
     arrayIncludesWith = require('./_arrayIncludesWith'),
@@ -893,7 +2951,7 @@ function baseDifference(array, values, iteratee, comparator) {
 
 module.exports = baseDifference;
 
-},{"./_SetCache":8,"./_arrayIncludes":18,"./_arrayIncludesWith":19,"./_arrayMap":21,"./_baseUnary":64,"./_cacheHas":66}],33:[function(require,module,exports){
+},{"./_SetCache":10,"./_arrayIncludes":20,"./_arrayIncludesWith":21,"./_arrayMap":23,"./_baseUnary":67,"./_cacheHas":69}],35:[function(require,module,exports){
 var baseForOwn = require('./_baseForOwn'),
     createBaseEach = require('./_createBaseEach');
 
@@ -909,7 +2967,7 @@ var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
 
-},{"./_baseForOwn":38,"./_createBaseEach":82}],34:[function(require,module,exports){
+},{"./_baseForOwn":40,"./_createBaseEach":85}],36:[function(require,module,exports){
 var baseEach = require('./_baseEach');
 
 /**
@@ -932,7 +2990,7 @@ function baseFilter(collection, predicate) {
 
 module.exports = baseFilter;
 
-},{"./_baseEach":33}],35:[function(require,module,exports){
+},{"./_baseEach":35}],37:[function(require,module,exports){
 /**
  * The base implementation of `_.findIndex` and `_.findLastIndex` without
  * support for iteratee shorthands.
@@ -958,7 +3016,7 @@ function baseFindIndex(array, predicate, fromIndex, fromRight) {
 
 module.exports = baseFindIndex;
 
-},{}],36:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var arrayPush = require('./_arrayPush'),
     isFlattenable = require('./_isFlattenable');
 
@@ -998,7 +3056,7 @@ function baseFlatten(array, depth, predicate, isStrict, result) {
 
 module.exports = baseFlatten;
 
-},{"./_arrayPush":22,"./_isFlattenable":111}],37:[function(require,module,exports){
+},{"./_arrayPush":24,"./_isFlattenable":114}],39:[function(require,module,exports){
 var createBaseFor = require('./_createBaseFor');
 
 /**
@@ -1016,7 +3074,7 @@ var baseFor = createBaseFor();
 
 module.exports = baseFor;
 
-},{"./_createBaseFor":83}],38:[function(require,module,exports){
+},{"./_createBaseFor":86}],40:[function(require,module,exports){
 var baseFor = require('./_baseFor'),
     keys = require('./keys');
 
@@ -1034,7 +3092,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"./_baseFor":37,"./keys":177}],39:[function(require,module,exports){
+},{"./_baseFor":39,"./keys":181}],41:[function(require,module,exports){
 var castPath = require('./_castPath'),
     toKey = require('./_toKey');
 
@@ -1060,7 +3118,7 @@ function baseGet(object, path) {
 
 module.exports = baseGet;
 
-},{"./_castPath":68,"./_toKey":151}],40:[function(require,module,exports){
+},{"./_castPath":71,"./_toKey":154}],42:[function(require,module,exports){
 var arrayPush = require('./_arrayPush'),
     isArray = require('./isArray');
 
@@ -1082,7 +3140,7 @@ function baseGetAllKeys(object, keysFunc, symbolsFunc) {
 
 module.exports = baseGetAllKeys;
 
-},{"./_arrayPush":22,"./isArray":166}],41:[function(require,module,exports){
+},{"./_arrayPush":24,"./isArray":170}],43:[function(require,module,exports){
 var Symbol = require('./_Symbol'),
     getRawTag = require('./_getRawTag'),
     objectToString = require('./_objectToString');
@@ -1112,7 +3170,28 @@ function baseGetTag(value) {
 
 module.exports = baseGetTag;
 
-},{"./_Symbol":10,"./_getRawTag":97,"./_objectToString":135}],42:[function(require,module,exports){
+},{"./_Symbol":12,"./_getRawTag":100,"./_objectToString":138}],44:[function(require,module,exports){
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * The base implementation of `_.has` without support for deep paths.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {Array|string} key The key to check.
+ * @returns {boolean} Returns `true` if `key` exists, else `false`.
+ */
+function baseHas(object, key) {
+  return object != null && hasOwnProperty.call(object, key);
+}
+
+module.exports = baseHas;
+
+},{}],45:[function(require,module,exports){
 /**
  * The base implementation of `_.hasIn` without support for deep paths.
  *
@@ -1127,7 +3206,7 @@ function baseHasIn(object, key) {
 
 module.exports = baseHasIn;
 
-},{}],43:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var baseFindIndex = require('./_baseFindIndex'),
     baseIsNaN = require('./_baseIsNaN'),
     strictIndexOf = require('./_strictIndexOf');
@@ -1149,7 +3228,7 @@ function baseIndexOf(array, value, fromIndex) {
 
 module.exports = baseIndexOf;
 
-},{"./_baseFindIndex":35,"./_baseIsNaN":48,"./_strictIndexOf":149}],44:[function(require,module,exports){
+},{"./_baseFindIndex":37,"./_baseIsNaN":51,"./_strictIndexOf":152}],47:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isObjectLike = require('./isObjectLike');
 
@@ -1169,7 +3248,7 @@ function baseIsArguments(value) {
 
 module.exports = baseIsArguments;
 
-},{"./_baseGetTag":41,"./isObjectLike":173}],45:[function(require,module,exports){
+},{"./_baseGetTag":43,"./isObjectLike":177}],48:[function(require,module,exports){
 var baseIsEqualDeep = require('./_baseIsEqualDeep'),
     isObjectLike = require('./isObjectLike');
 
@@ -1199,7 +3278,7 @@ function baseIsEqual(value, other, bitmask, customizer, stack) {
 
 module.exports = baseIsEqual;
 
-},{"./_baseIsEqualDeep":46,"./isObjectLike":173}],46:[function(require,module,exports){
+},{"./_baseIsEqualDeep":49,"./isObjectLike":177}],49:[function(require,module,exports){
 var Stack = require('./_Stack'),
     equalArrays = require('./_equalArrays'),
     equalByTag = require('./_equalByTag'),
@@ -1284,7 +3363,7 @@ function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = baseIsEqualDeep;
 
-},{"./_Stack":9,"./_equalArrays":87,"./_equalByTag":88,"./_equalObjects":89,"./_getTag":100,"./isArray":166,"./isBuffer":169,"./isTypedArray":176}],47:[function(require,module,exports){
+},{"./_Stack":11,"./_equalArrays":90,"./_equalByTag":91,"./_equalObjects":92,"./_getTag":103,"./isArray":170,"./isBuffer":173,"./isTypedArray":180}],50:[function(require,module,exports){
 var Stack = require('./_Stack'),
     baseIsEqual = require('./_baseIsEqual');
 
@@ -1348,7 +3427,7 @@ function baseIsMatch(object, source, matchData, customizer) {
 
 module.exports = baseIsMatch;
 
-},{"./_Stack":9,"./_baseIsEqual":45}],48:[function(require,module,exports){
+},{"./_Stack":11,"./_baseIsEqual":48}],51:[function(require,module,exports){
 /**
  * The base implementation of `_.isNaN` without support for number objects.
  *
@@ -1362,7 +3441,7 @@ function baseIsNaN(value) {
 
 module.exports = baseIsNaN;
 
-},{}],49:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isMasked = require('./_isMasked'),
     isObject = require('./isObject'),
@@ -1411,7 +3490,7 @@ function baseIsNative(value) {
 
 module.exports = baseIsNative;
 
-},{"./_isMasked":115,"./_toSource":152,"./isFunction":170,"./isObject":172}],50:[function(require,module,exports){
+},{"./_isMasked":118,"./_toSource":155,"./isFunction":174,"./isObject":176}],53:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isLength = require('./isLength'),
     isObjectLike = require('./isObjectLike');
@@ -1473,7 +3552,7 @@ function baseIsTypedArray(value) {
 
 module.exports = baseIsTypedArray;
 
-},{"./_baseGetTag":41,"./isLength":171,"./isObjectLike":173}],51:[function(require,module,exports){
+},{"./_baseGetTag":43,"./isLength":175,"./isObjectLike":177}],54:[function(require,module,exports){
 var baseMatches = require('./_baseMatches'),
     baseMatchesProperty = require('./_baseMatchesProperty'),
     identity = require('./identity'),
@@ -1506,7 +3585,7 @@ function baseIteratee(value) {
 
 module.exports = baseIteratee;
 
-},{"./_baseMatches":55,"./_baseMatchesProperty":56,"./identity":164,"./isArray":166,"./property":182}],52:[function(require,module,exports){
+},{"./_baseMatches":58,"./_baseMatchesProperty":59,"./identity":168,"./isArray":170,"./property":186}],55:[function(require,module,exports){
 var isPrototype = require('./_isPrototype'),
     nativeKeys = require('./_nativeKeys');
 
@@ -1538,7 +3617,7 @@ function baseKeys(object) {
 
 module.exports = baseKeys;
 
-},{"./_isPrototype":116,"./_nativeKeys":132}],53:[function(require,module,exports){
+},{"./_isPrototype":119,"./_nativeKeys":135}],56:[function(require,module,exports){
 var isObject = require('./isObject'),
     isPrototype = require('./_isPrototype'),
     nativeKeysIn = require('./_nativeKeysIn');
@@ -1573,7 +3652,7 @@ function baseKeysIn(object) {
 
 module.exports = baseKeysIn;
 
-},{"./_isPrototype":116,"./_nativeKeysIn":133,"./isObject":172}],54:[function(require,module,exports){
+},{"./_isPrototype":119,"./_nativeKeysIn":136,"./isObject":176}],57:[function(require,module,exports){
 var baseEach = require('./_baseEach'),
     isArrayLike = require('./isArrayLike');
 
@@ -1597,7 +3676,7 @@ function baseMap(collection, iteratee) {
 
 module.exports = baseMap;
 
-},{"./_baseEach":33,"./isArrayLike":167}],55:[function(require,module,exports){
+},{"./_baseEach":35,"./isArrayLike":171}],58:[function(require,module,exports){
 var baseIsMatch = require('./_baseIsMatch'),
     getMatchData = require('./_getMatchData'),
     matchesStrictComparable = require('./_matchesStrictComparable');
@@ -1621,7 +3700,7 @@ function baseMatches(source) {
 
 module.exports = baseMatches;
 
-},{"./_baseIsMatch":47,"./_getMatchData":94,"./_matchesStrictComparable":129}],56:[function(require,module,exports){
+},{"./_baseIsMatch":50,"./_getMatchData":97,"./_matchesStrictComparable":132}],59:[function(require,module,exports){
 var baseIsEqual = require('./_baseIsEqual'),
     get = require('./get'),
     hasIn = require('./hasIn'),
@@ -1656,7 +3735,7 @@ function baseMatchesProperty(path, srcValue) {
 
 module.exports = baseMatchesProperty;
 
-},{"./_baseIsEqual":45,"./_isKey":113,"./_isStrictComparable":117,"./_matchesStrictComparable":129,"./_toKey":151,"./get":162,"./hasIn":163}],57:[function(require,module,exports){
+},{"./_baseIsEqual":48,"./_isKey":116,"./_isStrictComparable":120,"./_matchesStrictComparable":132,"./_toKey":154,"./get":165,"./hasIn":167}],60:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -1672,7 +3751,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],58:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 var baseGet = require('./_baseGet');
 
 /**
@@ -1690,7 +3769,7 @@ function basePropertyDeep(path) {
 
 module.exports = basePropertyDeep;
 
-},{"./_baseGet":39}],59:[function(require,module,exports){
+},{"./_baseGet":41}],62:[function(require,module,exports){
 /**
  * The base implementation of `_.reduce` and `_.reduceRight`, without support
  * for iteratee shorthands, which iterates over `collection` using `eachFunc`.
@@ -1715,7 +3794,7 @@ function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
 
 module.exports = baseReduce;
 
-},{}],60:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 var identity = require('./identity'),
     overRest = require('./_overRest'),
     setToString = require('./_setToString');
@@ -1734,7 +3813,7 @@ function baseRest(func, start) {
 
 module.exports = baseRest;
 
-},{"./_overRest":137,"./_setToString":142,"./identity":164}],61:[function(require,module,exports){
+},{"./_overRest":140,"./_setToString":145,"./identity":168}],64:[function(require,module,exports){
 var constant = require('./constant'),
     defineProperty = require('./_defineProperty'),
     identity = require('./identity');
@@ -1758,7 +3837,7 @@ var baseSetToString = !defineProperty ? identity : function(func, string) {
 
 module.exports = baseSetToString;
 
-},{"./_defineProperty":86,"./constant":154,"./identity":164}],62:[function(require,module,exports){
+},{"./_defineProperty":89,"./constant":157,"./identity":168}],65:[function(require,module,exports){
 /**
  * The base implementation of `_.times` without support for iteratee shorthands
  * or max array length checks.
@@ -1780,7 +3859,7 @@ function baseTimes(n, iteratee) {
 
 module.exports = baseTimes;
 
-},{}],63:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 var Symbol = require('./_Symbol'),
     arrayMap = require('./_arrayMap'),
     isArray = require('./isArray'),
@@ -1819,7 +3898,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{"./_Symbol":10,"./_arrayMap":21,"./isArray":166,"./isSymbol":175}],64:[function(require,module,exports){
+},{"./_Symbol":12,"./_arrayMap":23,"./isArray":170,"./isSymbol":179}],67:[function(require,module,exports){
 /**
  * The base implementation of `_.unary` without support for storing metadata.
  *
@@ -1835,7 +3914,7 @@ function baseUnary(func) {
 
 module.exports = baseUnary;
 
-},{}],65:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 var SetCache = require('./_SetCache'),
     arrayIncludes = require('./_arrayIncludes'),
     arrayIncludesWith = require('./_arrayIncludesWith'),
@@ -1909,7 +3988,7 @@ function baseUniq(array, iteratee, comparator) {
 
 module.exports = baseUniq;
 
-},{"./_SetCache":8,"./_arrayIncludes":18,"./_arrayIncludesWith":19,"./_cacheHas":66,"./_createSet":85,"./_setToArray":141}],66:[function(require,module,exports){
+},{"./_SetCache":10,"./_arrayIncludes":20,"./_arrayIncludesWith":21,"./_cacheHas":69,"./_createSet":88,"./_setToArray":144}],69:[function(require,module,exports){
 /**
  * Checks if a `cache` value for `key` exists.
  *
@@ -1924,7 +4003,7 @@ function cacheHas(cache, key) {
 
 module.exports = cacheHas;
 
-},{}],67:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var identity = require('./identity');
 
 /**
@@ -1940,7 +4019,7 @@ function castFunction(value) {
 
 module.exports = castFunction;
 
-},{"./identity":164}],68:[function(require,module,exports){
+},{"./identity":168}],71:[function(require,module,exports){
 var isArray = require('./isArray'),
     isKey = require('./_isKey'),
     stringToPath = require('./_stringToPath'),
@@ -1963,7 +4042,7 @@ function castPath(value, object) {
 
 module.exports = castPath;
 
-},{"./_isKey":113,"./_stringToPath":150,"./isArray":166,"./toString":189}],69:[function(require,module,exports){
+},{"./_isKey":116,"./_stringToPath":153,"./isArray":170,"./toString":193}],72:[function(require,module,exports){
 var Uint8Array = require('./_Uint8Array');
 
 /**
@@ -1981,7 +4060,7 @@ function cloneArrayBuffer(arrayBuffer) {
 
 module.exports = cloneArrayBuffer;
 
-},{"./_Uint8Array":11}],70:[function(require,module,exports){
+},{"./_Uint8Array":13}],73:[function(require,module,exports){
 var root = require('./_root');
 
 /** Detect free variable `exports`. */
@@ -2018,7 +4097,7 @@ function cloneBuffer(buffer, isDeep) {
 
 module.exports = cloneBuffer;
 
-},{"./_root":138}],71:[function(require,module,exports){
+},{"./_root":141}],74:[function(require,module,exports){
 var cloneArrayBuffer = require('./_cloneArrayBuffer');
 
 /**
@@ -2036,7 +4115,7 @@ function cloneDataView(dataView, isDeep) {
 
 module.exports = cloneDataView;
 
-},{"./_cloneArrayBuffer":69}],72:[function(require,module,exports){
+},{"./_cloneArrayBuffer":72}],75:[function(require,module,exports){
 var addMapEntry = require('./_addMapEntry'),
     arrayReduce = require('./_arrayReduce'),
     mapToArray = require('./_mapToArray');
@@ -2060,7 +4139,7 @@ function cloneMap(map, isDeep, cloneFunc) {
 
 module.exports = cloneMap;
 
-},{"./_addMapEntry":13,"./_arrayReduce":23,"./_mapToArray":128}],73:[function(require,module,exports){
+},{"./_addMapEntry":15,"./_arrayReduce":25,"./_mapToArray":131}],76:[function(require,module,exports){
 /** Used to match `RegExp` flags from their coerced string values. */
 var reFlags = /\w*$/;
 
@@ -2079,7 +4158,7 @@ function cloneRegExp(regexp) {
 
 module.exports = cloneRegExp;
 
-},{}],74:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 var addSetEntry = require('./_addSetEntry'),
     arrayReduce = require('./_arrayReduce'),
     setToArray = require('./_setToArray');
@@ -2103,7 +4182,7 @@ function cloneSet(set, isDeep, cloneFunc) {
 
 module.exports = cloneSet;
 
-},{"./_addSetEntry":14,"./_arrayReduce":23,"./_setToArray":141}],75:[function(require,module,exports){
+},{"./_addSetEntry":16,"./_arrayReduce":25,"./_setToArray":144}],78:[function(require,module,exports){
 var Symbol = require('./_Symbol');
 
 /** Used to convert symbols to primitives and strings. */
@@ -2123,7 +4202,7 @@ function cloneSymbol(symbol) {
 
 module.exports = cloneSymbol;
 
-},{"./_Symbol":10}],76:[function(require,module,exports){
+},{"./_Symbol":12}],79:[function(require,module,exports){
 var cloneArrayBuffer = require('./_cloneArrayBuffer');
 
 /**
@@ -2141,7 +4220,7 @@ function cloneTypedArray(typedArray, isDeep) {
 
 module.exports = cloneTypedArray;
 
-},{"./_cloneArrayBuffer":69}],77:[function(require,module,exports){
+},{"./_cloneArrayBuffer":72}],80:[function(require,module,exports){
 /**
  * Copies the values of `source` to `array`.
  *
@@ -2163,7 +4242,7 @@ function copyArray(source, array) {
 
 module.exports = copyArray;
 
-},{}],78:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 var assignValue = require('./_assignValue'),
     baseAssignValue = require('./_baseAssignValue');
 
@@ -2205,7 +4284,7 @@ function copyObject(source, props, object, customizer) {
 
 module.exports = copyObject;
 
-},{"./_assignValue":25,"./_baseAssignValue":29}],79:[function(require,module,exports){
+},{"./_assignValue":27,"./_baseAssignValue":31}],82:[function(require,module,exports){
 var copyObject = require('./_copyObject'),
     getSymbols = require('./_getSymbols');
 
@@ -2223,7 +4302,7 @@ function copySymbols(source, object) {
 
 module.exports = copySymbols;
 
-},{"./_copyObject":78,"./_getSymbols":98}],80:[function(require,module,exports){
+},{"./_copyObject":81,"./_getSymbols":101}],83:[function(require,module,exports){
 var copyObject = require('./_copyObject'),
     getSymbolsIn = require('./_getSymbolsIn');
 
@@ -2241,7 +4320,7 @@ function copySymbolsIn(source, object) {
 
 module.exports = copySymbolsIn;
 
-},{"./_copyObject":78,"./_getSymbolsIn":99}],81:[function(require,module,exports){
+},{"./_copyObject":81,"./_getSymbolsIn":102}],84:[function(require,module,exports){
 var root = require('./_root');
 
 /** Used to detect overreaching core-js shims. */
@@ -2249,7 +4328,7 @@ var coreJsData = root['__core-js_shared__'];
 
 module.exports = coreJsData;
 
-},{"./_root":138}],82:[function(require,module,exports){
+},{"./_root":141}],85:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike');
 
 /**
@@ -2283,7 +4362,7 @@ function createBaseEach(eachFunc, fromRight) {
 
 module.exports = createBaseEach;
 
-},{"./isArrayLike":167}],83:[function(require,module,exports){
+},{"./isArrayLike":171}],86:[function(require,module,exports){
 /**
  * Creates a base function for methods like `_.forIn` and `_.forOwn`.
  *
@@ -2310,7 +4389,7 @@ function createBaseFor(fromRight) {
 
 module.exports = createBaseFor;
 
-},{}],84:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 var baseIteratee = require('./_baseIteratee'),
     isArrayLike = require('./isArrayLike'),
     keys = require('./keys');
@@ -2337,7 +4416,7 @@ function createFind(findIndexFunc) {
 
 module.exports = createFind;
 
-},{"./_baseIteratee":51,"./isArrayLike":167,"./keys":177}],85:[function(require,module,exports){
+},{"./_baseIteratee":54,"./isArrayLike":171,"./keys":181}],88:[function(require,module,exports){
 var Set = require('./_Set'),
     noop = require('./noop'),
     setToArray = require('./_setToArray');
@@ -2358,7 +4437,7 @@ var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY) ? noop
 
 module.exports = createSet;
 
-},{"./_Set":7,"./_setToArray":141,"./noop":181}],86:[function(require,module,exports){
+},{"./_Set":9,"./_setToArray":144,"./noop":185}],89:[function(require,module,exports){
 var getNative = require('./_getNative');
 
 var defineProperty = (function() {
@@ -2371,7 +4450,7 @@ var defineProperty = (function() {
 
 module.exports = defineProperty;
 
-},{"./_getNative":95}],87:[function(require,module,exports){
+},{"./_getNative":98}],90:[function(require,module,exports){
 var SetCache = require('./_SetCache'),
     arraySome = require('./_arraySome'),
     cacheHas = require('./_cacheHas');
@@ -2456,7 +4535,7 @@ function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalArrays;
 
-},{"./_SetCache":8,"./_arraySome":24,"./_cacheHas":66}],88:[function(require,module,exports){
+},{"./_SetCache":10,"./_arraySome":26,"./_cacheHas":69}],91:[function(require,module,exports){
 var Symbol = require('./_Symbol'),
     Uint8Array = require('./_Uint8Array'),
     eq = require('./eq'),
@@ -2570,7 +4649,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalByTag;
 
-},{"./_Symbol":10,"./_Uint8Array":11,"./_equalArrays":87,"./_mapToArray":128,"./_setToArray":141,"./eq":157}],89:[function(require,module,exports){
+},{"./_Symbol":12,"./_Uint8Array":13,"./_equalArrays":90,"./_mapToArray":131,"./_setToArray":144,"./eq":160}],92:[function(require,module,exports){
 var getAllKeys = require('./_getAllKeys');
 
 /** Used to compose bitmasks for value comparisons. */
@@ -2661,7 +4740,7 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalObjects;
 
-},{"./_getAllKeys":91}],90:[function(require,module,exports){
+},{"./_getAllKeys":94}],93:[function(require,module,exports){
 (function (global){
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -2670,7 +4749,7 @@ module.exports = freeGlobal;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],91:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 var baseGetAllKeys = require('./_baseGetAllKeys'),
     getSymbols = require('./_getSymbols'),
     keys = require('./keys');
@@ -2688,7 +4767,7 @@ function getAllKeys(object) {
 
 module.exports = getAllKeys;
 
-},{"./_baseGetAllKeys":40,"./_getSymbols":98,"./keys":177}],92:[function(require,module,exports){
+},{"./_baseGetAllKeys":42,"./_getSymbols":101,"./keys":181}],95:[function(require,module,exports){
 var baseGetAllKeys = require('./_baseGetAllKeys'),
     getSymbolsIn = require('./_getSymbolsIn'),
     keysIn = require('./keysIn');
@@ -2707,7 +4786,7 @@ function getAllKeysIn(object) {
 
 module.exports = getAllKeysIn;
 
-},{"./_baseGetAllKeys":40,"./_getSymbolsIn":99,"./keysIn":178}],93:[function(require,module,exports){
+},{"./_baseGetAllKeys":42,"./_getSymbolsIn":102,"./keysIn":182}],96:[function(require,module,exports){
 var isKeyable = require('./_isKeyable');
 
 /**
@@ -2727,7 +4806,7 @@ function getMapData(map, key) {
 
 module.exports = getMapData;
 
-},{"./_isKeyable":114}],94:[function(require,module,exports){
+},{"./_isKeyable":117}],97:[function(require,module,exports){
 var isStrictComparable = require('./_isStrictComparable'),
     keys = require('./keys');
 
@@ -2753,7 +4832,7 @@ function getMatchData(object) {
 
 module.exports = getMatchData;
 
-},{"./_isStrictComparable":117,"./keys":177}],95:[function(require,module,exports){
+},{"./_isStrictComparable":120,"./keys":181}],98:[function(require,module,exports){
 var baseIsNative = require('./_baseIsNative'),
     getValue = require('./_getValue');
 
@@ -2772,7 +4851,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"./_baseIsNative":49,"./_getValue":101}],96:[function(require,module,exports){
+},{"./_baseIsNative":52,"./_getValue":104}],99:[function(require,module,exports){
 var overArg = require('./_overArg');
 
 /** Built-in value references. */
@@ -2780,7 +4859,7 @@ var getPrototype = overArg(Object.getPrototypeOf, Object);
 
 module.exports = getPrototype;
 
-},{"./_overArg":136}],97:[function(require,module,exports){
+},{"./_overArg":139}],100:[function(require,module,exports){
 var Symbol = require('./_Symbol');
 
 /** Used for built-in method references. */
@@ -2828,7 +4907,7 @@ function getRawTag(value) {
 
 module.exports = getRawTag;
 
-},{"./_Symbol":10}],98:[function(require,module,exports){
+},{"./_Symbol":12}],101:[function(require,module,exports){
 var arrayFilter = require('./_arrayFilter'),
     stubArray = require('./stubArray');
 
@@ -2860,7 +4939,7 @@ var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
 
 module.exports = getSymbols;
 
-},{"./_arrayFilter":17,"./stubArray":184}],99:[function(require,module,exports){
+},{"./_arrayFilter":19,"./stubArray":188}],102:[function(require,module,exports){
 var arrayPush = require('./_arrayPush'),
     getPrototype = require('./_getPrototype'),
     getSymbols = require('./_getSymbols'),
@@ -2887,7 +4966,7 @@ var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
 
 module.exports = getSymbolsIn;
 
-},{"./_arrayPush":22,"./_getPrototype":96,"./_getSymbols":98,"./stubArray":184}],100:[function(require,module,exports){
+},{"./_arrayPush":24,"./_getPrototype":99,"./_getSymbols":101,"./stubArray":188}],103:[function(require,module,exports){
 var DataView = require('./_DataView'),
     Map = require('./_Map'),
     Promise = require('./_Promise'),
@@ -2947,7 +5026,7 @@ if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
 
 module.exports = getTag;
 
-},{"./_DataView":1,"./_Map":4,"./_Promise":6,"./_Set":7,"./_WeakMap":12,"./_baseGetTag":41,"./_toSource":152}],101:[function(require,module,exports){
+},{"./_DataView":3,"./_Map":6,"./_Promise":8,"./_Set":9,"./_WeakMap":14,"./_baseGetTag":43,"./_toSource":155}],104:[function(require,module,exports){
 /**
  * Gets the value at `key` of `object`.
  *
@@ -2962,7 +5041,7 @@ function getValue(object, key) {
 
 module.exports = getValue;
 
-},{}],102:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 var castPath = require('./_castPath'),
     isArguments = require('./isArguments'),
     isArray = require('./isArray'),
@@ -3003,7 +5082,7 @@ function hasPath(object, path, hasFunc) {
 
 module.exports = hasPath;
 
-},{"./_castPath":68,"./_isIndex":112,"./_toKey":151,"./isArguments":165,"./isArray":166,"./isLength":171}],103:[function(require,module,exports){
+},{"./_castPath":71,"./_isIndex":115,"./_toKey":154,"./isArguments":169,"./isArray":170,"./isLength":175}],106:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /**
@@ -3020,7 +5099,7 @@ function hashClear() {
 
 module.exports = hashClear;
 
-},{"./_nativeCreate":131}],104:[function(require,module,exports){
+},{"./_nativeCreate":134}],107:[function(require,module,exports){
 /**
  * Removes `key` and its value from the hash.
  *
@@ -3039,7 +5118,7 @@ function hashDelete(key) {
 
 module.exports = hashDelete;
 
-},{}],105:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /** Used to stand-in for `undefined` hash values. */
@@ -3071,7 +5150,7 @@ function hashGet(key) {
 
 module.exports = hashGet;
 
-},{"./_nativeCreate":131}],106:[function(require,module,exports){
+},{"./_nativeCreate":134}],109:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /** Used for built-in method references. */
@@ -3096,7 +5175,7 @@ function hashHas(key) {
 
 module.exports = hashHas;
 
-},{"./_nativeCreate":131}],107:[function(require,module,exports){
+},{"./_nativeCreate":134}],110:[function(require,module,exports){
 var nativeCreate = require('./_nativeCreate');
 
 /** Used to stand-in for `undefined` hash values. */
@@ -3121,7 +5200,7 @@ function hashSet(key, value) {
 
 module.exports = hashSet;
 
-},{"./_nativeCreate":131}],108:[function(require,module,exports){
+},{"./_nativeCreate":134}],111:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -3149,7 +5228,7 @@ function initCloneArray(array) {
 
 module.exports = initCloneArray;
 
-},{}],109:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 var cloneArrayBuffer = require('./_cloneArrayBuffer'),
     cloneDataView = require('./_cloneDataView'),
     cloneMap = require('./_cloneMap'),
@@ -3231,7 +5310,7 @@ function initCloneByTag(object, tag, cloneFunc, isDeep) {
 
 module.exports = initCloneByTag;
 
-},{"./_cloneArrayBuffer":69,"./_cloneDataView":71,"./_cloneMap":72,"./_cloneRegExp":73,"./_cloneSet":74,"./_cloneSymbol":75,"./_cloneTypedArray":76}],110:[function(require,module,exports){
+},{"./_cloneArrayBuffer":72,"./_cloneDataView":74,"./_cloneMap":75,"./_cloneRegExp":76,"./_cloneSet":77,"./_cloneSymbol":78,"./_cloneTypedArray":79}],113:[function(require,module,exports){
 var baseCreate = require('./_baseCreate'),
     getPrototype = require('./_getPrototype'),
     isPrototype = require('./_isPrototype');
@@ -3251,7 +5330,7 @@ function initCloneObject(object) {
 
 module.exports = initCloneObject;
 
-},{"./_baseCreate":31,"./_getPrototype":96,"./_isPrototype":116}],111:[function(require,module,exports){
+},{"./_baseCreate":33,"./_getPrototype":99,"./_isPrototype":119}],114:[function(require,module,exports){
 var Symbol = require('./_Symbol'),
     isArguments = require('./isArguments'),
     isArray = require('./isArray');
@@ -3273,7 +5352,7 @@ function isFlattenable(value) {
 
 module.exports = isFlattenable;
 
-},{"./_Symbol":10,"./isArguments":165,"./isArray":166}],112:[function(require,module,exports){
+},{"./_Symbol":12,"./isArguments":169,"./isArray":170}],115:[function(require,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -3297,7 +5376,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],113:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 var isArray = require('./isArray'),
     isSymbol = require('./isSymbol');
 
@@ -3328,7 +5407,7 @@ function isKey(value, object) {
 
 module.exports = isKey;
 
-},{"./isArray":166,"./isSymbol":175}],114:[function(require,module,exports){
+},{"./isArray":170,"./isSymbol":179}],117:[function(require,module,exports){
 /**
  * Checks if `value` is suitable for use as unique object key.
  *
@@ -3345,7 +5424,7 @@ function isKeyable(value) {
 
 module.exports = isKeyable;
 
-},{}],115:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 var coreJsData = require('./_coreJsData');
 
 /** Used to detect methods masquerading as native. */
@@ -3367,7 +5446,7 @@ function isMasked(func) {
 
 module.exports = isMasked;
 
-},{"./_coreJsData":81}],116:[function(require,module,exports){
+},{"./_coreJsData":84}],119:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -3387,7 +5466,7 @@ function isPrototype(value) {
 
 module.exports = isPrototype;
 
-},{}],117:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /**
@@ -3404,7 +5483,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"./isObject":172}],118:[function(require,module,exports){
+},{"./isObject":176}],121:[function(require,module,exports){
 /**
  * Removes all key-value entries from the list cache.
  *
@@ -3419,7 +5498,7 @@ function listCacheClear() {
 
 module.exports = listCacheClear;
 
-},{}],119:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /** Used for built-in method references. */
@@ -3456,7 +5535,7 @@ function listCacheDelete(key) {
 
 module.exports = listCacheDelete;
 
-},{"./_assocIndexOf":26}],120:[function(require,module,exports){
+},{"./_assocIndexOf":28}],123:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /**
@@ -3477,7 +5556,7 @@ function listCacheGet(key) {
 
 module.exports = listCacheGet;
 
-},{"./_assocIndexOf":26}],121:[function(require,module,exports){
+},{"./_assocIndexOf":28}],124:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /**
@@ -3495,7 +5574,7 @@ function listCacheHas(key) {
 
 module.exports = listCacheHas;
 
-},{"./_assocIndexOf":26}],122:[function(require,module,exports){
+},{"./_assocIndexOf":28}],125:[function(require,module,exports){
 var assocIndexOf = require('./_assocIndexOf');
 
 /**
@@ -3523,7 +5602,7 @@ function listCacheSet(key, value) {
 
 module.exports = listCacheSet;
 
-},{"./_assocIndexOf":26}],123:[function(require,module,exports){
+},{"./_assocIndexOf":28}],126:[function(require,module,exports){
 var Hash = require('./_Hash'),
     ListCache = require('./_ListCache'),
     Map = require('./_Map');
@@ -3546,7 +5625,7 @@ function mapCacheClear() {
 
 module.exports = mapCacheClear;
 
-},{"./_Hash":2,"./_ListCache":3,"./_Map":4}],124:[function(require,module,exports){
+},{"./_Hash":4,"./_ListCache":5,"./_Map":6}],127:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -3566,7 +5645,7 @@ function mapCacheDelete(key) {
 
 module.exports = mapCacheDelete;
 
-},{"./_getMapData":93}],125:[function(require,module,exports){
+},{"./_getMapData":96}],128:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -3584,7 +5663,7 @@ function mapCacheGet(key) {
 
 module.exports = mapCacheGet;
 
-},{"./_getMapData":93}],126:[function(require,module,exports){
+},{"./_getMapData":96}],129:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -3602,7 +5681,7 @@ function mapCacheHas(key) {
 
 module.exports = mapCacheHas;
 
-},{"./_getMapData":93}],127:[function(require,module,exports){
+},{"./_getMapData":96}],130:[function(require,module,exports){
 var getMapData = require('./_getMapData');
 
 /**
@@ -3626,7 +5705,7 @@ function mapCacheSet(key, value) {
 
 module.exports = mapCacheSet;
 
-},{"./_getMapData":93}],128:[function(require,module,exports){
+},{"./_getMapData":96}],131:[function(require,module,exports){
 /**
  * Converts `map` to its key-value pairs.
  *
@@ -3646,7 +5725,7 @@ function mapToArray(map) {
 
 module.exports = mapToArray;
 
-},{}],129:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 /**
  * A specialized version of `matchesProperty` for source values suitable
  * for strict equality comparisons, i.e. `===`.
@@ -3668,7 +5747,7 @@ function matchesStrictComparable(key, srcValue) {
 
 module.exports = matchesStrictComparable;
 
-},{}],130:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 var memoize = require('./memoize');
 
 /** Used as the maximum memoize cache size. */
@@ -3696,7 +5775,7 @@ function memoizeCapped(func) {
 
 module.exports = memoizeCapped;
 
-},{"./memoize":180}],131:[function(require,module,exports){
+},{"./memoize":184}],134:[function(require,module,exports){
 var getNative = require('./_getNative');
 
 /* Built-in method references that are verified to be native. */
@@ -3704,7 +5783,7 @@ var nativeCreate = getNative(Object, 'create');
 
 module.exports = nativeCreate;
 
-},{"./_getNative":95}],132:[function(require,module,exports){
+},{"./_getNative":98}],135:[function(require,module,exports){
 var overArg = require('./_overArg');
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -3712,7 +5791,7 @@ var nativeKeys = overArg(Object.keys, Object);
 
 module.exports = nativeKeys;
 
-},{"./_overArg":136}],133:[function(require,module,exports){
+},{"./_overArg":139}],136:[function(require,module,exports){
 /**
  * This function is like
  * [`Object.keys`](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
@@ -3734,7 +5813,7 @@ function nativeKeysIn(object) {
 
 module.exports = nativeKeysIn;
 
-},{}],134:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 var freeGlobal = require('./_freeGlobal');
 
 /** Detect free variable `exports`. */
@@ -3758,7 +5837,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-},{"./_freeGlobal":90}],135:[function(require,module,exports){
+},{"./_freeGlobal":93}],138:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -3782,7 +5861,7 @@ function objectToString(value) {
 
 module.exports = objectToString;
 
-},{}],136:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 /**
  * Creates a unary function that invokes `func` with its argument transformed.
  *
@@ -3799,7 +5878,7 @@ function overArg(func, transform) {
 
 module.exports = overArg;
 
-},{}],137:[function(require,module,exports){
+},{}],140:[function(require,module,exports){
 var apply = require('./_apply');
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -3837,7 +5916,7 @@ function overRest(func, start, transform) {
 
 module.exports = overRest;
 
-},{"./_apply":15}],138:[function(require,module,exports){
+},{"./_apply":17}],141:[function(require,module,exports){
 var freeGlobal = require('./_freeGlobal');
 
 /** Detect free variable `self`. */
@@ -3848,7 +5927,7 @@ var root = freeGlobal || freeSelf || Function('return this')();
 
 module.exports = root;
 
-},{"./_freeGlobal":90}],139:[function(require,module,exports){
+},{"./_freeGlobal":93}],142:[function(require,module,exports){
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
@@ -3869,7 +5948,7 @@ function setCacheAdd(value) {
 
 module.exports = setCacheAdd;
 
-},{}],140:[function(require,module,exports){
+},{}],143:[function(require,module,exports){
 /**
  * Checks if `value` is in the array cache.
  *
@@ -3885,7 +5964,7 @@ function setCacheHas(value) {
 
 module.exports = setCacheHas;
 
-},{}],141:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 /**
  * Converts `set` to an array of its values.
  *
@@ -3905,7 +5984,7 @@ function setToArray(set) {
 
 module.exports = setToArray;
 
-},{}],142:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 var baseSetToString = require('./_baseSetToString'),
     shortOut = require('./_shortOut');
 
@@ -3921,7 +6000,7 @@ var setToString = shortOut(baseSetToString);
 
 module.exports = setToString;
 
-},{"./_baseSetToString":61,"./_shortOut":143}],143:[function(require,module,exports){
+},{"./_baseSetToString":64,"./_shortOut":146}],146:[function(require,module,exports){
 /** Used to detect hot functions by number of calls within a span of milliseconds. */
 var HOT_COUNT = 800,
     HOT_SPAN = 16;
@@ -3960,7 +6039,7 @@ function shortOut(func) {
 
 module.exports = shortOut;
 
-},{}],144:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 var ListCache = require('./_ListCache');
 
 /**
@@ -3977,7 +6056,7 @@ function stackClear() {
 
 module.exports = stackClear;
 
-},{"./_ListCache":3}],145:[function(require,module,exports){
+},{"./_ListCache":5}],148:[function(require,module,exports){
 /**
  * Removes `key` and its value from the stack.
  *
@@ -3997,7 +6076,7 @@ function stackDelete(key) {
 
 module.exports = stackDelete;
 
-},{}],146:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 /**
  * Gets the stack value for `key`.
  *
@@ -4013,7 +6092,7 @@ function stackGet(key) {
 
 module.exports = stackGet;
 
-},{}],147:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 /**
  * Checks if a stack value for `key` exists.
  *
@@ -4029,7 +6108,7 @@ function stackHas(key) {
 
 module.exports = stackHas;
 
-},{}],148:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 var ListCache = require('./_ListCache'),
     Map = require('./_Map'),
     MapCache = require('./_MapCache');
@@ -4065,7 +6144,7 @@ function stackSet(key, value) {
 
 module.exports = stackSet;
 
-},{"./_ListCache":3,"./_Map":4,"./_MapCache":5}],149:[function(require,module,exports){
+},{"./_ListCache":5,"./_Map":6,"./_MapCache":7}],152:[function(require,module,exports){
 /**
  * A specialized version of `_.indexOf` which performs strict equality
  * comparisons of values, i.e. `===`.
@@ -4090,7 +6169,7 @@ function strictIndexOf(array, value, fromIndex) {
 
 module.exports = strictIndexOf;
 
-},{}],150:[function(require,module,exports){
+},{}],153:[function(require,module,exports){
 var memoizeCapped = require('./_memoizeCapped');
 
 /** Used to match property names within property paths. */
@@ -4120,7 +6199,7 @@ var stringToPath = memoizeCapped(function(string) {
 
 module.exports = stringToPath;
 
-},{"./_memoizeCapped":130}],151:[function(require,module,exports){
+},{"./_memoizeCapped":133}],154:[function(require,module,exports){
 var isSymbol = require('./isSymbol');
 
 /** Used as references for various `Number` constants. */
@@ -4143,7 +6222,7 @@ function toKey(value) {
 
 module.exports = toKey;
 
-},{"./isSymbol":175}],152:[function(require,module,exports){
+},{"./isSymbol":179}],155:[function(require,module,exports){
 /** Used for built-in method references. */
 var funcProto = Function.prototype;
 
@@ -4171,7 +6250,7 @@ function toSource(func) {
 
 module.exports = toSource;
 
-},{}],153:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 var baseClone = require('./_baseClone');
 
 /** Used to compose bitmasks for cloning. */
@@ -4209,7 +6288,7 @@ function clone(value) {
 
 module.exports = clone;
 
-},{"./_baseClone":30}],154:[function(require,module,exports){
+},{"./_baseClone":32}],157:[function(require,module,exports){
 /**
  * Creates a function that returns `value`.
  *
@@ -4237,7 +6316,7 @@ function constant(value) {
 
 module.exports = constant;
 
-},{}],155:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 var baseDifference = require('./_baseDifference'),
     baseFlatten = require('./_baseFlatten'),
     baseRest = require('./_baseRest'),
@@ -4272,10 +6351,10 @@ var difference = baseRest(function(array, values) {
 
 module.exports = difference;
 
-},{"./_baseDifference":32,"./_baseFlatten":36,"./_baseRest":60,"./isArrayLikeObject":168}],156:[function(require,module,exports){
+},{"./_baseDifference":34,"./_baseFlatten":38,"./_baseRest":63,"./isArrayLikeObject":172}],159:[function(require,module,exports){
 module.exports = require('./forEach');
 
-},{"./forEach":161}],157:[function(require,module,exports){
+},{"./forEach":164}],160:[function(require,module,exports){
 /**
  * Performs a
  * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
@@ -4314,7 +6393,7 @@ function eq(value, other) {
 
 module.exports = eq;
 
-},{}],158:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 var arrayFilter = require('./_arrayFilter'),
     baseFilter = require('./_baseFilter'),
     baseIteratee = require('./_baseIteratee'),
@@ -4364,7 +6443,7 @@ function filter(collection, predicate) {
 
 module.exports = filter;
 
-},{"./_arrayFilter":17,"./_baseFilter":34,"./_baseIteratee":51,"./isArray":166}],159:[function(require,module,exports){
+},{"./_arrayFilter":19,"./_baseFilter":36,"./_baseIteratee":54,"./isArray":170}],162:[function(require,module,exports){
 var createFind = require('./_createFind'),
     findIndex = require('./findIndex');
 
@@ -4408,7 +6487,7 @@ var find = createFind(findIndex);
 
 module.exports = find;
 
-},{"./_createFind":84,"./findIndex":160}],160:[function(require,module,exports){
+},{"./_createFind":87,"./findIndex":163}],163:[function(require,module,exports){
 var baseFindIndex = require('./_baseFindIndex'),
     baseIteratee = require('./_baseIteratee'),
     toInteger = require('./toInteger');
@@ -4465,7 +6544,7 @@ function findIndex(array, predicate, fromIndex) {
 
 module.exports = findIndex;
 
-},{"./_baseFindIndex":35,"./_baseIteratee":51,"./toInteger":187}],161:[function(require,module,exports){
+},{"./_baseFindIndex":37,"./_baseIteratee":54,"./toInteger":191}],164:[function(require,module,exports){
 var arrayEach = require('./_arrayEach'),
     baseEach = require('./_baseEach'),
     castFunction = require('./_castFunction'),
@@ -4508,7 +6587,7 @@ function forEach(collection, iteratee) {
 
 module.exports = forEach;
 
-},{"./_arrayEach":16,"./_baseEach":33,"./_castFunction":67,"./isArray":166}],162:[function(require,module,exports){
+},{"./_arrayEach":18,"./_baseEach":35,"./_castFunction":70,"./isArray":170}],165:[function(require,module,exports){
 var baseGet = require('./_baseGet');
 
 /**
@@ -4543,7 +6622,44 @@ function get(object, path, defaultValue) {
 
 module.exports = get;
 
-},{"./_baseGet":39}],163:[function(require,module,exports){
+},{"./_baseGet":41}],166:[function(require,module,exports){
+var baseHas = require('./_baseHas'),
+    hasPath = require('./_hasPath');
+
+/**
+ * Checks if `path` is a direct property of `object`.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @param {Array|string} path The path to check.
+ * @returns {boolean} Returns `true` if `path` exists, else `false`.
+ * @example
+ *
+ * var object = { 'a': { 'b': 2 } };
+ * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+ *
+ * _.has(object, 'a');
+ * // => true
+ *
+ * _.has(object, 'a.b');
+ * // => true
+ *
+ * _.has(object, ['a', 'b']);
+ * // => true
+ *
+ * _.has(other, 'a');
+ * // => false
+ */
+function has(object, path) {
+  return object != null && hasPath(object, path, baseHas);
+}
+
+module.exports = has;
+
+},{"./_baseHas":44,"./_hasPath":105}],167:[function(require,module,exports){
 var baseHasIn = require('./_baseHasIn'),
     hasPath = require('./_hasPath');
 
@@ -4579,7 +6695,7 @@ function hasIn(object, path) {
 
 module.exports = hasIn;
 
-},{"./_baseHasIn":42,"./_hasPath":102}],164:[function(require,module,exports){
+},{"./_baseHasIn":45,"./_hasPath":105}],168:[function(require,module,exports){
 /**
  * This method returns the first argument it receives.
  *
@@ -4602,7 +6718,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],165:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 var baseIsArguments = require('./_baseIsArguments'),
     isObjectLike = require('./isObjectLike');
 
@@ -4640,7 +6756,7 @@ var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsAr
 
 module.exports = isArguments;
 
-},{"./_baseIsArguments":44,"./isObjectLike":173}],166:[function(require,module,exports){
+},{"./_baseIsArguments":47,"./isObjectLike":177}],170:[function(require,module,exports){
 /**
  * Checks if `value` is classified as an `Array` object.
  *
@@ -4668,7 +6784,7 @@ var isArray = Array.isArray;
 
 module.exports = isArray;
 
-},{}],167:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 var isFunction = require('./isFunction'),
     isLength = require('./isLength');
 
@@ -4703,7 +6819,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./isFunction":170,"./isLength":171}],168:[function(require,module,exports){
+},{"./isFunction":174,"./isLength":175}],172:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isObjectLike = require('./isObjectLike');
 
@@ -4738,7 +6854,7 @@ function isArrayLikeObject(value) {
 
 module.exports = isArrayLikeObject;
 
-},{"./isArrayLike":167,"./isObjectLike":173}],169:[function(require,module,exports){
+},{"./isArrayLike":171,"./isObjectLike":177}],173:[function(require,module,exports){
 var root = require('./_root'),
     stubFalse = require('./stubFalse');
 
@@ -4778,7 +6894,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-},{"./_root":138,"./stubFalse":185}],170:[function(require,module,exports){
+},{"./_root":141,"./stubFalse":189}],174:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isObject = require('./isObject');
 
@@ -4817,7 +6933,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./_baseGetTag":41,"./isObject":172}],171:[function(require,module,exports){
+},{"./_baseGetTag":43,"./isObject":176}],175:[function(require,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -4854,7 +6970,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],172:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 /**
  * Checks if `value` is the
  * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
@@ -4887,7 +7003,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],173:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
  * and has a `typeof` result of "object".
@@ -4918,7 +7034,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],174:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     getPrototype = require('./_getPrototype'),
     isObjectLike = require('./isObjectLike');
@@ -4982,7 +7098,7 @@ function isPlainObject(value) {
 
 module.exports = isPlainObject;
 
-},{"./_baseGetTag":41,"./_getPrototype":96,"./isObjectLike":173}],175:[function(require,module,exports){
+},{"./_baseGetTag":43,"./_getPrototype":99,"./isObjectLike":177}],179:[function(require,module,exports){
 var baseGetTag = require('./_baseGetTag'),
     isObjectLike = require('./isObjectLike');
 
@@ -5013,7 +7129,7 @@ function isSymbol(value) {
 
 module.exports = isSymbol;
 
-},{"./_baseGetTag":41,"./isObjectLike":173}],176:[function(require,module,exports){
+},{"./_baseGetTag":43,"./isObjectLike":177}],180:[function(require,module,exports){
 var baseIsTypedArray = require('./_baseIsTypedArray'),
     baseUnary = require('./_baseUnary'),
     nodeUtil = require('./_nodeUtil');
@@ -5042,7 +7158,7 @@ var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedA
 
 module.exports = isTypedArray;
 
-},{"./_baseIsTypedArray":50,"./_baseUnary":64,"./_nodeUtil":134}],177:[function(require,module,exports){
+},{"./_baseIsTypedArray":53,"./_baseUnary":67,"./_nodeUtil":137}],181:[function(require,module,exports){
 var arrayLikeKeys = require('./_arrayLikeKeys'),
     baseKeys = require('./_baseKeys'),
     isArrayLike = require('./isArrayLike');
@@ -5081,7 +7197,7 @@ function keys(object) {
 
 module.exports = keys;
 
-},{"./_arrayLikeKeys":20,"./_baseKeys":52,"./isArrayLike":167}],178:[function(require,module,exports){
+},{"./_arrayLikeKeys":22,"./_baseKeys":55,"./isArrayLike":171}],182:[function(require,module,exports){
 var arrayLikeKeys = require('./_arrayLikeKeys'),
     baseKeysIn = require('./_baseKeysIn'),
     isArrayLike = require('./isArrayLike');
@@ -5115,7 +7231,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"./_arrayLikeKeys":20,"./_baseKeysIn":53,"./isArrayLike":167}],179:[function(require,module,exports){
+},{"./_arrayLikeKeys":22,"./_baseKeysIn":56,"./isArrayLike":171}],183:[function(require,module,exports){
 var arrayMap = require('./_arrayMap'),
     baseIteratee = require('./_baseIteratee'),
     baseMap = require('./_baseMap'),
@@ -5170,7 +7286,7 @@ function map(collection, iteratee) {
 
 module.exports = map;
 
-},{"./_arrayMap":21,"./_baseIteratee":51,"./_baseMap":54,"./isArray":166}],180:[function(require,module,exports){
+},{"./_arrayMap":23,"./_baseIteratee":54,"./_baseMap":57,"./isArray":170}],184:[function(require,module,exports){
 var MapCache = require('./_MapCache');
 
 /** Error message constants. */
@@ -5245,7 +7361,7 @@ memoize.Cache = MapCache;
 
 module.exports = memoize;
 
-},{"./_MapCache":5}],181:[function(require,module,exports){
+},{"./_MapCache":7}],185:[function(require,module,exports){
 /**
  * This method returns `undefined`.
  *
@@ -5264,7 +7380,7 @@ function noop() {
 
 module.exports = noop;
 
-},{}],182:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 var baseProperty = require('./_baseProperty'),
     basePropertyDeep = require('./_basePropertyDeep'),
     isKey = require('./_isKey'),
@@ -5298,7 +7414,7 @@ function property(path) {
 
 module.exports = property;
 
-},{"./_baseProperty":57,"./_basePropertyDeep":58,"./_isKey":113,"./_toKey":151}],183:[function(require,module,exports){
+},{"./_baseProperty":60,"./_basePropertyDeep":61,"./_isKey":116,"./_toKey":154}],187:[function(require,module,exports){
 var arrayReduce = require('./_arrayReduce'),
     baseEach = require('./_baseEach'),
     baseIteratee = require('./_baseIteratee'),
@@ -5351,7 +7467,7 @@ function reduce(collection, iteratee, accumulator) {
 
 module.exports = reduce;
 
-},{"./_arrayReduce":23,"./_baseEach":33,"./_baseIteratee":51,"./_baseReduce":59,"./isArray":166}],184:[function(require,module,exports){
+},{"./_arrayReduce":25,"./_baseEach":35,"./_baseIteratee":54,"./_baseReduce":62,"./isArray":170}],188:[function(require,module,exports){
 /**
  * This method returns a new empty array.
  *
@@ -5376,7 +7492,7 @@ function stubArray() {
 
 module.exports = stubArray;
 
-},{}],185:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 /**
  * This method returns `false`.
  *
@@ -5396,7 +7512,7 @@ function stubFalse() {
 
 module.exports = stubFalse;
 
-},{}],186:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 var toNumber = require('./toNumber');
 
 /** Used as references for various `Number` constants. */
@@ -5440,7 +7556,7 @@ function toFinite(value) {
 
 module.exports = toFinite;
 
-},{"./toNumber":188}],187:[function(require,module,exports){
+},{"./toNumber":192}],191:[function(require,module,exports){
 var toFinite = require('./toFinite');
 
 /**
@@ -5478,7 +7594,7 @@ function toInteger(value) {
 
 module.exports = toInteger;
 
-},{"./toFinite":186}],188:[function(require,module,exports){
+},{"./toFinite":190}],192:[function(require,module,exports){
 var isObject = require('./isObject'),
     isSymbol = require('./isSymbol');
 
@@ -5546,7 +7662,7 @@ function toNumber(value) {
 
 module.exports = toNumber;
 
-},{"./isObject":172,"./isSymbol":175}],189:[function(require,module,exports){
+},{"./isObject":176,"./isSymbol":179}],193:[function(require,module,exports){
 var baseToString = require('./_baseToString');
 
 /**
@@ -5576,7 +7692,7 @@ function toString(value) {
 
 module.exports = toString;
 
-},{"./_baseToString":63}],190:[function(require,module,exports){
+},{"./_baseToString":66}],194:[function(require,module,exports){
 var baseUniq = require('./_baseUniq');
 
 /**
@@ -5603,7 +7719,7 @@ function uniq(array) {
 
 module.exports = uniq;
 
-},{"./_baseUniq":65}],191:[function(require,module,exports){
+},{"./_baseUniq":68}],195:[function(require,module,exports){
 var baseDifference = require('./_baseDifference'),
     baseRest = require('./_baseRest'),
     isArrayLikeObject = require('./isArrayLikeObject');
@@ -5636,7 +7752,7 @@ var without = baseRest(function(array, values) {
 
 module.exports = without;
 
-},{"./_baseDifference":32,"./_baseRest":60,"./isArrayLikeObject":168}],192:[function(require,module,exports){
+},{"./_baseDifference":34,"./_baseRest":63,"./isArrayLikeObject":172}],196:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -5822,7 +7938,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],193:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5846,7 +7962,7 @@ var thunk = createThunkMiddleware();
 thunk.withExtraArgument = createThunkMiddleware;
 
 exports['default'] = thunk;
-},{}],194:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5905,7 +8021,7 @@ function applyMiddleware() {
     };
   };
 }
-},{"./compose":197}],195:[function(require,module,exports){
+},{"./compose":201}],199:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5957,7 +8073,7 @@ function bindActionCreators(actionCreators, dispatch) {
   }
   return boundActionCreators;
 }
-},{}],196:[function(require,module,exports){
+},{}],200:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6104,7 +8220,7 @@ function combineReducers(reducers) {
 }
 }).call(this,require('_process'))
 
-},{"./createStore":198,"./utils/warning":200,"_process":192,"lodash/isPlainObject":174}],197:[function(require,module,exports){
+},{"./createStore":202,"./utils/warning":204,"_process":196,"lodash/isPlainObject":178}],201:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -6141,7 +8257,7 @@ function compose() {
     };
   });
 }
-},{}],198:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6403,7 +8519,7 @@ var ActionTypes = exports.ActionTypes = {
     replaceReducer: replaceReducer
   }, _ref2[_symbolObservable2['default']] = observable, _ref2;
 }
-},{"lodash/isPlainObject":174,"symbol-observable":201}],199:[function(require,module,exports){
+},{"lodash/isPlainObject":178,"symbol-observable":205}],203:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -6453,7 +8569,7 @@ exports.applyMiddleware = _applyMiddleware2['default'];
 exports.compose = _compose2['default'];
 }).call(this,require('_process'))
 
-},{"./applyMiddleware":194,"./bindActionCreators":195,"./combineReducers":196,"./compose":197,"./createStore":198,"./utils/warning":200,"_process":192}],200:[function(require,module,exports){
+},{"./applyMiddleware":198,"./bindActionCreators":199,"./combineReducers":200,"./compose":201,"./createStore":202,"./utils/warning":204,"_process":196}],204:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6479,10 +8595,10 @@ function warning(message) {
   } catch (e) {}
   /* eslint-enable no-empty */
 }
-},{}],201:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 module.exports = require('./lib/index');
 
-},{"./lib/index":202}],202:[function(require,module,exports){
+},{"./lib/index":206}],206:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -6515,7 +8631,7 @@ var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./ponyfill":203}],203:[function(require,module,exports){
+},{"./ponyfill":207}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6539,7 +8655,7 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
-},{}],204:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6557,6 +8673,10 @@ var _map = require('lodash/map');
 var _map2 = _interopRequireDefault(_map);
 
 var _actions = require('../modules/actions');
+
+var _uploader = require('./uploader');
+
+var _uploader2 = _interopRequireDefault(_uploader);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6581,7 +8701,8 @@ var MediaGridListItem = function () {
         }, this.constructor.defaultOptions, options);
         this.store = this.options.store;
 
-        this.popoverHTML = '<div class="media-gridlist-popover">' + $container.find('.media-gridlist-popover').html() + '</div>';
+        this.$popover = $container.find('.media-gridlist-popover');
+        this.$replace = null;
 
         this.init();
     }
@@ -6597,6 +8718,11 @@ var MediaGridListItem = function () {
 
             this.unsubscribers = [store.subscribePath('opened', this.handleOpenedChange.bind(this)), store.subscribePath('selected', this.handleSelectedChange.bind(this)), store.subscribePath('grid.dragging', this.handleDraggingChange.bind(this))];
 
+            // Already should be opened
+            if (store.getState().opened === this.options.id) {
+                this.handleOpenedChange(this.options.id, null);
+            }
+
             // Drag & drop
             $container.draggable({
                 helper: 'clone',
@@ -6609,6 +8735,18 @@ var MediaGridListItem = function () {
 
             // Popover
             $container.on('click', this.handleClick.bind(this));
+        }
+    }, {
+        key: 'initPopover',
+        value: function initPopover() {
+            // "Replace" button
+            this.$replace = this.$popover.find('.js-media-replace');
+            _uploader2.default.registerButton(this.$replace, {
+                'multiple': false,
+                'info': {
+                    'replace': this.options.id
+                }
+            });
         }
 
         /**
@@ -6634,10 +8772,11 @@ var MediaGridListItem = function () {
     }, {
         key: 'destroy',
         value: function destroy() {
+            _uploader2.default.unregisterButton(this.$replace || $());
             (0, _each2.default)(this.unsubscribers, function (unsubscribe) {
                 return unsubscribe();
             });
-            this.unsubscribers = this.$container = this.options = this.store = null;
+            this.unsubscribers = this.$container = this.$replace = this.options = this.store = null;
         }
     }, {
         key: 'handleClick',
@@ -6690,8 +8829,6 @@ var MediaGridListItem = function () {
     }, {
         key: 'handleOpenedChange',
         value: function handleOpenedChange(opened, prevOpened) {
-            var _this = this;
-
             if (!this.options) return;
             var id = this.options.id;
 
@@ -6703,10 +8840,10 @@ var MediaGridListItem = function () {
                         trigger: 'null',
                         html: true,
                         placement: 'bottom',
-                        content: function content() {
-                            return _this.popoverHTML;
-                        }
+                        content: this.$popover.removeClass('hidden')
                     });
+
+                    this.initPopover();
                 }
 
                 this.$container.popover('show').addClass('is-active');
@@ -6743,7 +8880,9 @@ var MediaGridListItem = function () {
     }, {
         key: 'handleMoveStart',
         value: function handleMoveStart(event, ui) {
-            var selected = this.store.getState().selected;
+            var store = this.store;
+            var selected = store.getState().selected;
+
             var id = this.options.id;
             var list = [id];
 
@@ -6765,7 +8904,7 @@ var MediaGridListItem = function () {
     }, {
         key: 'handleMoveEnd',
         value: function handleMoveEnd(event, ui) {
-            store.dispatch((0, _actions.setDraggingListItems)([]));
+            this.store.dispatch((0, _actions.setDraggingListItems)([]));
         }
     }]);
 
@@ -6774,7 +8913,7 @@ var MediaGridListItem = function () {
 
 exports.default = MediaGridListItem;
 
-},{"../modules/actions":208,"lodash/each":156,"lodash/map":179}],205:[function(require,module,exports){
+},{"../modules/actions":214,"./uploader":211,"lodash/each":159,"lodash/map":183}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6818,8 +8957,9 @@ var MediaGridList = function () {
         key: 'defaultOptions',
         get: function get() {
             return {
-                'className': 'media-grid-list',
+                'className': 'media-gridlist',
                 'itemSelector': '.media-gridlist-box',
+                'popoverSelector': '.popover',
                 'store': null
             };
         }
@@ -6851,11 +8991,13 @@ var MediaGridList = function () {
 
             store.subscribePath('grid.files', this.handleGridChange.bind(this));
             store.subscribePath('grid.loading', this.handleGridLoading.bind(this));
+            store.subscribePath('files', this.handleFilesChange.bind(this));
         }
     }, {
         key: 'handleGridChange',
         value: function handleGridChange(newFiles, prevFiles) {
-            var state = this.store.getState();
+            var store = this.store;
+            var state = store.getState();
 
             // List of ids added / removed, these are objects {"fileIdA": 1, "fileIdB": 1}
             var added = (0, _reduce2.default)((0, _difference2.default)(newFiles, prevFiles), function (list, id) {
@@ -6875,6 +9017,7 @@ var MediaGridList = function () {
                 var file = state.files[_id];
 
                 if (_id in added) {
+                    // New items which were added
                     var $element = $(this.template({ 'data': file }));
 
                     if (prevItem) {
@@ -6885,10 +9028,38 @@ var MediaGridList = function () {
 
                     prevItem = items[file.id] = new _gridlistItem2.default($element, { store: store, id: _id });
                 } else if (_id in removed) {
+                    // Items which were removed
                     items[_id].remove();
                     delete items[_id];
                 } else {
                     prevItem = items[_id];
+                }
+            }
+        }
+    }, {
+        key: 'handleFilesChange',
+        value: function handleFilesChange(newFiles, prevFiles) {
+            var items = this.mediaGridItems;
+            var store = this.store;
+
+            for (var _id2 in newFiles) {
+                var newFile = newFiles[_id2];
+                var prevFile = prevFiles[_id2];
+
+                if (prevFile && prevFile !== newFile) {
+                    for (var key in newFile) {
+                        if (newFile[key] !== prevFile[key]) {
+                            // Replace item
+                            var prevItem = items[newFile.id];
+                            var $element = $(this.template({ 'data': newFile }));
+
+                            prevItem.$container.after($element);
+                            items[newFile.id].remove();
+                            items[newFile.id] = new _gridlistItem2.default($element, { store: store, id: newFile.id });
+
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -6902,7 +9073,7 @@ var MediaGridList = function () {
         value: function handleSelectItem(e, ui) {
             var id = this.getItemId({ 'target': ui.selected || ui.selecting });
             if (id) {
-                store.dispatch((0, _actions.addSelectedItems)([id]));
+                this.store.dispatch((0, _actions.addSelectedItems)([id]));
             }
         }
     }, {
@@ -6910,7 +9081,7 @@ var MediaGridList = function () {
         value: function handleUnselectItem(e, ui) {
             var id = this.getItemId({ 'target': ui.unselected || ui.unselecting });
             if (id) {
-                store.dispatch((0, _actions.removeSelectedItems)([id]));
+                this.store.dispatch((0, _actions.removeSelectedItems)([id]));
             }
         }
     }, {
@@ -6919,8 +9090,8 @@ var MediaGridList = function () {
             var id = this.getItemId(e);
 
             if (!id) {
-                store.dispatch((0, _actions.unsetAllSelectedListItems)());
-                store.dispatch((0, _actions.setOpenedListItem)(null));
+                this.store.dispatch((0, _actions.unsetAllSelectedListItems)());
+                this.store.dispatch((0, _actions.setOpenedListItem)(null));
             }
         }
     }, {
@@ -6938,7 +9109,19 @@ var MediaGridList = function () {
         key: 'getItemElement',
         value: function getItemElement(e) {
             if (e && e.target) {
-                return $(e.target).closest(this.options.itemSelector);
+                var $item = $(e.target).closest(this.options.itemSelector);
+
+                if ($item.length) {
+                    return $item;
+                } else {
+                    var $popover = $(e.target).closest(this.options.popoverSelector);
+
+                    if ($popover.length) {
+                        return $popover.prev(this.options.itemSelector);
+                    } else {
+                        return $();
+                    }
+                }
             } else if (e instanceof jQuery) {
                 return e;
             } else if (typeof e === 'string') {
@@ -6952,7 +9135,7 @@ var MediaGridList = function () {
 
 exports.default = MediaGridList;
 
-},{"../modules/actions":208,"../utils/micro-template":213,"./gridlist-item":204,"lodash/difference":155,"lodash/filter":158,"lodash/reduce":183,"lodash/uniq":190}],206:[function(require,module,exports){
+},{"../modules/actions":214,"../utils/micro-template":220,"./gridlist-item":208,"lodash/difference":158,"lodash/filter":161,"lodash/reduce":187,"lodash/uniq":194}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6971,9 +9154,15 @@ var _difference2 = _interopRequireDefault(_difference);
 
 var _actions = require('../modules/actions');
 
+var _folders = require('../utils/folders');
+
 var _microTemplate = require('../utils/micro-template');
 
 var _microTemplate2 = _interopRequireDefault(_microTemplate);
+
+var _uploader = require('./uploader');
+
+var _uploader2 = _interopRequireDefault(_uploader);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7014,6 +9203,7 @@ var MediaTreeView = function () {
         value: function init() {
             var $container = this.$container;
             var options = this.options;
+            var store = this.store;
 
             $container.addClass(options.className).attr(options.instanceAttribute, true);
 
@@ -7035,7 +9225,7 @@ var MediaTreeView = function () {
         value: function handleItemClick(e) {
             var $item = $(e.target).closest(this.options.itemSelector);
             var categoryId = $item.data('id');
-            var store = this.options.store;
+            var store = this.store;
 
             e.preventDefault();
 
@@ -7090,8 +9280,8 @@ var MediaTreeView = function () {
                 helper: 'clone',
                 zIndex: 999999,
                 cursorAt: { left: -10, top: -10 },
-                start: this.handleTreeItemDragStart.bind(this),
-                stop: this.handleTreeItemDragEnd.bind(this),
+                // start   : this.handleTreeItemDragStart.bind(this),
+                // stop    : this.handleTreeItemDragEnd.bind(this),
                 appendTo: this.$container
             });
 
@@ -7119,26 +9309,25 @@ var MediaTreeView = function () {
             this.handleDropOut(e, ui);
 
             var store = this.store;
+            var state = store.getState();
             var id = ui.draggable.data('id');
             var parent = $(e.target).data('id');
 
-            console.log(parent);
-
             if (id in store.getState().files) {
                 // Files
-                var files = store.getState().grid.dragging;
-                store.dispatch((0, _actions.moveFiles)(files, parent));
+                if (state.categoryId !== parent) {
+                    // Not dropping in same folder
+                    var files = store.getState().grid.dragging;
+                    store.dispatch((0, _actions.moveFiles)(files, parent));
+                }
             } else {
                 // Folder
-                store.dispatch((0, _actions.moveFolder)(id, parent));
+                if (!(0, _folders.isDescendantOf)(parent, id, state) && !(0, _folders.isChildOf)(id, parent, state)) {
+                    // Not dropping parent into child
+                    store.dispatch((0, _actions.moveFolder)(id, parent));
+                }
             }
         }
-    }, {
-        key: 'handleTreeItemDragStart',
-        value: function handleTreeItemDragStart() {}
-    }, {
-        key: 'handleTreeItemDragEnd',
-        value: function handleTreeItemDragEnd() {}
 
         /*
          * Tree rendering
@@ -7148,7 +9337,7 @@ var MediaTreeView = function () {
         key: 'generateTree',
         value: function generateTree(list) {
             if (list && list.length) {
-                var folders = store.getState().tree.folders;
+                var folders = this.store.getState().tree.folders;
                 var tree = [];
 
                 for (var i = 0; i < list.length; i++) {
@@ -7182,10 +9371,11 @@ var MediaTreeView = function () {
                 'template': this.template,
                 'root': true,
                 'depth': 1,
-                'currentCategoryId': store.getState().categoryId
+                'currentCategoryId': state.categoryId
             });
 
             // Render
+            this.cleanupTreeState();
             $container.html(html);
             this.restoreTreeState();
         }
@@ -7222,10 +9412,23 @@ var MediaTreeView = function () {
             $toggled.addClass(options.toggledClassName);
             $toggled.next('ul').show();
 
-            // Enable drag and drop
+            // Enable drag and drop, file upload
             $container.find(options.itemSelector).each(function (index, item) {
-                return _this.setupDroppable($(item));
+                var $item = $(item);
+
+                _this.setupDroppable($item);
+                _uploader2.default.registerDropZone($item, {
+                    'info': {
+                        'parent': $item.data('id')
+                    }
+                });
             });
+        }
+    }, {
+        key: 'cleanupTreeState',
+        value: function cleanupTreeState() {
+            var $items = this.$container.find(this.options.itemSelector);
+            _uploader2.default.unregisterDropZone($items);
         }
     }]);
 
@@ -7234,7 +9437,271 @@ var MediaTreeView = function () {
 
 exports.default = MediaTreeView;
 
-},{"../modules/actions":208,"../utils/micro-template":213,"lodash/difference":155,"lodash/map":179}],207:[function(require,module,exports){
+},{"../modules/actions":214,"../utils/folders":219,"../utils/micro-template":220,"./uploader":211,"lodash/difference":158,"lodash/map":183}],211:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _blueimpFileUpload = require('blueimp-file-upload');
+
+var _blueimpFileUpload2 = _interopRequireDefault(_blueimpFileUpload);
+
+var _actions = require('../modules/actions');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FILE_UPLOAD_URL = '/bundles/videinfracms/media/json/upload.json';
+var UID = 0;
+
+var Uploader = function () {
+    _createClass(Uploader, null, [{
+        key: 'getInstance',
+        value: function getInstance() {
+            return Uploader.instance || (Uploader.instance = new Uploader());
+        }
+    }]);
+
+    function Uploader() {
+        _classCallCheck(this, Uploader);
+
+        this.options = {};
+        this.$input = null;
+        this.uploadZones = {};
+        this.activeUploadZone = null;
+        this.dropTimeout = null;
+
+        this.uploadComplete = [];
+        this.$progress = $('.js-media-gridlist-progress');
+        this.create();
+    }
+
+    _createClass(Uploader, [{
+        key: 'setOptions',
+        value: function setOptions(options) {
+            this.options = $.extend(this.options, options);
+            this.store = this.options.store;
+        }
+    }, {
+        key: 'create',
+        value: function create() {
+            this.$input = $('<input class="media-out-of-screen" type="file" name="files[]" multiple="multiple" />').appendTo('body');
+            this.$input.fileupload({
+                url: FILE_UPLOAD_URL,
+                dataType: 'json',
+                done: this.handleFileUploadComplete.bind(this),
+                progressall: this.handleFileUploadProgress.bind(this),
+                add: this.handleFileUpload.bind(this)
+            });
+
+            // Disable global drag / drop of files
+            $(document).bind('dragover', this.handleDropZoneDragOver.bind(this));
+            $(document).bind('drop dragover', this.handleGlobalDragOver.bind(this));
+        }
+
+        /*
+         * Upload progress
+         */
+
+    }, {
+        key: 'handleAllFileUploadComplete',
+        value: function handleAllFileUploadComplete() {
+            var uploadComplete = this.uploadComplete;
+            this.uploadComplete = [];
+            this.store.dispatch((0, _actions.uploadedFiles)(uploadComplete));
+        }
+    }, {
+        key: 'handleFileUploadComplete',
+        value: function handleFileUploadComplete(e, data) {
+            if (data.info && data.info.replace) {
+                // Was replacing file
+                this.store.dispatch((0, _actions.updatedFile)(data.result.files[0]));
+            } else {
+                this.uploadComplete = this.uploadComplete.concat(data.result.files);
+            }
+        }
+    }, {
+        key: 'handleFileUploadProgress',
+        value: function handleFileUploadProgress(e, data) {
+            var progress = data.loaded / data.total;
+
+            this.$progress.removeClass('media-gridlist-progress--hidden').children().css('width', progress * 100 + '%');
+
+            if (progress === 1) {
+                // Done
+                setTimeout(this.hideUploadProgress.bind(this), 500);
+
+                // Dispatch complete
+                this.handleAllFileUploadComplete();
+            }
+        }
+    }, {
+        key: 'hideUploadProgress',
+        value: function hideUploadProgress() {
+            this.$progress.addClass('media-gridlist-progress--hidden');
+        }
+
+        /*
+         * Drag / drop zones
+         */
+
+    }, {
+        key: 'handleGlobalDragOver',
+        value: function handleGlobalDragOver(e) {
+            e.preventDefault();
+        }
+    }, {
+        key: 'handleDropZoneDragOver',
+        value: function handleDropZoneDragOver(e) {
+            var $dropZones = this.$input.fileupload('option', 'dropZone');
+
+            if (this.dropTimeout) {
+                clearTimeout(this.dropTimeout);
+            } else {
+                $dropZones.addClass('dropzone--in');
+            }
+
+            var $hoveredDropZone = $(e.target).closest($dropZones);
+
+            $dropZones.not($hoveredDropZone).removeClass('dropzone--hover');
+            $hoveredDropZone.addClass('dropzone--hover');
+
+            this.dropTimeout = setTimeout(this.resetDropZones.bind(this), 100);
+            this.activeUploadZone = $hoveredDropZone.data('dropZone');
+        }
+    }, {
+        key: 'resetDropZones',
+        value: function resetDropZones() {
+            var $dropZones = this.$input.fileupload('option', 'dropZone');
+            this.dropTimeout = null;
+            $dropZones.removeClass('dropzone--in dropzone--hover');
+        }
+
+        /**
+         * Before file uploaded we want to add additional data
+         * to the request
+         */
+
+    }, {
+        key: 'handleFileUpload',
+        value: function handleFileUpload(e, data) {
+            var info = null;
+
+            if (!data.files[0].uploading) {
+                data.files[0].uploading = true; // Prevent duplicate request
+
+                if (data.info) {
+                    // Uploading using a "Browse" button, data is passed in using data.info
+                    info = data.info;
+                } else if (this.activeUploadZone) {
+                    // Uploading file using drag and drop, data is in uploadZone map
+                    info = this.uploadZones[this.activeUploadZone];
+                }
+
+                if (info) {
+                    data.formData = typeof info === 'function' ? info() : info;
+                    data.submit();
+                }
+            }
+        }
+
+        /*
+         * Add / remove drop zones
+         */
+
+    }, {
+        key: 'registerDropZone',
+        value: function registerDropZone($element, data) {
+            var options = $.extend({ 'info': {} }, data);
+            var $dropZones = this.$input.fileupload('option', 'dropZone');
+            var uid = ++UID;
+
+            this.uploadZones[uid] = options.info;
+            $element.data('dropZone', uid);
+            $element.addClass('dropzone');
+
+            this.$input.fileupload('option', 'dropZone', $dropZones.add($element));
+        }
+    }, {
+        key: 'unregisterDropZone',
+        value: function unregisterDropZone($element) {
+            var $dropZones = this.$input.fileupload('option', 'dropZone');
+            var uploadZones = this.uploadZones;
+
+            $element.each(function () {
+                var uid = $(this).data('dropZone');
+                if (uid && uid in uploadZones) {
+                    delete uploadZones[uid];
+                }
+            });
+
+            $element.removeData('dropZone');
+            $element.removeClass('dropzone');
+
+            this.$input.fileupload('option', 'dropZone', $dropZones.not($element));
+        }
+
+        /*
+         * Add / remove buttons
+         */
+
+    }, {
+        key: 'registerButton',
+        value: function registerButton($element, data) {
+            var _this = this;
+
+            var options = $.extend({ 'multiple': true, 'info': {} }, data);
+            var $input = $('<input class="media-out-of-screen" type="file" name="files[]" ' + (options.multiple ? 'multiple="multiple"' : '') + ' />');
+
+            $element.addClass('media-upload-button').append($input);
+
+            $input.on('change', function () {
+                var files = $input.get(0).files || [{ name: _this.value }];
+
+                _this.$input.fileupload('add', {
+                    files: files,
+                    fileInput: $input,
+                    info: options.info
+                });
+            });
+        }
+    }, {
+        key: 'unregisterButton',
+        value: function unregisterButton($element) {
+            $element.removeClass('media-upload-button').find('input:file').off('change').remove();
+        }
+    }]);
+
+    return Uploader;
+}();
+
+exports.default = {
+    init: function init(options) {
+        Uploader.getInstance().setOptions(options);
+    },
+    registerDropZone: function registerDropZone($element, data) {
+        Uploader.getInstance().registerDropZone($element, data);
+    },
+    unregisterDropZone: function unregisterDropZone($element) {
+        Uploader.getInstance().unregisterDropZone($element);
+    },
+    registerButton: function registerButton($element, data) {
+        Uploader.getInstance().registerButton($element, data);
+    },
+    unregisterButton: function unregisterButton($element) {
+        Uploader.getInstance().unregisterButton($element);
+    }
+};
+
+},{"../modules/actions":214,"blueimp-file-upload":1}],212:[function(require,module,exports){
+// Shim for jQuery
+module.exports = window.jQuery;
+},{}],213:[function(require,module,exports){
 'use strict';
 
 var _treeview = require('./components/treeview');
@@ -7245,6 +9712,10 @@ var _gridlist = require('./components/gridlist');
 
 var _gridlist2 = _interopRequireDefault(_gridlist);
 
+var _uploader = require('./components/uploader');
+
+var _uploader2 = _interopRequireDefault(_uploader);
+
 var _store = require('./modules/store');
 
 var _store2 = _interopRequireDefault(_store);
@@ -7253,16 +9724,27 @@ var _actions = require('./modules/actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.store = _store2.default; // @TODO Remove global
-
-
 $(function () {
+    _uploader2.default.init({ 'store': _store2.default });
+
     $('[data-widget="media-treeview"]').each(function () {
         new _treeview2.default($(this), { 'store': _store2.default });
     });
 
     $('[data-widget="media-gridlist"]').each(function () {
         new _gridlist2.default($(this), { 'store': _store2.default });
+
+        $(this).on('click', '.js-media-remove', function (e) {
+            _store2.default.dispatch((0, _actions.deleteSelectedListItems)());
+        });
+
+        _uploader2.default.registerDropZone($(this), {
+            'info': function info() {
+                return {
+                    'parent': _store2.default.getState().categoryId
+                };
+            }
+        });
     });
 
     $('.js-media-remove').on('click', function (e) {
@@ -7276,18 +9758,23 @@ $(function () {
         _store2.default.dispatch((0, _actions.addFolder)(name));
     });
 
-    $('.js-media-upload-file').on('click', function (e) {
-        e.preventDefault();
+    // Upload button
+    _uploader2.default.registerButton($('.js-media-upload-file'), {
+        'info': function info(e) {
+            return {
+                'parent': _store2.default.getState().categoryId
+            };
+        }
     });
 });
 
-},{"./components/gridlist":205,"./components/treeview":206,"./modules/actions":208,"./modules/store":211}],208:[function(require,module,exports){
+},{"./components/gridlist":209,"./components/treeview":210,"./components/uploader":211,"./modules/actions":214,"./modules/store":217}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.SET_CATEGORY = exports.TOGGLE_OPENED_ITEM = exports.SET_OPENED_ITEM = exports.MOVED_FILES = exports.REMOVE_FILES = exports.RECEIVE_FILES = exports.REQUEST_FILES = exports.MOVED_FOLDER = exports.RECEIVE_FOLDER = exports.UNSET_ALL_SELECTED_ITEMS = exports.REMOVE_SELECTED_ITEMS = exports.ADD_SELECTED_ITEMS = exports.TOGGLE_SELECTED_ITEM = exports.SET_SELECTED_ITEM = exports.UNSET_SELECTED_ITEM = exports.DELETE_SELECTED_ITEMS = exports.SET_DRAGGING_ITEMS = exports.SET_GRID_LOADING = exports.SET_GRID_LIST = undefined;
+exports.SET_CATEGORY = exports.TOGGLE_OPENED_ITEM = exports.SET_OPENED_ITEM = exports.MOVED_FILES = exports.REMOVE_FILES = exports.RECEIVE_FILES = exports.REQUEST_FILES = exports.UPDATED_FILE = exports.INVALIDATE_FOLDER = exports.REMOVE_FOLDER = exports.MOVED_FOLDER = exports.RECEIVE_FOLDER = exports.UNSET_ALL_SELECTED_ITEMS = exports.REMOVE_SELECTED_ITEMS = exports.ADD_SELECTED_ITEMS = exports.TOGGLE_SELECTED_ITEM = exports.SET_SELECTED_ITEM = exports.UNSET_SELECTED_ITEM = exports.DELETE_SELECTED_ITEMS = exports.SET_DRAGGING_ITEMS = exports.SET_GRID_LOADING = exports.SET_GRID_LIST = undefined;
 exports.setSelectedItem = setSelectedItem;
 exports.toggleSelectedItem = toggleSelectedItem;
 exports.addSelectedItems = addSelectedItems;
@@ -7296,6 +9783,8 @@ exports.addFolder = addFolder;
 exports.moveFolder = moveFolder;
 exports.fetchFilesIfNeeded = fetchFilesIfNeeded;
 exports.deleteSelectedListItems = deleteSelectedListItems;
+exports.uploadedFiles = uploadedFiles;
+exports.updatedFile = updatedFile;
 exports.moveFiles = moveFiles;
 exports.setGridLoading = setGridLoading;
 exports.setGridList = setGridList;
@@ -7308,10 +9797,21 @@ exports.setOpenedListItem = setOpenedListItem;
 exports.toggleOpenedListItem = toggleOpenedListItem;
 exports.setCategory = setCategory;
 exports.setDraggingListItems = setDraggingListItems;
+exports.invalidateFolder = invalidateFolder;
 
 var _map = require('lodash/map');
 
 var _map2 = _interopRequireDefault(_map);
+
+var _each = require('lodash/each');
+
+var _each2 = _interopRequireDefault(_each);
+
+var _uniq = require('lodash/uniq');
+
+var _uniq2 = _interopRequireDefault(_uniq);
+
+var _folders = require('../utils/folders');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7333,7 +9833,10 @@ var UNSET_ALL_SELECTED_ITEMS = exports.UNSET_ALL_SELECTED_ITEMS = 'UNSET_ALL_SEL
 
 var RECEIVE_FOLDER = exports.RECEIVE_FOLDER = 'RECEIVE_FOLDER';
 var MOVED_FOLDER = exports.MOVED_FOLDER = 'MOVED_FOLDER';
+var REMOVE_FOLDER = exports.REMOVE_FOLDER = 'REMOVE_FOLDER';
+var INVALIDATE_FOLDER = exports.INVALIDATE_FOLDER = 'INVALIDATE_FOLDER';
 
+var UPDATED_FILE = exports.UPDATED_FILE = 'UPDATED_FILE';
 var REQUEST_FILES = exports.REQUEST_FILES = 'REQUEST_FILES';
 var RECEIVE_FILES = exports.RECEIVE_FILES = 'RECEIVE_FILES';
 var REMOVE_FILES = exports.REMOVE_FILES = 'REMOVE_FILES';
@@ -7472,16 +9975,21 @@ function removeFiles(ids) {
     return { type: REMOVE_FILES, ids: ids };
 }
 
+function removeFolder(id) {
+    return { type: REMOVE_FOLDER, id: id };
+}
+
 function deleteSelectedListItems() {
     return function (dispatch, getState) {
-        var ids = (0, _map2.default)(getState().selected, function (value, key) {
+        var state = getState();
+        var ids = (0, _map2.default)(state.selected, function (value, key) {
             return key;
         });
 
         if (ids.length) {
-            var confirmation = confirm('Are you sure you want to delete the selected assets?');
+            var message = ids.length === 1 ? 'Are you sure you want to delete the selected asset?' : 'Are you sure you want to delete the selected ' + ids.length + ' assets?';
 
-            if (confirmation) {
+            if (confirm(message)) {
                 dispatch(setGridLoading(true));
 
                 return fetch('/bundles/videinfracms/media/json/delete-files.json', {
@@ -7494,8 +10002,38 @@ function deleteSelectedListItems() {
                     return response.json();
                 }).then(function (json) {
                     dispatch(setGridLoading(false));
+                    dispatch(unsetAllSelectedListItems());
                     dispatch(removeFiles(ids));
                 });
+            }
+        } else if (state.categoryId !== state.tree.root) {
+            var folderId = state.categoryId;
+            var folderData = state.tree.folders[folderId];
+
+            // Only if there are no files in the folder
+            if ((0, _folders.isEmpty)(folderId, state)) {
+                var confirmation = confirm('Are you sure you want to delete the selected folder "' + folderData.name + '"?');
+
+                if (confirmation) {
+                    dispatch(setGridLoading(true));
+
+                    return fetch('/bundles/videinfracms/media/json/delete-folder.json', {
+                        'method': 'POST',
+                        'headers': {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        'body': decodeURIComponent($.param({ 'folder': folderId }))
+                    }).then(function (response) {
+                        return response.json();
+                    }).then(function (json) {
+                        dispatch(setGridLoading(false));
+                        dispatch(setCategory(folderData.parent));
+                        dispatch(fetchFilesIfNeeded(folderData.parent));
+                        dispatch(removeFolder(folderId));
+                    });
+                }
+            } else {
+                alert('Can\'t delete folder "' + folderData.name + '", because it\'s not empty!');
             }
         }
 
@@ -7504,10 +10042,72 @@ function deleteSelectedListItems() {
 };
 
 /*
+ * Upload files
+ */
+
+function uploadedFiles(files) {
+    return function (dispatch, getState) {
+        var parents = (0, _uniq2.default)((0, _map2.default)(files, function (file) {
+            return file.parent;
+        }));
+        var categoryId = getState().categoryId;
+
+        // Invalidate parent folders
+        (0, _each2.default)(parents, function (parent) {
+            dispatch(invalidateFolder(parent));
+
+            if (parent == categoryId) {
+                dispatch(fetchFilesIfNeeded(categoryId));
+            }
+        });
+    };
+}
+
+/*
+ * Replace files
+ */
+
+function updatedFile(file) {
+    return {
+        type: UPDATED_FILE,
+        file: file
+    };
+}
+
+/*
  * Move files
  */
 
-function moveFiles(ids, parentId) {}
+function movedFiles(ids, parentId) {
+    return { type: MOVED_FILES, ids: ids, parentId: parentId };
+}
+
+function moveFiles(ids, parentId) {
+    return function (dispatch, getState) {
+        var ids = (0, _map2.default)(getState().selected, function (value, key) {
+            return key;
+        });
+
+        if (ids.length) {
+            dispatch(setGridLoading(true));
+
+            return fetch('/bundles/videinfracms/media/json/move-files.json', {
+                'method': 'POST',
+                'headers': {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                },
+                'body': decodeURIComponent($.param({ 'files': ids, 'parent': parentId }))
+            }).then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                dispatch(setGridLoading(false));
+                dispatch(movedFiles(ids, parentId));
+            });
+        }
+
+        return Promise.resolve();
+    };
+}
 
 /*
  * action creators
@@ -7557,7 +10157,11 @@ function setDraggingListItems(ids) {
     return { type: SET_DRAGGING_ITEMS, ids: ids };
 };
 
-},{"lodash/map":179}],209:[function(require,module,exports){
+function invalidateFolder(id) {
+    return { type: INVALIDATE_FOLDER, id: id };
+};
+
+},{"../utils/folders":219,"lodash/each":159,"lodash/map":183,"lodash/uniq":194}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7650,7 +10254,7 @@ exports.default = transformTreeRoot($.extend(true, {
     'opened': null
 }, MEDIA_INITIAL_STATE));
 
-},{"lodash/map":179,"lodash/reduce":183}],210:[function(require,module,exports){
+},{"lodash/map":183,"lodash/reduce":187}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7689,12 +10293,20 @@ var _setImmutable = require('../utils/set-immutable');
 
 var _setImmutable2 = _interopRequireDefault(_setImmutable);
 
+var _removeImmutable = require('../utils/remove-immutable');
+
+var _removeImmutable2 = _interopRequireDefault(_removeImmutable);
+
 var _actions = require('./actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*
  * action creators
+ */
+
+/*
+ * action types
  */
 
 function gridReducer(state, action) {
@@ -7706,9 +10318,7 @@ function gridReducer(state, action) {
         default:
             return state;
     }
-} /*
-   * action types
-   */
+}
 
 function dragReducer(state, action) {
     switch (action.type) {
@@ -7723,6 +10333,7 @@ function selectedReducer(state, action) {
     var selected = void 0;
 
     switch (action.type) {
+        case _actions.MOVED_FILES:
         case _actions.UNSET_SELECTED_ITEM:
             return (0, _setImmutable2.default)(state, 'selected', {});
         case _actions.SET_SELECTED_ITEM:
@@ -7803,6 +10414,23 @@ function folderReducer(state, action) {
             state = (0, _setImmutable2.default)(state, ['tree', 'folders', action.id, 'parent'], action.parent);
 
             return state;
+        case _actions.INVALIDATE_FOLDER:
+            // Reset category cache
+            state = (0, _removeImmutable2.default)(state, ['categories', action.id], null);
+            return state;
+        case _actions.REMOVE_FOLDER:
+            var folder = state.tree.folders[action.id];
+
+            state = (0, _removeImmutable2.default)(state, ['tree', 'folders', action.id], null);
+            state = (0, _removeImmutable2.default)(state, ['categories', action.id], null);
+
+            if (folder.parent) {
+                // Remove from parents children list
+                var children = (0, _without2.default)(state.tree.folders[folder.parent].children, folder.id);
+                state = (0, _setImmutable2.default)(state, ['tree', 'folders', folder.parent, 'children'], children);
+            }
+
+            return state;
         default:
             return state;
     }
@@ -7810,8 +10438,17 @@ function folderReducer(state, action) {
 
 function fileReducer(state, action) {
     var filesList = void 0;
+    var filesLeft = void 0;
+    var ids = void 0;
 
     switch (action.type) {
+        case _actions.UPDATED_FILE:
+            // File list as object indexed by ids
+            if (action.file.parent === state.categoryId) {
+                state = (0, _setImmutable2.default)(state, ['files', action.file.id], action.file);
+            }
+
+            return state;
         case _actions.RECEIVE_FILES:
             // File list as object indexed by ids
             filesList = (0, _reduce2.default)(action.files, function (files, file) {
@@ -7826,9 +10463,9 @@ function fileReducer(state, action) {
 
             return state;
         case _actions.REMOVE_FILES:
-            var ids = action.ids;
+            ids = action.ids;
 
-            var filesLeft = (0, _filter2.default)(state.files, function (file) {
+            filesLeft = (0, _filter2.default)(state.files, function (file) {
                 return ids.indexOf(file.id) === -1 ? true : false;
             });
             filesList = (0, _reduce2.default)(filesLeft, function (files, file) {
@@ -7836,12 +10473,36 @@ function fileReducer(state, action) {
             }, {});
             state = (0, _setImmutable2.default)(state, 'files', filesList);
 
-            // Set categories, but files are only ids
+            // Set categories, but in categories structure files are only ids
             state = (0, _setImmutable2.default)(state, ['categories', state.categoryId], (0, _map2.default)(filesLeft, function (file) {
                 return file.id;
             }));
 
             return state;
+        case _actions.MOVED_FILES:
+            ids = action.ids;
+            var parentId = action.parentId;
+
+            // We have info about new parent children, invalidate that info which will force  so that
+            // list is forced to be reloaded
+            if (parentId in state.categories) {
+                state = (0, _setImmutable2.default)(state, ['categories', parentId], null);
+            }
+
+            // Remove files
+            filesLeft = (0, _filter2.default)(state.files, function (file) {
+                return ids.indexOf(file.id) === -1 ? true : false;
+            });
+            filesList = (0, _reduce2.default)(filesLeft, function (files, file) {
+                files[file.id] = file;return files;
+            }, {});
+            state = (0, _setImmutable2.default)(state, 'files', filesList);
+
+            // Set categories, but in categories structure files are only ids
+            state = (0, _setImmutable2.default)(state, ['categories', state.categoryId], (0, _map2.default)(filesLeft, function (file) {
+                return file.id;
+            }));
+
         default:
             return state;
     }
@@ -7853,7 +10514,7 @@ exports.default = function (state, action) {
     }, state);
 };
 
-},{"../utils/set-immutable":214,"./actions":208,"lodash/filter":158,"lodash/find":159,"lodash/findIndex":160,"lodash/map":179,"lodash/reduce":183,"lodash/uniq":190,"lodash/without":191}],211:[function(require,module,exports){
+},{"../utils/remove-immutable":221,"../utils/set-immutable":222,"./actions":214,"lodash/filter":161,"lodash/find":162,"lodash/findIndex":163,"lodash/map":183,"lodash/reduce":187,"lodash/uniq":194,"lodash/without":195}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7922,7 +10583,7 @@ $(function () {
 
 exports.default = store;
 
-},{"./actions":208,"./initial-state":209,"./reducers":210,"lodash/get":162,"redux":199,"redux-thunk":193}],212:[function(require,module,exports){
+},{"./actions":214,"./initial-state":215,"./reducers":216,"lodash/get":165,"redux":203,"redux-thunk":197}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7969,7 +10630,48 @@ exports.default = {
 
 };
 
-},{}],213:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.isDescendantOf = isDescendantOf;
+exports.isChildOf = isChildOf;
+exports.isEmpty = isEmpty;
+function isDescendantOf(id, parent, state) {
+    var folder = id in state.files ? state.tree.folders[state.categoryId] : state.tree.folders[id];
+
+    while (folder && folder.id !== parent) {
+        folder = state.tree.folders[folder.parent];
+    }
+
+    return folder && folder.id === parent ? true : false;
+};
+
+function isChildOf(id, parent, state) {
+    if (id in state.files) {
+        // File
+        return parent === state.categoryId;
+    } else {
+        // Folder
+        return state.tree.folders[id].parent === parent;
+    }
+}
+
+function isEmpty(id, state) {
+    // Check if there are any files in the folder
+    if (id in state.categories && !state.categories[id].length) {
+        // Check for sub-folders
+        if (!state.tree.folders[id].children.length) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+},{}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8026,7 +10728,50 @@ function tmpl(str, data) {
     return data ? emptyBlockWhiteSpace(fn(data)) : fn;
 };
 
-},{"./escape":212}],214:[function(require,module,exports){
+},{"./escape":218}],221:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = removeImmutable;
+
+var _isArray = require('lodash/isArray');
+
+var _isArray2 = _interopRequireDefault(_isArray);
+
+var _clone = require('lodash/clone');
+
+var _clone2 = _interopRequireDefault(_clone);
+
+var _has = require('lodash/has');
+
+var _has2 = _interopRequireDefault(_has);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function removeImmutable(source, keyString) {
+    if ((0, _has2.default)(source, keyString)) {
+        var keys = (0, _isArray2.default)(keyString) ? keyString : keyString.split('.');
+        var cloned = $.extend({}, source);
+        var object = cloned;
+
+        for (var i = 0; i < keys.length; i++) {
+            if (i == keys.length - 1) {
+                delete object[keys[i]];
+            } else {
+                object[keys[i]] = (0, _clone2.default)(object[keys[i]]);
+            }
+            object = object[keys[i]];
+        }
+
+        return cloned;
+    } else {
+        return source;
+    }
+}
+
+},{"lodash/clone":156,"lodash/has":166,"lodash/isArray":170}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8057,6 +10802,6 @@ function setImmutable(source, keyString, value) {
     return cloned;
 }
 
-},{"lodash/clone":153,"lodash/isArray":166}]},{},[207])
+},{"lodash/clone":156,"lodash/isArray":170}]},{},[213])
 
 //# sourceMappingURL=main.js.map

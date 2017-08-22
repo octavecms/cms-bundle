@@ -11,13 +11,14 @@ import filter from 'lodash/filter';
 import without from 'lodash/without';
 
 import setImmutable from '../utils/set-immutable';
+import removeImmutable from '../utils/remove-immutable';
 
 import {
     SET_GRID_LIST, SET_GRID_LOADING,
     DELETE_SELECTED_ITEMS, UNSET_SELECTED_ITEM, SET_SELECTED_ITEM, TOGGLE_SELECTED_ITEM, ADD_SELECTED_ITEMS, REMOVE_SELECTED_ITEMS, UNSET_ALL_SELECTED_ITEMS,
     SET_DRAGGING_ITEMS,
-    RECEIVE_FILES, REMOVE_FILES, MOVED_FILES,
-    RECEIVE_FOLDER, MOVED_FOLDER,
+    UPDATED_FILE, RECEIVE_FILES, REMOVE_FILES, MOVED_FILES,
+    RECEIVE_FOLDER, MOVED_FOLDER, REMOVE_FOLDER, INVALIDATE_FOLDER,
     SET_OPENED_ITEM, TOGGLE_OPENED_ITEM,
     SET_CATEGORY
 } from './actions';
@@ -51,6 +52,7 @@ function selectedReducer (state, action) {
     let selected;
 
     switch (action.type) {
+        case MOVED_FILES:
         case UNSET_SELECTED_ITEM:
             return setImmutable(state, 'selected', {});
         case SET_SELECTED_ITEM:
@@ -131,6 +133,23 @@ function folderReducer (state, action) {
             state = setImmutable(state, ['tree', 'folders', action.id, 'parent'], action.parent);
 
             return state;
+        case INVALIDATE_FOLDER:
+            // Reset category cache
+            state = removeImmutable(state, ['categories', action.id], null);
+            return state;
+        case REMOVE_FOLDER:
+            const folder = state.tree.folders[action.id];
+
+            state = removeImmutable(state, ['tree', 'folders', action.id], null);
+            state = removeImmutable(state, ['categories', action.id], null);
+
+            if (folder.parent) {
+                // Remove from parents children list
+                let children = without(state.tree.folders[folder.parent].children, folder.id);
+                state = setImmutable(state, ['tree', 'folders', folder.parent, 'children'], children);
+            }
+
+            return state;
         default:
             return state;
     }
@@ -138,8 +157,17 @@ function folderReducer (state, action) {
 
 function fileReducer (state, action) {
     let filesList;
+    let filesLeft;
+    let ids;
 
     switch (action.type) {
+        case UPDATED_FILE:
+            // File list as object indexed by ids
+            if (action.file.parent === state.categoryId) {
+                state = setImmutable(state, ['files', action.file.id], action.file);
+            }
+
+            return state;
         case RECEIVE_FILES:
             // File list as object indexed by ids
             filesList = reduce(action.files, (files, file) => { files[file.id] = file; return files; }, {});
@@ -150,16 +178,34 @@ function fileReducer (state, action) {
 
             return state;
         case REMOVE_FILES:
-            const ids = action.ids;
+            ids = action.ids;
 
-            const filesLeft = filter(state.files, (file) => ids.indexOf(file.id) === -1 ? true : false);
+            filesLeft = filter(state.files, (file) => ids.indexOf(file.id) === -1 ? true : false);
             filesList = reduce(filesLeft, (files, file) => { files[file.id] = file; return files; }, {});
             state = setImmutable(state, 'files', filesList);
 
-            // Set categories, but files are only ids
+            // Set categories, but in categories structure files are only ids
             state = setImmutable(state, ['categories', state.categoryId], map(filesLeft, file => file.id));
 
             return state;
+        case MOVED_FILES:
+            ids = action.ids;
+            const parentId = action.parentId;
+
+            // We have info about new parent children, invalidate that info which will force  so that
+            // list is forced to be reloaded
+            if (parentId in state.categories) {
+                state = setImmutable(state, ['categories', parentId], null);
+            }
+
+            // Remove files
+            filesLeft = filter(state.files, (file) => ids.indexOf(file.id) === -1 ? true : false);
+            filesList = reduce(filesLeft, (files, file) => { files[file.id] = file; return files; }, {});
+            state = setImmutable(state, 'files', filesList);
+
+            // Set categories, but in categories structure files are only ids
+            state = setImmutable(state, ['categories', state.categoryId], map(filesLeft, file => file.id));
+
         default:
             return state;
     }

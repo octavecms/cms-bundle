@@ -24,6 +24,10 @@ gulp.task('scripts', () => {
     return browserify({
         'entries': ['./src/scripts/main.js'],
         'debug': true,
+        'paths': [
+            './node_modules',
+            './src/scripts/lib'
+        ],
         'transform': [
             babelify.configure({
                 'presets': ['es2015']

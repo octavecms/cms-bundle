@@ -1,4 +1,8 @@
 import map from 'lodash/map';
+import each from 'lodash/each';
+import uniq from 'lodash/uniq';
+
+import { isEmpty } from '../utils/folders';
 
 
 /*
@@ -19,7 +23,10 @@ export const UNSET_ALL_SELECTED_ITEMS = 'UNSET_ALL_SELECTED_ITEMS';
 
 export const RECEIVE_FOLDER = 'RECEIVE_FOLDER';
 export const MOVED_FOLDER = 'MOVED_FOLDER';
+export const REMOVE_FOLDER = 'REMOVE_FOLDER';
+export const INVALIDATE_FOLDER = 'INVALIDATE_FOLDER';
 
+export const UPDATED_FILE = 'UPDATED_FILE';
 export const REQUEST_FILES = 'REQUEST_FILES';
 export const RECEIVE_FILES = 'RECEIVE_FILES';
 export const REMOVE_FILES = 'REMOVE_FILES';
@@ -165,15 +172,22 @@ function removeFiles (ids) {
     return { type: REMOVE_FILES, ids };
 }
 
+function removeFolder (id) {
+    return { type: REMOVE_FOLDER, id };
+}
+
 
 export function deleteSelectedListItems () {
     return (dispatch, getState) => {
-        const ids = map(getState().selected, (value, key) => key);
+        const state = getState();
+        const ids = map(state.selected, (value, key) => key);
 
         if (ids.length) {
-            const confirmation = confirm('Are you sure you want to delete the selected assets?');
+            const message = (ids.length === 1 ?
+                `Are you sure you want to delete the selected asset?` :
+                `Are you sure you want to delete the selected ${ ids.length } assets?`);
 
-            if (confirmation) {
+            if (confirm(message)) {
                 dispatch(setGridLoading(true));
 
                 return fetch('/bundles/videinfracms/media/json/delete-files.json', {
@@ -186,8 +200,38 @@ export function deleteSelectedListItems () {
                     .then(response => response.json())
                     .then(json => {
                         dispatch(setGridLoading(false));
+                        dispatch(unsetAllSelectedListItems());
                         dispatch(removeFiles(ids));
                     });
+            }
+        } else if (state.categoryId !== state.tree.root) {
+            const folderId = state.categoryId;
+            const folderData = state.tree.folders[folderId];
+
+            // Only if there are no files in the folder
+            if (isEmpty(folderId, state)) {
+                const confirmation = confirm(`Are you sure you want to delete the selected folder "${ folderData.name }"?`);
+
+                if (confirmation) {
+                    dispatch(setGridLoading(true));
+
+                    return fetch('/bundles/videinfracms/media/json/delete-folder.json', {
+                        'method': 'POST',
+                        'headers': {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        'body': decodeURIComponent($.param({'folder': folderId}))
+                    })
+                        .then(response => response.json())
+                        .then(json => {
+                            dispatch(setGridLoading(false));
+                            dispatch(setCategory(folderData.parent));
+                            dispatch(fetchFilesIfNeeded(folderData.parent));
+                            dispatch(removeFolder(folderId));
+                        });
+                }
+            } else {
+                alert(`Can't delete folder "${ folderData.name }", because it's not empty!`);
             }
         }
 
@@ -197,11 +241,69 @@ export function deleteSelectedListItems () {
 
 
 /*
+ * Upload files
+ */
+
+export function uploadedFiles (files) {
+    return (dispatch, getState) => {
+        const parents = uniq(map(files, file => file.parent));
+        const categoryId = getState().categoryId;
+
+        // Invalidate parent folders
+        each(parents, parent => {
+            dispatch(invalidateFolder(parent));
+
+            if (parent == categoryId) {
+                dispatch(fetchFilesIfNeeded(categoryId));
+            }
+        });
+    };
+}
+
+
+/*
+ * Replace files
+ */
+
+export function updatedFile (file) {
+    return {
+        type: UPDATED_FILE,
+        file: file
+    };
+}
+
+
+/*
  * Move files
  */
 
-export function moveFiles(ids, parentId) {
+function movedFiles (ids, parentId) {
+    return { type: MOVED_FILES, ids, parentId };
+}
 
+export function moveFiles(ids, parentId) {
+    return (dispatch, getState) => {
+        const ids = map(getState().selected, (value, key) => key);
+
+        if (ids.length) {
+            dispatch(setGridLoading(true));
+
+            return fetch('/bundles/videinfracms/media/json/move-files.json', {
+                'method': 'POST',
+                'headers': {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                },
+                'body': decodeURIComponent($.param({'files': ids, 'parent': parentId}))
+            })
+                .then(response => response.json())
+                .then(json => {
+                    dispatch(setGridLoading(false));
+                    dispatch(movedFiles(ids, parentId));
+                });
+        }
+
+        return Promise.resolve();
+    };
 }
 
 
@@ -252,3 +354,8 @@ export function setCategory (id) {
 export function setDraggingListItems (ids) {
     return { type: SET_DRAGGING_ITEMS, ids };
 };
+
+export function invalidateFolder (id) {
+    return { type: INVALIDATE_FOLDER, id };
+};
+

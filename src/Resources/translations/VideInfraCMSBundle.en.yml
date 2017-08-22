@@ -19,3 +19,9 @@ custom_label: Custom
 simple_text_label: Text page
 block_label: Blocks
 add_block: Drag a block from toolbar to add
+delete: Delete
+folder: Folder
+upload_file: Upload file
+file_size: Size
+dimensions: Dimensions
+replace: Replace

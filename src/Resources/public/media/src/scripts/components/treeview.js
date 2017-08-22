@@ -2,7 +2,9 @@ import map from 'lodash/map';
 import difference from 'lodash/difference';
 import { setCategory, fetchFilesIfNeeded, moveFiles, moveFolder } from '../modules/actions';
 
+import { isDescendantOf, isChildOf } from '../utils/folders'
 import microtemplate from '../utils/micro-template';
+import uploader from './uploader';
 
 
 export default class MediaTreeView {
@@ -34,6 +36,7 @@ export default class MediaTreeView {
     init () {
         const $container = this.$container;
         const options    = this.options;
+        const store      = this.store;
 
         $container
             .addClass(options.className)
@@ -54,7 +57,7 @@ export default class MediaTreeView {
     handleItemClick (e) {
         const $item = $(e.target).closest(this.options.itemSelector);
         const categoryId = $item.data('id');
-        const store = this.options.store;
+        const store = this.store;
 
         e.preventDefault();
 
@@ -108,8 +111,8 @@ export default class MediaTreeView {
             helper  : 'clone',
             zIndex  : 999999,
             cursorAt: { left: -10, top: -10 },
-            start   : this.handleTreeItemDragStart.bind(this),
-            stop    : this.handleTreeItemDragEnd.bind(this),
+            // start   : this.handleTreeItemDragStart.bind(this),
+            // stop    : this.handleTreeItemDragEnd.bind(this),
             appendTo: this.$container
         });
 
@@ -134,27 +137,24 @@ export default class MediaTreeView {
         this.handleDropOut(e, ui);
 
         const store = this.store;
+        const state = store.getState();
         const id = ui.draggable.data('id');
         const parent = $(e.target).data('id');
 
-        console.log(parent);
-
         if (id in store.getState().files) {
             // Files
-            const files = store.getState().grid.dragging;
-            store.dispatch(moveFiles(files, parent));
+            if (state.categoryId !== parent) {
+                // Not dropping in same folder
+                const files = store.getState().grid.dragging;
+                store.dispatch(moveFiles(files, parent));
+            }
         } else {
             // Folder
-            store.dispatch(moveFolder(id, parent));
+            if (!isDescendantOf(parent, id, state) && !isChildOf(id, parent, state)) {
+                // Not dropping parent into child
+                store.dispatch(moveFolder(id, parent));
+            }
         }
-    }
-
-    handleTreeItemDragStart () {
-
-    }
-
-    handleTreeItemDragEnd () {
-
     }
 
 
@@ -164,7 +164,7 @@ export default class MediaTreeView {
 
     generateTree (list) {
         if (list && list.length) {
-            const folders = store.getState().tree.folders;
+            const folders = this.store.getState().tree.folders;
             const tree = [];
 
             for (let i = 0; i < list.length; i++) {
@@ -197,10 +197,11 @@ export default class MediaTreeView {
             'template': this.template,
             'root': true,
             'depth': 1,
-            'currentCategoryId': store.getState().categoryId
+            'currentCategoryId': state.categoryId
         });
 
         // Render
+        this.cleanupTreeState();
         $container.html(html);
         this.restoreTreeState();
     }
@@ -232,8 +233,22 @@ export default class MediaTreeView {
         $toggled.addClass(options.toggledClassName);
         $toggled.next('ul').show();
 
-        // Enable drag and drop
-        $container.find(options.itemSelector).each((index, item) => this.setupDroppable($(item)));
+        // Enable drag and drop, file upload
+        $container.find(options.itemSelector).each((index, item) => {
+            const $item = $(item);
+
+            this.setupDroppable($item);
+            uploader.registerDropZone($item, {
+                'info': {
+                    'parent': $item.data('id')
+                }
+            });
+        });
+    }
+
+    cleanupTreeState () {
+        const $items = this.$container.find(this.options.itemSelector);
+        uploader.unregisterDropZone($items);
     }
 
 }

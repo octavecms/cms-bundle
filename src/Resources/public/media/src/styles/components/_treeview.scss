@@ -33,4 +33,59 @@
             border-left-color: #3c8dbc;
         }
     }
+
+    .sonata-tree__item.dropzone--in {
+        border-style: dashed;
+        border-color: #3c8dbc;
+
+        &, &:after, a {
+            transition: all 0.15s ease;
+            transition-property: color, background, border-color;
+        }
+    }
+    .sonata-tree__item.dropzone--hover {
+        border-color: #3c8dbc;
+        background-color: #3c8dbc;
+        color: #fff;
+
+        a {
+            color: #fff;
+        }
+
+        &.is-active:after {
+            border-left-color: #3c8dbc;
+        }
+    }
 }
+
+// .media-treeview-drop {
+//     display: none;
+//     position: absolute;
+//     left: -1px;
+//     top: -1px;
+//     right: -1px;
+//     bottom: -1px;
+//     background: #fff;
+//     opacity: 0.8;
+
+//     color: #3c8dbc;
+//     border: 1px dashed #3c8dbc;
+//     font-weight: bold;
+//     font-size: 12px;
+
+//     justify-content: center;
+//     align-items: center;
+
+//     transition: all 0.15s ease;
+//     transition-property: color, background, opacity;
+
+//     .dropzone--in &,
+//     .dropzone--hover & {
+//         display: flex;
+//     }
+
+//     .dropzone--hover & {
+//         color: #ffffff;
+//         background: #3c8dbc;
+//     }
+// }

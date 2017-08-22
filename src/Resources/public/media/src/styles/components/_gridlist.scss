@@ -1,12 +1,13 @@
 .media-gridlist {
     $grid-item-size: 150px;
     $grid-item-margin: 15px - 2 * (2px + 1px);
+    $progress-bar-size: 10px;
 
     position: relative;
     display: flex;
     flex-wrap: wrap;
     list-style: none;
-    padding: 0 $grid-item-margin $grid-item-margin 0;
+    padding: 0 $grid-item-margin ($grid-item-margin + $progress-bar-size) 0;
     margin: 0;
 
     user-select: none;
@@ -82,8 +83,13 @@
         box-shadow: 7px 7px 0 0 rgba(#000, 0.05);
     }
 
+
+    .popover {
+        max-width: none;
+    }
+
     &-popover {
-        width: $grid-item-size * 2;
+        width: $grid-item-size * 1.75;
 
         p {
             display: flex;
@@ -97,6 +103,18 @@
         }
         &-value {
 
+        }
+
+        &-buttons {
+            display: flex;
+
+            .btn {
+                margin-top: 10px;
+                flex: 1;
+            }
+            .btn:not(:first-child) {
+                margin-left: 10px;
+            }
         }
     }
 
@@ -154,5 +172,71 @@
         position: absolute;
         right: -6px;
         top: -6px;
+    }
+}
+
+.media-out-of-screen {
+    position: absolute;
+    left: -9000px;
+}
+
+
+/*
+ * Drop zone
+ */
+
+.media-gridlist-drop {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border: 1px dashed #3c8dbc;
+    border-top: 0;
+    opacity: 0.8;
+
+    color: #3c8dbc;
+    font-weight: bold;
+    font-size: 12px;
+
+    justify-content: center;
+    align-items: center;
+
+    transition: all 0.15s ease;
+    transition-property: color, background, border-color, opacity;
+
+    .media-gridlist.dropzone--in &,
+    .media-gridlist.dropzone--hover & {
+        display: flex;
+    }
+
+    .media-gridlist.dropzone--hover & {
+        color: #ffffff;
+        background: #3c8dbc;
+    }
+}
+
+
+/*
+ * File upload progress bar
+ */
+
+.media-gridlist-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 0;
+    border-radius: 1px 3px 3px 1px;
+
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    opacity: 1;
+
+    &--hidden {
+        transition-duration: 0.35s;
+        opacity: 0;
     }
 }

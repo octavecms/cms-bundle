@@ -12,6 +12,10 @@
                     <i class="fa fa-refresh fa-spin"></i>
                 </li>
 
+                <li class="media-gridlist-drop">
+                    <p>Drop files here to upload to this folder</p>
+                </li>
+
                 {# Client-side template for item #}
                 <script type="text/template">
                     <li class="media-gridlist-box" data-id="<%= data.id %>">
@@ -30,21 +34,36 @@
 
                         <div class="media-gridlist-popover hidden">
                             <p>
-                                <label class="media-gridlist-popover-label">Size:</label>
+                                <label class="media-gridlist-popover-label">{{ 'file_size' | trans({}, 'VideInfraCMSBundle') }}:</label>
                                 <span class="media-gridlist-popover-value"><%= data.size %></span>
                             </p>
                             <% if (data.width || data.height) { %>
                                 <p>
-                                    <label class="media-gridlist-popover-label">Dimensions:</label>
+                                    <label class="media-gridlist-popover-label">{{ 'dimensions' | trans({}, 'VideInfraCMSBundle') }}:</label>
                                     <span class="media-gridlist-popover-value"><%= data.width %>x<%= data.height %></span>
                                 </p>
                             <% } %>
+
+                            <p class="media-gridlist-popover-buttons">
+                                <button type="button" class="btn btn-primary js-media-replace">
+                                    <span class="fa fa-upload"></span>
+                                    {{ 'replace' | trans({}, 'VideInfraCMSBundle') }}
+                                </button>
+                                <button type="button" class="btn btn-danger js-media-remove">
+                                    <span class="fa fa-trash-o"></span>
+                                    {{ 'delete' | trans({}, 'VideInfraCMSBundle') }}
+                                </button>
+                            </p>
                         </div>
 
                     </li>
                 </script>
 
             </ul>
+
+            <div class="js-media-gridlist-progress progress active progress-sm media-gridlist-progress media-gridlist-progress--hidden">
+                <div class="progress-bar progress-bar-primary progress-bar-striped"></div>
+            </div>
 
         </div>
     </div>

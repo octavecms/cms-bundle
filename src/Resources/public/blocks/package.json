@@ -4,7 +4,7 @@
   "description": "Block and block list widget",
   "main": "gulpfile.babel.js",
   "author": "Vide Infra Group",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "development": "gulp",
     "production": "gulp production",
