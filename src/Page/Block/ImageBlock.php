@@ -2,7 +2,7 @@
 
 namespace VideInfra\CMSBundle\Page\Block;
 
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use VideInfra\CMSBundle\Form\Type\MediaImageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -50,7 +50,7 @@ class ImageBlock extends AbstractBlock
      */
     public function getFormType()
     {
-        return FileType::class;
+        return MediaImageType::class;
     }
 
     /**

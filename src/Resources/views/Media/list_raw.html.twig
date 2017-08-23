@@ -1,0 +1,15 @@
+{% import 'VideInfraCMSBundle:Media:treeview.html.twig' as tree %}
+{% import 'VideInfraCMSBundle:Media:gridlist.html.twig' as gridlist %}
+
+<section class="content">
+    <div class="sonata-ba-content">
+        <div class="row">
+            <div class="col-xs-6 col-md-3">
+                {{ tree.navigate_child([root_category], admin, true, current_category_id, 1) }}
+            </div>
+            <div class="col-xs-12 col-md-9">
+                {{ gridlist.list() }}
+            </div>
+        </div>
+    </div>
+</section>

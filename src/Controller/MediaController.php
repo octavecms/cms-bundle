@@ -18,8 +18,11 @@ class MediaController extends CRUDController
         $request = $this->getRequest();
         $currentCategory = $request->get('category', 'root');
 
-        return $this->render('VideInfraCMSBundle:Media:list.html.twig', [
+        $selectMode = $request->get('select_mode');
+        $template = 'VideInfraCMSBundle:Media:list.html.twig';
+        if ($selectMode) $template = 'VideInfraCMSBundle:Media:list_raw.html.twig';
 
+        return $this->render($template, [
             'csrf_token' => 'NANANANANANANA BATMAAAAAAAAN',
             'current_category_id' => $currentCategory,
             'root_category' => [

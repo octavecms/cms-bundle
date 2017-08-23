@@ -4,6 +4,8 @@
 
 {% set blockTypes = form.blocks.vars.block_types %}
 
+{% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'VideInfraCMSBundle::fields.html.twig' %}
+
 {% block sonata_page_content_header %}
 
     <nav class="navbar navbar-default" role="navigation">
@@ -78,8 +80,6 @@
 {% endblock %}
 
 {% block content %}
-
-    {% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' %}
 
     {{ form_start(form) }}
 
