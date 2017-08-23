@@ -41,7 +41,8 @@ $(function () {
     $('.js-media-add-folder').on('click', function (e) {
         e.preventDefault();
         const name = prompt('Enter name of the folder');
-        store.dispatch(addFolder(name));
+        const parent = store.getState().categoryId;
+        store.dispatch(addFolder(name, parent));
     });
 
     // Upload button

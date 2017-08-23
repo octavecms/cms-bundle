@@ -70,7 +70,7 @@ function receiveFolder (json) {
     };
 }
 
-export function addFolder(name) {
+export function addFolder(name, parent) {
     return (dispatch) => {
         dispatch(setGridLoading(true));
 
@@ -79,7 +79,10 @@ export function addFolder(name) {
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
-            'body': decodeURIComponent($.param({'name': name}))
+            'body': decodeURIComponent($.param({
+                'name': name,
+                'parent': parent
+            }))
         })
             .then(response => response.json())
             .then(json => {
