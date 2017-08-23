@@ -1,10 +1,14 @@
 import map from 'lodash/map';
+import each from 'lodash/each';
 import difference from 'lodash/difference';
 import { setCategory, fetchFilesIfNeeded, moveFiles, moveFolder } from '../modules/actions';
 
 import { isDescendantOf, isChildOf } from '../utils/folders'
 import microtemplate from '../utils/micro-template';
 import uploader from './uploader';
+
+
+let UID = 1;
 
 
 export default class MediaTreeView {
@@ -27,7 +31,7 @@ export default class MediaTreeView {
         this.$container = $container;
         this.template = microtemplate($container.find('script[type="text/template"]').remove().html());
         this.options = $.extend({}, this.constructor.defaultOptions, options);
-        this.store = this.options.store;
+        this.namespace = `mediagridlist${ ++UID }`;
         this.states = {};
 
         this.init();
@@ -36,19 +40,37 @@ export default class MediaTreeView {
     init () {
         const $container = this.$container;
         const options    = this.options;
-        const store      = this.store;
+        const store      = this.store = options.store;
+        const namespace  = this.namespace;
 
         $container
             .addClass(options.className)
             .attr(options.instanceAttribute, true);
 
-        $container.on('click', options.itemSelector + ' a', this.handleItemClick.bind(this));
-        $container.on('click', options.togglersSelector, this.handleTogglerClick.bind(this));
+        $container.on(`click.${ namespace }`, options.itemSelector + ' a', this.handleItemClick.bind(this));
+        $container.on(`click.${ namespace }`, options.togglersSelector, this.handleTogglerClick.bind(this));
 
-        store.subscribePath('categoryId', this.handleCategoryChange.bind(this));
-        store.subscribePath('tree.folders', this.handleFolderChange.bind(this));
+        this.unsubscribers = [
+            store.subscribePath('categoryId', this.handleCategoryChange.bind(this)),
+            store.subscribePath('tree.folders', this.handleFolderChange.bind(this))
+        ];
 
         this.restoreTreeState();
+    }
+
+    destroy () {
+        const $container = this.$container;
+        const namespace  = this.namespace;
+        const items      = this.mediaGridItems;
+
+        $container.off(`.${ namespace }`);
+        $container.find(this.options.itemSelector).each((index, item) => {
+            this.cleanupItem($(item));
+        });
+
+        each(this.unsubscribers, unsubscribe => unsubscribe());
+
+        this.unsubscribers = this.$container = this.template = this.options = this.store = this.states = null;
     }
 
     /**
@@ -123,6 +145,11 @@ export default class MediaTreeView {
             over     : this.handleDropOver.bind(this),
             out      : this.handleDropOut.bind(this)
         });
+    }
+
+    cleanupDroppable ($element) {
+        $element.draggable('destroy');
+        $element.droppable('destroy');
     }
 
     handleDropOver (e, ui) {
@@ -235,20 +262,42 @@ export default class MediaTreeView {
 
         // Enable drag and drop, file upload
         $container.find(options.itemSelector).each((index, item) => {
-            const $item = $(item);
-
-            this.setupDroppable($item);
-            uploader.registerDropZone($item, {
-                'info': {
-                    'parent': $item.data('id')
-                }
-            });
+            this.setupItem($(item));
         });
     }
 
     cleanupTreeState () {
         const $items = this.$container.find(this.options.itemSelector);
         uploader.unregisterDropZone($items);
+    }
+
+    /**
+     * Setup up drag and drop support for item
+     *
+     * @param {object} $item
+     * @protected
+     */
+    setupItem ($item) {
+        this.setupDroppable($item);
+
+        uploader.registerDropZone($item, {
+            'info': { 'parent': $item.data('id') }
+        });
+
+        // When item is removed from DOM, cleanup
+        $item.one('remove', this.cleanupItem.bind(this, $item));
+    }
+
+    /**
+     * Clean up item to allow garbage collection
+     *
+     * @param {object} $item
+     * @protected
+     */
+    cleanupItem ($item) {
+        $item.off('remove');
+        this.cleanupDroppable($item);
+        uploader.unregisterDropZone($item);
     }
 
 }

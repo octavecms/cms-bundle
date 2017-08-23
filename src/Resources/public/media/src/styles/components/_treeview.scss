@@ -1,4 +1,7 @@
 .media-tree-view {
+    position: relative;
+    margin-left: -20px;
+
     a:before {
         content: "";
         display: block;

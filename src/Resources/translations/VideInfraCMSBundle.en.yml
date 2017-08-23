@@ -25,3 +25,6 @@ upload_file: Upload file
 file_size: Size
 dimensions: Dimensions
 replace: Replace
+caption: Caption
+change_image: Change
+select: Select

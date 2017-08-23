@@ -11,16 +11,16 @@ const INPUT_SELECTOR = 'input[maxlength], textarea[maxlength]';
 class InputMaxLengthCounter {
 
     constructor (element, options) {
-        this.element = $(element);
+        this.$element = $(element);
         this.options = $.extend(true, {
-            maxlength: parseInt(this.element.attr('maxlength'), 10) || 512
+            maxlength: parseInt(this.$element.attr('maxlength'), 10) || 512
         }, this.options, options);
 
         this._init();
     }
 
     _init () {
-        const $element = this.element;
+        const $element = this.$element;
         $element.on('input change', this.update.bind(this));
 
         // When input is removed from DOM destroy this plugin
@@ -30,22 +30,22 @@ class InputMaxLengthCounter {
     }
 
     _render () {
-        const remaining = this.options.maxlength - this.element.val().length;
-        this.group = $('<div class="input-group"></div>')
-        this.addon = $('<span class="input-group-addon" style="width: 1%;"></span>').text(remaining);
+        const remaining = this.options.maxlength - this.$element.val().length;
+        this.$group = $('<div class="input-group"></div>')
+        this.$addon = $('<span class="input-group-addon" style="width: 1%;"></span>').text(remaining);
 
-        this.group.insertAfter(this.element)
-            .append(this.element)
-            .append(this.addon);
+        this.$group.insertAfter(this.$element)
+            .append(this.$element)
+            .append(this.$addon);
     }
 
     destroy () {
-        this.element.off(`.${ NAMESPACE }`).removeData(NAMESPACE);
+        this.$element.off(`.${ NAMESPACE }`).removeData(NAMESPACE);
     }
 
     update () {
-        const remaining = this.options.maxlength - this.element.val().length;
-        this.addon.text(remaining)
+        const remaining = this.options.maxlength - this.$element.val().length;
+        this.$addon.text(remaining)
     }
 }
 

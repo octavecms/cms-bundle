@@ -1,0 +1,22 @@
+/*
+ * Navigation bar adjustments
+ */
+
+ .navbar-blocks {
+    margin-top: 10px;
+
+    .content-header &.navbar-right:last-child {
+        margin-right: -15px;
+    }
+}
+
+
+/*
+ * Add new block links
+ */
+
+.blocks-add {
+    cursor: move;
+}
+
+

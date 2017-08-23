@@ -22,7 +22,9 @@ gulp.task('development', ['scripts', 'styles'], () => {
 
 gulp.task('scripts', () => {
     return browserify({
-        'entries': ['./src/scripts/main.js'],
+        'entries': [
+            './src/scripts/main.js'
+        ],
         'debug': true,
         'paths': [
             './node_modules',
@@ -94,7 +96,9 @@ gulp.task('jsmin', () => {
     });
 
     return browserify({
-        'entries': ['./src/scripts/main.js'],
+        'entries': [
+            './src/scripts/main.js'
+        ],
         'debug': false,
         'paths': [
             './node_modules',

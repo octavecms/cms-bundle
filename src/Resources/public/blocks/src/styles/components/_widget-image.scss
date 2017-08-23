@@ -1,0 +1,25 @@
+.form-control-image {
+    display: flex;
+
+    &__preview {
+        min-width: 150px;
+        max-width: 150px;
+        height: 150px;
+        margin-right: 9px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            display: block;
+            max-width: 144px;
+            max-height: 144px;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+
+    &__caption {
+        width: 300px;
+    }
+}

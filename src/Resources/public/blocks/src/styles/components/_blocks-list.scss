@@ -1,0 +1,54 @@
+$block-list-height: 100px;
+$block-list-item-margin: 20px;
+
+
+/*
+ * Block list
+ */
+
+ .blocks-list {
+    position: relative;
+    margin-bottom: -$block-list-item-margin;
+    min-height: $block-list-height + $block-list-item-margin;
+
+    // Heading
+    & > .box > .box-header {
+        cursor: move;
+    }
+
+    // Content
+    .sort-highlight {
+        display: block;
+        margin-bottom: $block-list-item-margin + 1px;
+        min-height: $block-list-height;
+    }
+
+    // Fix margin collpasing
+    &:after {
+        content: "";
+        display: block;
+        height: 0;
+        width: 100%;
+        overflow: hidden;
+        clear: both;
+    }
+}
+
+
+/**
+ * Empty message when there are no blocks in the list
+ */
+
+.blocks-list-empty-message {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+    line-height: $block-list-height;
+    min-height: $block-list-height + $block-list-item-margin + 1px;
+    opacity: 0.4;
+    display: none;
+
+    &:last-child {
+        display: block;
+    }
+}

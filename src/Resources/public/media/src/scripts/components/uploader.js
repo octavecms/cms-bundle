@@ -213,7 +213,7 @@ class Uploader {
     unregisterButton ($element) {
         $element
             .removeClass('media-upload-button')
-            .find('input:file').off('change').remove();
+            .find('input').off('change').remove();
     }
 }
 

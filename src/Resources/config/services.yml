@@ -86,6 +86,12 @@ services:
         tags:
             - { name: vig.block.type }
 
+    vig.cms.gallery.block:
+        class: VideInfra\CMSBundle\Page\Block\GalleryBlock
+        arguments: ['%vig.cms.editor.block.template%']
+        tags:
+            - { name: vig.block.type }
+
     vig.cms.page.manager:
         class: VideInfra\CMSBundle\Service\PageManager
         arguments:

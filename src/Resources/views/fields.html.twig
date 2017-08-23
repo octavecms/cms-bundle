@@ -1,7 +1,58 @@
 {% block media_image_widget %}
+    <div id="{{ id }}_widget" class="form-control-image">
 
-    Html will be here
+        {{ block('hidden_widget') }}
 
-    {{ block('hidden_widget') }}
+        <div class="form-control-image__preview well well-small">
+            <img src="" alt="" class="hidden" />
+        </div>
 
+        <div>
+            <div class="form-control-image__caption form-group">
+                <label for="{{ id }}_caption" class="control-label">{{ 'caption' | trans({}, 'VideInfraCMSBundle') }}</label>
+                <div class="sonata-ba-field">
+
+                    {#
+                        @TODO
+                        Hidden input uses "full_name" as a name
+                        This feels like a wrong thing to do, but we replace "[content]" with "[content_caption]" in full_name for caption
+                    #}
+                    {% set nameSearch = '[' ~ name ~ ']' %}
+                    {% set nameReplace = '[' ~ name ~ '_caption]' %}
+                    <input id="{{ id }}_caption" type="text" name="{{ full_name|split(nameSearch)|join(nameReplace) }}" value="" class="form-control" />
+
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a class="btn btn-primary sonata-action-element js-change">
+                    {{ 'change_image' | trans({}, 'VideInfraCMSBundle') }}
+                </a>
+                <a class="btn btn-danger sonata-action-element js-reset">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $(function () {
+            $('#{{ id }}_widget').image();
+        });
+    </script>
+{% endblock %}
+
+{% block media_gallery_widget %}
+    <div id="{{ id }}_widget" class="form-control-gallery">
+
+        {{ block('hidden_widget') }}
+
+        @TODO
+
+    </div>
+    <script>
+        $(function () {
+            $('#{{ id }}_widget').gallery();
+        });
+    </script>
 {% endblock %}

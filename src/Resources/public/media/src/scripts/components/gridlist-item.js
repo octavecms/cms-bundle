@@ -92,6 +92,10 @@ export default class MediaGridListItem {
      */
     destroy () {
         uploader.unregisterButton(this.$replace || $());
+
+        this.$container.draggable('destroy');
+        this.$container.off('click');
+
         each(this.unsubscribers, unsubscribe => unsubscribe());
         this.unsubscribers = this.$container = this.$replace = this.options = this.store = null;
     }
@@ -100,14 +104,14 @@ export default class MediaGridListItem {
     handleClick (e) {
         const id = this.options.id;
         const store = this.store;
+        const state = store.getState();
 
-        if (e.metaKey || e.ctrlKey) {
+        if ((e.metaKey || e.ctrlKey) && state.multiselect) {
             // Selecting multiple nonconsecutive files
             store.dispatch(toggleSelectedListItem(id));
             store.dispatch(setOpenedListItem(null));
-        } else if (e.shiftKey) {
+        } else if (e.shiftKey && state.multiselect) {
             // Selecting multiple consecutive files
-            const state    = store.getState();
             const files    = state.categories[state.categoryId] || [];
             let   lastSelected = files[0];
             let   selected = [id];

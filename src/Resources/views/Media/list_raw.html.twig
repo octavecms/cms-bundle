@@ -1,15 +1,52 @@
 {% import 'VideInfraCMSBundle:Media:treeview.html.twig' as tree %}
 {% import 'VideInfraCMSBundle:Media:gridlist.html.twig' as gridlist %}
+{% import 'VideInfraCMSBundle:Media:filters.html.twig' as filters %}
 
-<section class="content">
+
+<section>
+    {{ filters.filters() }}
+
     <div class="sonata-ba-content">
         <div class="row">
             <div class="col-xs-6 col-md-3">
                 {{ tree.navigate_child([root_category], admin, true, current_category_id, 1) }}
             </div>
             <div class="col-xs-12 col-md-9">
-                {{ gridlist.list() }}
+                {% set selectmode = true %}
+                {{ gridlist.list(selectmode) }}
             </div>
         </div>
     </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary js-media-select-all">
+            {{ 'select' | trans({}, 'VideInfraCMSBundle') }}
+        </button>
+    </div>
 </section>
+
+
+{# JS #}
+<script>
+    var API_ENDPOINTS = {
+        'folderAdd':    '/bundles/videinfracms/media/json/folder-add.json',
+        'folderRemove': '/bundles/videinfracms/media/json/folder-remove.json',
+        'folderMove':   '/bundles/videinfracms/media/json/folder-move.json',
+        'filesList':    '/bundles/videinfracms/media/json/files-list.json',
+        'filesReplace': '/bundles/videinfracms/media/json/files-replace.json',
+        'filesUpload':  '/bundles/videinfracms/media/json/files-upload.json',
+        'filesRemove':  '/bundles/videinfracms/media/json/files-remove.json',
+        'filesMove':    '/bundles/videinfracms/media/json/files-move.json',
+    };
+
+    var MEDIA_INITIAL_STATE = {
+        'tree': {
+            'root': {{ root_category|json_encode|raw }}
+        },
+        'categoryId': {{ current_category_id|default(root_category.id)|json_encode|raw }}
+    };
+</script>
+<script src="{{ asset('bundles/videinfracms/media/dist/main.js') }}"></script>
+
+{# Styles #}
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/media/dist/main.css') }}" />

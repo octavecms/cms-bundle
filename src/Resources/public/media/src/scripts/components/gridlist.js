@@ -2,11 +2,15 @@ import difference from 'lodash/difference';
 import reduce from 'lodash/reduce';
 import uniq from 'lodash/uniq';
 import filter from 'lodash/filter';
+import each from 'lodash/each';
 
 import MediaGridListItem from './gridlist-item';
 import microtemplate from '../utils/micro-template';
 
 import { addSelectedItems, removeSelectedItems, unsetAllSelectedListItems, setOpenedListItem } from '../modules/actions';
+
+
+let UID = 1;
 
 
 export default class MediaGridList {
@@ -24,6 +28,7 @@ export default class MediaGridList {
         this.$container = $container;
         this.template = microtemplate($container.find('script[type="text/template"]').remove().html());
         this.options = $.extend({}, this.constructor.defaultOptions, options);
+        this.namespace = `mediagridlist${ ++UID }`;
 
         this.mediaGridItems = {};
         this.init();
@@ -33,23 +38,41 @@ export default class MediaGridList {
         const $container = this.$container;
         const options    = this.options;
         const store      = this.store      = options.store;
+        const namespace  = this.namespace;
 
         $container.addClass(this.options.className);
 
-        $container.on('mousedown', this.handleUnselectAllItems.bind(this));
-        $(document).on('mousedown', this.handleCloseListItem.bind(this));
-        $(document).on('keydown', this.handleCloseListItemKey.bind(this));
+        $container.on(`mousedown.${ namespace }`, this.handleUnselectAllItems.bind(this));
+        $(document).on(`mousedown.${ namespace }`, this.handleCloseListItem.bind(this));
+        $(document).on(`keydown.${ namespace }`, this.handleCloseListItemKey.bind(this));
 
         $container.selectable({})
-            .on('selectableselecting', this.handleSelectItem.bind(this))
-            .on('selectableselected', this.handleSelectItem.bind(this))
-            .on('selectableunselecting', this.handleUnselectItem.bind(this))
-            .on('selectableunselected', this.handleUnselectItem.bind(this));
+            .on(`selectableselecting.${ namespace }`, this.handleSelectItem.bind(this))
+            .on(`selectableselected.${ namespace }`, this.handleSelectItem.bind(this))
+            .on(`selectableunselecting.${ namespace }`, this.handleUnselectItem.bind(this))
+            .on(`selectableunselected.${ namespace }`, this.handleUnselectItem.bind(this));
 
+        this.unsubscribers = [
+            store.subscribePath('grid.files', this.handleGridChange.bind(this)),
+            store.subscribePath('grid.loading', this.handleGridLoading.bind(this)),
+            store.subscribePath('files', this.handleFilesChange.bind(this))
+        ];
+    }
 
-        store.subscribePath('grid.files', this.handleGridChange.bind(this));
-        store.subscribePath('grid.loading', this.handleGridLoading.bind(this));
-        store.subscribePath('files', this.handleFilesChange.bind(this));
+    destroy () {
+        const $container = this.$container;
+        const namespace  = this.namespace;
+        const items      = this.mediaGridItems;
+
+        $(document).off(`.${ namespace }`);
+
+        $container.off(`.${ namespace }`);
+        $container.selectable('destroy');
+
+        each(items, item => item.destroy());
+        each(this.unsubscribers, unsubscribe => unsubscribe());
+
+        this.mediaGridItems = this.unsubscribers = this.$container = this.template = this.options = this.store = null;
     }
 
     handleGridChange (newFiles, prevFiles) {

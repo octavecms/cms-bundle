@@ -1,4 +1,4 @@
-{% macro list() %}
+{% macro list(selectmode) %}
     <div class="box box-primary">
         <div class="box-body no-padding">
 
@@ -54,6 +54,14 @@
                                     {{ 'delete' | trans({}, 'VideInfraCMSBundle') }}
                                 </button>
                             </p>
+
+                            {% if selectmode %}
+                                <p class="media-gridlist-popover-buttons">
+                                    <button type="button" class="btn btn-primary js-media-select-opened">
+                                        {{ 'select' | trans({}, 'VideInfraCMSBundle') }}
+                                    </button>
+                                </p>
+                            {% endif %}
                         </div>
 
                     </li>

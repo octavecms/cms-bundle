@@ -7,46 +7,38 @@ import thunkMiddleware from 'redux-thunk';
 import get from 'lodash/get';
 
 import reducers from './reducers';
-import { setGridList, fetchFilesIfNeeded } from './actions';
-import initialState from './initial-state';
+import getInitialState from './get-initial-state';
 
 
-const store = createStore(
-    reducers,
-    initialState,
-    applyMiddleware(
-        thunkMiddleware
-    )
-);
+const storeExtensions = {
+    subscribePath (path, callback) {
+        const store = this;
+        let value = get(this.getState(), path);
 
-store.subscribePath = function (path, callback) {
-    let value = get(this.getState(), path);
+        return this.subscribe(() => {
+            const newvalue = get(this.getState(), path);
+            if (newvalue !== value) {
+                const prevvalue = value;
+                value = newvalue;
 
-    return this.subscribe(() => {
-        const newvalue = get(this.getState(), path);
-        if (newvalue !== value) {
-            const prevvalue = value;
-            value = newvalue;
+                callback(newvalue, prevvalue, store);
+            }
+        });
+    },
 
-            callback(newvalue, prevvalue, store);
-        }
-    });
+    destroy () {
+        // @TODO
+    }
 };
 
-$(() => {
-    function handleCategoryChange (nextValue, prevValue) {
-        const state = store.getState();
-        const list  = state.categories[state.categoryId];
+export default function (state) {
+    const store = createStore(
+        reducers,
+        getInitialState(state),
+        applyMiddleware(
+            thunkMiddleware
+        )
+    );
 
-        if (list) {
-            store.dispatch(setGridList([].concat(list)));
-        }
-    }
-
-    store.subscribePath('categoryId', handleCategoryChange);
-    store.subscribePath('categories', handleCategoryChange);
-
-    store.dispatch(fetchFilesIfNeeded(store.getState().categoryId));
-});
-
-export default store;
+    return $.extend(store, storeExtensions);
+}

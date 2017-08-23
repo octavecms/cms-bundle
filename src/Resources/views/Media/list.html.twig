@@ -2,46 +2,12 @@
 
 {% import 'VideInfraCMSBundle:Media:treeview.html.twig' as tree %}
 {% import 'VideInfraCMSBundle:Media:gridlist.html.twig' as gridlist %}
+{% import 'VideInfraCMSBundle:Media:filters.html.twig' as filters %}
 
+{% block body_attributes %}data-widget="media" {{ parent() }}{% endblock %}
 
 {% block sonata_page_content_header %}
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a class="sonata-action-element js-media-remove" href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
-                            {{ 'delete' | trans({}, 'VideInfraCMSBundle') }}
-                        </a>
-                    </li>
-                    <li class="dropdown sonata-actions">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                            {{ 'add_new' | trans({}, 'VideInfraCMSBundle') }}
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a class="sonata-action-element js-media-add-folder" href="#">
-                                    <i class="fa fa-folder-o" aria-hidden="true"></i>
-                                    {{ 'folder' | trans({}, 'VideInfraCMSBundle') }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="sonata-action-element js-media-upload-file">
-                                    <i class="fa fa-file-o" aria-hidden="true"></i>
-                                    {{ 'upload_file' | trans({}, 'VideInfraCMSBundle') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {{ filters.filters() }}
 {% endblock %}
 
 
@@ -52,7 +18,8 @@
             {{ tree.navigate_child([root_category], admin, true, current_category_id, 1) }}
         </div>
         <div class="col-xs-12 col-md-9">
-            {{ gridlist.list() }}
+            {% set selectmode = false %}
+            {{ gridlist.list(selectmode) }}
         </div>
     </div>
 
@@ -61,7 +28,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="/bundles/videinfracms/media/dist/main.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/media/dist/main.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
@@ -86,5 +53,5 @@
             'categoryId': {{ current_category_id|default(root_category.id)|json_encode|raw }}
         };
     </script>
-    <script src="/bundles/videinfracms/media/dist/main.js"></script>
+    <script src="{{ asset('bundles/videinfracms/media/dist/main.js') }}"></script>
 {% endblock %}
