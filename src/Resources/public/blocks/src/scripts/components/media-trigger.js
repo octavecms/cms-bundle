@@ -60,7 +60,7 @@ class MediaTrigger {
     _getMediaContent () {
         const mediaContent = $.Deferred();
 
-        $.ajax('/admin/media/list?select_mode=1', {
+        $.ajax(MEDIA_LIBRARY_URL, {
             'dataType': 'html'
         }).done((html) => {
             const $html = $(html);
