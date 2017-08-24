@@ -39,7 +39,9 @@
   "dependencies": {
     "blueimp-file-upload": "^9.18.0",
     "lodash": "^4.17.4",
+    "promise-polyfill": "^6.0.2",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "whatwg-fetch": "^2.0.3"
   }
 }

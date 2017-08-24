@@ -3,6 +3,7 @@ import each from 'lodash/each';
 import uniq from 'lodash/uniq';
 
 import { isEmpty } from '../utils/folders';
+import 'whatwg-fetch';
 
 
 /*
