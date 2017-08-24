@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace VideInfra\CMSBundle\Controller\Media;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 

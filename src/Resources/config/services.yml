@@ -133,4 +133,4 @@ services:
               group: "CMS"
               label: "Media"
               label_catalogue: "admin"
-        arguments: [~, ~, 'VideInfraCMSBundle:Media']
+        arguments: [~, ~, 'VideInfraCMSBundle:Media\Media']
