@@ -166,7 +166,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var MEDIA_LIBRARY_URL = '/admin/media/list?select_mode=1';
+        var MEDIA_LIBRARY_URL = '{{ path('media_list', {'select_mode': '1'}) }}';
     </script>
     <script src="{{ asset('bundles/videinfracms/blocks/dist/main.js') }}"></script>
 {% endblock %}
