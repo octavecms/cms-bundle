@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="VideInfra\CMSBundle\Repository\MediaItemRepository")
  * @ORM\Table(
  *     name="vig_media_items"
  * )
@@ -38,6 +38,12 @@ class MediaItem
      * @ORM\Column(type="string", length=512)
      */
     private $path;
+
+    /**
+     * @var integer
+     * @ORM\Column(type="integer")
+     */
+    private $size = 0;
 
     /**
      * @var array
@@ -123,5 +129,30 @@ class MediaItem
     public function setInfo($info)
     {
         $this->info = $info;
+    }
+
+    /**
+     * @param $name
+     * @return mixed|null
+     */
+    public function getInfoItem($name)
+    {
+        return $this->info[$name] ?? null;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param int $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
     }
 }

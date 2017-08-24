@@ -9,10 +9,11 @@ parameters:
     vig.cms.text.block.template: 'VideInfraCMSBundle:Block:text.html.twig'
     vig.cms.textarea.block.template: 'VideInfraCMSBundle:Block:textarea.html.twig'
     vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
-    vig.cms.editor.image.template: 'VideInfraCMSBundle:Block:image.html.twig'
+    vig.cms.image.block.template: 'VideInfraCMSBundle:Block:image.html.twig'
 
 services:
 
+    # Repositories
     vig.cms.page.repository:
         class: VideInfra\CMSBundle\Repository\PageRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
@@ -30,7 +31,12 @@ services:
         calls:
           - [ 'setTreeBuilder', ['@vig.cms.media_category.tree_builder']]
 
+    vig.cms.media_item.repository:
+        class: VideInfra\CMSBundle\Repository\MediaItemRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        arguments: [ VideInfraCMSBundle:MediaItem ]
 
+    # Commands
     vig.cms.page.create.command:
         class: VideInfra\CMSBundle\Command\CreatePageCommand
         arguments:
@@ -40,13 +46,7 @@ services:
             - { name: console.command }
         public: false
 
-    vig.cms.page.loader:
-        class: VideInfra\CMSBundle\Routing\PageLoader
-        arguments:
-            - '@vig.cms.page.manager'
-        tags:
-            - { name: routing.loader }
-
+    # Page types
     vig.cms.custom_page.type:
         class: VideInfra\CMSBundle\Page\Type\CustomPageType
         tags:
@@ -62,6 +62,7 @@ services:
         tags:
             - { name: vig.page.type }
 
+    # Blocks
     vig.cms.text.block:
         class: VideInfra\CMSBundle\Page\Block\TextBlock
         arguments: ['%vig.cms.text.block.template%']
@@ -82,16 +83,17 @@ services:
 
     vig.cms.image.block:
         class: VideInfra\CMSBundle\Page\Block\ImageBlock
-        arguments: ['%vig.cms.editor.image.template%']
+        arguments: ['%vig.cms.image.block.template%']
         tags:
             - { name: vig.block.type }
 
     vig.cms.gallery.block:
         class: VideInfra\CMSBundle\Page\Block\GalleryBlock
-        arguments: ['%vig.cms.editor.block.template%']
+        arguments: ['%vig.cms.image.block.template%']
         tags:
             - { name: vig.block.type }
 
+    # Services
     vig.cms.page.manager:
         class: VideInfra\CMSBundle\Service\PageManager
         arguments:
@@ -110,6 +112,17 @@ services:
     vig.cms.media_category.tree_builder:
         class: VideInfra\CMSBundle\Service\MediaCategoryTreeBuilder
 
+    vig.cms.page.loader:
+        class: VideInfra\CMSBundle\Routing\PageLoader
+        arguments:
+            - '@vig.cms.page.manager'
+        tags:
+            - { name: routing.loader }
+
+    vig.cms.media_item.serializer:
+        class: VideInfra\CMSBundle\Service\MediaItemSerializer
+
+    # Admin
     vig.cms.page.admin:
         class: VideInfra\CMSBundle\Admin\PageAdmin
         tags:
