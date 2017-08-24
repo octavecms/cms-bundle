@@ -51,10 +51,10 @@
             </div>
 
             <div class="btn-group">
-                <a class="btn btn-primary sonata-action-element js-change">
+                <a class="btn btn-primary sonata-action-element js-image-change">
                     {{ 'change_image' | trans({}, 'VideInfraCMSBundle') }}
                 </a>
-                <a class="btn btn-danger sonata-action-element js-reset">
+                <a class="btn btn-danger sonata-action-element js-image-reset">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </a>
             </div>
@@ -74,25 +74,22 @@
 
         {{ block('hidden_widget') }}
 
-        <ul class="form-control-gallery__list">
+        {% set html %}
+            <li>
+                {# Prototype is media_image_widget #}
+                {# {{ form_widget(prototype) }} #}
 
-            <script type="text/template">
-                <li>
-                    <div class="form-control-gallery__preview well well-small">
-                        <img src="" alt="" class="hidden" />
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label class="control-label">{{ 'caption' | trans({}, 'VideInfraCMSBundle') }}</label>
-                        </div>
-                    </div>
-                </li>
-            </script>
+                @TODO HTML for gallery items same as for media_image_widget, __name__ in will be replaced with
+                a number
+            </li>
+        {% endset %}
 
+        <ul class="form-control-gallery__list js-gallery-list" data-prototype="{{ html|e('html_attr') }}">
+            {# @TODO List of images, each image is of type media_image_widget wrapped in <li>...</li> #}
         </ul>
 
         <div class="btn-group">
-            <a class="btn btn-primary sonata-action-element">
+            <a class="btn btn-primary sonata-action-element js-gallery-add">
                 <i class="fa fa-plus"></i>
                 {{ 'add_image' | trans({}, 'VideInfraCMSBundle') }}
             </a>

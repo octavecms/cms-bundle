@@ -48,7 +48,7 @@ class BlocksList {
     handleBlockAdd (event, ui) {
         var html   = ui.item.data('prototype');
         if (ui.item.is(ADD_BLOCK_SELECTOR) && html) {
-            const $html = this.generateBlockHTML(html);
+            const $html = $(this.generateBlockHTML(html));
             ui.item.replaceWith($html);
             Admin.shared_setup($html);
             this.updateList();
