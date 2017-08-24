@@ -36,6 +36,7 @@ class MediaCategory
 
     /**
      * @ORM\OneToMany(targetEntity="MediaCategory", mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $children;
 

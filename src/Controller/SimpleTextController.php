@@ -14,6 +14,11 @@ use VideInfra\CMSBundle\Page\Type\SimpleTextPageType;
  */
 class SimpleTextController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param Page|null $page
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function editAction(Request $request, Page $page = null)
     {
         $isNew = !$page;

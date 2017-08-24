@@ -13,7 +13,6 @@ class GalleryBlock extends AbstractBlock
     private $template;
 
     /**
-     * EditorBlock constructor.
      * @param string $template
      */
     public function __construct($template)

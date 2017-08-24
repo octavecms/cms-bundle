@@ -42,4 +42,15 @@ class MediaCategoryRepository extends EntityRepository
 
         return $output;
     }
+
+    /**
+     * @return MediaCategory
+     */
+    public function create()
+    {
+        $category = new MediaCategory();
+        $this->getEntityManager()->persist($category);
+
+        return $category;
+    }
 }

@@ -22,5 +22,9 @@ class MediaAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->clearExcept(array('list'));
+
+        $collection->add('category_add', 'category/create', [
+            '_controller' => 'VideInfraCMSBundle:Media:categoryAdd'
+        ], [], [], '', [], ['POST']);
     }
 }

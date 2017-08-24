@@ -74,7 +74,7 @@ class Page
 
     /**
      * @var Content
-     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Content", mappedBy="page", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Content", mappedBy="page", cascade={"persist"})
      */
     private $content;
 
