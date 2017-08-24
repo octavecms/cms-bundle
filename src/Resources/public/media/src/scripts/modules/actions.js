@@ -76,6 +76,7 @@ export function addFolder(name, parent) {
 
         return fetch(API_ENDPOINTS.folderAdd, {
             'method': 'POST',
+            'credentials': 'same-origin',
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
@@ -107,6 +108,7 @@ export function moveFolder(id, parent) {
 
         return fetch(API_ENDPOINTS.folderMove, {
             'method': 'POST',
+            'credentials': 'same-origin',
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
@@ -145,7 +147,9 @@ function fetchFiles (categoryId) {
         dispatch(requestFiles(categoryId));
         dispatch(setGridLoading(true));
 
-        return fetch(`${ API_ENDPOINTS.filesList }?category=${ encodeURIComponent(categoryId) }`)
+        return fetch(`${ API_ENDPOINTS.filesList }?category=${ encodeURIComponent(categoryId) }`, {
+            'credentials': 'same-origin'
+        })
             .then(response => response.json())
             .then(json => {
                 dispatch(setGridLoading(false));
@@ -195,6 +199,7 @@ export function deleteSelectedListItems () {
 
                 return fetch(API_ENDPOINTS.filesRemove, {
                     'method': 'POST',
+                    'credentials': 'same-origin',
                     'headers': {
                         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                     },
@@ -220,6 +225,7 @@ export function deleteSelectedListItems () {
 
                     return fetch(API_ENDPOINTS.folderRemove, {
                         'method': 'POST',
+                        'credentials': 'same-origin',
                         'headers': {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                         },
@@ -293,6 +299,7 @@ export function moveFiles(ids, parentId) {
 
             return fetch(API_ENDPOINTS.filesMove, {
                 'method': 'POST',
+                'credentials': 'same-origin',
                 'headers': {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                 },
