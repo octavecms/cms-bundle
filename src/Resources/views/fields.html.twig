@@ -76,6 +76,9 @@
 
         {% set html %}
             <li>
+                {# Item order, we use "galleryorder" to make sure we don't conflict with blocks #}
+                <input type="hidden" name="...[galleryorder]" class="form-control" value="0" />
+
                 {# Prototype is media_image_widget #}
                 {# {{ form_widget(prototype) }} #}
 

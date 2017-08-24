@@ -2,6 +2,9 @@ import each from 'lodash/each';
 
 const NAMESPACE = 'gallery';
 
+const IMAGE_WIDGET_SELECTOR = '.form-control-image';
+const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[galleryorder]"]';
+
 
 class GalleryWidget {
 
@@ -22,7 +25,7 @@ class GalleryWidget {
         const $button  = this.$button  = $element.find('.js-gallery-add');
 
         // Item counter
-        this.index = this.$list.children().length;
+        this.index = $list.find(ORDER_INPUT_CSS_SELECTOR).length;
 
         // Sortable list
         $list
@@ -31,8 +34,7 @@ class GalleryWidget {
                 // handle              : '.form-control-image__preview',
                 forcePlaceholderSize: true,
                 zIndex              : 999999,
-                // update              : this.handleBlockAdd.bind(this),
-                // stop                : this.updateBlockOrder.bind(this)
+                stop                : this._updateBlockOrder.bind(this)
             });
 
         // "Add" button click
@@ -58,11 +60,30 @@ class GalleryWidget {
 
 
     /**
+     * Order
+     */
+
+    _updateList () {
+        this.$list.sortable('refresh');
+        this.updateBlockOrder();
+    }
+
+    _updateBlockOrder () {
+        var $inputs = this.$list.find(ORDER_INPUT_CSS_SELECTOR);
+
+        $inputs.each(function (index, input) {
+            $(input).val(index);
+        });
+    }
+
+
+    /**
      * Add image
      */
 
     _handleImagesAdd (images) {
         each(images, this.add.bind(this));
+        this._updateList();
     }
 
     _generateItemHTML () {
@@ -74,8 +95,7 @@ class GalleryWidget {
         const $html = $(this._generateItemHTML());
         this.$list.append($html);
 
-        $html.image('change', image);
-
+        $html.find(IMAGE_WIDGET_SELECTOR).image('change', image);
         Admin.shared_setup($html);
     }
 
@@ -86,6 +106,7 @@ class GalleryWidget {
     _handleRemoveItem (e) {
         const $item = $(e.target).closest('.js-gallery-list > li');
         $item.remove();
+        this._updateList();
     }
 }
 
