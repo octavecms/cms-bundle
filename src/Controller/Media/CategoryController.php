@@ -1,9 +1,9 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace VideInfra\CMSBundle\Controller\Media;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Psr\Log\InvalidArgumentException;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
@@ -12,33 +12,8 @@ use VideInfra\CMSBundle\Entity\MediaCategory;
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
-class MediaController extends CRUDController
+class CategoryController extends Controller
 {
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction()
-    {
-        $categories = $this->get('vig.cms.media_category.repository')->getTree();
-        $request = $this->getRequest();
-        $currentCategory = $request->get('category', 'root');
-
-        $selectMode = $request->get('select_mode');
-        $template = 'VideInfraCMSBundle:Media:list.html.twig';
-        if ($selectMode) $template = 'VideInfraCMSBundle:Media:list_raw.html.twig';
-
-        return $this->render($template, [
-            'csrf_token' => 'NANANANANANANA BATMAAAAAAAAN',
-            'current_category_id' => $currentCategory,
-            'root_category' => [
-                'id' => 'root',
-                'parent' => null,
-                'name' => 'Default Category',
-                'children' => $categories
-            ]
-        ]);
-    }
-
     /**
      * @param Request $request
      * @return JsonResponse
@@ -87,6 +62,45 @@ class MediaController extends CRUDController
         }
         catch (\Exception $e) {
 
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function categoryRemoveAction(Request $request)
+    {
+        try {
+
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $categoryId = $request->get('folder');
+
+            if (empty($categoryId)) {
+                throw new InvalidArgumentException('Empty category id');
+            }
+
+            $category = $em->getRepository(MediaCategory::class)->find($categoryId);
+            if (!$category) {
+                throw new InvalidArgumentException(sprintf('Category with id %s not found', $categoryId));
+            }
+
+            $em->remove($category);
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => true
+            ]);
+        }
+        catch (\Exception $e) {
             return new JsonResponse(
                 [
                     'status' => false,
