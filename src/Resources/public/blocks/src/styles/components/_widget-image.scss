@@ -19,7 +19,15 @@
         }
     }
 
-    &__caption {
-        width: 300px;
+    &__content {
+        flex-grow: 1;
+    }
+
+    input {
+        width: 100%;
+    }
+    textarea {
+        resize: vertical;
+        width: 100%;
     }
 }

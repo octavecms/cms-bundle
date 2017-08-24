@@ -7,19 +7,45 @@
             <img src="" alt="" class="hidden" />
         </div>
 
-        <div>
-            <div class="form-control-image__caption form-group">
-                <label for="{{ id }}_caption" class="control-label">{{ 'caption' | trans({}, 'VideInfraCMSBundle') }}</label>
+        <div class="form-control-image__content">
+            <div class="form-group">
+                <label class="control-label">{{ 'caption' | trans({}, 'VideInfraCMSBundle') }}</label>
                 <div class="sonata-ba-field">
 
-                    {#
-                        @TODO
-                        Hidden input uses "full_name" as a name
-                        This feels like a wrong thing to do, but we replace "[content]" with "[content_caption]" in full_name for caption
-                    #}
-                    {% set nameSearch = '[' ~ name ~ ']' %}
-                    {% set nameReplace = '[' ~ name ~ '_caption]' %}
-                    <input id="{{ id }}_caption" type="text" name="{{ full_name|split(nameSearch)|join(nameReplace) }}" value="" class="form-control" />
+                    {# @TODO Tabs with language selection to enter "Caption" in each language for image. #}
+                    {# This is a standard output of tabs #}
+                    <div class="sonata-ba-field">
+                        <div class="a2lix_translations tabbable">
+                            <ul class="a2lix_translationsLocales nav nav-tabs">
+                                <li class="active"><a href="#" data-toggle="tab" data-target=".{{ id }}_translations_en_a2lix_translationsFields-en">En [Default]</a></li>
+                                <li>               <a href="#" data-toggle="tab" data-target=".{{ id }}_translations_ru_a2lix_translationsFields-ru">Ru</a></li>
+                                <li>               <a href="#" data-toggle="tab" data-target=".{{ id }}_translations_lv_a2lix_translationsFields-lv">Lv</a></li>
+                            </ul>
+                            <div class="a2lix_translationsFields tab-content">
+                                <div class="{{ id }}_translations_en_a2lix_translationsFields-en tab-pane active">
+                                    <div class="form-group">
+                                        <div class="sonata-ba-field sonata-collection-row-without-label">
+                                            <input type="text" id="{{ id }}_translations_en_content" name="...[translations][en][content]" class=" form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="{{ id }}_translations_ru_a2lix_translationsFields-ru tab-pane">
+                                    <div class="form-group">
+                                        <div class="sonata-ba-field sonata-collection-row-without-label">
+                                            <input type="text" id="{{ id }}_translations_ru_content" name="...[translations][ru][content]" class=" form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="{{ id }}_translations_lv_a2lix_translationsFields-lv tab-pane">
+                                    <div class="form-group">
+                                        <div class="sonata-ba-field sonata-collection-row-without-label">
+                                            <input type="text" id="{{ id }}_translations_lv_content" name="...[translations][lv][content]" class=" form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -42,12 +68,35 @@
     </script>
 {% endblock %}
 
+
 {% block media_gallery_widget %}
     <div id="{{ id }}_widget" class="form-control-gallery">
 
         {{ block('hidden_widget') }}
 
-        @TODO
+        <ul class="form-control-gallery__list">
+
+            <script type="text/template">
+                <li>
+                    <div class="form-control-gallery__preview well well-small">
+                        <img src="" alt="" class="hidden" />
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'caption' | trans({}, 'VideInfraCMSBundle') }}</label>
+                        </div>
+                    </div>
+                </li>
+            </script>
+
+        </ul>
+
+        <div class="btn-group">
+            <a class="btn btn-primary sonata-action-element">
+                <i class="fa fa-plus"></i>
+                {{ 'add_image' | trans({}, 'VideInfraCMSBundle') }}
+            </a>
+        </div>
 
     </div>
     <script>

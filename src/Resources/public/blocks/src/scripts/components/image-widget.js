@@ -43,7 +43,7 @@ class ImageWidget {
     _handleImageChange (images) {
         this.$image.removeClass('hidden').attr('src', images[0].image);
         this.$input.val(images[0].id);
-        this.$caption.val(images[0].name);
+        // this.$caption.val(images[0].name || images[0].title || '');
     }
 
     _reset () {
