@@ -6,7 +6,8 @@ class MediaTrigger {
 
     static get defaultOptions () {
         return {
-            'onselect': null
+            'onselect': null,
+            'multiselect': false
         };
     }
 
@@ -18,9 +19,12 @@ class MediaTrigger {
     }
 
     _init () {
-        this.$element.on(`click.${ TRIGGER_NAMESPACE }`, this.open.bind(this));
         this.$modal = null;
         this.initialized = false;
+
+        // When this whole widget is removed from DOM trigger 'destroy'
+        this.$element.on(`click.${ TRIGGER_NAMESPACE }`, this.open.bind(this));
+        this.$element.on(`remove.${ TRIGGER_NAMESPACE }`, this.destroy.bind(this));
     }
 
     _getModal () {
@@ -45,8 +49,12 @@ class MediaTrigger {
     }
 
     destroy () {
+        if (this.$modal) {
+            this.$modal.remove();
+        }
+
         this.$element.off(`.${ TRIGGER_NAMESPACE }`).removeData(TRIGGER_NAMESPACE);
-        this.$element = this.options = null;
+        this.$element = this.$modal = this.options = null;
     }
 
     _getMediaContent () {
@@ -92,7 +100,7 @@ class MediaTrigger {
             $modal.modal();
 
             $modal.media({
-                'multiselect': false,
+                'multiselect': this.options.multiselect,
                 'selectmode': true,
                 'onselect': this._handleFileSelect.bind(this)
             });
