@@ -9,6 +9,7 @@ import findIndex from 'lodash/findIndex';
 import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';
 import without from 'lodash/without';
+import indexOf from 'lodash/indexOf';
 
 import setImmutable from '../utils/set-immutable';
 import removeImmutable from '../utils/remove-immutable';
@@ -174,13 +175,15 @@ function fileReducer (state, action) {
             state = setImmutable(state, 'files', filesList);
 
             // Set categories, but files are only ids
-            state = setImmutable(state, ['categories', action.categoryId], map(action.files, file => file.id));
+            let categories = {};
+            categories[action.categoryId] = map(action.files, file => file.id);
+            state = setImmutable(state, ['categories'], categories);
 
             return state;
         case REMOVE_FILES:
             ids = action.ids;
 
-            filesLeft = filter(state.files, (file) => ids.indexOf(file.id) === -1 ? true : false);
+            filesLeft = filter(state.files, (file) => indexOf(ids, file.id) === -1 ? true : false);
             filesList = reduce(filesLeft, (files, file) => { files[file.id] = file; return files; }, {});
             state = setImmutable(state, 'files', filesList);
 
@@ -199,7 +202,7 @@ function fileReducer (state, action) {
             }
 
             // Remove files
-            filesLeft = filter(state.files, (file) => ids.indexOf(file.id) === -1 ? true : false);
+            filesLeft = filter(state.files, (file) => indexOf(ids, file.id) === -1 ? true : false);
             filesList = reduce(filesLeft, (files, file) => { files[file.id] = file; return files; }, {});
             state = setImmutable(state, 'files', filesList);
 

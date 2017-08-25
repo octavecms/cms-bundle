@@ -58,6 +58,9 @@
             padding: 8px;
 
             cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &.is-selected {

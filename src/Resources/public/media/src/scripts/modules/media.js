@@ -6,7 +6,7 @@ import MediaTreeView from '../components/treeview';
 import MediaGridList from '../components/gridlist';
 import uploader from '../components/uploader';
 
-import { setGridList, fetchFilesIfNeeded, addFolder, deleteSelectedListItems } from '../modules/actions';
+import { setGridList, fetchFiles, addFolder, deleteSelectedListItems } from '../modules/actions';
 
 
 /**
@@ -74,6 +74,7 @@ class MediaStandalone {
         $element.on(`dblclick.${ MEDIA_NAMESPACE }`, this._handleItemDoubleClick.bind(this));
 
         // Upload
+        uploader.init({'store': store});
         uploader.registerButton($element.find(SELECTOR_MEDIA_UPLOAD_FILE), this._getUploaderInfo());
         uploader.registerDropZone($gridList, this._getUploaderInfo());
 
@@ -82,7 +83,7 @@ class MediaStandalone {
         store.subscribePath('categories', this._handleCategoryChange.bind(this));
 
         // Load grid info
-        store.dispatch(fetchFilesIfNeeded(this._getCurrentFolderId()));
+        store.dispatch(fetchFiles(this._getCurrentFolderId()));
     }
 
     _getCurrentFolderId () {
@@ -126,7 +127,6 @@ class MediaStandalone {
                 const state = this.store.getState();
                 const files = [state.files[id]];
 
-                console.log(id, files);
                 this.options.onselect(files);
             }
         }

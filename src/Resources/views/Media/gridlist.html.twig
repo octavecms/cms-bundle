@@ -35,7 +35,7 @@
                         <div class="media-gridlist-popover hidden">
                             <p>
                                 <label class="media-gridlist-popover-label">{{ 'file_size' | trans({}, 'VideInfraCMSBundle') }}:</label>
-                                <span class="media-gridlist-popover-value"><%= data.size %></span>
+                                <span class="media-gridlist-popover-value"><%= formatSize(data.size) %></span>
                             </p>
                             <% if (data.width || data.height) { %>
                                 <p>

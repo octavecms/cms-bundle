@@ -1,7 +1,7 @@
 import map from 'lodash/map';
 import each from 'lodash/each';
 import difference from 'lodash/difference';
-import { setCategory, fetchFilesIfNeeded, moveFiles, moveFolder } from '../modules/actions';
+import { setCategory, fetchFiles, moveFiles, moveFolder } from '../modules/actions';
 
 import { isDescendantOf, isChildOf } from '../utils/folders'
 import microtemplate from '../utils/micro-template';
@@ -84,7 +84,7 @@ export default class MediaTreeView {
         e.preventDefault();
 
         store.dispatch(setCategory(categoryId));
-        store.dispatch(fetchFilesIfNeeded(categoryId));
+        store.dispatch(fetchFiles(categoryId));
     }
 
     /**

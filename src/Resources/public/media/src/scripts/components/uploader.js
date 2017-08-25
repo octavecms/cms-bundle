@@ -51,6 +51,7 @@ class Uploader {
 
     handleAllFileUploadComplete () {
         const uploadComplete = this.uploadComplete;
+
         this.uploadComplete = [];
         this.store.dispatch(uploadedFiles(uploadComplete));
     }
@@ -61,6 +62,11 @@ class Uploader {
             this.store.dispatch(updatedFile(data.result.files[0]));
         } else {
             this.uploadComplete = this.uploadComplete.concat(data.result.files);
+        }
+
+        // Check if this was the last file
+        if (this.$input.fileupload('active') === 1) {
+            this.handleAllFileUploadComplete();
         }
     }
 
@@ -73,9 +79,6 @@ class Uploader {
         if (progress === 1) {
             // Done
             setTimeout(this.hideUploadProgress.bind(this), 500);
-
-            // Dispatch complete
-            this.handleAllFileUploadComplete();
         }
     }
 
@@ -122,7 +125,7 @@ class Uploader {
      */
     handleFileSubmit (e, data) {
         // For file replace we use different url
-        data.url = data.info.replace ? API_ENDPOINTS.filesReplace : API_ENDPOINTS.filesUpload;
+        data.url = data.info && data.info.replace ? API_ENDPOINTS.filesReplace : API_ENDPOINTS.filesUpload;
     }
 
     /**

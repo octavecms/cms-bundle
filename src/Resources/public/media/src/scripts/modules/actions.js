@@ -143,7 +143,7 @@ function receiveFiles (categoryId, json) {
     };
 }
 
-function fetchFiles (categoryId) {
+export function fetchFiles (categoryId) {
     return (dispatch) => {
         dispatch(requestFiles(categoryId));
         dispatch(setGridLoading(true));
@@ -156,17 +156,6 @@ function fetchFiles (categoryId) {
                 dispatch(setGridLoading(false));
                 dispatch(receiveFiles(categoryId, json));
             })
-    };
-}
-
-
-export function fetchFilesIfNeeded (categoryId) {
-    return (dispatch, getState) => {
-        if (!getState().categories[categoryId]) {
-            return dispatch(fetchFiles(categoryId));
-        } else {
-            return Promise.resolve();
-        }
     };
 }
 
@@ -187,8 +176,9 @@ function removeFolder (id) {
 
 export function deleteSelectedListItems () {
     return (dispatch, getState) => {
+        // Ids as array (numbers instead of string)
         const state = getState();
-        const ids = map(state.selected, (value, key) => key);
+        const ids = map(state.selected, (value, key) => !isNaN(key) ? parseInt(key) : key);
 
         if (ids.length) {
             const message = (ids.length === 1 ?
@@ -236,7 +226,7 @@ export function deleteSelectedListItems () {
                         .then(json => {
                             dispatch(setGridLoading(false));
                             dispatch(setCategory(folderData.parent));
-                            dispatch(fetchFilesIfNeeded(folderData.parent));
+                            dispatch(fetchFiles(folderData.parent));
                             dispatch(removeFolder(folderId));
                         });
                 }
@@ -264,7 +254,7 @@ export function uploadedFiles (files) {
             dispatch(invalidateFolder(parent));
 
             if (parent == categoryId) {
-                dispatch(fetchFilesIfNeeded(categoryId));
+                dispatch(fetchFiles(categoryId));
             }
         });
     };
@@ -293,7 +283,9 @@ function movedFiles (ids, parentId) {
 
 export function moveFiles(ids, parentId) {
     return (dispatch, getState) => {
-        const ids = map(getState().selected, (value, key) => key);
+        // Ids as array (numbers instead of string)
+        const state = getState();
+        const ids = map(state.selected, (value, key) => !isNaN(key) ? parseInt(key) : key);
 
         if (ids.length) {
             dispatch(setGridLoading(true));

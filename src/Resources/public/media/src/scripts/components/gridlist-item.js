@@ -78,13 +78,18 @@ export default class MediaGridListItem {
      * Remove grid list item from the list
      */
     remove () {
+        const $container = this.$container;
+
         if (this.hasPopover) {
             this.hasPopover = false;
-            this.$container.popover('hide').popover('destroy');
+
+            $container
+                .popover('hide')
+                .popover('destroy');
         }
 
-        this.$container.remove();
         this.destroy();
+        $container.remove();
     }
 
     /**

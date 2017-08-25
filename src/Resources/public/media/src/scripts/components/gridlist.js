@@ -6,6 +6,7 @@ import each from 'lodash/each';
 
 import MediaGridListItem from './gridlist-item';
 import microtemplate from '../utils/micro-template';
+import formatSize from '../utils/format-size';
 
 import { addSelectedItems, removeSelectedItems, unsetAllSelectedListItems, setOpenedListItem } from '../modules/actions';
 
@@ -94,7 +95,10 @@ export default class MediaGridList {
 
             if (id in added) {
                 // New items which were added
-                let $element = $(this.template({'data': file}));
+                let $element = $(this.template({
+                    'data': file,
+                    'formatSize': formatSize
+                }));
 
                 if (prevItem) {
                     prevItem.$container.after($element);
@@ -126,7 +130,10 @@ export default class MediaGridList {
                     if (newFile[key] !== prevFile[key]) {
                         // Replace item
                         let prevItem = items[newFile.id];
-                        let $element = $(this.template({'data': newFile}));
+                        let $element = $(this.template({
+                            'data': newFile,
+                            'formatSize': formatSize
+                        }));
 
                         prevItem.$container.after($element);
                         items[newFile.id].remove();
