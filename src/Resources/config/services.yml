@@ -11,6 +11,9 @@ parameters:
     vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
     vig.cms.image.block.template: 'VideInfraCMSBundle:Block:image.html.twig'
 
+    # @TODO implement this
+    vig.cms.media.upload_dir: '/uploads/'
+
 services:
 
     # Repositories
@@ -121,6 +124,13 @@ services:
 
     vig.cms.media_item.serializer:
         class: VideInfra\CMSBundle\Service\MediaItemSerializer
+
+    vig.cms.media_upload.helper:
+        class: VideInfra\CMSBundle\Service\UploadHelper
+        arguments:
+            - '@vig.cms.media_item.repository'
+            - '%vig.cms.media.upload_dir%'
+            - '%kernel.root_dir%'
 
     # Admin
     vig.cms.page.admin:

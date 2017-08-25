@@ -3,6 +3,7 @@
 namespace VideInfra\CMSBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use VideInfra\CMSBundle\Entity\MediaItem;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -30,5 +31,16 @@ class MediaItemRepository extends EntityRepository
             ->orderBy('i.name', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return MediaItem
+     */
+    public function create()
+    {
+        $item = new MediaItem();
+        $this->getEntityManager()->persist($item);
+
+        return $item;
     }
 }

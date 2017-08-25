@@ -159,4 +159,46 @@ class ItemController extends Controller
             );
         }
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function uploadAction(Request $request)
+    {
+        try {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+
+            $categoryId = $request->get('parent');
+            $files = $request->files->get('files');
+
+            if (empty($categoryId)) {
+                throw new InvalidArgumentException('Category id is missing');
+            }
+
+            $category = null;
+            if ($categoryId != 'root') {
+                $category = $this->get('vig.cms.media_category.repository')->find($categoryId);
+            }
+
+            $items = $this->get('vig.cms.media_upload.helper')->upload($files, $category);
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => true,
+                'files' => $this->get('vig.cms.media_item.serializer')->serialize($items)
+            ]);
+        }
+        catch (\Exception $e) {
+
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
 }
