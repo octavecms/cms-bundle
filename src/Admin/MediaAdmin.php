@@ -38,5 +38,9 @@ class MediaAdmin extends AbstractAdmin
         $collection->add('item_move', 'item/move', [
             '_controller' => 'VideInfraCMSBundle:Media\Item:move'
         ], [], [], '', [], ['POST']);
+
+        $collection->add('item_remove', 'item/remove', [
+            '_controller' => 'VideInfraCMSBundle:Media\Item:remove'
+        ], [], [], '', [], ['POST']);
     }
 }

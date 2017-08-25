@@ -110,4 +110,53 @@ class ItemController extends Controller
             );
         }
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removeAction(Request $request)
+    {
+        try {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+
+            $fileIds = $request->get('files');
+
+            if (empty($fileIds)) {
+                throw new InvalidArgumentException('Empty list of files');
+            }
+
+            $itemRepository = $this->get('vig.cms.media_item.repository');
+
+            foreach ($fileIds as $fileId) {
+
+                /** @var MediaItem $item */
+                $item = $itemRepository->find($fileId);
+                if (!$item) {
+                    throw new \Exception(sprintf('Unable to find item with id %s', $fileId));
+                }
+
+                $em->remove($item);
+
+                //@TODO remove file from filesystem
+            }
+
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => true
+            ]);
+        }
+        catch (\Exception $e) {
+
+            return new JsonResponse(
+                [
+                    'status' => false,
+                    'message' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
 }
