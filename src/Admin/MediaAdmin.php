@@ -24,11 +24,15 @@ class MediaAdmin extends AbstractAdmin
         $collection->clearExcept(array('list'));
 
         $collection->add('category_add', 'category/create', [
-            '_controller' => 'VideInfraCMSBundle:Media\Category:categoryAdd'
+            '_controller' => 'VideInfraCMSBundle:Media\Category:create'
         ], [], [], '', [], ['POST']);
 
         $collection->add('category_remove', 'category/remove', [
-            '_controller' => 'VideInfraCMSBundle:Media\Category:categoryRemove'
+            '_controller' => 'VideInfraCMSBundle:Media\Category:remove'
+        ], [], [], '', [], ['POST']);
+
+        $collection->add('category_move', 'category/move', [
+            '_controller' => 'VideInfraCMSBundle:Media\Category:move'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_list', 'item/list', [
