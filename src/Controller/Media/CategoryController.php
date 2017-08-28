@@ -2,7 +2,6 @@
 
 namespace VideInfra\CMSBundle\Controller\Media;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +11,7 @@ use VideInfra\CMSBundle\Entity\MediaCategory;
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
-class CategoryController extends Controller
+class CategoryController extends AbstractController
 {
     /**
      * @param Request $request
@@ -61,14 +60,7 @@ class CategoryController extends Controller
             );
         }
         catch (\Exception $e) {
-
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ],
-                500
-            );
+            return $this->generateJsonErrorResponse($e);
         }
     }
 
@@ -101,13 +93,7 @@ class CategoryController extends Controller
             ]);
         }
         catch (\Exception $e) {
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ],
-                500
-            );
+            return $this->generateJsonErrorResponse($e);
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace VideInfra\CMSBundle\Controller\Media;
 
 use Psr\Log\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use VideInfra\CMSBundle\Entity\MediaItem;
@@ -11,7 +10,7 @@ use VideInfra\CMSBundle\Entity\MediaItem;
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
-class ItemController extends Controller
+class ItemController extends AbstractController
 {
     /**
      * @param Request $request
@@ -39,14 +38,7 @@ class ItemController extends Controller
             ]);
         }
         catch (\Exception $e) {
-
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ],
-                500
-            );
+            return $this->generateJsonErrorResponse($e);
         }
     }
 
@@ -100,14 +92,7 @@ class ItemController extends Controller
             ]);
         }
         catch (\Exception $e) {
-
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ],
-                500
-            );
+            return $this->generateJsonErrorResponse($e);
         }
     }
 
@@ -139,7 +124,7 @@ class ItemController extends Controller
 
                 $em->remove($item);
 
-                //@TODO remove file from filesystem
+                $this->get('vig.cms.media_item.manager')->onItemDelete($item);
             }
 
             $em->flush();
@@ -149,14 +134,7 @@ class ItemController extends Controller
             ]);
         }
         catch (\Exception $e) {
-
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ],
-                500
-            );
+            return $this->generateJsonErrorResponse($e);
         }
     }
 
@@ -191,14 +169,7 @@ class ItemController extends Controller
             ]);
         }
         catch (\Exception $e) {
-
-            return new JsonResponse(
-                [
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ],
-                500
-            );
+            return $this->generateJsonErrorResponse($e);
         }
     }
 }

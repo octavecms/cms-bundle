@@ -26,7 +26,7 @@ class MediaItemSerializer
                 'filename' => $item->getName(),
                 'parent' => ($item->getCategory()) ? $item->getCategory()->getId() : 'root',
                 'width' => $item->getInfoItem('width'),
-                'height' => $item->getInfoItem('width'),
+                'height' => $item->getInfoItem('height'),
                 'size' => $item->getSize()
             ];
         }

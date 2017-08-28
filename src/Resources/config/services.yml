@@ -132,6 +132,11 @@ services:
             - '%vig.cms.media.upload_dir%'
             - '%kernel.root_dir%'
 
+    vig.cms.media_item.manager:
+        class: VideInfra\CMSBundle\Service\MediaItemManager
+        arguments:
+            - '%kernel.root_dir%'
+
     # Admin
     vig.cms.page.admin:
         class: VideInfra\CMSBundle\Admin\PageAdmin

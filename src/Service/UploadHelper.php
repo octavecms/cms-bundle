@@ -1,8 +1,10 @@
 <?php
 
 namespace VideInfra\CMSBundle\Service;
+
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use VideInfra\CMSBundle\Entity\MediaCategory;
+use VideInfra\CMSBundle\Entity\MediaItem;
 use VideInfra\CMSBundle\Repository\MediaItemRepository;
 
 /**
@@ -19,9 +21,21 @@ class UploadHelper
     /** @var string */
     private $webPath;
 
-    private $tmbWidth;
+    /** @var array */
+    private $allowedMimeTypes = [
+        'image/gif',
+        'image/jpeg',
+        'image/jpg',
+        'image/png'
+    ];
 
-    private $tmbHeight;
+    /** @var array */
+    private $imageMimeTypes = [
+        'image/gif',
+        'image/jpeg',
+        'image/jpg',
+        'image/png'
+    ];
 
     /**
      * UploadHelper constructor.
@@ -68,17 +82,14 @@ class UploadHelper
 
             $webPath = $this->webPath . $newFileName;
 
-            $file->move($this->uploadPath, $newFileName);
-
             $item = $this->itemRepository->create();
             $item->setName($newFileName);
             $item->setCategory($category);
             $item->setPath($webPath);
             $item->setSize($file->getClientSize());
 
-            // @TODO Set info
-
-            // @TODO Generate thumbnail
+            $this->setFileInfo($item, $file);
+            $file->move($this->uploadPath, $newFileName);
 
             $items[] = $item;
         }
@@ -87,12 +98,71 @@ class UploadHelper
     }
 
     /**
+     * @param MediaItem $item
+     * @param UploadedFile $file
+     */
+    private function setFileInfo(MediaItem $item, UploadedFile $file)
+    {
+        if ($this->isImage($file)) {
+            $this->setImageFileInfo($item, $file);
+        }
+    }
+
+    /**
+     * @param MediaItem $item
+     * @param UploadedFile $file
+     */
+    private function setImageFileInfo(MediaItem $item, UploadedFile $file)
+    {
+        $imageInfo = @getimagesize($file->getPath() . '/' . $file->getFilename());
+        if (!$imageInfo) {
+            return;
+        }
+
+        $width = $imageInfo[0] ?? 0;
+        $height = $imageInfo[1] ?? 0;
+
+        $item->setInfo([
+            'width' => $width,
+            'height' => $height
+        ]);
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return bool
+     */
+    private function isImage(UploadedFile $file)
+    {
+        $mimeType = $this->getFileMimeType($file);
+        return in_array($mimeType, $this->imageMimeTypes);
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return null|string
+     */
+    private function getFileMimeType(UploadedFile $file)
+    {
+        $mimeType = @mime_content_type($file->getPath() . '/' . $file->getFilename());
+        if (!$mimeType) {
+            $mimeType = $file->getClientMimeType();
+        }
+
+        return $mimeType;
+    }
+
+    /**
      * @param UploadedFile $file
      * @return bool
      */
     private function validateFile(UploadedFile $file)
     {
-        // @TODO implement
+        $mimeType = $this->getFileMimeType($file);
+
+        if (!in_array($mimeType, $this->allowedMimeTypes)) {
+            return false;
+        }
 
         return true;
     }
