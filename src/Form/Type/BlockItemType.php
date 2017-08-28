@@ -32,13 +32,23 @@ class BlockItemType extends AbstractType
             ]);
 
         if ($options['use_translation']) {
+
+            $fields = [
+                'content' => ['field_type' => $contentType, 'label' => false]
+            ];
+
+            if ($options['show_title']) {
+                $fields['title'] = ['field_type' => TextType::class, 'label' => 'Caption'];
+            }
+            else {
+                $fields['title'] = ['field_type' => HiddenType::class, 'label' => false];
+            }
+
             $builder
                 ->add('translations', TranslationsType::class, [
                     'label' => false,
                     'locales' => $options['locales'],
-                    'fields' => [
-                        'content' => ['field_type' => $contentType, 'label' => false]
-                    ]
+                    'fields' => $fields
                 ])
             ;
         }
@@ -46,6 +56,17 @@ class BlockItemType extends AbstractType
             $builder->add('content', $contentType, [
                 'label' => false
             ]);
+
+            if ($options['show_title']) {
+                $builder->add('translations', TranslationsType::class, [
+                    'label' => false,
+                    'locales' => $options['locales'],
+                    'fields' => [
+                        'title' => ['field_type' => TextType::class, 'label' => 'Caption'],
+                        'content' => ['field_type' => HiddenType::class]
+                    ]
+                ]);
+            }
         }
     }
 
@@ -69,7 +90,8 @@ class BlockItemType extends AbstractType
             'block_type' => 'text',
             'content_type' => TextType::class,
             'locales' => ['en'],
-            'use_translation' => true
+            'use_translation' => true,
+            'show_title' => false
         ));
     }
 }

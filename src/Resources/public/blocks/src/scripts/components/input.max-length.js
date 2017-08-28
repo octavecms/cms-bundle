@@ -5,7 +5,7 @@
 import $ from 'jquery';
 
 const NAMESPACE = 'maxlength';
-const INPUT_SELECTOR = 'input[maxlength], textarea[maxlength]';
+const INPUT_SELECTOR = 'input[maxlength][type!="hidden"], textarea[maxlength]';
 
 
 class InputMaxLengthCounter {

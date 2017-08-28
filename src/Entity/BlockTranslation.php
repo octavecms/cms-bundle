@@ -17,9 +17,15 @@ class BlockTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $content;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $title;
 
     /**
      * @return string
@@ -35,5 +41,21 @@ class BlockTranslation
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

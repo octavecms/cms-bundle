@@ -4,51 +4,15 @@
         {{ block('hidden_widget') }}
 
         <div class="form-control-image__preview well well-small">
-            <img src="" alt="" class="hidden" />
+            {% set value = form.vars.value %}
+            <img src="{{ value }}" alt="" class="{% if not value %}hidden{% endif %}" />
         </div>
 
         <div class="form-control-image__content">
-            <div class="form-group">
-                <label class="control-label">{{ 'caption' | trans({}, 'VideInfraCMSBundle') }}</label>
-                <div class="sonata-ba-field">
 
-                    {# @TODO Tabs with language selection to enter "Caption" in each language for image. #}
-                    {# This is a standard output of tabs #}
-                    <div class="sonata-ba-field">
-                        <div class="a2lix_translations tabbable">
-                            <ul class="a2lix_translationsLocales nav nav-tabs">
-                                <li class="active"><a href="#" data-toggle="tab" data-target=".{{ id }}_translations_en_a2lix_translationsFields-en">En [Default]</a></li>
-                                <li>               <a href="#" data-toggle="tab" data-target=".{{ id }}_translations_ru_a2lix_translationsFields-ru">Ru</a></li>
-                                <li>               <a href="#" data-toggle="tab" data-target=".{{ id }}_translations_lv_a2lix_translationsFields-lv">Lv</a></li>
-                            </ul>
-                            <div class="a2lix_translationsFields tab-content">
-                                <div class="{{ id }}_translations_en_a2lix_translationsFields-en tab-pane active">
-                                    <div class="form-group">
-                                        <div class="sonata-ba-field sonata-collection-row-without-label">
-                                            <input type="text" id="{{ id }}_translations_en_content" name="...[translations][en][content]" class=" form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="{{ id }}_translations_ru_a2lix_translationsFields-ru tab-pane">
-                                    <div class="form-group">
-                                        <div class="sonata-ba-field sonata-collection-row-without-label">
-                                            <input type="text" id="{{ id }}_translations_ru_content" name="...[translations][ru][content]" class=" form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="{{ id }}_translations_lv_a2lix_translationsFields-lv tab-pane">
-                                    <div class="form-group">
-                                        <div class="sonata-ba-field sonata-collection-row-without-label">
-                                            <input type="text" id="{{ id }}_translations_lv_content" name="...[translations][lv][content]" class=" form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+            {% if form.parent.translations is defined %}
+                {{ form_row(form.parent.translations) }}
+            {% endif %}
 
             <div class="btn-group">
                 <a class="btn btn-primary sonata-action-element js-image-change">

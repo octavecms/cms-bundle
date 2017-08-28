@@ -66,7 +66,7 @@ class BlockManager
             }
 
             $content .= $this->templating->render($blockType->getContentTemplate(),
-                ['content' => $blockEntity->getContent()]);
+                ['content' => $blockEntity->getContent(), 'title' => $blockEntity->getTitle()]);
         }
 
         return $content;

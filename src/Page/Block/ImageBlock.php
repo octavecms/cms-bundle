@@ -66,7 +66,8 @@ class ImageBlock extends AbstractBlock
     public function getOptions()
     {
         return [
-            'use_translation' => false
+            'use_translation' => false,
+            'show_title' => true
         ];
     }
 }
