@@ -172,4 +172,44 @@ class ItemController extends AbstractController
             return $this->generateJsonErrorResponse($e);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function replaceAction(Request $request)
+    {
+        try {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+
+            $itemId = $request->get('replace');
+            $files = $request->files->get('files');
+            $file = $files[0] ?? null;
+
+            if (empty($itemId)) {
+                throw new InvalidArgumentException('Item id is missing');
+            }
+
+            if (empty($file)) {
+                throw new InvalidArgumentException('File not found');
+            }
+
+            $item = $this->get('vig.cms.media_item.repository')->find($itemId);
+            if (!$item) {
+                throw new \Exception(sprintf('Item with id %s not found', $itemId));
+            }
+
+            $this->get('vig.cms.media_upload.helper')->replace($file, $item);
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => true,
+                'files' => $this->get('vig.cms.media_item.serializer')->serialize([$item])
+            ]);
+        }
+        catch (\Exception $e) {
+            return $this->generateJsonErrorResponse($e);
+        }
+    }
 }

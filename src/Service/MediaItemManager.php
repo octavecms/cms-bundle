@@ -32,7 +32,7 @@ class MediaItemManager
     /**
      * @param MediaItem $item
      */
-    private function deleteItemFile(MediaItem $item)
+    public function deleteItemFile(MediaItem $item)
     {
         if (file_exists($this->webDir . $item->getPath())) {
             @unlink($this->webDir . $item->getPath());

@@ -21,6 +21,10 @@ class Configuration implements ConfigurationInterface
         $root
             ->children()
             ->append($this->createTemplatesNode())
+            ->scalarNode('media_upload_path')
+            ->isRequired()
+            ->cannotBeEmpty()
+            ->end()
             ->end();
 
 

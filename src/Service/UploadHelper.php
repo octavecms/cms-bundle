@@ -15,6 +15,9 @@ class UploadHelper
     /** @var MediaItemRepository */
     private $itemRepository;
 
+    /** @var MediaItemManager */
+    private $itemManager;
+
     /** @var string */
     private $uploadPath;
 
@@ -40,12 +43,15 @@ class UploadHelper
     /**
      * UploadHelper constructor.
      * @param MediaItemRepository $itemRepository
+     * @param MediaItemManager $mediaItemManager
      * @param $uploadDir
      * @param $rootDir
      */
-    public function __construct(MediaItemRepository $itemRepository, $uploadDir, $rootDir)
+    public function __construct(MediaItemRepository $itemRepository, MediaItemManager $mediaItemManager, $uploadDir,
+                                $rootDir)
     {
         $this->itemRepository = $itemRepository;
+        $this->itemManager = $mediaItemManager;
         $this->uploadPath = $rootDir . '/../web' . $uploadDir . '/';
         $this->webPath = $uploadDir;
     }
@@ -71,15 +77,7 @@ class UploadHelper
                 throw new \Exception(sprintf('Invalid file %s', $file->getClientOriginalName()));
             }
 
-            $extension = $file->getClientOriginalExtension();
-            $newFileName = $this->prepareFilename($file->getClientOriginalName());
-            $newFilePath = $this->uploadPath . $newFileName;
-
-            if (file_exists($newFilePath)) {
-                $newFileName = str_replace('.' . $extension, '', $newFileName);
-                $newFileName = $this->prepareFilename($newFileName.'_'.time() . '.' . $extension);
-            }
-
+            $newFileName = $this->getNewFilename($file);
             $webPath = $this->webPath . $newFileName;
 
             $item = $this->itemRepository->create();
@@ -95,6 +93,32 @@ class UploadHelper
         }
 
         return $items;
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @param MediaItem $item
+     * @return MediaItem
+     * @throws \Exception
+     */
+    public function replace(UploadedFile $file, MediaItem $item)
+    {
+        if (!$this->validateFile($file)) {
+            throw new \Exception(sprintf('Invalid file %s', $file->getClientOriginalName()));
+        }
+
+        $this->itemManager->deleteItemFile($item);
+        $newFileName = $this->getNewFilename($file);
+        $webPath = $this->webPath . $newFileName;
+
+        $item->setName($newFileName);
+        $item->setPath($webPath);
+        $item->setSize($file->getClientSize());
+
+        $this->setFileInfo($item, $file);
+        $file->move($this->uploadPath, $newFileName);
+
+        return $item;
     }
 
     /**
@@ -174,5 +198,22 @@ class UploadHelper
     private function prepareFilename($filename)
     {
         return strtolower(preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename));
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return mixed|string
+     */
+    private function getNewFilename(UploadedFile $file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $newFileName = $this->prepareFilename($file->getClientOriginalName());
+        $newFilePath = $this->uploadPath . $newFileName;
+
+        if (file_exists($newFilePath)) {
+            $newFileName = str_replace('.' . $extension, '', $newFileName);
+            $newFileName = $this->prepareFilename($newFileName . '_' . time() . '.' . $extension);
+        }
+        return $newFileName;
     }
 }

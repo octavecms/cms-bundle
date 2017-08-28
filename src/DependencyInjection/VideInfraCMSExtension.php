@@ -28,5 +28,9 @@ class VideInfraCMSExtension extends Extension
         if (isset($config['simple_text_templates'])) {
             $definition->addMethodCall('setSimpleTextTemplates', [$config['simple_text_templates']]);
         }
+
+        if (isset($config['media_upload_path'])) {
+            $container->setParameter('vig.cms.media.upload_dir', $config['media_upload_path']);
+        }
     }
 }
