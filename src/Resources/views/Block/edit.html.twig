@@ -98,7 +98,7 @@
                 <div class="box-header"><h4>{{ 'general' | trans({}, 'VideInfraCMSBundle') }}</h4></div>
                 <div class="box-body">
                     {% if isAdmin %}
-                        {#{{ form_row(form.name) }}#}
+                        {{ form_row(form.name) }}
                     {% endif %}
 
                     {{ form_row(form.title) }}
@@ -120,7 +120,6 @@
 
     </div>
 
-    {# Placeholder for blocks #}
     {{ blocks.block_list_start() }}
 
         <h4 class="blocks-list-empty-message">

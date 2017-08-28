@@ -43,7 +43,8 @@ class BlockController extends Controller
         $form = $this->createForm(BlockType::class, $page, [
             'method' => 'post',
             'block_types' => $blockManager->getBlocks(),
-            'locales' => $this->getParameter('locales')
+            'locales' => $this->getParameter('locales'),
+            'is_admin' => $isAdmin
         ]);
         $form->handleRequest($request);
 
@@ -51,6 +52,10 @@ class BlockController extends Controller
 
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
+
+            if (!$page->getName()) {
+                $page->setName(sprintf('simple_text_%s', time()));
+            }
 
             $page->setController($this->getParameter('vig.cms.block_controller'));
             $page->setOption('id', $page->getId());
