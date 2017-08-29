@@ -14,6 +14,19 @@ class SitemapController extends CRUDController
         return $this->render('VideInfraCMSBundle:Sitemap:list.html.twig', [
             'csrf_token' => 'NANANANANANANA BATMAAAAAAAAN',
 
+            'page_types' => [
+                [
+                    'id' => 'text',
+                    'icon' => 'fa-file-text-o',
+                    'label' => 'Text page'
+                ],
+                [
+                    'id' => 'blocks',
+                    'icon' => 'fa-file-archive-o',
+                    'label' => 'Blocks page'
+                ]
+            ],
+
             'root_page' => [
                 'id' => 'aaa',
                 'parent' => null,
