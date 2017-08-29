@@ -77,6 +77,33 @@ export default class SitemapTreeView {
         this.unsubscribers = this.$container = this.template = this.options = this.store = this.states = null;
     }
 
+    expand ($item) {
+        const options = this.options;
+        const id      = $item.data('id');
+        const states  = this.states;
+
+        if (!states[id]) {
+            $item.addClass(options.toggledClassName);
+            $item.next('ul').slideDown(this.updateItemDragOffsets.bind(this, $item));
+            window.$item = $item;
+
+            states[id] = true;
+        }
+    }
+
+    collapse ($item) {
+        const options = this.options;
+        const id      = $item.data('id');
+        const states  = this.states;
+
+        if (states[id]) {
+            $item.removeClass(options.toggledClassName);
+            $item.next('ul').slideUp();
+
+            states[id] = false;
+        }
+    }
+
     /**
      * On toggler click expand / collapse folder list
      */
@@ -84,16 +111,15 @@ export default class SitemapTreeView {
         const options = this.options;
         const $item   = $(e.target).closest(options.itemSelector);
         const id      = $item.data('id');
-        const states  = this.states;
 
         e.preventDefault();
-
-        $item.toggleClass(options.toggledClassName);
-        $item.next('ul').slideToggle();
-
-        states[id] = !states[id];
-
         store.dispatch(removeTemporaryPage());
+
+        if (this.states[id]) {
+            this.collapse($item);
+        } else {
+            this.expand($item);
+        }
     }
 
 
@@ -164,7 +190,10 @@ export default class SitemapTreeView {
     }
 
     handleDropOver (e, ui) {
-        $(e.target).addClass('ui-draggable-target');
+        const $item = $(e.target);
+
+        $item.addClass('ui-draggable-target');
+        this.expand($item);
     }
 
     handleDropOut (e, ui) {
@@ -317,6 +346,14 @@ export default class SitemapTreeView {
 
         $item.off('remove');
         this.cleanupDroppable($item);
+    }
+
+    updateItemDragOffsets ($item) {
+        const draggable = $item.data('ui-draggable');
+
+        if (draggable) {
+            $.ui.ddmanager.prepareOffsets(draggable, null);
+        }
     }
 
 }

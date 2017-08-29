@@ -42,6 +42,19 @@ function removeTemporaryPage (state) {
     return state;
 }
 
+function sortPages (state, parent) {
+    let children = state.tree.pages[parent].children;
+
+    children = children.sort((a, b) => {
+        const nameA = state.tree.pages[a].name;
+        const nameB = state.tree.pages[b].name;
+
+        return nameA > nameB ? 1 : nameA == nameB ? 0 : -1;
+    });
+
+    return setImmutable(state, ['tree', 'pages', parent, 'children'], children);
+}
+
 
 function treeReducer (state, action) {
     switch (action.type) {
@@ -63,6 +76,7 @@ function pageReducer (state, action) {
 
             state = setImmutable(state, ['tree', 'pages', action.page.id], action.page);
             state = setImmutable(state, ['tree', 'pages', action.page.parent, 'children'], [].concat(parentChildren, action.page.id));
+            state = sortPages(state, action.page.parent);
 
             state = removeTemporaryPage(state);
 
@@ -76,6 +90,7 @@ function pageReducer (state, action) {
             state = setImmutable(state, ['tree', 'pages', prevParent, 'children'], without(prevParentChildren, action.id));
             state = setImmutable(state, ['tree', 'pages', action.parent, 'children'], [].concat(parentChildren, action.id));
             state = setImmutable(state, ['tree', 'pages', action.id, 'parent'], action.parent);
+            state = sortPages(state, action.parent);
 
             return state;
         case REMOVE_PAGE:

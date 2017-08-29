@@ -1,5 +1,5 @@
 import reduce from 'lodash/reduce';
-import { addPage } from '../modules/actions';
+import { addPage, removeTemporaryPage } from '../modules/actions';
 
 
 let UID = 1;
@@ -7,7 +7,9 @@ let UID = 1;
 
 export default class SitemapForm {
     static get defaultOptions () {
-        return {};
+        return {
+            store: null
+        };
     }
 
     constructor ($container, options) {
@@ -24,10 +26,11 @@ export default class SitemapForm {
         const $reset     = $container.find('button[type="reset"]');
         const $spinner   = $container.find('.overlay');
 
-        $reset.on(`click.${ this.namespace }`, this.hide.bind(this));
+        $reset.on(`click.${ this.namespace }`, this.cancel.bind(this));
         $container.on(`submit.${ this.namespace }`, this.submit.bind(this));
 
         this.$spinner = $spinner;
+        this.store = this.options.store;
     }
 
     submit (e) {
@@ -43,7 +46,7 @@ export default class SitemapForm {
         this.$spinner.removeClass('hidden');
 
         // Add page
-        values.parent = store.getState().tree.pages.temporary.parent;
+        values.parent = this.store.getState().tree.pages.temporary.parent;
 
         store.dispatch(addPage(values)).then(() => {
             this.$spinner.addClass('hidden');
@@ -74,5 +77,9 @@ export default class SitemapForm {
 
             this.$container.get(0).reset();
         }
+    }
+
+    cancel () {
+        this.store.dispatch(removeTemporaryPage());
     }
 }
