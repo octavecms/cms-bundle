@@ -1,0 +1,112 @@
+.sitemap-tree-view {
+    position: relative;
+    overflow: visible;
+
+    a:before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .sonata-tree__item.ui-draggable-dragging {
+        width: 75%;
+        white-space: nowrap;
+        opacity: 0.75;
+
+        &:before,
+        &:after {
+            display: none;
+        }
+    }
+
+    .ui-draggable-target {
+        border-color: #3c8dbc;
+        background-color: #3c8dbc;
+        color: #fff;
+
+        a {
+            color: #fff;
+        }
+
+        .sonata-tree__item__remove {
+            color: #3c8dbc;
+        }
+
+        &.is-active:after {
+            border-left-color: #3c8dbc;
+        }
+    }
+
+    .sonata-tree__item.dropzone--in {
+        border-style: dashed;
+        border-color: #3c8dbc;
+
+        &, &:after, a {
+            transition: all 0.15s ease;
+            transition-property: color, background, border-color;
+        }
+    }
+
+    .sonata-tree__item.dropzone--hover {
+        border-color: #3c8dbc;
+        background-color: #3c8dbc;
+        color: #fff;
+
+        a {
+            color: #fff;
+        }
+
+        &.is-active:after {
+            border-left-color: #3c8dbc;
+        }
+    }
+
+
+    /*
+     * Remove button icon
+     */
+
+    .sonata-tree__item {
+        position: relative;
+        margin-right: 40px;
+        min-height: 29px;
+    }
+    .sonata-tree__item__remove {
+        position: absolute;
+        left: 100%;
+        top: 0;
+        bottom: 0;
+        padding: 3px 15px 4px 15px;
+    }
+
+
+    /*
+     * Inactive tree item
+     */
+
+    .sonata-tree__item--inactive {
+        background: rgba(#fff, 0.25);
+
+        .sonata-tree__item__edit {
+            color: #444;
+            opacity: 0.65;
+        }
+
+        &:hover {
+            background: #eee;
+        }
+
+        &.ui-draggable-target {
+            background: #3c8dbc;
+
+            .sonata-tree__item__edit {
+                color: #fff;
+                opacity: 1;
+            }
+        }
+    }
+}

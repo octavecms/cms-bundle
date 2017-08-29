@@ -160,3 +160,13 @@ services:
               label: "Media"
               label_catalogue: "admin"
         arguments: [~, ~, 'VideInfraCMSBundle:Media\Media']
+
+    vig.cms.sitemap.admin:
+        class: VideInfra\CMSBundle\Admin\SitemapAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: "CMS"
+              label: "Sitemap"
+              label_catalogue: "admin"
+        arguments: [~, ~, 'VideInfraCMSBundle:Sitemap']

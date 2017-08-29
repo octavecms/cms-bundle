@@ -1,0 +1,70 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+{% import 'VideInfraCMSBundle:Sitemap:treeview.html.twig' as tree %}
+
+
+{% block body_attributes %}data-widget="sitemap" {{ parent() }}{% endblock %}
+
+{% block sonata_page_content_header %}
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse">
+                <div class="navbar-left"></div>
+
+                <ul class="nav navbar-blocks navbar-nav navbar-right">
+                    <li>
+                        <a class="btn btn-app" data-widget="sitemap-add" data-sitemap-add-type="text">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            <span>Text page</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn btn-app" data-widget="sitemap-add" data-sitemap-add-type="blocks">
+                            <i class="fa fa-file-archive-o" aria-hidden="true"></i>
+                            <span>Blocks page</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-xs-6 col-md-6">
+            {{ tree.navigate_child([root_page], admin, true, null, 1) }}
+        </div>
+    </div>
+
+    {% include 'VideInfraCMSBundle:Sitemap:form.html.twig' %}
+
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/sitemap/dist/main.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        var API_ENDPOINTS = {
+            'pageAdd':    '/bundles/videinfracms/sitemap/json/page-add.json',
+            'pageRemove': '/bundles/videinfracms/sitemap/json/page-remove.json',
+            'pageMove':   '/bundles/videinfracms/sitemap/json/page-move.json'
+        };
+
+        var SITEMAP_INITIAL_STATE = {
+            'tree': {
+                'root': {{ root_page|json_encode|raw }}
+            }
+        };
+    </script>
+    <script src="{{ asset('bundles/videinfracms/sitemap/dist/main.js') }}"></script>
+{% endblock %}

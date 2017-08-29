@@ -29,3 +29,8 @@ caption: Caption
 change_image: Change
 select: Select
 add_image: Add image
+delete_page: Delete page
+page_title: Title
+page_path: Path
+page_create: Create
+page_cancel: Close

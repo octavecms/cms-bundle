@@ -1,0 +1,11 @@
+{
+    "status": 1,
+    "data": {
+        "id": "newpageid",
+        "parent": "aaa",
+        "name": "New page title",
+        "active": false,
+        "readonly": false,
+        "children": []
+    }
+}

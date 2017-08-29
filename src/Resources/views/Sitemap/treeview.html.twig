@@ -1,0 +1,53 @@
+{% macro navigate_child(collection, admin, root, current_page_id, depth) %}
+    {% import _self as tree %}
+
+    <ul{% if root %} class="sonata-tree sonata-tree--small sonata-tree--toggleable" data-widget="sitemap-treeview"{% endif %}>
+        {% for element in collection if element is not null %}
+            <li>
+                <div class="sonata-tree__item {% if not element.active %} sonata-tree__item--inactive{% endif %}{% if element.id == current_page_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
+                    <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
+                    <a class="sonata-tree__item__edit" href="#TODO&id={{ element.id }}">{{ element.name }}</a>
+
+                    {% if not element.readonly %}
+                        <a class="sonata-tree__item__remove" href="#TODO&id={{ element.id }}" aria-label="{{ 'delete_page' | trans({}, 'VideInfraCMSBundle') }}">
+                            <i class="fa  fa-trash-o"></i>
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if element.children|length %}
+                    {{ tree.navigate_child(element.children, admin, false, current_page_id, depth + 1) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+
+        {% if root %}
+            {{ tree.navigate_child_js_template() }}
+        {% endif %}
+    </ul>
+{% endmacro %}
+
+{% macro navigate_child_js_template () %}
+    <script type="text/template">
+        <li>
+            <div class="sonata-tree__item <% if (!data.active) { %> sonata-tree__item--inactive<% } %> <% if (currentPageId == data.id) { %> is-active<% } %>" <% if (depth < 2) { %>data-treeview-toggled<% } %> data-id="<%= data.id %>">
+                <i class="fa fa-caret-right <% if (!data.parent && !root) { %>hidden<% } %>" data-treeview-toggler></i>
+                <a class="sonata-tree__item__edit" href="#TODO&id=<%= data.id %>"><%= data.name %></a>
+
+                <% if (!data.readonly) { %>
+                    <a class="sonata-tree__item__remove" href="#TODO&id=<%= data.id %>" aria-label="{{ 'delete_page' | trans({}, 'VideInfraCMSBundle') }}">
+                        <i class="fa  fa-trash-o"></i>
+                    </a>
+                <% } %>
+            </div>
+
+            <% if (data.children && data.children.length) { %>
+                <ul>
+                    <% for (var i = 0; i < data.children.length; i++) { %>
+                        <%= template({template: template, data: data.children[i], currentPageId: currentPageId, root: false, depth: depth + 1}) %>
+                    <% } %>
+                </ul>
+            <% } %>
+        </li>
+    </script>
+{% endmacro %}
