@@ -10,6 +10,7 @@ parameters:
     vig.cms.textarea.block.template: 'VideInfraCMSBundle:Block:textarea.html.twig'
     vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
     vig.cms.image.block.template: 'VideInfraCMSBundle:Block:image.html.twig'
+    vig.cms.gallery.block.template: 'VideInfraCMSBundle:Block:gallery.html.twig'
 
 services:
 
@@ -89,7 +90,7 @@ services:
 
     vig.cms.gallery.block:
         class: VideInfra\CMSBundle\Page\Block\GalleryBlock
-        arguments: ['%vig.cms.image.block.template%']
+        arguments: ['%vig.cms.gallery.block.template%']
         tags:
             - { name: vig.block.type }
 

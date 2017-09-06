@@ -9,6 +9,8 @@ use VideInfra\CMSBundle\Form\Type\MediaGalleryType;
  */
 class GalleryBlock extends AbstractBlock
 {
+    const NAME = 'gallery';
+
     /** @var string */
     private $template;
 
@@ -25,7 +27,7 @@ class GalleryBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'gallery';
+        return self::NAME;
     }
 
     /**

@@ -26,10 +26,19 @@ class MediaGalleryType extends AbstractType
                 function ($data) {
 
                     if (!is_string($data)) {
-                        return $data;
+                        $output = $data;
+                    }
+                    else {
+                        $output = json_decode($data, true);
                     }
 
-                    return json_decode($data, true);
+                    if (!empty($output)) {
+                        usort($output, function ($a, $b) {
+                            return $a['galleryorder'] <= $b['galleryorder'] ? -1 : 1;
+                        });
+                    }
+
+                    return $output;
                 },
                 function ($data) {
 
@@ -79,6 +88,10 @@ class MediaGalleryType extends AbstractType
 
         $resolver->setDefaults([
             'entry_type' => MediaGalleryItemType::class,
+            'entry_options' => [
+                'locales' => ['en']
+            ],
+            'locales' => ['en'],
             'allow_add' => true,
             'allow_delete' => true
         ]);

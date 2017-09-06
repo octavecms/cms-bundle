@@ -5,6 +5,7 @@ namespace VideInfra\CMSBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use VideInfra\CMSBundle\Entity\Page;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use VideInfra\CMSBundle\Page\Block\GalleryBlock;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -120,7 +121,13 @@ class Block
      */
     public function getContent()
     {
-        return $this->content ? $this->content : $this->translate()->getContent();
+        $content = $this->content ? $this->content : $this->translate()->getContent();
+
+        if ($this->type == GalleryBlock::NAME) {
+            $content = json_decode($content, true);
+        }
+
+        return $content;
     }
 
     /**

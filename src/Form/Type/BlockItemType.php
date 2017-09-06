@@ -53,9 +53,19 @@ class BlockItemType extends AbstractType
             ;
         }
         else {
-            $builder->add('content', $contentType, [
-                'label' => false
-            ]);
+
+            $contentOptions = [
+                'label' => false,
+                'locales' => $options['locales']
+            ];
+
+            if ($contentType == MediaGalleryType::class) {
+                $contentOptions['entry_options'] = [
+                    'locales' => $options['locales']
+                ];
+            }
+
+            $builder->add('content', $contentType, $contentOptions);
 
             if ($options['show_title']) {
                 $builder->add('translations', TranslationsType::class, [

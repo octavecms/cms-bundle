@@ -1,0 +1,12 @@
+<div>
+    {% if content|length %}
+        <ul>
+            {% for item in content %}
+
+                <li><img src="{{ item.image }}"
+                         alt="{% if item.title[app.request.locale] is defined %}{{ item.title[app.request.locale] }}{% endif %}"></li>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

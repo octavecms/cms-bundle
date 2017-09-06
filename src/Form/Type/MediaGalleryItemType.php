@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use VideInfra\CMSBundle\Model\MediaGalleryItem;
+use VideInfra\CMSBundle\Model\MediaGalleryItemTranslation;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -21,22 +22,36 @@ class MediaGalleryItemType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $locales = $options['locales'];
+
         $builder
             ->add('galleryorder', HiddenType::class)
             ->add('image', MediaImageType::class)
             ->add('translations', TranslationsType::class, [
-                'locales' => ['en'],
+                'locales' => $locales,
                 'label' => false,
                 'fields' => [
                     'title' => ['label' => 'Caption']
                 ]
             ])
             ->addModelTransformer(new CallbackTransformer(
-                function($data) {
+                function($data) use ($locales) {
 
                     $item = new MediaGalleryItem();
                     $item->setImage($data['image'] ?? null);
                     $item->setGalleryorder($data['galleryorder'] ?? null);
+
+                    foreach ($locales as $locale) {
+                        $translation = new MediaGalleryItemTranslation();
+                        $translation->setLocale($locale);
+                        $translation->setTranslatable($item);
+
+                        if (isset($data['title'][$locale])) {
+                            $translation->setTitle($data['title'][$locale]);
+                        }
+
+                        $item->addTranslation($translation);
+                    }
 
                     return $item;
                 },
@@ -46,9 +61,17 @@ class MediaGalleryItemType extends AbstractType
 
                     if ($item instanceof MediaGalleryItem) {
 
+                        $titles = [];
+
+                        /** @var MediaGalleryItemTranslation $translation */
+                        foreach ($item->getTranslations() as $translation) {
+                            $titles[$translation->getLocale()] = $translation->getTitle();
+                        }
+
                         $data = [
                             'image' => $item->getImage(),
-                            'galleryorder' => $item->getGalleryorder()
+                            'galleryorder' => $item->getGalleryorder(),
+                            'title' => $titles
                         ];
                     }
 
@@ -63,7 +86,8 @@ class MediaGalleryItemType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => MediaGalleryItem::class
+            'data_class' => MediaGalleryItem::class,
+            'locales' => ['en']
         ]);
     }
 }
