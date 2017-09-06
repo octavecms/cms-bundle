@@ -36,23 +36,18 @@
 {% block media_gallery_widget %}
     <div id="{{ id }}_widget" class="form-control-gallery">
 
-        {{ block('hidden_widget') }}
-
         {% set html %}
             <li>
-                {# Item order, we use "galleryorder" to make sure we don't conflict with blocks #}
-                <input type="hidden" name="...[galleryorder]" class="form-control" value="0" />
-
-                {# Prototype is media_image_widget #}
-                {# {{ form_widget(prototype) }} #}
-
-                @TODO HTML for gallery items same as for media_image_widget, __name__ in will be replaced with
-                a number
+                {{ form_widget(form.vars.prototype) }}
             </li>
         {% endset %}
 
         <ul class="form-control-gallery__list js-gallery-list" data-prototype="{{ html|e('html_attr') }}">
-            {# @TODO List of images, each image is of type media_image_widget wrapped in <li>...</li> #}
+            {% for field in form %}
+                <li>
+                    {{ form_widget(field) }}
+                </li>
+            {% endfor %}
         </ul>
 
         <div class="btn-group">
