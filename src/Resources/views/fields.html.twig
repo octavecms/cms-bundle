@@ -37,16 +37,12 @@
     <div id="{{ id }}_widget" class="form-control-gallery">
 
         {% set html %}
-            <li>
-                {{ form_widget(form.vars.prototype) }}
-            </li>
+            <li>{{ form_widget(form.vars.prototype) }}</li>
         {% endset %}
 
         <ul class="form-control-gallery__list js-gallery-list" data-prototype="{{ html|e('html_attr') }}">
             {% for field in form %}
-                <li>
-                    {{ form_widget(field) }}
-                </li>
+                <li>{{ form_widget(field) }}</li>
             {% endfor %}
         </ul>
 
