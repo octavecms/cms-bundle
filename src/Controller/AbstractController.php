@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller\Media;
+namespace VideInfra\CMSBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;

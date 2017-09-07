@@ -6,7 +6,10 @@
             <li>
                 <div class="sonata-tree__item {% if not element.active %} sonata-tree__item--inactive{% endif %}{% if element.id == current_page_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
                     <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
-                    <a class="sonata-tree__item__edit" href="#TODO&id={{ element.id }}">{{ element.name }}</a>
+
+                    <a class="sonata-tree__item__edit" href="{% if element.id != 'root' %}{{ path('sitemap_page_edit', {'id': element.id}) }}{% else %}#{% endif %}">
+                        {{ element.name }}
+                    </a>
 
                     {% if not element.readonly %}
                         <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'VideInfraCMSBundle') }}">
@@ -32,7 +35,7 @@
         <li>
             <div class="sonata-tree__item <% if (!data.active) { %> sonata-tree__item--inactive<% } %> <% if (currentPageId == data.id) { %> is-active<% } %>" <% if (depth < 2) { %>data-treeview-toggled<% } %> data-id="<%= data.id %>">
                 <i class="fa fa-caret-right <% if (!data.parent && !root) { %>hidden<% } %>" data-treeview-toggler></i>
-                <a class="sonata-tree__item__edit" href="#TODO&id=<%= data.id %>"><%= data.name %></a>
+                <a class="sonata-tree__item__edit" href="<%= data.edit_url %>"><%= data.name %></a>
 
                 <% if (!data.readonly) { %>
                     <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'VideInfraCMSBundle') }}">

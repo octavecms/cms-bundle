@@ -49,6 +49,12 @@ class Page
     private $active = false;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $readonly = false;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
      */
@@ -84,6 +90,25 @@ class Page
      * @ORM\OrderBy({"order" = "ASC"})
      */
     private $blocks;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $position = 0;
+
+    /**
+     * @var Page
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    private $children;
 
     /**
      * @var \DateTime
@@ -347,5 +372,69 @@ class Page
     public function setBlocks($blocks)
     {
         $this->blocks = $blocks;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Page $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param mixed $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReadonly()
+    {
+        return $this->readonly;
+    }
+
+    /**
+     * @param bool $readonly
+     */
+    public function setReadonly($readonly)
+    {
+        $this->readonly = $readonly;
     }
 }

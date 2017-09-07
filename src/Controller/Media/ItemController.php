@@ -5,6 +5,7 @@ namespace VideInfra\CMSBundle\Controller\Media;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use VideInfra\CMSBundle\Controller\AbstractController;
 use VideInfra\CMSBundle\Entity\MediaItem;
 
 /**

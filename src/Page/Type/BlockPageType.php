@@ -32,4 +32,20 @@ class BlockPageType extends BasePageType
     {
         return 'ROLE_BLOCK_PAGE_CREATE';
     }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return 'fa-file-text-o';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Blocks';
+    }
 }

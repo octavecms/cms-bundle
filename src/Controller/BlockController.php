@@ -78,18 +78,18 @@ class BlockController extends Controller
             if (!$isNew) {
 
                 if ($request->get('update_and_list')) {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_list');
+                    return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_edit', ['id' => $page->getId()]);
+                    return $this->redirectToRoute('sitemap_page_edit', ['id' => $page->getId()]);
                 }
             }
             else {
                 if ($request->get('create_and_list')) {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_list');
+                    return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_create_type', ['type' => 'custom']);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => 'custom']);
                 }
             }
         }
