@@ -19,18 +19,26 @@ class MediaItemSerializer
 
         /** @var MediaItem $item */
         foreach ($items as $item) {
-
-            $output[] = [
-                'id' => $item->getId(),
-                'image' => $item->getPath(),
-                'filename' => $item->getName(),
-                'parent' => ($item->getCategory()) ? $item->getCategory()->getId() : 'root',
-                'width' => $item->getInfoItem('width'),
-                'height' => $item->getInfoItem('height'),
-                'size' => $item->getSize()
-            ];
+            $output[] = $this->toArray($item);
         }
 
         return $output;
+    }
+
+    /**
+     * @param MediaItem $item
+     * @return array
+     */
+    public function toArray(MediaItem $item)
+    {
+        return [
+            'id' => $item->getId(),
+            'image' => $item->getPath(),
+            'filename' => $item->getName(),
+            'parent' => ($item->getCategory()) ? $item->getCategory()->getId() : 'root',
+            'width' => $item->getInfoItem('width'),
+            'height' => $item->getInfoItem('height'),
+            'size' => $item->getSize()
+        ];
     }
 }

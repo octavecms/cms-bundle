@@ -32,4 +32,20 @@ class SimpleTextPageType extends BasePageType
     {
         return 'ROLE_SIMPLE_TEXT_PAGE_CREATE';
     }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return 'fa-file-archive-o';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Text';
+    }
 }

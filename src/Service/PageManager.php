@@ -2,7 +2,9 @@
 
 namespace VideInfra\CMSBundle\Service;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use VideInfra\CMSBundle\Entity\Page;
+use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
 use VideInfra\CMSBundle\Repository\PageRepository;
 
 /**
@@ -25,15 +27,21 @@ class PageManager
     /** @var RequestStack */
     private $requestStack;
 
+    /** @var AuthorizationCheckerInterface */
+    private $authorizationChecker;
+
     /**
      * PageManager constructor.
      * @param PageRepository $repository
      * @param RequestStack $requestStack
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(PageRepository $repository, RequestStack $requestStack)
+    public function __construct(PageRepository $repository, RequestStack $requestStack,
+                                AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->repository = $repository;
         $this->requestStack = $requestStack;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -116,5 +124,23 @@ class PageManager
     {
         $routeName = $this->requestStack->getCurrentRequest()->get('_route');
         return $this->pages[$routeName] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedPageTypes()
+    {
+        $types = $this->getTypes();
+        $output = [];
+
+        /** @var PageTypeInterface $type */
+        foreach ($types as $type) {
+            if (!$type->canCreateRole() || $this->authorizationChecker->isGranted($type->canCreateRole())) {
+                $output[] = $type;
+            }
+        }
+
+        return $output;
     }
 }

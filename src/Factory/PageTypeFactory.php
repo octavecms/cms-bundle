@@ -2,13 +2,13 @@
 
 namespace VideInfra\CMSBundle\Factory;
 
-use VideInfra\CMSBundle\PageType\PageTypeInterface;
+use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
 use VideInfra\CMSBundle\Service\PageManager;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
-class PageFactory
+class PageTypeFactory
 {
     /** @var PageManager */
     private $pageManager;
@@ -27,7 +27,7 @@ class PageFactory
      * @return PageTypeInterface
      * @throws \Exception
      */
-    public function create($type)
+    public function get($type)
     {
         $pageTypes = $this->pageManager->getTypes();
 

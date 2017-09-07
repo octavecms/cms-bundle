@@ -32,4 +32,20 @@ class CustomPageType extends BasePageType
     {
         return 'ROLE_CUSTOM_PAGE_CREATE';
     }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return 'fa-cube';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Custom';
+    }
 }

@@ -29,7 +29,7 @@ class CustomPageController extends Controller
 
         if (!$page) {
             $page = $repository->create();
-            $page->setType(\VideInfra\CMSBundle\PageType\CustomPageType::TYPE);
+            $page->setType(\VideInfra\CMSBundle\Page\Type\CustomPageType::TYPE);
         }
 
         $form = $this->createForm(CustomPageType::class, $page, [
@@ -59,18 +59,18 @@ class CustomPageController extends Controller
             if (!$isNew) {
 
                 if ($request->get('update_and_list')) {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_list');
+                    return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_edit', ['id' => $page->getId()]);
+                    return $this->redirectToRoute('sitemap_page_edit', ['id' => $page->getId()]);
                 }
             }
             else {
                 if ($request->get('create_and_list')) {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_list');
+                    return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('admin_videinfra_cms_page_create_type', ['type' => 'custom']);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => 'custom']);
                 }
             }
         }

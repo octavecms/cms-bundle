@@ -21,4 +21,14 @@ interface PageTypeInterface
      * @return string
      */
     public function canCreateRole();
+
+    /**
+     * @return string
+     */
+    public function getIcon();
+
+    /**
+     * @return string
+     */
+    public function getLabel();
 }

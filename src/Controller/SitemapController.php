@@ -9,94 +9,24 @@ use Sonata\AdminBundle\Controller\CRUDController;
  */
 class SitemapController extends CRUDController
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listAction()
     {
+        $pageTypes = $this->get('vig.cms.page.manager')->getAllowedPageTypes();
+        $pages = $this->get('vig.cms.page.repository')->getTree();
+
         return $this->render('VideInfraCMSBundle:Sitemap:list.html.twig', [
-            'csrf_token' => 'NANANANANANANA BATMAAAAAAAAN',
-
-            'page_types' => [
-                [
-                    'id' => 'text',
-                    'icon' => 'fa-file-text-o',
-                    'label' => 'Text page'
-                ],
-                [
-                    'id' => 'blocks',
-                    'icon' => 'fa-file-archive-o',
-                    'label' => 'Blocks page'
-                ]
-            ],
-
+            'page_types' => $pageTypes,
             'root_page' => [
-                'id' => 'aaa',
+                'id' => 'root',
                 'parent' => null,
                 'name' => 'Home page',
                 'active' => true,
                 'readonly' => true,
-                'children' => [
-                    [
-                        'id' => 'bbb',
-                        'parent' => 'aaa',
-                        'name' => 'About us',
-                        'active' => true,
-                        'readonly' => false,
-                        'children' => [
-                            [
-                                'id' => 'eee',
-                                'parent' => 'bbb',
-                                'name' => 'History',
-                                'active' => true,
-                                'readonly' => false,
-                                'children' => [
-                                    [
-                                        'id' => 'hhh',
-                                        'parent' => 'eee',
-                                        'name' => '1920 - 1960',
-                                        'active' => true,
-                                        'readonly' => false,
-                                        'children' => []
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                    [
-                        'id' => 'ccc',
-                        'parent' => 'aaa',
-                        'name' => 'Services',
-                        'active' => false,
-                        'readonly' => false,
-                        'children' => [
-                            [
-                                'id' => 'fff',
-                                'parent' => 'ccc',
-                                'name' => 'Subscription+',
-                                'active' => true,
-                                'readonly' => false,
-                                'children' => []
-                            ]
-                        ]
-                    ],
-                    [
-                        'id' => 'ddd',
-                        'parent' => 'aaa',
-                        'name' => 'Contacts',
-                        'active' => true,
-                        'readonly' => false,
-                        'children' => [
-                            [
-                                'id' => 'ggg',
-                                'parent' => 'ddd',
-                                'name' => 'Shops',
-                                'active' => true,
-                                'readonly' => false,
-                                'children' => []
-                            ]
-                        ]
-                    ]
-                ]
+                'children' => $pages
             ]
         ]);
-
     }
 }

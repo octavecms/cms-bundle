@@ -3,15 +3,15 @@
 namespace VideInfra\CMSBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use VideInfra\CMSBundle\Factory\PageFactory;
-use VideInfra\CMSBundle\PageType\CustomPageType;
+use VideInfra\CMSBundle\Factory\PageTypeFactory;
+use VideInfra\CMSBundle\Page\Type\CustomPageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
 class PageFactoryTest extends WebTestCase
 {
-    /** @var PageFactory */
+    /** @var PageTypeFactory */
     private $pageFactory;
 
     public function setUp()
@@ -19,12 +19,12 @@ class PageFactoryTest extends WebTestCase
         static::bootKernel();
         $container = static::$kernel->getContainer();
 
-        $this->pageFactory = $container->get('vig.cms.page.factory');
+        $this->pageFactory = $container->get('vig.cms.page_type.factory');
     }
 
     public function testCreate()
     {
-        $pageType = $this->pageFactory->create('custom');
+        $pageType = $this->pageFactory->get('custom');
         $this->assertTrue($pageType instanceof CustomPageType);
     }
 }

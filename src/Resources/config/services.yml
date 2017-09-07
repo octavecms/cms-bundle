@@ -19,6 +19,8 @@ services:
         class: VideInfra\CMSBundle\Repository\PageRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ VideInfraCMSBundle:Page ]
+        calls:
+          - [ 'setTreeBuilder', ['@vig.cms.page.tree_builder']]
 
     vig.cms.content.repository:
         class: VideInfra\CMSBundle\Repository\ContentRepository
@@ -48,11 +50,6 @@ services:
         public: false
 
     # Page types
-    vig.cms.custom_page.type:
-        class: VideInfra\CMSBundle\Page\Type\CustomPageType
-        tags:
-            - { name: vig.page.type }
-
     vig.cms.simple_text.type:
         class: VideInfra\CMSBundle\Page\Type\SimpleTextPageType
         tags:
@@ -60,6 +57,11 @@ services:
 
     vig.cms.block.type:
         class: VideInfra\CMSBundle\Page\Type\BlockPageType
+        tags:
+            - { name: vig.page.type }
+
+    vig.cms.custom_page.type:
+        class: VideInfra\CMSBundle\Page\Type\CustomPageType
         tags:
             - { name: vig.page.type }
 
@@ -100,18 +102,24 @@ services:
         arguments:
             - '@vig.cms.page.repository'
             - '@request_stack'
+            - '@security.authorization_checker'
 
     vig.cms.block.manager:
         class: VideInfra\CMSBundle\Service\BlockManager
         arguments: ['@templating']
 
-    vig.cms.page.factory:
-        class: VideInfra\CMSBundle\Factory\PageFactory
+    vig.cms.page_type.factory:
+        class: VideInfra\CMSBundle\Factory\PageTypeFactory
         arguments:
             - '@vig.cms.page.manager'
 
     vig.cms.media_category.tree_builder:
         class: VideInfra\CMSBundle\Service\MediaCategoryTreeBuilder
+
+    vig.cms.page.tree_builder:
+        class: VideInfra\CMSBundle\Service\PageTreeBuilder
+        arguments:
+            - '@vig.cms.page.serializer'
 
     vig.cms.page.loader:
         class: VideInfra\CMSBundle\Routing\PageLoader
@@ -122,6 +130,11 @@ services:
 
     vig.cms.media_item.serializer:
         class: VideInfra\CMSBundle\Service\MediaItemSerializer
+
+    vig.cms.page.serializer:
+        class: VideInfra\CMSBundle\Service\PageSerializer
+        arguments:
+            - '@router'
 
     vig.cms.media_upload.helper:
         class: VideInfra\CMSBundle\Service\UploadHelper
@@ -137,21 +150,6 @@ services:
             - '%kernel.root_dir%'
 
     # Admin
-    vig.cms.page.admin:
-        class: VideInfra\CMSBundle\Admin\PageAdmin
-        tags:
-            - name: sonata.admin
-              manager_type: orm
-              group: "CMS"
-              label: "Pages"
-              label_catalogue: "admin"
-        arguments: [~, 'VideInfra\CMSBundle\Entity\Page', 'VideInfraCMSBundle:PageAdmin']
-        calls:
-            - [ 'setTemplate', ['list', 'VideInfraCMSBundle:Page:list.html.twig']]
-            - [ 'setTranslationDomain', ['VideInfraCMSBundle']]
-            - [ 'setPageManager', ['@vig.cms.page.manager']]
-            - [ 'setAuthorizationChecker', ['@security.authorization_checker']]
-
     vig.cms.media.admin:
         class: VideInfra\CMSBundle\Admin\MediaAdmin
         tags:

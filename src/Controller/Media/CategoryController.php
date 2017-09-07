@@ -6,6 +6,7 @@ use Psr\Log\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
+use VideInfra\CMSBundle\Controller\AbstractController;
 use VideInfra\CMSBundle\Entity\MediaCategory;
 
 /**

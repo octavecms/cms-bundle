@@ -1,7 +1,6 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 {% import 'VideInfraCMSBundle:Sitemap:treeview.html.twig' as tree %}
 
-
 {% block body_attributes %}data-widget="sitemap" {{ parent() }}{% endblock %}
 
 {% block sonata_page_content_header %}
@@ -14,7 +13,7 @@
                 <ul class="nav navbar-blocks navbar-nav navbar-right">
                     {% for data in page_types %}
                         <li>
-                            <a class="btn btn-app" data-widget="sitemap-add" data-sitemap-add-type="{{ data.id }}">
+                            <a class="btn btn-app" data-widget="sitemap-add" data-sitemap-add-type="{{ data.name }}">
                                 <i class="fa {{ data.icon }}" aria-hidden="true"></i>
                                 <span>{{ data.label }}</span>
                             </a>
@@ -51,9 +50,9 @@
 
     <script>
         var API_ENDPOINTS = {
-            'pageAdd':    '/bundles/videinfracms/sitemap/json/page-add.json',
-            'pageRemove': '/bundles/videinfracms/sitemap/json/page-remove.json',
-            'pageMove':   '/bundles/videinfracms/sitemap/json/page-move.json'
+            'pageAdd':    '{{ path('sitemap_page_add') }}',
+            'pageRemove': '{{ path('sitemap_page_remove') }}',
+            'pageMove':   '{{ path('sitemap_page_move') }}'
         };
 
         var SITEMAP_INITIAL_STATE = {
