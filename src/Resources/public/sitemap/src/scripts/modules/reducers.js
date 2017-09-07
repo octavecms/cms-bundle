@@ -119,7 +119,8 @@ function pageReducer (state, action) {
                 'parent': action.parent,
                 'name': '',
                 'active': false,
-                'readonly': true
+                'readonly': true,
+                'type': action.pageType
             });
 
             parent = state.tree.pages[action.parent];

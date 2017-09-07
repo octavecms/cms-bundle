@@ -46,7 +46,9 @@ export default class SitemapForm {
         this.$spinner.removeClass('hidden');
 
         // Add page
-        values.parent = this.store.getState().tree.pages.temporary.parent;
+        const temp = this.store.getState().tree.pages.temporary;
+        values.parent = temp.parent;
+        values.type = temp.type;
 
         store.dispatch(addPage(values)).then(() => {
             this.$spinner.addClass('hidden');

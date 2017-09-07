@@ -212,7 +212,7 @@ export default class SitemapTreeView {
         if (type) {
             // New page
             this.states[parent] = true;
-            store.dispatch(addTemporaryPage(parent));
+            store.dispatch(addTemporaryPage(parent, type));
         } else if (!isDescendantOf(parent, id, state) && !isChildOf(id, parent, state)) {
             // Not dropping parent into child
             store.dispatch(movePage(id, parent));

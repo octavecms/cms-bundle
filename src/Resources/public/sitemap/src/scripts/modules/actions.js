@@ -140,8 +140,8 @@ export function deletePage (id) {
  * Add / remove temporary page
  */
 
-export function addTemporaryPage (parent) {
-    return { type: ADD_TEMPORARY_PAGE, parent };
+export function addTemporaryPage (parent, pageType) {
+    return { type: ADD_TEMPORARY_PAGE, parent, pageType };
 }
 
 export function removeTemporaryPage () {
