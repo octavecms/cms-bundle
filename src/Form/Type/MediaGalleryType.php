@@ -33,7 +33,7 @@ class MediaGalleryType extends AbstractType
                     }
 
                     if (!empty($output)) {
-                        usort($output, function ($a, $b) {
+                        uasort($output, function ($a, $b) {
                             return $a['galleryorder'] <= $b['galleryorder'] ? -1 : 1;
                         });
                     }
