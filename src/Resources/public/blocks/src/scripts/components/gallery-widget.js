@@ -65,7 +65,7 @@ class GalleryWidget {
 
     _updateList () {
         this.$list.sortable('refresh');
-        this.updateBlockOrder();
+        this._updateBlockOrder();
     }
 
     _updateBlockOrder () {
