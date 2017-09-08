@@ -34,6 +34,9 @@ class SimpleTextType extends AbstractType
             ->add('active', CheckboxType::class, [
                 'required' => false
             ])
+            ->add('includeInMenu', CheckboxType::class, [
+                'required' => false
+            ])
             ->add('path', TextType::class);
 
         $builder

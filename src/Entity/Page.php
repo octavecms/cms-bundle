@@ -55,6 +55,12 @@ class Page
     private $readonly = false;
 
     /**
+     * @var bool
+     * @ORM\Column(name="include_in_menu", type="boolean")
+     */
+    private $includeInMenu = false;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
      */
@@ -436,5 +442,21 @@ class Page
     public function setReadonly($readonly)
     {
         $this->readonly = $readonly;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncludeInMenu()
+    {
+        return $this->includeInMenu;
+    }
+
+    /**
+     * @param bool $includeInMenu
+     */
+    public function setIncludeInMenu($includeInMenu)
+    {
+        $this->includeInMenu = $includeInMenu;
     }
 }

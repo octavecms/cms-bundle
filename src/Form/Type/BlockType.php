@@ -34,6 +34,9 @@ class BlockType extends AbstractType
             ->add('active', CheckboxType::class, [
                 'required' => false
             ])
+            ->add('includeInMenu', CheckboxType::class, [
+                'required' => false
+            ])
             ->add('path', TextType::class)
             ->add('blocks', BlockCollectionType::class, [
                 'entry_type' => BlockItemType::class,
