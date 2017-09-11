@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -63,6 +64,7 @@ class Page
     /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Regex("/^\/(\w+\/?)+$/")
      */
     private $path;
 
