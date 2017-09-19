@@ -95,7 +95,7 @@ class GalleryWidget {
         const $html = $(this._generateItemHTML());
         this.$list.append($html);
 
-        $html.find(IMAGE_WIDGET_SELECTOR).image('change', image);
+        $html.find(IMAGE_WIDGET_SELECTOR).image().image('change', image);
         Admin.shared_setup($html);
     }
 
