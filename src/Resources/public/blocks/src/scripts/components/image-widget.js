@@ -39,6 +39,7 @@ class ImageWidget {
     }
 
     change (image) {
+        this.$element.toggleClass('form-control-image--empty', !image.image);
         this.$image.removeClass('hidden').attr('src', image.image);
         this.$input.val(image.image);
         // this.$caption.val(image.name || image.title || '');
@@ -49,6 +50,7 @@ class ImageWidget {
     }
 
     _reset () {
+        this.$element.addClass('form-control-image--empty');
         this.$image.addClass('hidden').attr('src', '');
         this.$input.val('');
         this.$caption.val('');

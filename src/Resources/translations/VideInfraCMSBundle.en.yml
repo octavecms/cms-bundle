@@ -26,7 +26,8 @@ file_size: Size
 dimensions: Dimensions
 replace: Replace
 caption: Caption
-change_image: Change
+select_image: Select
+change_image: Replace
 select: Select
 add_image: Add image
 delete_page: Delete page

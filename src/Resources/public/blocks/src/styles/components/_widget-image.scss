@@ -31,4 +31,13 @@
         resize: vertical;
         width: 100%;
     }
+
+    .form-control-image__empty,
+    &--empty .form-control-image__not-empty {
+        display: none;
+    }
+
+    &--empty .form-control-image__empty {
+        display: inline;
+    }
 }

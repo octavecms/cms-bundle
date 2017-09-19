@@ -1,10 +1,11 @@
 {% block media_image_widget %}
-    <div id="{{ id }}_widget" class="form-control-image">
+    {% set value = form.vars.value %}
+
+    <div id="{{ id }}_widget" class="form-control-image {% if not value %}form-control-image--empty{% endif %}">
 
         {{ block('hidden_widget') }}
 
         <div class="form-control-image__preview well well-small">
-            {% set value = form.vars.value %}
             <img src="{{ value }}" alt="" class="{% if not value %}hidden{% endif %}" />
         </div>
 
@@ -16,7 +17,8 @@
 
             <div class="btn-group">
                 <a class="btn btn-primary sonata-action-element js-image-change">
-                    {{ 'change_image' | trans({}, 'VideInfraCMSBundle') }}
+                    <span class="form-control-image__not-empty">{{ 'change_image' | trans({}, 'VideInfraCMSBundle') }}</span>
+                    <span class="form-control-image__empty">{{ 'select_image' | trans({}, 'VideInfraCMSBundle') }}</span>
                 </a>
                 <a class="btn btn-danger sonata-action-element js-image-reset">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
