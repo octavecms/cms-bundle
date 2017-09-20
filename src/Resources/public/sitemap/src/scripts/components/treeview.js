@@ -36,7 +36,7 @@ export default class SitemapTreeView {
         this.template = microtemplate($container.find('script[type="text/template"]').remove().html());
         this.options = $.extend({}, this.constructor.defaultOptions, options);
         this.namespace = `sitemap${ ++UID }`;
-        this.states = {};
+        this.states = this.loadTreeState();
 
         this.dragging = null;
         this.dropTarget = null;
@@ -92,6 +92,7 @@ export default class SitemapTreeView {
             window.$item = $item;
 
             states[id] = true;
+            this.saveTreeState(states);
         }
     }
 
@@ -105,6 +106,7 @@ export default class SitemapTreeView {
             $item.next('ul').slideUp();
 
             states[id] = false;
+            this.saveTreeState(states);
         }
     }
 
@@ -226,6 +228,7 @@ export default class SitemapTreeView {
         const position = this.dropPosition;
         const id = ui.draggable.data('id');
         const type = ui.draggable.data('sitemapAddType');
+        const states = this.states;
 
         if (position === 'before' || position === 'after') {
             parent = state.tree.pages[target].parent;
@@ -234,9 +237,14 @@ export default class SitemapTreeView {
         this.dropTarget = null;
         this.dropPosition = null;
 
+        // Expand page
+        if (!states[parent]) {
+            states[parent] = true;
+            this.saveTreeState(states);
+        }
+
         if (type) {
             // New page
-            this.states[parent] = true;
             store.dispatch(addTemporaryPage(target, position, type));
         } else if (!isDescendantOf(parent, id, state)) {
             // Not dropping parent into child
@@ -432,6 +440,25 @@ export default class SitemapTreeView {
         if (draggable) {
             $.ui.ddmanager.prepareOffsets(draggable, null);
         }
+    }
+
+    saveTreeState (state) {
+        const stateJSON = JSON.stringify(state);
+        localStorage.setItem('sitemapTreeViewState', stateJSON);
+    }
+
+    loadTreeState () {
+        const stateJSON = localStorage.getItem('sitemapTreeViewState');
+        let   state = {};
+
+        if (stateJSON) {
+            try {
+                state = JSON.parse(stateJSON) || {};
+            } catch (e) {
+            }
+        }
+
+        return state;
     }
 
 }
