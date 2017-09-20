@@ -64,15 +64,16 @@ export function addPage(data) {
 }
 
 
-function movedPage (id, parent) {
+function movedPage (id, reference, position) {
     return {
         type: MOVED_PAGE,
         id,
-        parent
+        reference,
+        position
     };
 }
 
-export function movePage(id, parent) {
+export function movePage(id, reference, position) {
     return (dispatch) => {
         dispatch(setTreeLoading(true));
 
@@ -82,14 +83,14 @@ export function movePage(id, parent) {
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
-            'body': decodeURIComponent($.param({id, parent}))
+            'body': decodeURIComponent($.param({id, reference, position}))
         })
             .then(response => response.json())
             .then(json => {
                 dispatch(setTreeLoading(false));
 
                 if (json && json.status) {
-                    dispatch(movedPage(id, parent));
+                    dispatch(movedPage(id, reference, position));
                 }
             })
     };
@@ -140,8 +141,8 @@ export function deletePage (id) {
  * Add / remove temporary page
  */
 
-export function addTemporaryPage (parent, pageType) {
-    return { type: ADD_TEMPORARY_PAGE, parent, pageType };
+export function addTemporaryPage (reference, position, pageType) {
+    return { type: ADD_TEMPORARY_PAGE, reference, position, pageType };
 }
 
 export function removeTemporaryPage () {

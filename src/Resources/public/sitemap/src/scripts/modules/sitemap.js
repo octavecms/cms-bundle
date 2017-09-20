@@ -52,7 +52,9 @@ class Sitemap {
                 scope             : 'sitemapitem',
                 helper            : 'clone',
                 placeholder       : 'sort-highlight',
-                zIndex            : 999999
+                zIndex            : 999999,
+                cursorAt          : { left: -10, top: -10 },
+                drag              : this.treeView.handleSortDrag.bind(this.treeView)
             });
     }
 

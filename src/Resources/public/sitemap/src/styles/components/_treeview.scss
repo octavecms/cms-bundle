@@ -7,9 +7,9 @@
         display: block;
         position: absolute;
         left: 0;
-        top: 0;
+        top: -4px;
         right: 0;
-        bottom: 0;
+        bottom: -3px;
     }
 
     .sonata-tree__item.ui-draggable-dragging {
@@ -23,7 +23,7 @@
         }
     }
 
-    .ui-draggable-target {
+    .ui-draggable-target--inside {
         border-color: #3c8dbc;
         background-color: #3c8dbc;
         color: #fff;
@@ -38,6 +38,28 @@
 
         &.is-active:after {
             border-left-color: #3c8dbc;
+        }
+    }
+
+    .ui-draggable-target--top {
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -5px;
+            border-top: 3px solid #3c8dbc;
+        }
+    }
+
+    .ui-draggable-target--bottom {
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -5px;
+            border-top: 3px solid #3c8dbc;
         }
     }
 
@@ -100,7 +122,7 @@
             background: #eee;
         }
 
-        &.ui-draggable-target {
+        &.ui-draggable-target--inside {
             background: #3c8dbc;
 
             .sonata-tree__item__edit {
