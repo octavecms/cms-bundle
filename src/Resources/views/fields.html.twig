@@ -15,6 +15,11 @@
                 {{ form_row(form.parent.translations) }}
             {% endif %}
 
+
+            {% if form.parent.vars.title_name is defined and form.parent[form.parent.vars.title_name] is defined %}
+                {{ form_row(form.parent[form.parent.vars.title_name]) }}
+            {% endif %}
+
             <div class="btn-group">
                 <a class="btn btn-primary sonata-action-element js-image-change">
                     <span class="form-control-image__not-empty">{{ 'change_image' | trans({}, 'VideInfraCMSBundle') }}</span>

@@ -11,6 +11,7 @@ parameters:
     vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
     vig.cms.image.block.template: 'VideInfraCMSBundle:Block:image.html.twig'
     vig.cms.gallery.block.template: 'VideInfraCMSBundle:Block:gallery.html.twig'
+    locales: ['en']
 
 services:
 

@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use VideInfra\CMSBundle\Model\MediaGalleryItem;
 
@@ -36,8 +38,8 @@ class MediaGalleryItemType extends AbstractType
         $locales = $options['locales'];
 
         $builder
-            ->add('galleryorder', HiddenType::class)
-            ->add('image', MediaImageType::class);
+            ->add($options['order_name'], HiddenType::class)
+            ->add($options['image_name'], MediaImageType::class);
 
         if ($options['use_translations']) {
             $builder
@@ -45,16 +47,26 @@ class MediaGalleryItemType extends AbstractType
                     'locales' => $locales,
                     'label' => false,
                     'fields' => [
-                        'title' => ['label' => 'Caption']
+                        $options['title_name'] => ['label' => 'Caption']
                     ]
                 ]);
         }
         else {
-            $builder->add('title');
+            $builder->add($options['title_name']);
         }
 
         $builder
             ->addModelTransformer($this->transformer);
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['title_name'] = $options['title_name'];
     }
 
     /**
@@ -65,7 +77,10 @@ class MediaGalleryItemType extends AbstractType
         $resolver->setDefaults([
             'data_class' => MediaGalleryItem::class,
             'use_translations' => true,
-            'locales' => ['en']
+            'locales' => ['en'],
+            'image_name' => 'image',
+            'title_name' => 'title',
+            'order_name' => 'galleryorder'
         ]);
     }
 }
