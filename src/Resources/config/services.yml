@@ -149,6 +149,27 @@ services:
         arguments:
             - '%kernel.root_dir%'
 
+    vig.cms.media_gallery_item.data_transformer.default:
+        class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryItemDataTransformer
+        arguments: ['%locales%']
+
+    vig.cms.media_gallery.data_transformer.default:
+        class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryDataTransformer
+
+    vig.cms.media_gallery_item.form_type:
+        class: VideInfra\CMSBundle\Form\Type\MediaGalleryItemType
+        arguments:
+            - '@vig.cms.media_gallery_item.data_transformer'
+        tags:
+            - { name: form.type }
+
+    vig.cms.media_gallery.form_type:
+        class: VideInfra\CMSBundle\Form\Type\MediaGalleryType
+        arguments:
+            - '@vig.cms.media_gallery.data_transformer'
+        tags:
+            - { name: form.type }
+
     # Admin
     vig.cms.sitemap.admin:
         class: VideInfra\CMSBundle\Admin\SitemapAdmin

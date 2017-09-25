@@ -3,7 +3,7 @@
 namespace VideInfra\CMSBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -15,6 +15,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class MediaGalleryType extends AbstractType
 {
+    /** @var DataTransformerInterface */
+    private $transformer;
+
+    /**
+     * MediaGalleryType constructor.
+     * @param DataTransformerInterface $transformer
+     */
+    public function __construct(DataTransformerInterface $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -22,34 +34,7 @@ class MediaGalleryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->addModelTransformer(new CallbackTransformer(
-                function ($data) {
-
-                    if (!is_string($data)) {
-                        $output = $data;
-                    }
-                    else {
-                        $output = json_decode($data, true);
-                    }
-
-                    if (!empty($output)) {
-                        uasort($output, function ($a, $b) {
-                            return $a['galleryorder'] <= $b['galleryorder'] ? -1 : 1;
-                        });
-                    }
-
-                    return $output;
-                },
-                function ($data) {
-
-                    if (is_string($data)) {
-                        return $data;
-                    }
-
-                    return json_encode($data);
-                }
-            ))
-        ;
+            ->addModelTransformer($this->transformer);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
 

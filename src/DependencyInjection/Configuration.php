@@ -25,6 +25,12 @@ class Configuration implements ConfigurationInterface
             ->isRequired()
             ->cannotBeEmpty()
             ->end()
+            ->scalarNode('media_gallery_item_transformer')
+            ->cannotBeEmpty()
+            ->end()
+            ->scalarNode('media_gallery_transformer')
+            ->cannotBeEmpty()
+            ->end()
             ->end();
 
 
