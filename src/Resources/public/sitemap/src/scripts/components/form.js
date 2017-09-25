@@ -47,7 +47,8 @@ export default class SitemapForm {
 
         // Add page
         const temp = this.store.getState().tree.pages.temporary;
-        values.parent = temp.parent;
+        values.reference = temp.reference;
+        values.position = temp.position;
         values.type = temp.type;
 
         store.dispatch(addPage(values)).then(() => {

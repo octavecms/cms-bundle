@@ -3,7 +3,7 @@ import each from 'lodash/each';
 import difference from 'lodash/difference';
 import { movePage, deletePage, addTemporaryPage, removeTemporaryPage } from '../modules/actions';
 
-import { isDescendantOf, isChildOf } from '../utils/hierarchy'
+import { isDescendantOf } from '../utils/hierarchy'
 import microtemplate from '../utils/micro-template';
 
 
@@ -36,7 +36,11 @@ export default class SitemapTreeView {
         this.template = microtemplate($container.find('script[type="text/template"]').remove().html());
         this.options = $.extend({}, this.constructor.defaultOptions, options);
         this.namespace = `sitemap${ ++UID }`;
-        this.states = {};
+        this.states = this.loadTreeState();
+
+        this.dragging = null;
+        this.dropTarget = null;
+        this.dropPosition = null;
 
         this.init();
     }
@@ -88,6 +92,7 @@ export default class SitemapTreeView {
             window.$item = $item;
 
             states[id] = true;
+            this.saveTreeState(states);
         }
     }
 
@@ -101,6 +106,7 @@ export default class SitemapTreeView {
             $item.next('ul').slideUp();
 
             states[id] = false;
+            this.saveTreeState(states);
         }
     }
 
@@ -166,7 +172,11 @@ export default class SitemapTreeView {
                 cursorAt: { left: -10, top: -10 },
                 // start   : this.handleTreeItemDragStart.bind(this),
                 // stop    : this.handleTreeItemDragEnd.bind(this),
-                appendTo: this.$container
+                appendTo: this.$container,
+
+                start   : this.handleDragStart.bind(this),
+                stop    : this.handleDragEnd.bind(this),
+                drag    : this.handleSortDrag.bind(this)
             });
         }
 
@@ -176,7 +186,8 @@ export default class SitemapTreeView {
             tolerance: 'pointer',
             drop     : this.handleDropDrop.bind(this),
             over     : this.handleDropOver.bind(this),
-            out      : this.handleDropOut.bind(this)
+            out      : this.handleDropOut.bind(this),
+            drag     : this.handleSortDrag.bind(this)
         });
     }
 
@@ -192,12 +203,19 @@ export default class SitemapTreeView {
     handleDropOver (e, ui) {
         const $item = $(e.target);
 
-        $item.addClass('ui-draggable-target');
+        // $item
+        //     .addClass('ui-draggable-target')
+        //     .addClass('ui-draggable-target--inside');
+        this.handleSortDrag(e, ui);
         this.expand($item);
     }
 
     handleDropOut (e, ui) {
-        $(e.target).removeClass('ui-draggable-target');
+        $(e.target)
+            .removeClass('ui-draggable-target')
+            .removeClass('ui-draggable-target--inside')
+            .removeClass('ui-draggable-target--top')
+            .removeClass('ui-draggable-target--bottom');
     }
 
     handleDropDrop (e, ui) {
@@ -205,18 +223,86 @@ export default class SitemapTreeView {
 
         const store = this.store;
         const state = store.getState();
-        const parent = $(e.target).data('id');
+        const target = this.dropTarget;
+        let   parent = target;
+        const position = this.dropPosition;
         const id = ui.draggable.data('id');
         const type = ui.draggable.data('sitemapAddType');
+        const states = this.states;
+
+        if (position === 'before' || position === 'after') {
+            parent = state.tree.pages[target].parent;
+        }
+
+        this.dropTarget = null;
+        this.dropPosition = null;
+
+        // Expand page
+        if (!states[parent]) {
+            states[parent] = true;
+            this.saveTreeState(states);
+        }
 
         if (type) {
             // New page
-            this.states[parent] = true;
-            store.dispatch(addTemporaryPage(parent, type));
-        } else if (!isDescendantOf(parent, id, state) && !isChildOf(id, parent, state)) {
+            store.dispatch(addTemporaryPage(target, position, type));
+        } else if (!isDescendantOf(parent, id, state)) {
             // Not dropping parent into child
-            store.dispatch(movePage(id, parent));
+            setTimeout(() => {
+                store.dispatch(movePage(id, target, position));
+            }, 16);
         }
+    }
+
+    handleDragStart (e, ui) {
+        const parent = $(e.target).data('id');
+        this.dragging = parent;
+    }
+
+    handleDragEnd (e, ui) {
+        this.dragging = null;
+    }
+
+    handleSortDrag (e, ui) {
+        const $item = $(e.toElement).closest(this.options.itemSelector);
+        const id    = $item.data('id');
+
+        if (id && id !== this.dragging) {
+            const position = this.getDragDropPosition(e, ui);
+
+            this.dropTarget = position ? id : null;
+            this.dropPosition = position;
+
+            $item
+                .toggleClass('ui-draggable-target', !!position)
+                .toggleClass('ui-draggable-target--inside', position === 'inside')
+                .toggleClass('ui-draggable-target--top', position === 'before')
+                .toggleClass('ui-draggable-target--bottom', position === 'after');
+        }
+    }
+
+    getDragDropPosition (e, ui) {
+        const $item    = $(e.toElement).closest(this.options.itemSelector);
+        const id       = $item.data('id');
+        const rect     = $item.get(0).getBoundingClientRect();
+        const cursorX  = ui.offset.left - 10;
+        const cursorY  = ui.offset.top - 10;
+
+        let   atTop    = cursorY < rect.top + 7;
+        let   atBottom = cursorY > rect.top + rect.height - 7;
+        let   isInside = !atTop && !atBottom;
+
+        if (cursorX < rect.left || cursorX > rect.left + rect.width || cursorY < rect.top || cursorY > rect.top + rect.height) {
+            // Outside the element
+            atTop = atBottom = false;
+            isInside = false;
+        } else if (id === 'root') {
+            // Only one root folder
+            atTop = atBottom = false;
+            isInside = true;
+        }
+
+        return atTop ? 'before' : atBottom ? 'after' : isInside ? 'inside' : null;
     }
 
 
@@ -354,6 +440,25 @@ export default class SitemapTreeView {
         if (draggable) {
             $.ui.ddmanager.prepareOffsets(draggable, null);
         }
+    }
+
+    saveTreeState (state) {
+        const stateJSON = JSON.stringify(state);
+        localStorage.setItem('sitemapTreeViewState', stateJSON);
+    }
+
+    loadTreeState () {
+        const stateJSON = localStorage.getItem('sitemapTreeViewState');
+        let   state = {};
+
+        if (stateJSON) {
+            try {
+                state = JSON.parse(stateJSON) || {};
+            } catch (e) {
+            }
+        }
+
+        return state;
     }
 
 }

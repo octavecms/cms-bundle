@@ -7,9 +7,9 @@
         display: block;
         position: absolute;
         left: 0;
-        top: 0;
+        top: -4px;
         right: 0;
-        bottom: 0;
+        bottom: -3px;
     }
 
     .sonata-tree__item.ui-draggable-dragging {
@@ -32,6 +32,10 @@
             color: #fff;
         }
 
+        .sonata-tree__item__remove {
+            color: #3c8dbc;
+        }
+
         &.is-active:after {
             border-left-color: #3c8dbc;
         }
@@ -46,6 +50,7 @@
             transition-property: color, background, border-color;
         }
     }
+
     .sonata-tree__item.dropzone--hover {
         border-color: #3c8dbc;
         background-color: #3c8dbc;

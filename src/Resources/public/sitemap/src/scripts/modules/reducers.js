@@ -42,15 +42,15 @@ function removeTemporaryPage (state) {
     return state;
 }
 
-function sortPages (state, parent) {
-    let children = state.tree.pages[parent].children;
+function insertPage (state, parent, id, reference, position) {
+    let children = [].concat(state.tree.pages[parent].children);
+    let index = indexOf(children, reference);
 
-    children = children.sort((a, b) => {
-        const nameA = state.tree.pages[a].name;
-        const nameB = state.tree.pages[b].name;
-
-        return nameA > nameB ? 1 : nameA == nameB ? 0 : -1;
-    });
+    if (position === 'before') {
+        children.splice(index, 0, id);
+    } else {
+        children.splice(index + 1, 0, id);
+    }
 
     return setImmutable(state, ['tree', 'pages', parent, 'children'], children);
 }
@@ -69,6 +69,7 @@ function pageReducer (state, action) {
     let temp;
     let parentChildren;
     let parent;
+    let reference;
 
     switch (action.type) {
         case RECEIVE_PAGE:
@@ -76,21 +77,29 @@ function pageReducer (state, action) {
 
             state = setImmutable(state, ['tree', 'pages', action.page.id], action.page);
             state = setImmutable(state, ['tree', 'pages', action.page.parent, 'children'], [].concat(parentChildren, action.page.id));
-            state = sortPages(state, action.page.parent);
 
             state = removeTemporaryPage(state);
 
             return state;
         case MOVED_PAGE:
-            parentChildren = state.tree.pages[action.parent].children || [];
+            reference = state.tree.pages[action.reference];
+            parent    = reference;
+
+            if (action.position === 'before' || action.position === 'after') {
+                parent = state.tree.pages[reference.parent];
+            }
 
             const prevParent = state.tree.pages[action.id].parent;
             const prevParentChildren = state.tree.pages[prevParent].children || [];
 
             state = setImmutable(state, ['tree', 'pages', prevParent, 'children'], without(prevParentChildren, action.id));
-            state = setImmutable(state, ['tree', 'pages', action.parent, 'children'], [].concat(parentChildren, action.id));
-            state = setImmutable(state, ['tree', 'pages', action.id, 'parent'], action.parent);
-            state = sortPages(state, action.parent);
+            state = setImmutable(state, ['tree', 'pages', action.id, 'parent'], parent.id);
+
+            if (action.position === 'before' || action.position === 'after') {
+                state = insertPage(state, parent.id, action.id, reference.id, action.position);
+            } else {
+                state = setImmutable(state, ['tree', 'pages', parent.id, 'children'], [].concat(parent.children, action.id));
+            }
 
             return state;
         case REMOVE_PAGE:
@@ -106,26 +115,41 @@ function pageReducer (state, action) {
 
             return state;
         case ADD_TEMPORARY_PAGE:
+            reference = state.tree.pages[action.reference];
+            parent    = reference;
+
+            if (action.position === 'before' || action.position === 'after') {
+                parent = state.tree.pages[reference.parent];
+            }
+
+            // Remove existing temporary page from parent
             temp = state.tree.pages.temporary;
 
             if (temp) {
-                // Remove from parent
-                parent = state.tree.pages[temp.parent];
-                state = setImmutable(state, ['tree', 'pages', parent.id, 'children'], without(parent.children, 'temporary'));
+                let tempparent = state.tree.pages[temp.parent];
+                state = setImmutable(state, ['tree', 'pages', tempparent.id, 'children'], without(tempparent.children, 'temporary'));
             }
 
+            // Create temporary page
             state = setImmutable(state, 'tree.pages.temporary', {
                 'id': 'temporary',
-                'parent': action.parent,
+                'parent': parent.id,
                 'name': '',
                 'active': false,
                 'readonly': true,
-                'type': action.pageType
+                'type': action.pageType,
+
+                'reference': action.reference,
+                'position': action.position
             });
 
-            parent = state.tree.pages[action.parent];
-            state = setImmutable(state, ['tree', 'pages', action.parent, 'children'], [].concat(parent.children, 'temporary'));
             state = setImmutable(state, ['tree', 'temporary'], true);
+
+            if (action.position === 'before' || action.position === 'after') {
+                state = insertPage(state, parent.id, 'temporary', reference.id, action.position);
+            } else {
+                state = setImmutable(state, ['tree', 'pages', parent.id, 'children'], [].concat(parent.children, 'temporary'));
+            }
 
             return state;
         case REMOVE_TEMPORARY_PAGE:
