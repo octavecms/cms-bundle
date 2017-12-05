@@ -46,7 +46,7 @@ class PageController extends AbstractController
     public function createAction(Request $request)
     {
         try {
-            $parentId = $request->get('parent');
+            $parentId = $request->get('reference');
             $title = $request->get('title');
             $path = $request->get('path');
             $typeId = $request->get('type');

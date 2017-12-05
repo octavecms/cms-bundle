@@ -1,5 +1,9 @@
 {% block media_image_widget %}
+
     {% set value = form.vars.value %}
+    {% if form.vars.show_label %}
+        {{ form_label(form) }}
+    {% endif %}
 
     <div id="{{ id }}_widget" class="form-control-image {% if not value %}form-control-image--empty{% endif %}">
 
