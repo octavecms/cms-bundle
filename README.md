@@ -38,7 +38,11 @@ Enable the bundle in the kernel:
 public function registerBundles()
 {
     $bundles = array(
-        // ...
+        // ...                
+        new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
+        new Knp\DoctrineBehaviors\Bundle\DoctrineBehaviorsBundle(),
+        new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+        
         new VideInfra\CMSBundle\VideInfraCMSBundle(),
         // ...
     );
@@ -74,3 +78,21 @@ sonata_admin:
 ### Step 4: Update DB schema
 
 `php bin/console doctrine:schema:update --force` 
+
+### Step 5: Configure routes
+
+```yaml
+vig.cms.bundle:
+    resource: "@VideInfraCMSBundle/Resources/config/routing.yml"
+```
+
+### Step 6: Configure roles
+
+```yaml
+role_hierarchy:
+    ROLE_ADMIN:
+        - ROLE_USER
+        - ROLE_BLOCK_PAGE_CREATE
+        - ROLE_CUSTOM_PAGE_CREATE
+        - ROLE_SIMPLE_TEXT_PAGE_CREATE
+```
