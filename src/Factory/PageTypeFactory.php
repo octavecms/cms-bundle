@@ -29,15 +29,6 @@ class PageTypeFactory
      */
     public function get($type)
     {
-        $pageTypes = $this->pageManager->getTypes();
-
-        /** @var PageTypeInterface $pageType */
-        foreach ($pageTypes as $pageType) {
-            if ($pageType->getName() == $type) {
-                return $pageType;
-            }
-        }
-
-        throw new \Exception(sprintf('Unsupported page type %s', $pageType));
+        return $this->pageManager->getType($type);
     }
 }

@@ -74,7 +74,7 @@ class PageController extends AbstractController
             }
 
             $type = $this->get('vig.cms.page_type.factory')->get($typeId);
-            if (!$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
+            if ($type->canCreateRole() && !$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
                 throw new AccessDeniedException(sprintf('You are not allowed to create page with %s type', $typeId));
             }
 
