@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use VideInfra\CMSBundle\Entity\Page;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
 use VideInfra\CMSBundle\Service\PageManager;
 
 /**
@@ -50,6 +51,10 @@ class PageLoader implements LoaderInterface
             $options = array_merge($page->getOptions(), ['_controller' => $page->getController()]);
             $route = new Route($page->getPath(), $options);
             $routes->add($page->getName(), $route);
+
+            /** @var PageTypeInterface $pageType */
+            $pageType = $this->pageManager->getType($page->getType());
+            $pageType->setRoutes($routes, $page);
         }
 
         return $routes;

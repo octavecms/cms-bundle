@@ -61,11 +61,11 @@ class PageManager
     }
 
     /**
-     * @param $type
+     * @param PageTypeInterface $type
      */
     public function addType($type)
     {
-        $this->types[] = $type;
+        $this->types[$type->getName()] = $type;
     }
 
     /**
@@ -142,5 +142,14 @@ class PageManager
         }
 
         return $output;
+    }
+
+    /**
+     * @param $name
+     * @return mixed|null
+     */
+    public function getType($name)
+    {
+        return $this->types[$name] ?? null;
     }
 }
