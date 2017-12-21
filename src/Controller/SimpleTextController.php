@@ -79,7 +79,7 @@ class SimpleTextController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => 'custom']);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => SimpleTextPageType::TYPE]);
                 }
             }
         }
