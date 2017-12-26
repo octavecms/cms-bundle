@@ -49,7 +49,7 @@ public function registerBundles()
 }
 ```
 
-### Step 3: Configure the VideInfraTextBundle
+### Step 3: Configure the VideInfraCMSBundle
 
 ```yaml
 vide_infra_cms:
