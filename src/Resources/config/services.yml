@@ -150,6 +150,13 @@ services:
         arguments:
             - '%kernel.root_dir%'
 
+    vig.cms.twig.extension:
+        class: VideInfra\CMSBundle\Twig\CMSExtension
+        arguments:
+            - '@router'
+        tags:
+            - { name: twig.extension }
+
     vig.cms.media_gallery_item.data_transformer.default:
         class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryItemDataTransformer
         arguments: ['%locales%']
