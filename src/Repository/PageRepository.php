@@ -64,4 +64,41 @@ class PageRepository extends EntityRepository
 
         return $output;
     }
+
+    /**
+     * @param $parent
+     * @return int
+     */
+    public function getNewPosition($parent)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->select('MAX(p.position) AS position')
+        ;
+
+        if ($parent == 'root' || !$parent) {
+            $queryBuilder->andWhere('p.parent IS NULL');
+        }
+        else {
+            $queryBuilder->andWhere('p.parent = :parent')
+                ->setParameter('parent', $parent);
+        }
+
+        $position = (int) $queryBuilder->getQuery()->getSingleScalarResult()['position'];
+
+        return ++$position;
+    }
+
+    /**
+     * @param Page $page
+     */
+    public function increasePositionAfter(Page $page)
+    {
+        $this->createQueryBuilder('p')
+            ->update('VideInfraCMSBundle:Page', 'p')
+            ->set('p.position', 'p.position + 1')
+            ->andWhere('p.position > :position')
+            ->setParameter('position', $page->getPosition())
+            ->getQuery()
+            ->getResult();
+    }
 }

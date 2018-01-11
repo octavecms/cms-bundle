@@ -84,6 +84,7 @@ class PageController extends AbstractController
             $page->setType($type->getName());
             $page->setName($type->getName() . '_' . time());
             $page->setParent($parent);
+            $page->setPosition($pageRepository->getNewPosition($parent));
 
             $validator = $this->get('validator');
             $errors = $validator->validate($page);
@@ -151,31 +152,54 @@ class PageController extends AbstractController
         try {
             $em = $this->getDoctrine()->getManager();
 
-            $parentId = $request->get('parent');
+            $referenceId = $request->get('reference');
+            $position = $request->get('position');
             $id = $request->get('id');
             if (empty($id)) {
                 throw new \Exception('Id is missing');
             }
 
-            if (empty($parentId)) {
-                throw new \Exception('Parent is missing');
+            if (empty($referenceId)) {
+                throw new \Exception('Reference is missing');
             }
 
-            $parent = null;
-            if ($parentId != 'root') {
-                $parent = $this->get('vig.cms.page.repository')->find($parentId);
-                if (!$parent) {
-                    throw new \Exception(sprintf('Unable to find Page with id %s', $parentId));
+            $pageRepository = $this->get('vig.cms.page.repository');
+
+            /** @var Page|null $reference */
+            $reference = null;
+            if ($referenceId != 'root') {
+                $reference = $pageRepository->find($referenceId);
+                if (!$reference) {
+                    throw new \Exception(sprintf('Unable to find Page with id %s', $referenceId));
                 }
             }
 
             /** @var Page $page */
-            $page = $this->get('vig.cms.page.repository')->find($id);
+            $page = $pageRepository->find($id);
             if (!$page) {
                 throw new \Exception(sprintf('Unable to find page with id %s', $id));
             }
 
-            $page->setParent($parent);
+            if ($position == 'inside') {
+                $page->setParent($reference);
+            }
+
+            if ($position == 'before') {
+
+                $page->setParent($reference->getParent());
+
+                $pageRepository->increasePositionAfter($reference);
+                $page->setPosition($reference->getPosition());
+                $reference->setPosition($page->getPosition() + 1);
+            }
+
+            if ($position == 'after') {
+
+                $page->setParent($reference->getParent());
+                $page->setPosition($reference->getPosition() + 1);
+                $pageRepository->increasePositionAfter($page);
+            }
+
             $em->flush();
 
             return new JsonResponse(['status' => true]);
