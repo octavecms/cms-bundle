@@ -21,7 +21,7 @@ Require the bundle
 ```json
 "require": {
     ... some repositories
-    "vig/cms-bundle": "1.0.0"
+    "vig/cms-bundle": "^1.0.0"
 }
 ```
 
@@ -49,9 +49,14 @@ public function registerBundles()
 }
 ```
 
-### Step 3: Configure the VideInfraCMSBundle
+### Step 3: Configure Sonata Admin Bundle
+
+Follow instructions at [Sonata Admin Bundle documentation page](https://symfony.com/doc/master/bundles/SonataAdminBundle/index.html).
+
+### Step 4: Configure the VideInfraCMSBundle
 
 ```yaml
+# app/config/config.yml
 vide_infra_cms:
     media_upload_path: /uploads/
     simple_text_templates:
@@ -66,6 +71,7 @@ vide_infra_cms:
 
 Define CMS group in your SonataAdminBundle configuration:
 ```yaml
+# app/config/config.yml
 sonata_admin:
     ...
     dashboard:
@@ -75,20 +81,22 @@ sonata_admin:
                 label: CMS
 ```
 
-### Step 4: Update DB schema
+### Step 5: Update DB schema
 
 `php bin/console doctrine:schema:update --force` 
 
-### Step 5: Configure routes
+### Step 6: Configure routes
 
 ```yaml
+# app/config/routing.yml
 vig.cms.bundle:
     resource: "@VideInfraCMSBundle/Resources/config/routing.yml"
 ```
 
-### Step 6: Configure roles
+### Step 7: Configure roles
 
 ```yaml
+# app/config/security.yml
 role_hierarchy:
     ROLE_ADMIN:
         - ROLE_USER
