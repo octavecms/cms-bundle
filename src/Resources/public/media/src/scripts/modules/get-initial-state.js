@@ -73,6 +73,12 @@ export default function (state) {
         'multiselect': true,
 
         // ID of opened file
-        'opened': null
+        'opened': null,
+
+        // Error message
+        'error': {
+            'visible': false,
+            'message': '' 
+        }
     }, window.MEDIA_INITIAL_STATE, state));
 };

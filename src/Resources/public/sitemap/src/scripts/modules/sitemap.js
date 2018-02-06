@@ -46,7 +46,7 @@ class Sitemap {
         const $treeView = this.$treeView = $element.find(SELECTOR_TREE_VIEW);
         this.treeView = new SitemapTreeView($treeView, {'store': store, 'temporaryform': this.form});
 
-        new ErrorMessage($element.find(SELECTOR_ERROR), {'store': store,});
+        new ErrorMessage($element.find(SELECTOR_ERROR), {'store': store});
     }
 
     _initToolbar () {

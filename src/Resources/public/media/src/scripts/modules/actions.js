@@ -38,6 +38,9 @@ export const TOGGLE_OPENED_ITEM = 'TOGGLE_OPENED_ITEM'
 
 export const SET_CATEGORY = 'SET_CATEGORY';
 
+export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
+export const HIDE_ERROR_MESSAGE = 'HIDE_ERROR_MESSAGE';
+
 
 /*
  * Selected items
@@ -89,7 +92,14 @@ export function addFolder(name, parent) {
             .then(response => response.json())
             .then(json => {
                 dispatch(setGridLoading(false));
-                dispatch(receiveFolder(json));
+                
+                if (json && json.status) {
+                    dispatch(receiveFolder(json));
+                } else if (json && json.message) {
+                    dispatch(setErrorMessage(json.message));
+                }
+
+                return json;
             })
     };
 }
@@ -118,7 +128,14 @@ export function moveFolder(id, parent) {
             .then(response => response.json())
             .then(json => {
                 dispatch(setGridLoading(false));
-                dispatch(movedFolder(id, parent));
+
+                if (json && json.status) {
+                    dispatch(movedFolder(id, parent));
+                } else if (json && json.message) {
+                    dispatch(setErrorMessage(json.message));
+                }
+
+                return json;
             })
     };
 }
@@ -154,7 +171,14 @@ export function fetchFiles (categoryId) {
             .then(response => response.json())
             .then(json => {
                 dispatch(setGridLoading(false));
-                dispatch(receiveFiles(categoryId, json));
+                
+                if (json && json.status) {
+                    dispatch(receiveFiles(categoryId, json));
+                } else if (json && json.message) {
+                    dispatch(setErrorMessage(json.message));
+                }
+
+                return json;
             })
     };
 }
@@ -199,8 +223,15 @@ export function deleteSelectedListItems () {
                     .then(response => response.json())
                     .then(json => {
                         dispatch(setGridLoading(false));
-                        dispatch(unsetAllSelectedListItems());
-                        dispatch(removeFiles(ids));
+                        
+                        if (json && json.status) {
+                            dispatch(unsetAllSelectedListItems());
+                            dispatch(removeFiles(ids));
+                        } else if (json && json.message) {
+                            dispatch(setErrorMessage(json.message));
+                        }
+
+                        return json;
                     });
             }
         } else if (state.categoryId !== state.tree.root) {
@@ -225,9 +256,16 @@ export function deleteSelectedListItems () {
                         .then(response => response.json())
                         .then(json => {
                             dispatch(setGridLoading(false));
-                            dispatch(setCategory(folderData.parent));
-                            dispatch(fetchFiles(folderData.parent));
-                            dispatch(removeFolder(folderId));
+                            
+                            if (json && json.status) {
+                                dispatch(setCategory(folderData.parent));
+                                dispatch(fetchFiles(folderData.parent));
+                                dispatch(removeFolder(folderId));
+                            } else if (json && json.message) {
+                                dispatch(setErrorMessage(json.message));
+                            }
+
+                            return json;
                         });
                 }
             } else {
@@ -301,7 +339,14 @@ export function moveFiles(ids, parentId) {
                 .then(response => response.json())
                 .then(json => {
                     dispatch(setGridLoading(false));
-                    dispatch(movedFiles(ids, parentId));
+                    
+                    if (json && json.status) {
+                        dispatch(movedFiles(ids, parentId));
+                    } else if (json && json.message) {
+                        dispatch(setErrorMessage(json.message));
+                    }
+
+                    return json;
                 });
         }
 
@@ -362,3 +407,15 @@ export function invalidateFolder (id) {
     return { type: INVALIDATE_FOLDER, id };
 };
 
+
+/**
+ * Set error message
+ */
+
+export function setErrorMessage (message) {
+    return { type: SET_ERROR_MESSAGE, message };
+}
+
+export function hideErrorMessage () {
+    return { type: HIDE_ERROR_MESSAGE };
+}

@@ -173,7 +173,6 @@ function errorReducer (state, action) {
         default:
             return state;
     }
-
 }
 
 
