@@ -154,6 +154,7 @@ services:
         class: VideInfra\CMSBundle\Twig\CMSExtension
         arguments:
             - '@router'
+            - '@service_container'
         tags:
             - { name: twig.extension }
 
