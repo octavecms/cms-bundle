@@ -23,9 +23,10 @@ class PageTreeBuilder
 
     /**
      * @param Page $page
+     * @param bool $showHidden
      * @return array
      */
-    public function build(Page $page)
+    public function build(Page $page, $showHidden = false)
     {
         $data = $this->serializer->toArray($page);
 
@@ -33,7 +34,13 @@ class PageTreeBuilder
             return $data;
         }
 
+        /** @var Page $child */
         foreach ($page->getChildren() as $child) {
+
+            if (!$showHidden && !$child->isIncludeInMenu()) {
+                continue;
+            }
+
             $data['children'][] = $this->build($child);
         }
 

@@ -45,21 +45,33 @@ class PageRepository extends EntityRepository
     }
 
     /**
+     * @param Page|null $page
+     * @param bool $showHidden
      * @return array
      */
-    public function getTree()
+    public function getTree(Page $page = null, $showHidden = false)
     {
-        $pages = $this->createQueryBuilder('p')
-            ->orderBy('p.position', 'ASC')
-            ->andWhere('p.parent IS NULL')
-            ->getQuery()
-            ->getResult();
+        if ($page) {
+            $pages = $page->getChildren();
+        }
+        else {
+            $pages = $this->createQueryBuilder('p')
+                ->orderBy('p.position', 'ASC')
+                ->andWhere('p.parent IS NULL')
+                ->getQuery()
+                ->getResult();
+        }
 
         $output = [];
 
         /** @var Page $page */
         foreach ($pages as $page) {
-            $output[] = $this->treeBuilder->build($page);
+
+            if (!$showHidden && !$page->isIncludeInMenu()) {
+                continue;
+            }
+
+            $output[] = $this->treeBuilder->build($page, $showHidden);
         }
 
         return $output;
