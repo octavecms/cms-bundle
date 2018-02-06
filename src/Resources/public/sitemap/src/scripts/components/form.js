@@ -17,6 +17,7 @@ export default class SitemapForm {
         this.options = $.extend({}, this.constructor.defaultOptions, options);
         this.namespace = `sitemapform${ ++UID }`;
         this.states = {};
+        this.visible = false;
 
         this.init();
     }
@@ -51,12 +52,18 @@ export default class SitemapForm {
         values.position = temp.position;
         values.type = temp.type;
 
-        store.dispatch(addPage(values)).then(() => {
+        store.dispatch(addPage(values)).then((response) => {
             this.$spinner.addClass('hidden');
+
+            if (!response.status) {
+                this.showError(response.message);
+            } else {
+                this.hideError();
+            }
         });
     }
 
-    show ($target) {
+    updatePopover ($target) {
         this.$target = $target;
 
         $target.popover({
@@ -72,6 +79,14 @@ export default class SitemapForm {
         $target.data('bs.popover').$tip.addClass('sitemap-form');
     }
 
+    show ($target) {
+        this.visible = false;
+        this.hideError();
+        this.updatePopover($target);
+
+        this.visible = true;
+    }
+
     hide () {
         if (this.$target) {
             this.$spinner.addClass('hidden');
@@ -79,10 +94,29 @@ export default class SitemapForm {
             this.$target = null;
 
             this.$container.get(0).reset();
+            this.visible = false;
         }
     }
 
     cancel () {
         this.store.dispatch(removeTemporaryPage());
+    }
+
+    showError (message) {
+        const $alert = this.$container.find('.alert');
+        $alert.removeClass('hidden').text(message || 'Error occured');
+
+        // Update form position
+        this.updatePopover(this.$target);
+    }
+
+    hideError () {
+        const $alert = this.$container.find('.alert');
+        $alert.addClass('hidden');
+
+        if (this.visible) {
+            // Update form position
+            this.updatePopover(this.$target);
+        }
     }
 }

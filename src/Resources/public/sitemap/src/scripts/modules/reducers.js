@@ -18,7 +18,8 @@ import removeImmutable from '../utils/remove-immutable';
 import {
     SET_TREE_LOADING,
     RECEIVE_PAGE, MOVED_PAGE, REMOVE_PAGE,
-    ADD_TEMPORARY_PAGE, REMOVE_TEMPORARY_PAGE
+    ADD_TEMPORARY_PAGE, REMOVE_TEMPORARY_PAGE,
+    SET_ERROR_MESSAGE, HIDE_ERROR_MESSAGE
 } from './actions';
 
 
@@ -159,12 +160,29 @@ function pageReducer (state, action) {
     }
 }
 
+function errorReducer (state, action) {
+    switch (action.type) {
+        case SET_ERROR_MESSAGE:
+            let newState = state;
+            newState = setImmutable(newState, 'error.message', action.message);
+            newState = setImmutable(newState, 'error.visible', true);
+
+            return newState;
+        case HIDE_ERROR_MESSAGE: 
+            return setImmutable(state, 'error.visible', false);
+        default:
+            return state;
+    }
+
+}
+
 
 export default (state, action) => {
     return reduce([
 
         treeReducer,
-        pageReducer
+        pageReducer,
+        errorReducer
 
     ], (state, reducer) => reducer(state, action), state);
 };

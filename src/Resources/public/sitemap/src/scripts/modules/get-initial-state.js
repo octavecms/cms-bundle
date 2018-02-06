@@ -38,6 +38,11 @@ export default function (state) {
             ],
 
             'temporary': false
+        },
+
+        'error': {
+            'visible': false,
+            'message': '' 
         }
     }, window.SITEMAP_INITIAL_STATE, state));
 };
