@@ -5,6 +5,7 @@ import createStore from '../modules/store';
 import MediaTreeView from '../components/treeview';
 import MediaGridList from '../components/gridlist';
 import uploader from '../components/uploader';
+import ErrorMessage from '../components/error-message';
 
 import { setGridList, fetchFiles, addFolder, deleteSelectedListItems } from '../modules/actions';
 
@@ -23,6 +24,7 @@ const SELECTOR_MEDIA_SELECT_ALL = '.js-media-select-all';
 const SELECTOR_ADD_FOLDER = '.js-media-add-folder';
 const SELECTOR_TREE_VIEW = '[data-widget="media-treeview"]';
 const SELECTOR_GRID_LIST = '[data-widget="media-gridlist"]';
+const SELECTOR_ERROR = '[data-widget="error-message"]';
 
 
 class MediaStandalone {
@@ -59,6 +61,9 @@ class MediaStandalone {
 
         const $gridList = this.$gridList = $element.find(SELECTOR_GRID_LIST);
         this.gridList = new MediaGridList($gridList, {'store': store});
+
+        // Error message
+        new ErrorMessage($element.find(SELECTOR_ERROR), {'store': store});
 
         // Handle delete button click
         $element.on(`click.${ MEDIA_NAMESPACE }`, SELECTOR_MEDIA_REMOVE, this._handleRemoveClick.bind(this));

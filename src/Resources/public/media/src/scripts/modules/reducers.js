@@ -21,7 +21,8 @@ import {
     UPDATED_FILE, RECEIVE_FILES, REMOVE_FILES, MOVED_FILES,
     RECEIVE_FOLDER, MOVED_FOLDER, REMOVE_FOLDER, INVALIDATE_FOLDER,
     SET_OPENED_ITEM, TOGGLE_OPENED_ITEM,
-    SET_CATEGORY
+    SET_CATEGORY,
+    SET_ERROR_MESSAGE, HIDE_ERROR_MESSAGE
 } from './actions';
 
 
@@ -214,6 +215,21 @@ function fileReducer (state, action) {
     }
 }
 
+function errorReducer (state, action) {
+    switch (action.type) {
+        case SET_ERROR_MESSAGE:
+            let newState = state;
+            newState = setImmutable(newState, 'error.message', action.message);
+            newState = setImmutable(newState, 'error.visible', true);
+
+            return newState;
+        case HIDE_ERROR_MESSAGE: 
+            return setImmutable(state, 'error.visible', false);
+        default:
+            return state;
+    }
+}
+
 
 export default (state, action) => {
     return reduce([
@@ -224,7 +240,8 @@ export default (state, action) => {
         openedReducer,
         categoryReducer,
         folderReducer,
-        fileReducer
+        fileReducer,
+        errorReducer
 
     ], (state, reducer) => reducer(state, action), state);
 };
