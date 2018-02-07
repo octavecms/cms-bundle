@@ -32,7 +32,7 @@ class CMSExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('vig_route_exists', [$this, 'routeExist']),
+            new \Twig_SimpleFunction('vig_route_exists', [$this, 'routeExists']),
             new \Twig_SimpleFunction('vig_cms_menu', [$this, 'getMenu'])
         ];
     }
