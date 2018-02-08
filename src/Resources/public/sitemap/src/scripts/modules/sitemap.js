@@ -58,7 +58,9 @@ class Sitemap {
                 placeholder       : 'sort-highlight',
                 zIndex            : 999999,
                 cursorAt          : { left: -10, top: -10 },
-                drag              : this.treeView.handleSortDrag.bind(this.treeView)
+                drag              : this.treeView.handleSortDrag.bind(this.treeView),
+                stop              : this.treeView.handleDragEnd.bind(this.treeView),
+                start             : this.treeView.handleDragStart.bind(this.treeView)
             });
     }
 
