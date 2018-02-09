@@ -199,3 +199,12 @@ services:
               label: "Media"
               label_catalogue: "admin"
         arguments: [~, ~, 'VideInfraCMSBundle:Media\Media']
+        
+    vig.cms.sitemap.source:
+        class: VideInfra\CMSBundle\Service\SitemapSource
+        arguments:
+            - '@router'
+            - '@vig.cms.page.repository'
+            - '%vig.sitemap.host%'
+        tags:
+            - { name: vig.sitemap.source }
