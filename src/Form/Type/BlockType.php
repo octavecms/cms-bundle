@@ -37,6 +37,9 @@ class BlockType extends AbstractType
             ->add('includeInMenu', CheckboxType::class, [
                 'required' => false
             ])
+            ->add('includeInSitemap', CheckboxType::class, [
+                'required' => false
+            ])
             ->add('path', TextType::class)
             ->add('blocks', BlockCollectionType::class, [
                 'entry_type' => BlockItemType::class,
