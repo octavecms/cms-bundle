@@ -2,6 +2,8 @@
 
 namespace VideInfra\CMSBundle\Page\Block;
 
+use VideInfra\CMSBundle\Entity\Block;
+
 interface BlockInterface
 {
     /**
@@ -33,4 +35,10 @@ interface BlockInterface
      * @return array
      */
     public function getOptions();
+
+    /**
+     * @param Block $block
+     * @return mixed
+     */
+    public function getContent(Block $block);
 }

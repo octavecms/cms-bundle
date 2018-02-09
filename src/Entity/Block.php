@@ -123,10 +123,6 @@ class Block
     {
         $content = $this->content ? $this->content : $this->translate()->getContent();
 
-        if ($this->type == GalleryBlock::NAME) {
-            $content = json_decode($content, true);
-        }
-
         return $content;
     }
 

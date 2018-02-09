@@ -2,6 +2,7 @@
 
 namespace VideInfra\CMSBundle\Page\Block;
 
+use VideInfra\CMSBundle\Entity\Block;
 use VideInfra\CMSBundle\Form\Type\MediaGalleryType;
 
 /**
@@ -60,6 +61,15 @@ class GalleryBlock extends AbstractBlock
     public function getContentTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @param Block $block
+     * @return mixed
+     */
+    public function getContent(Block $block)
+    {
+        return json_decode($block->getContent(), true);
     }
 
     /**
