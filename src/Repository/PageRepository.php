@@ -43,6 +43,18 @@ class PageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+          
+    /**
+     * @return array
+     */
+    public function findIncludeInSitemap()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.active = 1')
+            ->andWhere('p.includeInSitemap = 1')
+            ->getQuery()
+            ->getResult();
+    }
 
     /**
      * @param Page|null $page

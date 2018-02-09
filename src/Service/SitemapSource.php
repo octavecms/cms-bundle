@@ -40,7 +40,7 @@ class SitemapSource implements SourceInterface
         $items = [];
         
         /* @var array */
-        $pages = $this->pageRepository->findActive();
+        $pages = $this->pageRepository->findIncludeInSitemap();
                 
          foreach($pages as $page) {
             $items[] = new Item(

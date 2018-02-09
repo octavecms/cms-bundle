@@ -62,6 +62,12 @@ class Page
     private $includeInMenu = false;
 
     /**
+     * @var bool
+     * @ORM\Column(name="include_in_sitemap", type="boolean")
+     */
+    private $includeInSitemap = true;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Regex("/^\/(\w+\/?)+$/")
@@ -460,5 +466,21 @@ class Page
     public function setIncludeInMenu($includeInMenu)
     {
         $this->includeInMenu = $includeInMenu;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncludeInSitemap()
+    {
+        return $this->includeInSitemap;
+    }
+
+    /**
+     * @param bool $includeInSitemap
+     */
+    public function setIncludeInSitemap($includeInSitemap)
+    {
+        $this->includeInSitemap = $includeInSitemap;
     }
 }
