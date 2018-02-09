@@ -63,7 +63,7 @@ class PageController extends AbstractController
                 throw new \Exception('Path is required');
             }
 
-            if ($path[0] == '/') $path = '/' . $path;
+            if ($path[0] !== '/') $path = '/' . $path;
 
             $pageRepository = $this->get('vig.cms.page.repository');
 
