@@ -107,7 +107,9 @@ class PageRepository extends EntityRepository
                 ->setParameter('parent', $parent);
         }
 
-        $position = (int) $queryBuilder->getQuery()->getSingleScalarResult()['position'];
+        $result = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        $position = (int) $result['position'] ?? 0;
 
         return ++$position;
     }
