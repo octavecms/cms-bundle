@@ -109,7 +109,7 @@ class PageRepository extends EntityRepository
 
         $result = $queryBuilder->getQuery()->getSingleScalarResult();
 
-        $position = (int) $result['position'] ?? 0;
+        $position = (int) ($result['position'] ?? 0);
 
         return ++$position;
     }
