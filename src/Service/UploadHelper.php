@@ -87,7 +87,10 @@ class UploadHelper
             $item->setPath($webPath);
             $item->setSize($file->getClientSize());
 
-            $filePath = $this->uploadPath . $category->getId();
+            $filePath = $category
+                ? $this->uploadPath . $category->getId()
+                : $this->uploadPath ;
+
             if (!is_dir($filePath)) {
                 $this->createDir($filePath);
             }
@@ -123,7 +126,10 @@ class UploadHelper
 
         $this->setFileInfo($item, $file);
 
-        $filePath = $this->uploadPath . $item->getCategory()->getId();
+        $filePath = $item->getCategory()
+            ? $this->uploadPath . $item->getCategory()->getId()
+            : $this->uploadPath;
+
         if (!is_dir($filePath)) {
             $this->createDir($filePath);
         }
@@ -139,7 +145,10 @@ class UploadHelper
      */
     public function move(MediaItem $item)
     {
-        $newFilePath = $this->uploadPath . $item->getCategory()->getId();
+        $newFilePath = $item->getCategory()
+            ? $this->uploadPath . $item->getCategory()->getId()
+            : $this->uploadPath . '/';
+
         if (!is_dir($newFilePath)) {
             $this->createDir($newFilePath);
         }
@@ -150,7 +159,7 @@ class UploadHelper
 
 
         try {
-            $fs->rename($item->getPath(), $newFilePath . '/' . $fileName );
+            $fs->rename($item->getPath(), $newFilePath . $fileName );
             $result = true;
         }
         catch (\Exception $e) {
@@ -163,7 +172,7 @@ class UploadHelper
                 pathinfo($fileName, PATHINFO_FILENAME), time(), pathinfo($fileName, PATHINFO_EXTENSION));
 
             try {
-                $fs->rename($item->getPath(), $newFilePath . '/' . $newFileName );
+                $fs->rename($item->getPath(), $newFilePath . $newFileName );
                 $result = true;
             }
             catch (\Exception $e) {
@@ -267,11 +276,13 @@ class UploadHelper
      * @param MediaCategory $category
      * @return mixed|string
      */
-    private function getNewFilename(UploadedFile $file, MediaCategory $category)
+    private function getNewFilename(UploadedFile $file, MediaCategory $category = null)
     {
         $extension = $file->getClientOriginalExtension();
         $newFileName = $this->prepareFilename($file->getClientOriginalName());
-        $newFilePath = $this->uploadPath . $category->getId() . '/' . $newFileName;
+        $newFilePath = $category
+            ? $this->uploadPath . $category->getId() . '/' . $newFileName
+            : $this->uploadPath . $newFileName;
 
         if (file_exists($newFilePath)) {
             $newFileName = str_replace('.' . $extension, '', $newFileName);
