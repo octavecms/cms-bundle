@@ -79,7 +79,9 @@ class UploadHelper
             }
 
             $newFileName = $this->getNewFilename($file, $category);
-            $webPath = $this->webPath . $newFileName;
+            $webPath = $category
+                ? $this->webPath . $category->getId() . '/' . $newFileName
+                : $this->webPath . $newFileName;
 
             $item = $this->itemRepository->create();
             $item->setName($newFileName);
@@ -118,7 +120,9 @@ class UploadHelper
 
         $this->itemManager->deleteItemFile($item);
         $newFileName = $this->getNewFilename($file, $item->getCategory());
-        $webPath = $this->webPath . $newFileName;
+        $webPath = $item->getCategory()
+            ? $this->webPath . $item->getCategory()->getId() . '/' . $newFileName
+            : $this->webPath . $newFileName;
 
         $item->setName($newFileName);
         $item->setPath($webPath);
@@ -145,6 +149,8 @@ class UploadHelper
      */
     public function move(MediaItem $item)
     {
+        $fileName = basename($item->getPath());
+
         $newFilePath = $item->getCategory()
             ? $this->uploadPath . $item->getCategory()->getId()
             : $this->uploadPath . '/';
@@ -153,10 +159,7 @@ class UploadHelper
             $this->createDir($newFilePath);
         }
 
-        $fileName = basename($item->getPath());
-
         $fs = new Filesystem();
-
 
         try {
             $fs->rename($item->getPath(), $newFilePath . $fileName );
@@ -174,11 +177,18 @@ class UploadHelper
             try {
                 $fs->rename($item->getPath(), $newFilePath . $newFileName );
                 $result = true;
+                $fileName = $newFileName;
             }
             catch (\Exception $e) {
                 $result = false;
             }
         }
+
+        $webPath = $item->getCategory()
+            ? $this->webPath . $item->getCategory()->getId() . '/' . $fileName
+            : $this->webPath . $fileName;
+
+        $item->setPath($webPath);
 
         return $result;
     }
