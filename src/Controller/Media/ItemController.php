@@ -74,6 +74,7 @@ class ItemController extends AbstractController
             }
 
             $itemRepository = $this->get('vig.cms.media_item.repository');
+            $uploadHelper = $this->get('vig.cms.media_upload.helper');
 
             foreach ($fileIds as $fileId) {
 
@@ -84,6 +85,7 @@ class ItemController extends AbstractController
                 }
 
                 $item->setCategory($category);
+                $uploadHelper->move($item);
             }
 
             $em->flush();
