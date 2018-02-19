@@ -152,7 +152,7 @@ class UploadHelper
         $fileName = basename($item->getPath());
 
         $newFilePath = $item->getCategory()
-            ? $this->uploadPath . $item->getCategory()->getId()
+            ? $this->uploadPath . $item->getCategory()->getId() . '/'
             : $this->uploadPath . '/';
 
         if (!is_dir($newFilePath)) {
