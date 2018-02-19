@@ -160,9 +160,10 @@ class UploadHelper
         }
 
         $fs = new Filesystem();
+        $originFilePath = str_replace($this->webPath, $this->uploadPath, $item->getPath());
 
         try {
-            $fs->rename($item->getPath(), $newFilePath . $fileName );
+            $fs->rename($originFilePath, $newFilePath . $fileName );
             $result = true;
         }
         catch (\Exception $e) {
@@ -175,7 +176,7 @@ class UploadHelper
                 pathinfo($fileName, PATHINFO_FILENAME), time(), pathinfo($fileName, PATHINFO_EXTENSION));
 
             try {
-                $fs->rename($item->getPath(), $newFilePath . $newFileName );
+                $fs->rename($originFilePath, $newFilePath . $newFileName );
                 $result = true;
                 $fileName = $newFileName;
             }
