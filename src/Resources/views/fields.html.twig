@@ -71,3 +71,41 @@
         });
     </script>
 {% endblock %}
+
+{% block vig_collection_widget %}
+
+    <ul id="items-list"
+        data-prototype="{{ form_widget(form.vars.prototype)|e }}"
+        data-widget-tags="{{ '<li></li>'|e }}">
+        {% for item in form %}
+            <li>
+                {{ form_errors(item) }}
+                {{ form_widget(item) }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="#"
+       class="add-another-collection-widget btn btn-default"
+       data-list="#items-list">Add item</a>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('.add-another-collection-widget').click(function (e) {
+                e.preventDefault();
+                var list = jQuery(jQuery(this).attr('data-list'));
+                var counter = list.data('widget-counter') | list.children().length;
+                if (!counter) {
+                    counter = list.children().length;
+                }
+                var newWidget = list.attr('data-prototype');
+                newWidget = newWidget.replace(/__name__/g, counter);
+                counter++;
+                list.data(' widget-counter', counter);
+                var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+                newElem.appendTo(list);
+            });
+        });
+    </script>
+
+{% endblock %}
