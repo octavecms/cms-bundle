@@ -55,6 +55,15 @@
                                 </button>
                             </p>
 
+                            <% if (data.image) { %>
+                                <p class="media-gridlist-popover-buttons">
+                                    <a class="btn btn-primary js-media-download js-selectable-ignore" download="a.jpg" href="<%= data.image %>">
+                                        <span class="fa fa-download"></span>
+                                        {{ 'download' | trans({}, 'VideInfraCMSBundle') }}
+                                    </a>
+                                </p>
+                            <% } %>
+
                             {% if selectmode %}
                                 <p class="media-gridlist-popover-buttons">
                                     <button type="button" class="btn btn-primary js-media-select-opened">

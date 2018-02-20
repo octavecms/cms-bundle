@@ -70,7 +70,7 @@ class Page
     /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Regex("/^\/(\w+\/?)+$/")
+     * @Assert\Regex("/^\/(\w+\/?)*$/")
      */
     private $path;
 
