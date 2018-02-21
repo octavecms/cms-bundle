@@ -74,7 +74,7 @@
 
 {% block vig_collection_widget %}
 
-    <ul id="items-list"
+    <ul id="{{ id }}"
         data-prototype="{{ form_widget(form.vars.prototype)|e }}"
         data-widget-tags="{{ '<li></li>'|e }}">
         {% for item in form %}
@@ -87,7 +87,7 @@
 
     <a href="#"
        class="add-another-collection-widget btn btn-default"
-       data-list="#items-list">Add item</a>
+       data-list="#{{ id }}">Add item</a>
 
     <script>
         jQuery(document).ready(function () {
