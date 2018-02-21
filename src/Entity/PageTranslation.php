@@ -17,6 +17,12 @@ class PageTranslation
 
     /**
      * @var string
+     * @ORM\Column(type="string", length=512)
+     */
+    private $title;
+
+    /**
+     * @var string
      * @ORM\Column(name="meta_title", type="string", length=512, nullable=true)
      */
     private $metaTitle;
@@ -32,6 +38,22 @@ class PageTranslation
      * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
     private $metaDescription;
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
 
     /**
      * @return string

@@ -30,7 +30,6 @@ class BlockType extends AbstractType
         }
 
         $builder
-            ->add('title', TextType::class)
             ->add('active', CheckboxType::class, [
                 'required' => false
             ])
@@ -58,6 +57,10 @@ class BlockType extends AbstractType
                 'label' => false,
                 'locales' => $options['locales'],
                 'fields' => [
+                    'title' => [
+                        'required' => true,
+                        'field_type' => TextType::class,
+                    ],
                     'metaTitle' => [
                         'field_type' => TextType::class,
                         'required' => false

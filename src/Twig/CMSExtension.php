@@ -33,7 +33,8 @@ class CMSExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('vig_route_exists', [$this, 'routeExists']),
-            new \Twig_SimpleFunction('vig_cms_menu', [$this, 'getMenu'])
+            new \Twig_SimpleFunction('vig_cms_menu', [$this, 'getMenu']),
+            new \Twig_SimpleFunction('vig_current_page', [$this, 'getCurrentPage'])
         ];
     }
 
@@ -66,5 +67,13 @@ class CMSExtension extends \Twig_Extension
         }
 
         return $pageRepository->getTree($page);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCurrentPage()
+    {
+        return $this->container->get('vig.cms.page.manager')->getCurrentPage();
     }
 }

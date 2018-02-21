@@ -30,7 +30,6 @@ class SimpleTextType extends AbstractType
         }
 
         $builder
-            ->add('title', TextType::class)
             ->add('active', CheckboxType::class, [
                 'required' => false
             ])
@@ -54,6 +53,10 @@ class SimpleTextType extends AbstractType
                 'locales' => $options['locales'],
                 'label' => false,
                 'fields' => [
+                    'title' => [
+                        'required' => true,
+                        'field_type' => TextType::class,
+                    ],
                     'metaTitle' => [
                         'field_type' => TextType::class,
                         'required' => false

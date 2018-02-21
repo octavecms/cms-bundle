@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use VideInfra\CMSBundle\Entity\Page;
+use VideInfra\CMSBundle\Entity\PageTranslation;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -81,12 +82,17 @@ class PageController extends AbstractController
             }
 
             $page = $pageRepository->create();
-            $page->setTitle($title);
             $page->setPath($path);
             $page->setType($type->getName());
             $page->setName($type->getName() . '_' . time());
             $page->setParent($parent);
             $page->setPosition($pageRepository->getNewPosition($parent));
+
+            $translation = new PageTranslation();
+            $translation->setTitle($title);
+            $translation->setTranslatable($page);
+            $translation->setLocale($request->getLocale());
+            $page->addTranslation($translation);
 
             $validator = $this->get('validator');
             $errors = $validator->validate($page);
@@ -96,6 +102,7 @@ class PageController extends AbstractController
             }
 
             $em = $this->getDoctrine()->getManager();
+            $em->persist($translation);
             $em->flush();
 
             return new JsonResponse([

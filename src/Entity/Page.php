@@ -38,12 +38,6 @@ class Page
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=512)
-     */
-    private $title;
-
-    /**
      * @var bool
      * @ORM\Column(type="boolean")
      */
@@ -295,22 +289,6 @@ class Page
     public function setActive($active)
     {
         $this->active = $active;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
     }
 
     /**
