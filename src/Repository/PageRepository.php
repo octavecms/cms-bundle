@@ -79,7 +79,7 @@ class PageRepository extends EntityRepository
         /** @var Page $page */
         foreach ($pages as $page) {
 
-            if (!$showHidden && !$page->isIncludeInMenu()) {
+            if (!$showHidden && (!$page->isIncludeInMenu() || !$page->isActive())) {
                 continue;
             }
 
