@@ -15,6 +15,9 @@ class CMSExtension extends \Twig_Extension
     /** @var ContainerInterface */
     private $container;
 
+    /** @var array */
+    private $menu = [];
+
     /**
      * CMSExtension constructor.
      * @param RouterInterface $router
@@ -54,6 +57,10 @@ class CMSExtension extends \Twig_Extension
      */
     public function getMenu($itemName)
     {
+        if (isset($this->menu[$itemName])) {
+            return $this->menu[$itemName];
+        }
+
         $pageRepository = $this->container->get('vig.cms.page.repository');
 
         if ($itemName != 'root') {
@@ -66,7 +73,10 @@ class CMSExtension extends \Twig_Extension
             $page = null;
         }
 
-        return $pageRepository->getTree($page);
+        $result = $pageRepository->getTree($page);
+        $this->menu[$itemName] = $result;
+
+        return $result;
     }
 
     /**
