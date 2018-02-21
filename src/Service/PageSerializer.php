@@ -44,6 +44,7 @@ class PageSerializer
 
         return [
             'id' => $page->getId(),
+            'route' => $page->getName(),
             'name' => $page->getTitle(),
             'parent' => ($page->getParent()) ? $page->getParent()->getId() : 'root',
             'active' => $page->isActive(),
