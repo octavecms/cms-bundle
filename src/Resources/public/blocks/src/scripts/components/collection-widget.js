@@ -2,8 +2,6 @@ import each from 'lodash/each';
 
 const NAMESPACE = 'collection';
 
-const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[collectionorder]"]';
-
 
 class CollectionWidget {
 
@@ -24,16 +22,14 @@ class CollectionWidget {
         const $button  = this.$button  = $element.find('.js-collection-add');
 
         // Item counter
-        this.index = $list.find(ORDER_INPUT_CSS_SELECTOR).length;
-        console.log('Index:', this.index);
+        this.index = $list.children().length;
 
         // Sortable list
         $list
             .sortable({
                 placeholder         : 'form-control-collection__highlight',
                 forcePlaceholderSize: true,
-                zIndex              : 999999,
-                stop                : this._updateBlockOrder.bind(this)
+                zIndex              : 999999
             });
 
         // "Add" button click
@@ -61,15 +57,6 @@ class CollectionWidget {
 
     _updateList () {
         this.$list.sortable('refresh');
-        this._updateBlockOrder();
-    }
-
-    _updateBlockOrder () {
-        var $inputs = this.$list.find(ORDER_INPUT_CSS_SELECTOR);
-
-        $inputs.each(function (index, input) {
-            $(input).val(index);
-        });
     }
 
 
