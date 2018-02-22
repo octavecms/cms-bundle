@@ -39,6 +39,7 @@
     <script>
         $(function () {
             $('#{{ id }}_widget').image();
+            console.log($('#{{ id }}_widget'), $('#{{ id }}_widget').length);
         });
     </script>
 {% endblock %}
@@ -73,39 +74,42 @@
 {% endblock %}
 
 {% block vig_collection_widget %}
-
-    <ul id="{{ id }}"
-        data-prototype="{{ form_widget(form.vars.prototype)|e }}"
-        data-widget-tags="{{ '<li></li>'|e }}">
-        {% for item in form %}
-            <li>
-                {{ form_errors(item) }}
-                {{ form_widget(item) }}
+    <div id="{{ id }}_widget" class="form-control-collection">
+        {% set html %}
+            <li class="well well-small">
+                <a class="btn btn-danger js-collection-remove form-control-collection__remove">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </a>
+                
+                {{ form_widget(form.vars.prototype) }}
             </li>
-        {% endfor %}
-    </ul>
+        {% endset %}
+        
+        <ul class="form-control-collection__list js-collection-list" data-prototype="{{ html|e('html_attr') }}">
+            {% for item in form %}
+                <li class="well well-small">
+                    <a class="btn btn-danger js-collection-remove form-control-collection__remove">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>
 
-    <a href="#"
-       class="add-another-collection-widget btn btn-default"
-       data-list="#{{ id }}">Add item</a>
+                    {{ form_errors(item) }}
+                    {{ form_widget(item) }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="btn-group">
+            <a class="btn btn-primary sonata-action-element js-collection-add">
+                <i class="fa fa-plus"></i>
+                {{ 'add_collection_item' | trans({}, 'VideInfraCMSBundle') }}
+            </a>
+        </div>
+    </div>
 
     <script>
-        jQuery(document).ready(function () {
-            jQuery('.add-another-collection-widget').click(function (e) {
-                e.preventDefault();
-                var list = jQuery(jQuery(this).attr('data-list'));
-                var counter = list.data('widget-counter') | list.children().length;
-                if (!counter) {
-                    counter = list.children().length;
-                }
-                var newWidget = list.attr('data-prototype');
-                newWidget = newWidget.replace(/__name__/g, counter);
-                counter++;
-                list.data(' widget-counter', counter);
-                var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
-                newElem.appendTo(list);
-            });
+        $(function () {
+            console.log($('#{{ id }}_widget'));
+            $('#{{ id }}_widget').collection();
         });
     </script>
-
 {% endblock %}

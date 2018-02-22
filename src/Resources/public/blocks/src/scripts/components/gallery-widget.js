@@ -25,7 +25,7 @@ class GalleryWidget {
         const $button  = this.$button  = $element.find('.js-gallery-add');
 
         // Item counter
-        this.index = $list.find(ORDER_INPUT_CSS_SELECTOR).length;
+        this.index = $list.children().length;
 
         // Sortable list
         $list
@@ -33,8 +33,7 @@ class GalleryWidget {
                 placeholder         : 'form-control-gallery__highlight',
                 // handle              : '.form-control-image__preview',
                 forcePlaceholderSize: true,
-                zIndex              : 999999,
-                stop                : this._updateBlockOrder.bind(this)
+                zIndex              : 999999
             });
 
         // "Add" button click
@@ -65,15 +64,6 @@ class GalleryWidget {
 
     _updateList () {
         this.$list.sortable('refresh');
-        this._updateBlockOrder();
-    }
-
-    _updateBlockOrder () {
-        var $inputs = this.$list.find(ORDER_INPUT_CSS_SELECTOR);
-
-        $inputs.each(function (index, input) {
-            $(input).val(index);
-        });
     }
 
 

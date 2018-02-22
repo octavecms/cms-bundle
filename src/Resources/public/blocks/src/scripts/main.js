@@ -6,3 +6,4 @@ import './components/block-list';
 import './components/media-trigger';
 import './components/image-widget';
 import './components/gallery-widget';
+import './components/collection-widget';
