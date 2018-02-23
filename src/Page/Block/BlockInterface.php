@@ -34,6 +34,11 @@ interface BlockInterface
     /**
      * @return array
      */
+    public function getTemplateParameters();
+
+    /**
+     * @return array
+     */
     public function getOptions();
 
     /**

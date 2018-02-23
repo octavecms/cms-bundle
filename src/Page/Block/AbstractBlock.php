@@ -25,4 +25,12 @@ abstract class AbstractBlock implements BlockInterface
     {
         return $block->getContent();
     }
+
+    /**
+     * @return array
+     */
+    public function getTemplateParameters()
+    {
+        return [];
+    }
 }
