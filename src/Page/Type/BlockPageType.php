@@ -2,6 +2,10 @@
 
 namespace VideInfra\CMSBundle\Page\Type;
 
+use VideInfra\CMSBundle\Entity\Block;
+use VideInfra\CMSBundle\Entity\BlockTranslation;
+use VideInfra\CMSBundle\Entity\Page;
+
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
@@ -47,5 +51,29 @@ class BlockPageType extends BasePageType
     public function getLabel()
     {
         return 'Blocks';
+    }
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    public function serialize(Page $page)
+    {
+        $content = [];
+
+        $blocks = $page->getBlocks();
+
+        /** @var Block $block */
+        foreach ($blocks as $block) {
+
+            $content['blocks'][$block->getId()]['content'] = $block->getContent();
+
+            /** @var BlockTranslation $translation */
+            foreach ($block->getTranslations() as $translation) {
+                $content['blocks'][$block->getId()]['translations'][$translation->getLocale()] = $translation->getContent();
+            }
+        }
+
+        return $content;
     }
 }

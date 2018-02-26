@@ -40,4 +40,16 @@ interface PageTypeInterface
      * @return void
      */
     public function setRoutes(RouteCollection $routes, Page $page);
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    public function serialize(Page $page);
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    public function unserialize(Page $page);
 }

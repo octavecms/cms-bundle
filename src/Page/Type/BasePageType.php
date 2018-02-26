@@ -14,4 +14,22 @@ abstract class BasePageType implements PageTypeInterface
      * @param Page $page
      */
     public function setRoutes(RouteCollection $routes, Page $page) {}
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    public function serialize(Page $page)
+    {
+        return null;
+    }
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    public function unserialize(Page $page)
+    {
+        return [];
+    }
 }

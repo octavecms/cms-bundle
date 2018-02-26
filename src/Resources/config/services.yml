@@ -40,6 +40,11 @@ services:
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ VideInfraCMSBundle:MediaItem ]
 
+    vig.cms.page_version.repository:
+        class: VideInfra\CMSBundle\Repository\PageVersionRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        arguments: [ VideInfraCMSBundle:PageVersion ]
+
     # Commands
     vig.cms.page.create.command:
         class: VideInfra\CMSBundle\Command\CreatePageCommand
@@ -104,6 +109,13 @@ services:
             - '@vig.cms.page.repository'
             - '@request_stack'
             - '@security.authorization_checker'
+
+    vig.cms.page.version.manager:
+        class: VideInfra\CMSBundle\Service\PageVersionManager
+        arguments:
+            - '@vig.cms.page.manager'
+            - '@vig.cms.page_version.repository'
+            - '@doctrine.orm.entity_manager'
 
     vig.cms.block.manager:
         class: VideInfra\CMSBundle\Service\BlockManager
