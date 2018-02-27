@@ -49,6 +49,9 @@ class PageVersionManager
         }
 
         $content = $type->serialize($page);
+        if (!$content) {
+            return null;
+        }
 
         $lastVersion = $this->versionRepository->findLast($page);
 
