@@ -36,10 +36,11 @@ class PageVersionManager
 
     /**
      * @param Page $page
+     * @param null $version
      * @return \VideInfra\CMSBundle\Entity\PageVersion
      * @throws \Exception
      */
-    public function storeVersion(Page $page)
+    public function storeVersion(Page $page, $version = null)
     {
         /** @var PageTypeInterface $type */
         $type = $this->pageManager->getType($page->getType());
@@ -50,13 +51,41 @@ class PageVersionManager
         $content = $type->serialize($page);
 
         $lastVersion = $this->versionRepository->findLast($page);
-        $number = $lastVersion ? ($lastVersion->getVersion() + 1) : 1;
 
-        $newVersion = $this->versionRepository->create($page, $number);
+        if ($version) {
+            $number = $version;
+        }
+        else {
+            $number = $lastVersion ? ($lastVersion->getVersion() + 1) : 1;
+        }
+
+        $newVersion = $this->versionRepository->fetchOrCreate($page, $number);
         $newVersion->setContent(json_encode($content));
 
         $this->entityManager->flush();
 
         return $newVersion;
+    }
+
+    /**
+     * @param Page $page
+     * @param $number
+     * @return Page
+     * @throws \Exception
+     */
+    public function restoreVersion(Page $page, $number)
+    {
+        $pageVersion = $this->versionRepository->findOneByVersion($page, $number);
+
+        /** @var PageTypeInterface $type */
+        $type = $this->pageManager->getType($page->getType());
+        if (!$type) {
+            throw new \Exception(sprintf('Unknown type %s', $page->getType()));
+        }
+
+        $page =$type->unserialize($pageVersion);
+        $this->entityManager->flush();
+
+        return $page;
     }
 }

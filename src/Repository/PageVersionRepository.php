@@ -29,6 +29,21 @@ class PageVersionRepository extends EntityRepository
 
     /**
      * @param Page $page
+     * @param $number
+     * @return mixed|PageVersion
+     */
+    public function fetchOrCreate(Page $page, $number)
+    {
+        $version = $this->findOneByVersion($page, $number);
+        if (!$version) {
+            $version = $this->create($page, $number);
+        }
+
+        return $version;
+    }
+
+    /**
+     * @param Page $page
      * @return PageVersion
      */
     public function findLast(Page $page)
@@ -40,5 +55,15 @@ class PageVersionRepository extends EntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param Page $page
+     * @param $number
+     * @return mixed
+     */
+    public function findOneByVersion(Page $page, $number)
+    {
+        return $this->findOneBy(['page' => $page, 'version' => $number]);
     }
 }

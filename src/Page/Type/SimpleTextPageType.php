@@ -2,6 +2,8 @@
 
 namespace VideInfra\CMSBundle\Page\Type;
 
+use VideInfra\CMSBundle\Entity\Page;
+
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
@@ -47,5 +49,10 @@ class SimpleTextPageType extends BasePageType
     public function getLabel()
     {
         return 'Text';
+    }
+
+    public function serialize(Page $page)
+    {
+
     }
 }

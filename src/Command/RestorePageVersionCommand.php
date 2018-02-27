@@ -10,21 +10,26 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
  */
-class StorePageVersionCommand extends ContainerAwareCommand
+class RestorePageVersionCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('vig:cms:store-page')
+        $this->setName('vig:cms:restore-page')
             ->addArgument('page', InputArgument::REQUIRED)
-            ->addArgument('version', InputArgument::OPTIONAL)
+            ->addArgument('version', InputArgument::REQUIRED)
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $pageId = $input->getArgument('page');
-        $version = $input->getArgument('version');
-
+        $number = $input->getArgument('version');
         $pageRepository = $this->getContainer()->get('vig.cms.page.repository');
 
         $page = $pageRepository->find($pageId);
@@ -33,6 +38,6 @@ class StorePageVersionCommand extends ContainerAwareCommand
         }
 
         $versionManager = $this->getContainer()->get('vig.cms.page.version.manager');
-        $versionManager->storeVersion($page, $version);
+        $versionManager->restoreVersion($page, $number);
     }
 }
