@@ -152,7 +152,7 @@ class Page
      */
     public function __toString()
     {
-        return (string) $this->title;
+        return (string) $this->translate()->getTitle();
     }
 
     /**
