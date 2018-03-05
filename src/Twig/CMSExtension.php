@@ -42,6 +42,16 @@ class CMSExtension extends \Twig_Extension
     }
 
     /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return [
+            new \Twig_SimpleFilter('vig_resize', [$this, 'resize'])
+        ];
+    }
+
+    /**
      * @param $name
      * @return bool
      */
@@ -85,5 +95,16 @@ class CMSExtension extends \Twig_Extension
     public function getCurrentPage()
     {
         return $this->container->get('vig.cms.page.manager')->getCurrentPage();
+    }
+
+    /**
+     * @param $path
+     * @param $width
+     * @param $height
+     * @return string
+     */
+    public function resize($path, $width, $height)
+    {
+        return $this->container->get('vig.cms.image.processor')->resize($path, $width, $height);
     }
 }

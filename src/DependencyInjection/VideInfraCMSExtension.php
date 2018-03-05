@@ -33,6 +33,10 @@ class VideInfraCMSExtension extends Extension
             $container->setParameter('vig.cms.media.upload_dir', $config['media_upload_path']);
         }
 
+        if (isset($config['media_resized_path'])) {
+            $container->setParameter('vig.cms.media.resized_dir', $config['media_resized_path']);
+        }
+
         $container->addAliases([
             'vig.cms.media_gallery_item.data_transformer' => $config['media_gallery_item_transformer']
                 ?? 'vig.cms.media_gallery_item.data_transformer.default',

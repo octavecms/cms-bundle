@@ -126,6 +126,13 @@ services:
         arguments:
             - '@vig.cms.page.manager'
 
+    vig.cms.image.processor:
+        class: VideInfra\CMSBundle\Service\ImageProcessor
+        arguments:
+            - '%kernel.root_dir%'
+            - '%vig.cms.media.upload_dir%'
+            - '%vig.cms.media.resized_dir%'
+
     vig.cms.media_category.tree_builder:
         class: VideInfra\CMSBundle\Service\MediaCategoryTreeBuilder
 
