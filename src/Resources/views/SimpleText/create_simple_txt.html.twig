@@ -32,7 +32,9 @@
         <div class="col-md-12">
 
             <div class="box box-primary">
-                <div class="box-header"><h4>{{ 'general' | trans({}, 'VideInfraCMSBundle') }}</h4></div>
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'general' | trans({}, 'VideInfraCMSBundle') }}</h3>
+                </div>
                 <div class="box-body">
                     {% if isAdmin %}
                         {{ form_row(form.name) }}
@@ -50,7 +52,9 @@
 
         <div class="col-md-12">
             <div class="box box-primary">
-                <div class="box-header"><h4>{{ 'seo' | trans({}, 'VideInfraCMSBundle') }}</h4></div>
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'seo' | trans({}, 'VideInfraCMSBundle') }}</h3>
+                </div>
                 <div class="box-body">
                     {{ form_row(form.translations) }}
                 </div>

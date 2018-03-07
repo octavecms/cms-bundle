@@ -59,13 +59,16 @@ class BlocksList {
         var $item = $(event.target).closest(this.$container.children());
 
         if ($item.length) {
-            $item.slideUp('fast', (function () {
-                $item.remove();
-                this.updateList();
-            }).bind(this));
+            const message = `Are you sure you want to delete the selected block?`;
+
+            if (confirm(message)) {
+                $item.slideUp('fast', (function () {
+                    $item.remove();
+                    this.updateList();
+                }).bind(this));
+            }
         }
     }
-
 }
 
 
