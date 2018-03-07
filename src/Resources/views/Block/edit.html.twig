@@ -147,6 +147,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/blocks/dist/main.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/media/dist/main.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
@@ -155,4 +156,5 @@
         var MEDIA_LIBRARY_URL = '{{ path('media_list', {'select_mode': '1'}) }}';
     </script>
     <script src="{{ asset('bundles/videinfracms/blocks/dist/main.js') }}"></script>
+    <script src="{{ asset('bundles/videinfracms/media/dist/main.js') }}"></script>
 {% endblock %}
