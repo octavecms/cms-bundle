@@ -4,9 +4,58 @@
 
  .navbar-blocks {
     margin-top: 10px;
+    position: relative;
+    margin: 0 -15px;
+
+    display: flex;
+
+    ul {
+        max-width: 100%;
+        display: flex;
+        overflow-x: scroll;
+
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        flex-grow: 1;
+        flex-shrink: 1;
+        
+        > li > a {
+            display: block;
+            padding: 15px;
+            line-height: 20px;
+        }
+        > li:first-child > a {
+            margin-left: 0;
+        }
+    }
 
     .content-header &.navbar-right:last-child {
         margin-right: -15px;
+    }
+
+    &__previous,
+    &__next {
+        color: #97a0b3;
+        font-size: 12px;
+        padding: 5px;
+
+        flex-grow: 0;
+        flex-shrink: 0;
+
+        cursor: pointer;
+
+        &.disabled {
+            cursor: default;
+            opacity: 0.65;
+        }
+    }
+    &__previous {
+        padding: 20px 15px 0 10px;
+    }
+    &__next {
+        padding: 20px 10px 0 15px;
     }
 }
 
