@@ -6,11 +6,13 @@ parameters:
 
     vig.cms.block_controller: 'VideInfraCMSBundle:Block:show'
     vig.cms.block_template: 'VideInfraCMSBundle:Block:show.html.twig'
-    vig.cms.text.block.template: 'VideInfraCMSBundle:Block:text.html.twig'
-    vig.cms.textarea.block.template: 'VideInfraCMSBundle:Block:textarea.html.twig'
-    vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
-    vig.cms.image.block.template: 'VideInfraCMSBundle:Block:image.html.twig'
-    vig.cms.gallery.block.template: 'VideInfraCMSBundle:Block:gallery.html.twig'
+
+    vig.cms.text.block.template: 'VideInfraCMSBundle:Blocks:text.html.twig'
+    vig.cms.textarea.block.template: 'VideInfraCMSBundle:Blocks:textarea.html.twig'
+    vig.cms.editor.block.template: 'VideInfraCMSBundle:Blocks:editor.html.twig'
+    vig.cms.image.block.template: 'VideInfraCMSBundle:Blocks:image.html.twig'
+    vig.cms.gallery.block.template: 'VideInfraCMSBundle:Blocks:gallery.html.twig'
+
     vig.cms.page_use_versions: true
 
     locales: ['en']
