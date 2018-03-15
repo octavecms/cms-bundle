@@ -18,9 +18,10 @@ class BlockController extends Controller
     /**
      * @param Request $request
      * @param Page|null $page
+     * @param null $version
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, Page $page = null)
+    public function editAction(Request $request, Page $page = null, $version = null)
     {
         $isNew = !$page;
         $blockManager = $this->get('vig.cms.block.manager');
@@ -29,6 +30,7 @@ class BlockController extends Controller
             ? $this->get('security.authorization_checker')
                 ->isGranted($this->getParameter('vig.cms.super_admin_role'))
             : true;
+        $isPublish = $request->get('publish');
 
         if (!$page) {
             $page = $pageRepository->create();
@@ -73,7 +75,12 @@ class BlockController extends Controller
                 $block->setPage($page);
             }
 
-            $em->flush();
+            if (!$isPublish && $version) {
+                $this->get('vig.cms.page.version.manager')->storeVersion($page, $version);
+            }
+            else {
+                $em->flush();
+            }
 
             if (!$isNew) {
 
@@ -81,7 +88,13 @@ class BlockController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_edit', ['id' => $page->getId()]);
+
+                    $options = ['id' => $page->getId()];
+                    if ($version) {
+                        $options['version'] = $version;
+                    }
+
+                    return $this->redirectToRoute('sitemap_page_edit', $options);
                 }
             }
             else {
@@ -98,7 +111,8 @@ class BlockController extends Controller
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
+            'version' => $version
         ]);
     }
 

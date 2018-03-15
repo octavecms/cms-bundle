@@ -26,10 +26,11 @@ class PageController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @param null $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction($id = null)
+    public function editAction(Request $request, $id = null)
     {
         $page = $this->get('vig.cms.page.repository')->find($id);
         if (!$page) {
@@ -37,7 +38,31 @@ class PageController extends AbstractController
         }
 
         $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
-        return $this->forward($pageType->getController(), ['page' => $page]);
+
+        $usePageVersions = $this->getParameter('vig.cms.page_use_versions');
+        $version = $request->get('version');
+        $isPublish = $request->get('publish');
+
+        $options = ['page' => $page];
+
+        if ($usePageVersions && $version && !$isPublish) {
+
+            $versionRepository = $this->get('vig.cms.page_version.repository');
+
+            $pageVersion = $versionRepository->findOneByVersion($page, $version);
+            if (!$pageVersion) {
+                   $pageVersion = $versionRepository->create($page, $version);
+                   $pageVersion->setContent(json_encode($pageType->serialize($page)));
+                   $this->getDoctrine()->getManager()->flush($pageVersion);
+            }
+            else {
+                $page = $pageType->unserialize($pageVersion);
+            }
+
+            $options = ['page' => $page, 'version' => $version];
+        }
+
+        return $this->forward($pageType->getController(), $options);
     }
 
     /**
@@ -137,7 +162,7 @@ class PageController extends AbstractController
             }
 
             $type = $this->get('vig.cms.page_type.factory')->get($page->getType());
-            if (!$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
+            if ($type->canCreateRole() && !$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
                 throw new AccessDeniedException(sprintf('You are not allowed to remove page with %s type',
                     $page->getType()));
             }

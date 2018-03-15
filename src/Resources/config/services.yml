@@ -11,6 +11,8 @@ parameters:
     vig.cms.editor.block.template: 'VideInfraCMSBundle:Block:editor.html.twig'
     vig.cms.image.block.template: 'VideInfraCMSBundle:Block:image.html.twig'
     vig.cms.gallery.block.template: 'VideInfraCMSBundle:Block:gallery.html.twig'
+    vig.cms.page_use_versions: true
+
     locales: ['en']
 
 services:
@@ -155,6 +157,7 @@ services:
         class: VideInfra\CMSBundle\Service\PageSerializer
         arguments:
             - '@router'
+            - '%vig.cms.page_use_versions%'
 
     vig.cms.media_upload.helper:
         class: VideInfra\CMSBundle\Service\UploadHelper

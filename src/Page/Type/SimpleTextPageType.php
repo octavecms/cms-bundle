@@ -2,6 +2,7 @@
 
 namespace VideInfra\CMSBundle\Page\Type;
 
+use VideInfra\CMSBundle\Entity\Content;
 use VideInfra\CMSBundle\Entity\ContentTranslation;
 use VideInfra\CMSBundle\Entity\Page;
 use VideInfra\CMSBundle\Entity\PageVersion;
@@ -62,6 +63,14 @@ class SimpleTextPageType extends BasePageType
         $output = [];
 
         $content = $page->getContent();
+        if (!$content) return $output;
+
+        $output['name'] = $page->getName();
+        $output['path'] = $page->getPath();
+        $output['active'] = $page->isActive();
+        $output['include_in_menu'] = $page->isIncludeInMenu();
+        $output['include_in_sitemap'] = $page->isIncludeInSitemap();
+
         $output['template'] = $content->getTemplate();
 
         /**
@@ -84,25 +93,39 @@ class SimpleTextPageType extends BasePageType
         $page = $version->getPage();
         $data = json_decode($version->getContent(), true);
 
+        $page->setName($data['name'] ?? null);
+        $page->setPath($data['path'] ?? null);
+        $page->setActive($data['active'] ?? null);
+        $page->setIncludeInMenu($data['include_in_menu'] ?? null);
+        $page->setIncludeInSitemap($data['include_in_sitemap'] ?? null);
+
         $content = $page->getContent();
-        $content->setTemplate($data['template']);
+        if (!$content) {
+            $content = new Content();
+            $content->setPage($page);
+            $page->setContent($content);
+        }
+        $content->setTemplate($data['template'] ?? null);
 
         $translations = [];
         foreach ($content->getTranslations() as $locale => $translation) {
             $translations[$locale] = $translation;
         }
 
-        foreach ($data['translations'] as $locale => $text) {
+        if (isset($data['translations'])) {
+            foreach ($data['translations'] as $locale => $text) {
 
-            $translation = $translations[$locale] ?? null;
+                $translation = $translations[$locale] ?? null;
 
-            if (!$translation) {
-                $translation = new ContentTranslation();
-                $translation->setTranslatable($content);
-                $translation->setLocale($locale);
+                if (!$translation) {
+                    $translation = new ContentTranslation();
+                    $translation->setTranslatable($content);
+                    $translation->setLocale($locale);
+                    $content->addTranslation($translation);
+                }
+
+                $translation->setText($text);
             }
-
-            $translation->setText($text);
         }
 
         return $page;

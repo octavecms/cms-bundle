@@ -15,7 +15,13 @@
                     {% if isNew %}
                         {{ 'add_new' | trans({}, 'VideInfraCMSBundle') }}
                     {% else %}
-                        {{ 'edit' | trans({}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+
+                        {% if version %}
+                            {{ 'edit_version' | trans({'%version%' : version}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+                        {% else %}
+                            {{ 'edit' | trans({}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+                        {% endif %}
+
                     {% endif %}
                 </a>
             </div>
@@ -159,6 +165,11 @@
 
 
     <div class="sonata-ba-form-actions well well-small form-actions">
+
+        {% if version %}
+            <button class="btn btn-primary" type="submit" name="publish" value="1">{{ 'publish' | trans({}, 'VideInfraCMSBundle') }}</button>
+        {% endif %}
+
         {% if isNew %}
             <button class="btn btn-success" type="submit" name="create_and_list" value="1">{{ 'create_and_list' | trans({}, 'VideInfraCMSBundle') }}</button>
             <button class="btn btn-success" type="submit" name="create_and_create" value="1">{{ 'create_and_create' | trans({}, 'VideInfraCMSBundle') }}</button>

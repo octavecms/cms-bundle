@@ -64,7 +64,7 @@ class Page
     /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Regex("/^\/(\w+\/?)*$/")
+     * @Assert\NotBlank()
      */
     private $path;
 
@@ -364,6 +364,14 @@ class Page
     public function setBlocks($blocks)
     {
         $this->blocks = $blocks;
+    }
+
+    /**
+     * @param $block
+     */
+    public function addBlock($block)
+    {
+        $this->blocks[] = $block;
     }
 
     /**

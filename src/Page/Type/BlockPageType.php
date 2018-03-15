@@ -62,6 +62,12 @@ class BlockPageType extends BasePageType
     {
         $content = [];
 
+        $content['name'] = $page->getName();
+        $content['path'] = $page->getPath();
+        $content['active'] = $page->isActive();
+        $content['include_in_menu'] = $page->isIncludeInMenu();
+        $content['include_in_sitemap'] = $page->isIncludeInSitemap();
+
         $blocks = $page->getBlocks();
 
         /** @var Block $block */
@@ -94,6 +100,14 @@ class BlockPageType extends BasePageType
     public function unserialize(PageVersion $version)
     {
         $page = $version->getPage();
+        $content = json_decode($version->getContent(), true);
+
+        $page->setName($content['name'] ?? null);
+        $page->setPath($content['path'] ?? null);
+        $page->setActive($content['active'] ?? null);
+        $page->setIncludeInMenu($content['include_in_menu'] ?? null);
+        $page->setIncludeInSitemap($content['include_in_sitemap'] ?? null);
+
         $blocks = [];
 
         /** @var Block $block */
@@ -101,37 +115,40 @@ class BlockPageType extends BasePageType
             $blocks[$block->getId()] = $block;
         }
 
-        $content = json_decode($version->getContent(), true);
-        foreach ($content['blocks'] as $blockId => $block) {
+        if (isset($content['blocks'])) {
+            foreach ($content['blocks'] as $blockId => $block) {
 
-            /** @var Block $blockEntity */
-            $blockEntity = $blocks[$blockId] ?? null;
+                /** @var Block $blockEntity */
+                $blockEntity = $blocks[$blockId] ?? null;
 
-            if (!$blockEntity) {
-                $blockEntity = new Block();
-                $blockEntity->setPage($page);
-            }
-
-            $blockEntity->setType($block['type']);
-            $blockEntity->setOrder($block['order']);
-            $blockEntity->setContent($block['content']);
-
-            if (isset($block['translations'])) {
-
-                $translations = [];
-                foreach ($blockEntity->getTranslations() as $locale => $translation) {
-                    $translations[$locale] = $translation;
+                if (!$blockEntity) {
+                    $blockEntity = new Block();
+                    $blockEntity->setPage($page);
+                    $page->addBlock($blockEntity);
                 }
 
-                foreach ($block['translations'] as $locale => $translationContent) {
-                    $translationEntity = $translations[$locale] ?? null;
-                    if (!$translationEntity) {
-                        $translationEntity = new BlockTranslation();
-                        $translationEntity->setTranslatable($blockEntity);
-                        $translationEntity->setLocale($locale);
+                $blockEntity->setType($block['type']);
+                $blockEntity->setOrder($block['order']);
+                $blockEntity->setContent($block['content']);
+
+                if (isset($block['translations'])) {
+
+                    $translations = [];
+                    foreach ($blockEntity->getTranslations() as $locale => $translation) {
+                        $translations[$locale] = $translation;
                     }
 
-                    $translationEntity->setContent($translationContent);
+                    foreach ($block['translations'] as $locale => $translationContent) {
+                        $translationEntity = $translations[$locale] ?? null;
+                        if (!$translationEntity) {
+                            $translationEntity = new BlockTranslation();
+                            $translationEntity->setTranslatable($blockEntity);
+                            $translationEntity->setLocale($locale);
+                            $blockEntity->addTranslation($translationEntity);
+                        }
+
+                        $translationEntity->setContent($translationContent);
+                    }
                 }
             }
         }

@@ -18,6 +18,7 @@ class SitemapController extends CRUDController
         $pages = $this->get('vig.cms.page.repository')->getTree(null, true);
 
         return $this->render('VideInfraCMSBundle:Sitemap:list.html.twig', [
+            'usePageVersions' => $this->getParameter('vig.cms.page_use_versions'),
             'page_types' => $pageTypes,
             'root_page' => [
                 'id' => 'root',

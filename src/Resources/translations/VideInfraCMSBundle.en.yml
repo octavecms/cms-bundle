@@ -4,6 +4,7 @@ create_and_create: Create and add another
 update_and_list: Update and close
 update_and_edit: Update
 edit: Edit
+edit_version: Edit version "%version%" of page
 add_new: Add new
 return_to_list: Return to list
 actions: Actions
@@ -37,3 +38,4 @@ page_path: Path
 page_create: Create
 page_cancel: Cancel
 add_collection_item: Add item
+publish: Publish

@@ -59,13 +59,13 @@ class PageVersionManager
             $number = $version;
         }
         else {
-            $number = $lastVersion ? ($lastVersion->getVersion() + 1) : 1;
+            $number = $lastVersion ? ((int) $lastVersion->getVersion() + 1) : 1;
         }
 
         $newVersion = $this->versionRepository->fetchOrCreate($page, $number);
         $newVersion->setContent(json_encode($content));
 
-        $this->entityManager->flush();
+        $this->entityManager->flush($newVersion);
 
         return $newVersion;
     }
