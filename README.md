@@ -20,7 +20,7 @@ Require the bundle
 
 ```json
 "require": {
-    ... some repositories
+    ... 
     "vig/cms-bundle": "^1.0.0"
 }
 ```
@@ -62,11 +62,7 @@ vide_infra_cms:
     simple_text_templates:
         default:
             label: 'Default'
-            path: '::default.html.twig'
-
-        template2:
-            label: 'Empty'
-            path: '::empty.html.twig'    
+            path: 'VideInfraCMSBundle:SimpleText:show.html.twig'
 ```
 
 Define CMS group in your SonataAdminBundle configuration:
