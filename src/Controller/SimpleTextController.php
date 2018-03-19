@@ -17,9 +17,10 @@ class SimpleTextController extends Controller
     /**
      * @param Request $request
      * @param Page|null $page
+     * @param null $version
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, Page $page = null)
+    public function editAction(Request $request, Page $page = null, $version = null)
     {
         $isNew = !$page;
         $pageRepository = $this->get('vig.cms.page.repository');
@@ -28,6 +29,7 @@ class SimpleTextController extends Controller
                 ->isGranted($this->getParameter('vig.cms.super_admin_role'))
             : true;
         $templates = $this->get('vig.cms.page.manager')->getSimpleTextTemplatesAsChoices();
+        $isPublish = $request->get('publish');
 
         if (!$page) {
             $page = $pageRepository->create();
@@ -50,28 +52,42 @@ class SimpleTextController extends Controller
                 $page->setName(sprintf('simple_text_%s', time()));
             }
 
-            $content = $page->getContent();
-            $content->setPage($page);
+            if (!$isPublish && $version) {
+                $this->get('vig.cms.page.version.manager')->storeVersion($page, $version);
+            }
+            else {
+                $content = $page->getContent();
+                $content->setPage($page);
 
-            /** @var EntityManager $em */
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
+                /** @var EntityManager $em */
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+            }
 
             if ($emptyName) {
                 $page->setName(sprintf('simple_text_%d', $page->getId()));
             }
+
             $page->setController($this->getParameter('vig.cms.simple_text_controller'));
             $page->setOption('id', $page->getId());
 
-            $em->flush();
+            if ($isPublish) {
+                $em->flush();
+            }
 
             if (!$isNew) {
 
-                if ($request->get('update_and_list')) {
+                if ($request->get('update_and_list') || $isPublish) {
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_edit', ['id' => $page->getId()]);
+
+                    $options = ['id' => $page->getId()];
+                    if ($version) {
+                        $options['version'] = $version;
+                    }
+
+                    return $this->redirectToRoute('sitemap_page_edit', $options);
                 }
             }
             else {
@@ -88,7 +104,8 @@ class SimpleTextController extends Controller
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
+            'version' => $version
         ]);
     }
 

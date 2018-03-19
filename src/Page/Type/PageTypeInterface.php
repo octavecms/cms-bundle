@@ -3,6 +3,7 @@
 namespace VideInfra\CMSBundle\Page\Type;
 use Symfony\Component\Routing\RouteCollection;
 use VideInfra\CMSBundle\Entity\Page;
+use VideInfra\CMSBundle\Entity\PageVersion;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -40,4 +41,16 @@ interface PageTypeInterface
      * @return void
      */
     public function setRoutes(RouteCollection $routes, Page $page);
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    public function serialize(Page $page);
+
+    /**
+     * @param PageVersion $version
+     * @return Page
+     */
+    public function unserialize(PageVersion $version);
 }

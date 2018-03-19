@@ -65,8 +65,12 @@ class BlockManager
                 throw new \Exception(sprintf('Unknown type: %s', $blockEntity->getType()));
             }
 
-            $content .= $this->templating->render($blockType->getContentTemplate(),
-                ['content' => $blockEntity->getContent(), 'title' => $blockEntity->getTitle()]);
+            $blockParameters = array_merge([
+                'content' => $blockType->getContent($blockEntity),
+                'title' => $blockEntity->getTitle()
+            ], $blockType->getTemplateParameters());
+
+            $content .= $this->templating->render($blockType->getContentTemplate(), $blockParameters);
         }
 
         return $content;

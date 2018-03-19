@@ -170,8 +170,6 @@ export default class SitemapTreeView {
                 helper  : 'clone',
                 zIndex  : 999999,
                 cursorAt: { left: -10, top: -10 },
-                // start   : this.handleTreeItemDragStart.bind(this),
-                // stop    : this.handleTreeItemDragEnd.bind(this),
                 appendTo: this.$container,
 
                 start   : this.handleDragStart.bind(this),
@@ -203,9 +201,6 @@ export default class SitemapTreeView {
     handleDropOver (e, ui) {
         const $item = $(e.target);
 
-        // $item
-        //     .addClass('ui-draggable-target')
-        //     .addClass('ui-draggable-target--inside');
         this.handleSortDrag(e, ui);
         this.expand($item);
     }
@@ -220,14 +215,15 @@ export default class SitemapTreeView {
 
     handleDropDrop (e, ui) {
         this.handleDropOut(e, ui);
+        if (!this.dropTarget) return;
 
         const store = this.store;
         const state = store.getState();
         const target = this.dropTarget;
         let   parent = target;
         const position = this.dropPosition;
-        const id = ui.draggable.data('id');
-        const type = ui.draggable.data('sitemapAddType');
+        const id = ui.draggable ? ui.draggable.data('id') : this.dragging;
+        const type = ui.draggable ? ui.draggable.data('sitemapAddType') : this.draggingType;
         const states = this.states;
 
         if (position === 'before' || position === 'after') {
@@ -255,12 +251,18 @@ export default class SitemapTreeView {
     }
 
     handleDragStart (e, ui) {
-        const parent = $(e.target).data('id');
-        this.dragging = parent;
+        const $target = $(e.target);
+        this.dragging = $target.data('id');
+        this.draggingType = $target.data('sitemapAddType');
     }
 
     handleDragEnd (e, ui) {
+        if (this.dragging || this.draggingType) {
+            this.handleDropDrop(e, ui);
+        }
+        
         this.dragging = null;
+        this.draggingType = null;
     }
 
     handleSortDrag (e, ui) {
@@ -269,7 +271,7 @@ export default class SitemapTreeView {
 
         if (id && id !== this.dragging) {
             const position = this.getDragDropPosition(e, ui);
-
+            
             this.dropTarget = position ? id : null;
             this.dropPosition = position;
 

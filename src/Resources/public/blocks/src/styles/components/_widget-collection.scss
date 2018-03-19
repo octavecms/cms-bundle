@@ -1,0 +1,37 @@
+.form-control-collection {
+    &__list {
+        list-style: none;
+        margin: 0 0 20px;
+        padding: 0;
+
+        > li {
+            position: relative;
+            margin: 0;
+            border-radius: 0px;
+        }
+        > li:first-child {
+            border-radius: 4px 4px 0 0;
+            margin-top: 20px;
+        }
+        > li:last-child {
+            border-radius: 0 0 4px 4px;
+        }
+        > li:first-child:last-child {
+            border-radius: 4px;
+        }
+    }
+
+    &__remove {
+        position: absolute;
+        right: 19px;
+        top: 19px;
+    }
+
+    &__highlight {
+        padding: 19px;
+        background: #f5f5f5;
+        border: 1px solid #e3e3e3;
+        height: 175px;
+        opacity: 0.5;
+    }
+}

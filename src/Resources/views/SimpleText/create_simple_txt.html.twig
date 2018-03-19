@@ -6,32 +6,14 @@
         <nav class="navbar navbar-default" role="navigation" style="width: auto;">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">{{ 'edit' | trans({}, 'VideInfraCMSBundle') }} "{{ page.title }}"</a>
-                </div>
+                    <a class="navbar-brand" href="#">
+                        {% if version %}
+                            {{ 'edit_version' | trans({'%version%' : version}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+                        {% else %}
+                            {{ 'edit' | trans({}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+                        {% endif %}
 
-                <div class="navbar-collapse">
-                    <div class="navbar-left"></div>
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown sonata-actions">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ 'actions' | trans({}, 'VideInfraCMSBundle') }} <b class="caret"></b></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a class="sonata-action-element" href="{{ path('sitemap_page_create_type', {type: page.type}) }}">
-                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                        {{ 'add_new' | trans({}, 'VideInfraCMSBundle') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="sonata-action-element" href="{{ path('sitemap_list') }}">
-                                        <i class="fa fa-list" aria-hidden="true"></i>
-                                        {{ 'return_to_list' | trans({}, 'VideInfraCMSBundle') }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-
+                    </a>
                 </div>
             </div>
         </nav>
@@ -57,15 +39,20 @@
         <div class="col-md-12">
 
             <div class="box box-primary">
-                <div class="box-header"><h4>{{ 'general' | trans({}, 'VideInfraCMSBundle') }}</h4></div>
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'general' | trans({}, 'VideInfraCMSBundle') }}</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
                 <div class="box-body">
                     {% if isAdmin %}
                         {{ form_row(form.name) }}
                     {% endif %}
 
-                    {{ form_row(form.title) }}
                     {{ form_row(form.active) }}
                     {{ form_row(form.includeInMenu) }}
+                    {{ form_row(form.includeInSitemap) }}
                     {{ form_row(form.path) }}
                     {{ form_widget(form.content) }}
 
@@ -75,7 +62,12 @@
 
         <div class="col-md-12">
             <div class="box box-primary">
-                <div class="box-header"><h4>{{ 'seo' | trans({}, 'VideInfraCMSBundle') }}</h4></div>
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'seo' | trans({}, 'VideInfraCMSBundle') }}</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
                 <div class="box-body">
                     {{ form_row(form.translations) }}
                 </div>
@@ -85,6 +77,11 @@
     </div>
 
     <div class="sonata-ba-form-actions well well-small form-actions">
+
+        {% if version %}
+            <button class="btn btn-primary" type="submit" name="publish" value="1">{{ 'publish' | trans({}, 'VideInfraCMSBundle') }}</button>
+        {% endif %}
+
         {% if isNew %}
             <button class="btn btn-success" type="submit" name="create_and_list" value="1">{{ 'create_and_list' | trans({}, 'VideInfraCMSBundle') }}</button>
             <button class="btn btn-success" type="submit" name="create_and_create" value="1">{{ 'create_and_create' | trans({}, 'VideInfraCMSBundle') }}</button>

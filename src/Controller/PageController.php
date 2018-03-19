@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use VideInfra\CMSBundle\Entity\Page;
+use VideInfra\CMSBundle\Entity\PageTranslation;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -25,10 +26,11 @@ class PageController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @param null $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction($id = null)
+    public function editAction(Request $request, $id = null)
     {
         $page = $this->get('vig.cms.page.repository')->find($id);
         if (!$page) {
@@ -36,7 +38,31 @@ class PageController extends AbstractController
         }
 
         $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
-        return $this->forward($pageType->getController(), ['page' => $page]);
+
+        $usePageVersions = $this->getParameter('vig.cms.page_use_versions');
+        $version = $request->get('version');
+        $isPublish = $request->get('publish');
+
+        $options = ['page' => $page];
+
+        if ($usePageVersions && $version && !$isPublish) {
+
+            $versionRepository = $this->get('vig.cms.page_version.repository');
+
+            $pageVersion = $versionRepository->findOneByVersion($page, $version);
+            if (!$pageVersion) {
+                   $pageVersion = $versionRepository->create($page, $version);
+                   $pageVersion->setContent(json_encode($pageType->serialize($page)));
+                   $this->getDoctrine()->getManager()->flush($pageVersion);
+            }
+            else {
+                $page = $pageType->unserialize($pageVersion);
+            }
+
+            $options = ['page' => $page, 'version' => $version];
+        }
+
+        return $this->forward($pageType->getController(), $options);
     }
 
     /**
@@ -63,6 +89,8 @@ class PageController extends AbstractController
                 throw new \Exception('Path is required');
             }
 
+            if ($path[0] !== '/') $path = '/' . $path;
+
             $pageRepository = $this->get('vig.cms.page.repository');
 
             $parent = null;
@@ -79,12 +107,17 @@ class PageController extends AbstractController
             }
 
             $page = $pageRepository->create();
-            $page->setTitle($title);
             $page->setPath($path);
             $page->setType($type->getName());
             $page->setName($type->getName() . '_' . time());
             $page->setParent($parent);
             $page->setPosition($pageRepository->getNewPosition($parent));
+
+            $translation = new PageTranslation();
+            $translation->setTitle($title);
+            $translation->setTranslatable($page);
+            $translation->setLocale($request->getLocale());
+            $page->addTranslation($translation);
 
             $validator = $this->get('validator');
             $errors = $validator->validate($page);
@@ -94,6 +127,7 @@ class PageController extends AbstractController
             }
 
             $em = $this->getDoctrine()->getManager();
+            $em->persist($translation);
             $em->flush();
 
             return new JsonResponse([
@@ -128,7 +162,7 @@ class PageController extends AbstractController
             }
 
             $type = $this->get('vig.cms.page_type.factory')->get($page->getType());
-            if (!$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
+            if ($type->canCreateRole() && !$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
                 throw new AccessDeniedException(sprintf('You are not allowed to remove page with %s type',
                     $page->getType()));
             }

@@ -15,9 +15,10 @@ class SitemapController extends CRUDController
     public function listAction()
     {
         $pageTypes = $this->get('vig.cms.page.manager')->getAllowedPageTypes();
-        $pages = $this->get('vig.cms.page.repository')->getTree();
+        $pages = $this->get('vig.cms.page.repository')->getTree(null, true);
 
         return $this->render('VideInfraCMSBundle:Sitemap:list.html.twig', [
+            'usePageVersions' => $this->getParameter('vig.cms.page_use_versions'),
             'page_types' => $pageTypes,
             'root_page' => [
                 'id' => 'root',

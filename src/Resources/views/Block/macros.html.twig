@@ -8,9 +8,9 @@
     </div>
 {% endmacro %}
 
-{% macro block_start (title) %}
-    <div class="box box-success">
-        <div class="box-header">
+{% macro block_start (title, boxCollapsed) %}
+    <div class="box box-success {% if boxCollapsed %}collapsed-box{% endif %}">
+        <div class="box-header with-border">
             <i class="fa">
                 <span class="fa fa-ellipsis-v"></span>
                 <span class="fa fa-ellipsis-v"></span>
@@ -18,6 +18,13 @@
 
             <h3 class="box-title">{{ title }}</h3>
             <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    {% if boxCollapsed %}
+                        <i class="fa fa-plus"></i>
+                    {% else %}
+                        <i class="fa fa-minus"></i>
+                    {% endif %}
+                </button>
                 <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-remove"></i></button>
             </div>
         </div>

@@ -19,6 +19,9 @@ export const REMOVE_PAGE = 'REMOVE_PAGE';
 export const ADD_TEMPORARY_PAGE = 'ADD_TEMPORARY_PAGE';
 export const REMOVE_TEMPORARY_PAGE = 'REMOVE_TEMPORARY_PAGE';
 
+export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
+export const HIDE_ERROR_MESSAGE = 'HIDE_ERROR_MESSAGE';
+
 
 /*
  * Folders
@@ -59,6 +62,8 @@ export function addPage(data) {
                         document.location = url;
                     }
                 }
+
+                return json;
             })
     };
 }
@@ -91,7 +96,11 @@ export function movePage(id, reference, position) {
 
                 if (json && json.status) {
                     dispatch(movedPage(id, reference, position));
+                } else if (json && json.message) {
+                    dispatch(setErrorMessage(json.message));
                 }
+
+                return json;
             })
     };
 }
@@ -128,7 +137,11 @@ export function deletePage (id) {
 
                     if (json && json.status) {
                         dispatch(removePage(id));
+                    } else if (json && json.message) {
+                        dispatch(setErrorMessage(json.message));
                     }
+
+                    return json;
                 });
         }
 
@@ -157,3 +170,16 @@ export function removeTemporaryPage () {
 export function setTreeLoading (loading) {
     return { type: SET_TREE_LOADING, loading };
 };
+
+
+/**
+ * Set error message
+ */
+
+export function setErrorMessage (message) {
+    return { type: SET_ERROR_MESSAGE, message };
+}
+
+export function hideErrorMessage () {
+    return { type: HIDE_ERROR_MESSAGE };
+}

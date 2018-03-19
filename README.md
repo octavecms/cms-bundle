@@ -42,6 +42,7 @@ public function registerBundles()
         new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
         new Knp\DoctrineBehaviors\Bundle\DoctrineBehaviorsBundle(),
         new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+        new VideInfra\SitemapBundle\VideInfraSitemapBundle(),
         
         new VideInfra\CMSBundle\VideInfraCMSBundle(),
         // ...

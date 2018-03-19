@@ -38,12 +38,6 @@ class Page
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=512)
-     */
-    private $title;
-
-    /**
      * @var bool
      * @ORM\Column(type="boolean")
      */
@@ -62,9 +56,15 @@ class Page
     private $includeInMenu = false;
 
     /**
+     * @var bool
+     * @ORM\Column(name="include_in_sitemap", type="boolean")
+     */
+    private $includeInSitemap = true;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Regex("/^\/(\w+\/?)+$/")
+     * @Assert\NotBlank()
      */
     private $path;
 
@@ -152,7 +152,7 @@ class Page
      */
     public function __toString()
     {
-        return (string) $this->title;
+        return (string) $this->translate()->getTitle();
     }
 
     /**
@@ -294,22 +294,6 @@ class Page
     /**
      * @return string
      */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return string
-     */
     public function getController()
     {
         return $this->controller;
@@ -380,6 +364,14 @@ class Page
     public function setBlocks($blocks)
     {
         $this->blocks = $blocks;
+    }
+
+    /**
+     * @param $block
+     */
+    public function addBlock($block)
+    {
+        $this->blocks[] = $block;
     }
 
     /**
@@ -460,5 +452,21 @@ class Page
     public function setIncludeInMenu($includeInMenu)
     {
         $this->includeInMenu = $includeInMenu;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncludeInSitemap()
+    {
+        return $this->includeInSitemap;
+    }
+
+    /**
+     * @param bool $includeInSitemap
+     */
+    public function setIncludeInSitemap($includeInSitemap)
+    {
+        $this->includeInSitemap = $includeInSitemap;
     }
 }

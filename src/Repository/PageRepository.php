@@ -43,23 +43,47 @@ class PageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
-
+          
     /**
      * @return array
      */
-    public function getTree()
+    public function findIncludeInSitemap()
     {
-        $pages = $this->createQueryBuilder('p')
-            ->orderBy('p.position', 'ASC')
-            ->andWhere('p.parent IS NULL')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.active = 1')
+            ->andWhere('p.includeInSitemap = 1')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param Page|null $page
+     * @param bool $showHidden
+     * @return array
+     */
+    public function getTree(Page $page = null, $showHidden = false)
+    {
+        if ($page) {
+            $pages = $page->getChildren();
+        }
+        else {
+            $pages = $this->createQueryBuilder('p')
+                ->orderBy('p.position', 'ASC')
+                ->andWhere('p.parent IS NULL')
+                ->getQuery()
+                ->getResult();
+        }
 
         $output = [];
 
         /** @var Page $page */
         foreach ($pages as $page) {
-            $output[] = $this->treeBuilder->build($page);
+
+            if (!$showHidden && (!$page->isIncludeInMenu() || !$page->isActive())) {
+                continue;
+            }
+
+            $output[] = $this->treeBuilder->build($page, $showHidden);
         }
 
         return $output;
@@ -83,7 +107,9 @@ class PageRepository extends EntityRepository
                 ->setParameter('parent', $parent);
         }
 
-        $position = (int) $queryBuilder->getQuery()->getSingleScalarResult()['position'];
+        $result = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        $position = (int) ($result['position'] ?? 0);
 
         return ++$position;
     }

@@ -47,7 +47,9 @@ export default class MediaGridList {
         $(document).on(`mousedown.${ namespace }`, this.handleCloseListItem.bind(this));
         $(document).on(`keydown.${ namespace }`, this.handleCloseListItemKey.bind(this));
 
-        $container.selectable({})
+        $container.selectable({
+            'cancel': 'input,textarea,button,select,option,.js-selectable-ignore'
+        })
             .on(`selectableselecting.${ namespace }`, this.handleSelectItem.bind(this))
             .on(`selectableselected.${ namespace }`, this.handleSelectItem.bind(this))
             .on(`selectableunselecting.${ namespace }`, this.handleUnselectItem.bind(this))

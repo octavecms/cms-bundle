@@ -4,6 +4,7 @@ import createStore from '../modules/store';
 
 import SitemapTreeView from '../components/treeview';
 import SitemapForm from '../components/form';
+import ErrorMessage from '../components/error-message';
 
 
 /**
@@ -13,6 +14,7 @@ import SitemapForm from '../components/form';
 const SELECTOR_TREE_VIEW = '[data-widget="sitemap-treeview"]';
 const SELECTOR_SITEMAP_ADD = '[data-widget="sitemap-add"]';
 const SELECTOR_SITEMAP_FORM = '[data-widget="sitemap-form"]';
+const SELECTOR_ERROR = '[data-widget="error-message"]';
 
 const SITEMAP_NAMESPACE = 'sitemap';
 
@@ -43,6 +45,8 @@ class Sitemap {
 
         const $treeView = this.$treeView = $element.find(SELECTOR_TREE_VIEW);
         this.treeView = new SitemapTreeView($treeView, {'store': store, 'temporaryform': this.form});
+
+        new ErrorMessage($element.find(SELECTOR_ERROR), {'store': store});
     }
 
     _initToolbar () {
@@ -54,7 +58,9 @@ class Sitemap {
                 placeholder       : 'sort-highlight',
                 zIndex            : 999999,
                 cursorAt          : { left: -10, top: -10 },
-                drag              : this.treeView.handleSortDrag.bind(this.treeView)
+                drag              : this.treeView.handleSortDrag.bind(this.treeView),
+                stop              : this.treeView.handleDragEnd.bind(this.treeView),
+                start             : this.treeView.handleDragStart.bind(this.treeView)
             });
     }
 
