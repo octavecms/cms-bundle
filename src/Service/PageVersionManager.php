@@ -86,7 +86,7 @@ class PageVersionManager
             throw new \Exception(sprintf('Unknown type %s', $page->getType()));
         }
 
-        $page =$type->unserialize($pageVersion);
+        $page = $type->unserialize($pageVersion);
         $this->entityManager->flush();
 
         return $page;

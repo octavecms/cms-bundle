@@ -43,7 +43,7 @@ class PageController extends AbstractController
         $version = $request->get('version');
         $isPublish = $request->get('publish');
 
-        $options = ['page' => $page];
+        $options = ['page' => $page, 'version' => $version];
 
         if ($usePageVersions && $version && !$isPublish) {
 

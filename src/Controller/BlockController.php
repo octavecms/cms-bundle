@@ -42,6 +42,17 @@ class BlockController extends Controller
             $originalBlocks->add($block);
         }
 
+        $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
+
+        if ($version && $isPublish) {
+
+            $versionRepository = $this->get('vig.cms.page_version.repository');
+            $pageVersion = $versionRepository->findOneByVersion($page, $version);
+            if ($pageVersion) {
+                $page = $pageType->unserialize($pageVersion);
+            }
+        }
+
         $form = $this->createForm(BlockType::class, $page, [
             'method' => 'post',
             'block_types' => $blockManager->getBlocks(),
@@ -62,21 +73,29 @@ class BlockController extends Controller
             $page->setController($this->getParameter('vig.cms.block_controller'));
             $page->setOption('id', $page->getId());
 
-            foreach ($originalBlocks as $originalBlock) {
-
-                if (false === $page->getBlocks()->contains($originalBlock)) {
-                    $page->getBlocks()->removeElement($originalBlock);
-                    $em->remove($originalBlock);
-                }
-            }
-
             /** @var Block $block */
             foreach ($page->getBlocks() as $block) {
                 $block->setPage($page);
             }
 
-            if (!$isPublish && $version) {
-                $this->get('vig.cms.page.version.manager')->storeVersion($page, $version);
+            if ($version) {
+
+                $newVersion = $this->get('vig.cms.page.version.manager')->storeVersion($page, $version);
+
+                if ($isPublish) {
+
+                    $page = $pageType->unserialize($newVersion);
+
+                    foreach ($originalBlocks as $originalBlock) {
+
+                        if (false === $page->getBlocks()->contains($originalBlock)) {
+                            $page->getBlocks()->removeElement($originalBlock);
+                            $em->remove($originalBlock);
+                        }
+                    }
+
+                    $em->flush();
+                }
             }
             else {
                 $em->flush();

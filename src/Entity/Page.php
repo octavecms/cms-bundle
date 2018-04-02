@@ -359,7 +359,7 @@ class Page
     }
 
     /**
-     * @param array $blocks
+     * @param array|ArrayCollection $blocks
      */
     public function setBlocks($blocks)
     {
