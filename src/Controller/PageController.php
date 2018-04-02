@@ -89,16 +89,19 @@ class PageController extends AbstractController
                 throw new \Exception('Path is required');
             }
 
-            if ($path[0] !== '/') $path = '/' . $path;
-
             $pageRepository = $this->get('vig.cms.page.repository');
 
+            /** @var Page|null $parent */
             $parent = null;
             if ($parentId != 'root') {
                 $parent = $pageRepository->find($parentId);
                 if (!$parent) {
                     throw new \Exception(sprintf('Page with id %s not found', $parentId));
                 }
+            }
+
+            if ($path[0] !== '/') {
+                $path = $parent->getPath() . '/' . $path;
             }
 
             $type = $this->get('vig.cms.page_type.factory')->get($typeId);

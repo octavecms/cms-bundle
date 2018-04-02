@@ -41,7 +41,7 @@ class PageTreeBuilder
                 continue;
             }
 
-            $data['children'][] = $this->build($child);
+            $data['children'][] = $this->build($child, $showHidden);
         }
 
         return $data;
