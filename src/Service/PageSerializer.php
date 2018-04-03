@@ -13,18 +13,13 @@ class PageSerializer
     /** @var RouterInterface */
     private $router;
 
-    /** @var bool */
-    private $usePageVersions;
-
     /**
      * PageSerializer constructor.
      * @param RouterInterface $router
-     * @param $usePageVersions
      */
-    public function __construct(RouterInterface $router, $usePageVersions)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->usePageVersions = $usePageVersions;
     }
 
     /**
@@ -41,13 +36,7 @@ class PageSerializer
         }
 
         if ($page->getId()) {
-
-            $options = ['id' => $page->getId()];
-            if ($this->usePageVersions) {
-                $options['version'] = 'draft';
-            }
-
-            $editUrl = $this->router->generate('sitemap_page_edit', $options);
+            $editUrl = $this->router->generate('sitemap_page_edit', ['id' => $page->getId()]);
         }
         else {
             $editUrl = '#';

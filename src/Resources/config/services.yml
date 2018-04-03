@@ -159,7 +159,6 @@ services:
         class: VideInfra\CMSBundle\Service\PageSerializer
         arguments:
             - '@router'
-            - '%vig.cms.page_use_versions%'
 
     vig.cms.media_upload.helper:
         class: VideInfra\CMSBundle\Service\UploadHelper

@@ -40,7 +40,9 @@ class PageController extends AbstractController
         $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
 
         $usePageVersions = $this->getParameter('vig.cms.page_use_versions');
-        $version = $request->get('version');
+        $defaultVersion = $usePageVersions ? 'draft' : null;
+
+        $version = $request->get('version', $defaultVersion);
         $isPublish = $request->get('publish');
 
         $options = ['page' => $page, 'version' => $version];
