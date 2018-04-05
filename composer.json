@@ -20,6 +20,7 @@
     "a2lix/translation-form-bundle": "~2.0",
     "egeloen/ckeditor-bundle": "~4.0",
     "knplabs/doctrine-behaviors": "~1.1",
+    "friendsofsymfony/user-bundle": "~2.0",
     "vig/sitemap-bundle" : ">=1.0.5"
   },
   "autoload": {
