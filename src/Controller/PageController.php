@@ -40,10 +40,12 @@ class PageController extends AbstractController
         $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
 
         $usePageVersions = $this->getParameter('vig.cms.page_use_versions');
-        $version = $request->get('version');
+        $defaultVersion = $usePageVersions ? 'draft' : null;
+
+        $version = $request->get('version', $defaultVersion);
         $isPublish = $request->get('publish');
 
-        $options = ['page' => $page];
+        $options = ['page' => $page, 'version' => $version];
 
         if ($usePageVersions && $version && !$isPublish) {
 
@@ -89,16 +91,19 @@ class PageController extends AbstractController
                 throw new \Exception('Path is required');
             }
 
-            if ($path[0] !== '/') $path = '/' . $path;
-
             $pageRepository = $this->get('vig.cms.page.repository');
 
+            /** @var Page|null $parent */
             $parent = null;
             if ($parentId != 'root') {
                 $parent = $pageRepository->find($parentId);
                 if (!$parent) {
                     throw new \Exception(sprintf('Page with id %s not found', $parentId));
                 }
+            }
+
+            if ($path[0] !== '/') {
+                $path = $parent->getPath() . '/' . $path;
             }
 
             $type = $this->get('vig.cms.page_type.factory')->get($typeId);

@@ -36,6 +36,15 @@ class BlockManager
     }
 
     /**
+     * @param $name
+     * @return BlockInterface|null
+     */
+    public function getBlock($name)
+    {
+        return $this->blocks[$name] ?? null;
+    }
+
+    /**
      * @return array
      */
     public function getBlocks()

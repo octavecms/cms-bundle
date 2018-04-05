@@ -81,13 +81,7 @@ class SimpleTextController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-
-                    $options = ['id' => $page->getId()];
-                    if ($version) {
-                        $options['version'] = $version;
-                    }
-
-                    return $this->redirectToRoute('sitemap_page_edit', $options);
+                    return $this->redirectToRoute('sitemap_page_edit', ['id' => $page->getId()]);
                 }
             }
             else {

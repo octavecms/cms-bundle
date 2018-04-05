@@ -2,6 +2,7 @@
 
 namespace VideInfra\CMSBundle\Page\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use VideInfra\CMSBundle\Entity\Block;
 use VideInfra\CMSBundle\Entity\BlockTranslation;
 use VideInfra\CMSBundle\Entity\Page;
@@ -70,25 +71,31 @@ class BlockPageType extends BasePageType
 
         $blocks = $page->getBlocks();
 
+        $contentBlocks = [];
+
         /** @var Block $block */
         foreach ($blocks as $block) {
 
-            $content['blocks'][$block->getId()]['type'] = $block->getType();
-            $content['blocks'][$block->getId()]['order'] = $block->getOrder();
+            $contentBlocks[$block->getOrder()]['id'] = $block->getId();
+            $contentBlocks[$block->getOrder()]['type'] = $block->getType();
+            $contentBlocks[$block->getOrder()]['order'] = (int) $block->getOrder();
 
             if (!count($block->getTranslations())) {
-                $content['blocks'][$block->getId()]['content'] = $block->getContent();
+                $contentBlocks[$block->getOrder()]['content'] = $block->getContent();
             }
             else {
 
-                $content['blocks'][$block->getId()]['content'] = null;
+                $contentBlocks[$block->getOrder()]['content'] = null;
 
                 /** @var BlockTranslation $translation */
                 foreach ($block->getTranslations() as $translation) {
-                    $content['blocks'][$block->getId()]['translations'][$translation->getLocale()] = $translation->getContent();
+                    $contentBlocks[$block->getOrder()]['translations'][$translation->getLocale()] = $translation->getContent();
                 }
             }
         }
+
+        ksort($contentBlocks);
+        $content['blocks'] = $contentBlocks;
 
         return $content;
     }
@@ -115,16 +122,17 @@ class BlockPageType extends BasePageType
             $blocks[$block->getId()] = $block;
         }
 
+        $newBlocks = new ArrayCollection();
+
         if (isset($content['blocks'])) {
-            foreach ($content['blocks'] as $blockId => $block) {
+            foreach ($content['blocks'] as $blockOrder => $block) {
 
                 /** @var Block $blockEntity */
-                $blockEntity = $blocks[$blockId] ?? null;
+                $blockEntity = ($block['id'] && isset($blocks[$block['id']])) ? $blocks[$block['id']] : null;
 
                 if (!$blockEntity) {
                     $blockEntity = new Block();
                     $blockEntity->setPage($page);
-                    $page->addBlock($blockEntity);
                 }
 
                 $blockEntity->setType($block['type']);
@@ -150,8 +158,12 @@ class BlockPageType extends BasePageType
                         $translationEntity->setContent($translationContent);
                     }
                 }
+
+                $newBlocks->add($blockEntity);
             }
         }
+
+        $page->setBlocks($newBlocks);
 
         return $page;
     }

@@ -146,7 +146,7 @@ class PageManager
 
     /**
      * @param $name
-     * @return mixed|null
+     * @return PageTypeInterface|null
      */
     public function getType($name)
     {
