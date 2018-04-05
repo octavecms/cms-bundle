@@ -103,7 +103,7 @@ class PageController extends AbstractController
             }
 
             if ($path[0] !== '/') {
-                $path = $parent->getPath() . '/' . $path;
+                $path = ($parent ? $parent->getPath() : '') . '/' . $path;
             }
 
             $type = $this->get('vig.cms.page_type.factory')->get($typeId);

@@ -63,7 +63,6 @@ class SimpleTextPageType extends BasePageType
         $output = [];
 
         $content = $page->getContent();
-        if (!$content) return $output;
 
         $output['name'] = $page->getName();
         $output['path'] = $page->getPath();
@@ -71,14 +70,16 @@ class SimpleTextPageType extends BasePageType
         $output['include_in_menu'] = $page->isIncludeInMenu();
         $output['include_in_sitemap'] = $page->isIncludeInSitemap();
 
-        $output['template'] = $content->getTemplate();
+        if ($content) {
+            $output['template'] = $content->getTemplate();
 
-        /**
-         * @var string $locale
-         * @var ContentTranslation $translation
-         */
-        foreach ($content->getTranslations() as $locale => $translation) {
-            $output['translations'][$locale] = $translation->getText();
+            /**
+             * @var string $locale
+             * @var ContentTranslation $translation
+             */
+            foreach ($content->getTranslations() as $locale => $translation) {
+                $output['translations'][$locale] = $translation->getText();
+            }
         }
 
         return $output;
