@@ -23,7 +23,7 @@ class SitemapController extends CRUDController
             'root_page' => [
                 'id' => 'root',
                 'parent' => null,
-                'name' => 'Home page',
+                'name' => 'Site tree',
                 'active' => true,
                 'readonly' => true,
                 'children' => $pages
