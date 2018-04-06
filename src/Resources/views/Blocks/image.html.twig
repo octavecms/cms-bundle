@@ -1,3 +1,3 @@
 <p>
-    <img src="{{ content }}" alt="{{ title }}">
+    <img src="{{ content.image }}" alt="{{ content.title[app.request.locale] ?? '' }}">
 </p>

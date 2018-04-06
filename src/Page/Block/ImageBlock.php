@@ -2,7 +2,8 @@
 
 namespace VideInfra\CMSBundle\Page\Block;
 
-use VideInfra\CMSBundle\Form\Type\MediaImageType;
+use VideInfra\CMSBundle\Entity\Block;
+use VideInfra\CMSBundle\Form\Type\BlockImageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@videinfra.com>
@@ -49,7 +50,7 @@ class ImageBlock extends AbstractBlock
      */
     public function getFormType()
     {
-        return MediaImageType::class;
+        return BlockImageType::class;
     }
 
     /**
@@ -67,7 +68,16 @@ class ImageBlock extends AbstractBlock
     {
         return [
             'use_translation' => false,
-            'show_title' => true
+            'show_title' => false
         ];
+    }
+
+    /**
+     * @param Block $block
+     * @return mixed
+     */
+    public function getContent(Block $block)
+    {
+        return json_decode($block->getContent(), true);
     }
 }

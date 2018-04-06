@@ -185,6 +185,10 @@ services:
         class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryItemDataTransformer
         arguments: ['%locales%']
 
+    vig.cms.media_image.data_transformer:
+        class: VideInfra\CMSBundle\Form\DataTransformer\MediaImageDataTransformer
+        arguments: ['%locales%']
+
     vig.cms.media_gallery.data_transformer.default:
         class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryDataTransformer
 
@@ -192,6 +196,13 @@ services:
         class: VideInfra\CMSBundle\Form\Type\MediaGalleryItemType
         arguments:
             - '@vig.cms.media_gallery_item.data_transformer'
+        tags:
+            - { name: form.type }
+
+    vig.cms.block_image.form_type:
+        class: VideInfra\CMSBundle\Form\Type\BlockImageType
+        arguments:
+           - '@vig.cms.media_image.data_transformer'
         tags:
             - { name: form.type }
 
