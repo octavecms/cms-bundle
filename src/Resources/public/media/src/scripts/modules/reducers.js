@@ -11,8 +11,8 @@ import filter from 'lodash/filter';
 import without from 'lodash/without';
 import indexOf from 'lodash/indexOf';
 
-import setImmutable from '../utils/set-immutable';
-import removeImmutable from '../utils/remove-immutable';
+import setImmutable from 'utils/set-immutable';
+import removeImmutable from 'utils/remove-immutable';
 
 import {
     SET_GRID_LIST, SET_GRID_LOADING,

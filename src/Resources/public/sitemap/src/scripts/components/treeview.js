@@ -1,10 +1,10 @@
 import map from 'lodash/map';
 import each from 'lodash/each';
 import difference from 'lodash/difference';
-import { movePage, deletePage, addTemporaryPage, removeTemporaryPage } from '../modules/actions';
+import { movePage, deletePage, addTemporaryPage, removeTemporaryPage } from 'modules/actions';
 
-import { isDescendantOf } from '../utils/hierarchy'
-import microtemplate from '../utils/micro-template';
+import { isDescendantOf } from 'utils/hierarchy'
+import microtemplate from 'utils/micro-template';
 
 
 const EDIT_LINK_SELSECTOR = '.sonata-tree__item__edit';

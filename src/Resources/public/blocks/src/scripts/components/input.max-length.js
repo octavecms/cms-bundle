@@ -2,7 +2,7 @@
  * jQuery plugin which adds remaining character count to the inputs
  * with maxlength attribute
  */
-import $ from 'jquery';
+import $ from 'lib/jquery';
 
 const NAMESPACE = 'maxlength';
 const INPUT_SELECTOR = 'input[maxlength][type!="hidden"], textarea[maxlength]';

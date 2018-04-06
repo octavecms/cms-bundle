@@ -1,4 +1,4 @@
-import { hideErrorMessage } from '../modules/actions';
+import { hideErrorMessage } from 'modules/actions';
 
 
 export default class ErrorMessage {
@@ -27,7 +27,6 @@ export default class ErrorMessage {
     }
 
     handleVisibilityChange (visible) {
-        console.log('visible:', visible);
         if (visible) {
             this.$container.modal('show');
         } else {
@@ -36,7 +35,6 @@ export default class ErrorMessage {
     }
 
     handleMessageChange (message) {
-        console.log('message:', message);
         this.$text.text(message);
     }
 }

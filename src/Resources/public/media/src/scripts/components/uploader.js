@@ -1,6 +1,5 @@
 import fileupload from 'blueimp-file-upload';
-
-import { uploadedFiles, updatedFile } from '../modules/actions';
+import { uploadedFiles, updatedFile } from 'modules/actions';
 
 
 let UID = 0;

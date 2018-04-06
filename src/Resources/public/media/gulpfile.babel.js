@@ -28,6 +28,7 @@ gulp.task('scripts', () => {
         'debug': true,
         'paths': [
             './node_modules',
+            './src/scripts',
             './src/scripts/lib'
         ],
         'transform': [
@@ -102,6 +103,7 @@ gulp.task('jsmin', () => {
         'debug': false,
         'paths': [
             './node_modules',
+            './src/scripts',
             './src/scripts/lib'
         ],
         'transform': [

@@ -1,10 +1,10 @@
 import map from 'lodash/map';
 
-import createStore from '../modules/store';
+import createStore from 'modules/store';
 
-import SitemapTreeView from '../components/treeview';
-import SitemapForm from '../components/form';
-import ErrorMessage from '../components/error-message';
+import SitemapTreeView from 'components/treeview';
+import SitemapForm from 'components/form';
+import ErrorMessage from 'components/error-message';
 
 
 /**

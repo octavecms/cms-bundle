@@ -5,10 +5,10 @@ import filter from 'lodash/filter';
 import each from 'lodash/each';
 
 import MediaGridListItem from './gridlist-item';
-import microtemplate from '../utils/micro-template';
-import formatSize from '../utils/format-size';
+import microtemplate from 'utils/micro-template';
+import formatSize from 'utils/format-size';
 
-import { addSelectedItems, removeSelectedItems, unsetAllSelectedListItems, setOpenedListItem } from '../modules/actions';
+import { addSelectedItems, removeSelectedItems, unsetAllSelectedListItems, setOpenedListItem } from 'modules/actions';
 
 
 let UID = 1;

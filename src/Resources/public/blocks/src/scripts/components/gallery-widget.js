@@ -1,9 +1,15 @@
+import $ from 'lib/jquery';
+
+import map from 'lodash/map';
 import each from 'lodash/each';
+
 
 const NAMESPACE = 'gallery';
 
 const IMAGE_WIDGET_SELECTOR = '.form-control-image';
 const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[galleryorder]"]';
+
+const REGEX_MATCH_NUMBERS = /\d+/g;
 
 
 class GalleryWidget {
@@ -25,7 +31,7 @@ class GalleryWidget {
         const $button  = this.$button  = $element.find('.js-gallery-add');
 
         // Item counter
-        this.index = $list.find(ORDER_INPUT_CSS_SELECTOR).length;
+        this.index = this._getMaxIndex();
 
         // Sortable list
         $list
@@ -62,6 +68,20 @@ class GalleryWidget {
     /**
      * Order
      */
+
+    _getMaxIndex () {
+        const $inputs = this.$list.find(ORDER_INPUT_CSS_SELECTOR);
+        let   index   = 0;
+
+        $inputs.each((i, input) => {
+            const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
+            const numbers = map(names, name => parseInt(name, 10));
+
+            index = Math.max(index, Math.max.apply(Math, numbers));
+        });
+
+        return index + 1;
+    }
 
     _updateList () {
         this.$list.sortable('refresh');

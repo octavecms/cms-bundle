@@ -6,8 +6,8 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import get from 'lodash/get';
 
-import reducers from './reducers';
-import getInitialState from './get-initial-state';
+import reducers from 'modules/reducers';
+import getInitialState from 'modules/get-initial-state';
 
 
 const storeExtensions = {

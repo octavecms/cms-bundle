@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'lib/jquery';
 
 $.cleanData = (function(originalCleanData) {
     return function(elements) {
