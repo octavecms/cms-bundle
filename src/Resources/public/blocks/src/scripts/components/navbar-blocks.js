@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'lib/jquery';
 import debounce from 'lodash/debounce';
 
 const WIDGET_CONTAINER_SELECTOR = '[data-widget="navbar-blocks"]';

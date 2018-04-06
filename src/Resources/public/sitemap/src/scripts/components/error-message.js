@@ -1,4 +1,4 @@
-import { hideErrorMessage } from '../modules/actions';
+import { hideErrorMessage } from 'modules/actions';
 
 
 export default class ErrorMessage {

@@ -2,7 +2,7 @@ import map from 'lodash/map';
 import each from 'lodash/each';
 import uniq from 'lodash/uniq';
 
-import { isEmpty } from '../utils/hierarchy';
+import { isEmpty } from 'utils/hierarchy';
 import 'whatwg-fetch';
 
 

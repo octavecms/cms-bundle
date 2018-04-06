@@ -12,15 +12,15 @@ import without from 'lodash/without';
 import indexOf from 'lodash/indexOf';
 import get from 'lodash/get';
 
-import setImmutable from '../utils/set-immutable';
-import removeImmutable from '../utils/remove-immutable';
+import setImmutable from 'utils/set-immutable';
+import removeImmutable from 'utils/remove-immutable';
 
 import {
     SET_TREE_LOADING,
     RECEIVE_PAGE, MOVED_PAGE, REMOVE_PAGE,
     ADD_TEMPORARY_PAGE, REMOVE_TEMPORARY_PAGE,
     SET_ERROR_MESSAGE, HIDE_ERROR_MESSAGE
-} from './actions';
+} from 'modules/actions';
 
 
 /*

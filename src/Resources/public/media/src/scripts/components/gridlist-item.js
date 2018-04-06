@@ -5,7 +5,7 @@ import {
     setOpenedListItem, toggleOpenedListItem,
     setSelectedListItem, toggleSelectedListItem, addSelectedListItems,
     setDraggingListItems
-} from '../modules/actions';
+} from 'modules/actions';
 
 import uploader from './uploader';
 

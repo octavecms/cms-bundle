@@ -1,4 +1,5 @@
-import $ from 'jquery';
+import $ from 'lib/jquery';
+import map from 'lodash/map';
 
 
 const BLOCKS_LIST_SELECTOR     = '[data-widget="blocks-list"]';
@@ -6,11 +7,13 @@ const ADD_BLOCK_SELECTOR       = '[data-widget="blocks-add"]';
 
 const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[order]"]';
 
+const REGEX_MATCH_NUMBERS = /\d+/g;
+
 
 class BlocksList {
     constructor ($container) {
         this.$container = $container;
-        this.index = $container.find(ORDER_INPUT_CSS_SELECTOR).length;
+        this.index = this._getMaxIndex();
 
         $container
             .addClass('blocks-list')
@@ -25,6 +28,20 @@ class BlocksList {
             });
 
             $container.on('click', '[data-widget="block-remove"]', this.handleBlockRemove.bind(this));
+    }
+
+    _getMaxIndex () {
+        const $inputs = this.$container.find(ORDER_INPUT_CSS_SELECTOR);
+        let   index   = 0;
+
+        $inputs.each((i, input) => {
+            const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
+            const numbers = map(names, name => parseInt(name, 10));
+
+            index = Math.max(index, Math.max.apply(Math, numbers));
+        });
+
+        return index + 1;
     }
 
     updateList () {

@@ -1,10 +1,10 @@
 import map from 'lodash/map';
 import each from 'lodash/each';
 import difference from 'lodash/difference';
-import { setCategory, fetchFiles, moveFiles, moveFolder } from '../modules/actions';
+import { setCategory, fetchFiles, moveFiles, moveFolder } from 'modules/actions';
 
-import { isDescendantOf, isChildOf } from '../utils/folders'
-import microtemplate from '../utils/micro-template';
+import { isDescendantOf, isChildOf } from 'utils/folders'
+import microtemplate from 'utils/micro-template';
 import uploader from './uploader';
 
 

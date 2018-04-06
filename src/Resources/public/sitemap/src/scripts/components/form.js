@@ -1,5 +1,5 @@
 import reduce from 'lodash/reduce';
-import { addPage, removeTemporaryPage } from '../modules/actions';
+import { addPage, removeTemporaryPage } from 'modules/actions';
 
 
 let UID = 1;

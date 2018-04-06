@@ -1,13 +1,13 @@
 import map from 'lodash/map';
 
-import createStore from '../modules/store';
+import createStore from 'modules/store';
 
-import MediaTreeView from '../components/treeview';
-import MediaGridList from '../components/gridlist';
-import uploader from '../components/uploader';
-import ErrorMessage from '../components/error-message';
+import MediaTreeView from 'components/treeview';
+import MediaGridList from 'components/gridlist';
+import uploader from 'components/uploader';
+import ErrorMessage from 'components/error-message';
 
-import { setGridList, fetchFiles, addFolder, deleteSelectedListItems } from '../modules/actions';
+import { setGridList, fetchFiles, addFolder, deleteSelectedListItems } from 'modules/actions';
 
 
 /**
