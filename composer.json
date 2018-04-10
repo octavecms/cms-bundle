@@ -1,5 +1,5 @@
 {
-  "name": "vig/cms-bundle",
+  "name": "octave/cms-bundle",
   "type": "library",
   "description": "Symfony3 CMS",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "egeloen/ckeditor-bundle": "~4.0",
     "knplabs/doctrine-behaviors": "~1.1",
     "friendsofsymfony/user-bundle": "~2.0",
-    "vig/sitemap-bundle" : ">=1.0.5"
+    "octave/sitemap-bundle" : ">=1.0.5"
   },
   "autoload": {
     "psr-4": {

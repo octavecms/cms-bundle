@@ -52,6 +52,13 @@ Open `app/config/config.yml` file and add the below lines into the file.
 Enable Twig template engine and translator service:
  
 ```yaml
+
+# ...
+
+parameters:
+    locales: [en, ru]
+    locale: en
+
 framework:
     ...
     translator: { fallbacks: ['%locale%'] }
@@ -79,10 +86,8 @@ Configure Sonata Project bundles:
 sonata_admin:
     dashboard:
         groups:
-
             CMS:
                 label: CMS
-
             sonata_user:
                 label: Users
         
