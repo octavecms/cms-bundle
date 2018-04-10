@@ -1,5 +1,5 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
-{% import 'VideInfraCMSBundle:Sitemap:treeview.html.twig' as tree %}
+{% import 'OctaveCMSBundle:Sitemap:treeview.html.twig' as tree %}
 
 {% block body_attributes %}data-widget="sitemap" {{ parent() }}{% endblock %}
 
@@ -35,15 +35,15 @@
         </div>
     </div>
 
-    {% include 'VideInfraCMSBundle:Sitemap:form.html.twig' %}
-    {% include 'VideInfraCMSBundle:Sitemap:error.html.twig' %}
+    {% include 'OctaveCMSBundle:Sitemap:form.html.twig' %}
+    {% include 'OctaveCMSBundle:Sitemap:error.html.twig' %}
 
 {% endblock %}
 
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/sitemap/dist/main.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/octavecms/sitemap/dist/main.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
@@ -62,5 +62,5 @@
             }
         };
     </script>
-    <script src="{{ asset('bundles/videinfracms/sitemap/dist/main.js') }}"></script>
+    <script src="{{ asset('bundles/octavecms/sitemap/dist/main.js') }}"></script>
 {% endblock %}

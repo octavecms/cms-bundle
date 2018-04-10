@@ -1,14 +1,14 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
-use VideInfra\CMSBundle\Repository\PageVersionRepository;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Page\Type\PageTypeInterface;
+use Octave\CMSBundle\Repository\PageVersionRepository;
 use Doctrine\ORM\EntityManager;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageVersionManager
 {
@@ -37,7 +37,7 @@ class PageVersionManager
     /**
      * @param Page $page
      * @param null $version
-     * @return \VideInfra\CMSBundle\Entity\PageVersion
+     * @return \Octave\CMSBundle\Entity\PageVersion
      * @throws \Exception
      */
     public function storeVersion(Page $page, $version = null)

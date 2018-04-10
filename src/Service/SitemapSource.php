@@ -1,10 +1,10 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 
-use VideInfra\SitemapBundle\Service\SourceInterface;
-use VideInfra\SitemapBundle\Model\Item;
-use VideInfra\CMSBundle\Repository\PageRepository;
+use Octave\SitemapBundle\Service\SourceInterface;
+use Octave\SitemapBundle\Model\Item;
+use Octave\CMSBundle\Repository\PageRepository;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

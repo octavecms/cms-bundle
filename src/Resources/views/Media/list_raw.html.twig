@@ -1,6 +1,6 @@
-{% import 'VideInfraCMSBundle:Media:treeview.html.twig' as tree %}
-{% import 'VideInfraCMSBundle:Media:gridlist.html.twig' as gridlist %}
-{% import 'VideInfraCMSBundle:Media:filters.html.twig' as filters %}
+{% import 'OctaveCMSBundle:Media:treeview.html.twig' as tree %}
+{% import 'OctaveCMSBundle:Media:gridlist.html.twig' as gridlist %}
+{% import 'OctaveCMSBundle:Media:filters.html.twig' as filters %}
 
 
 <section>
@@ -20,7 +20,7 @@
 
     <div class="modal-footer">
         <button class="btn btn-primary js-media-select-all">
-            {{ 'select' | trans({}, 'VideInfraCMSBundle') }}
+            {{ 'select' | trans({}, 'OctaveCMSBundle') }}
         </button>
     </div>
 </section>
@@ -46,7 +46,7 @@
         'categoryId': {{ current_category_id|default(root_category.id)|json_encode|raw }}
     };
 </script>
-<script src="{{ asset('bundles/videinfracms/media/dist/main.js') }}"></script>
+<script src="{{ asset('bundles/octavecms/media/dist/main.js') }}"></script>
 
 {# Styles #}
-<link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/media/dist/main.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/octavecms/media/dist/main.css') }}" />

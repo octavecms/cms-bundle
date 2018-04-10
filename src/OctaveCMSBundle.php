@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle;
+namespace Octave\CMSBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use VideInfra\CMSBundle\DependencyInjection\Compiler\BlockTypesPass;
-use VideInfra\CMSBundle\DependencyInjection\Compiler\PageTypesPass;
+use Octave\CMSBundle\DependencyInjection\Compiler\BlockTypesPass;
+use Octave\CMSBundle\DependencyInjection\Compiler\PageTypesPass;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class VideInfraCMSBundle extends Bundle
+class OctaveCMSBundle extends Bundle
 {
     /**
      * @param ContainerBuilder $container

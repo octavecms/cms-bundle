@@ -1,17 +1,17 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace Octave\CMSBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use VideInfra\CMSBundle\Entity\Block;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Form\Type\BlockType;
-use VideInfra\CMSBundle\Page\Type\BlockPageType;
+use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Form\Type\BlockType;
+use Octave\CMSBundle\Page\Type\BlockPageType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class BlockController extends Controller
 {
@@ -24,11 +24,11 @@ class BlockController extends Controller
     public function editAction(Request $request, Page $page = null, $version = null)
     {
         $isNew = !$page;
-        $blockManager = $this->get('vig.cms.block.manager');
-        $pageRepository = $this->get('vig.cms.page.repository');
-        $isAdmin = ($this->getParameter('vig.cms.super_admin_role'))
+        $blockManager = $this->get('octave.cms.block.manager');
+        $pageRepository = $this->get('octave.cms.page.repository');
+        $isAdmin = ($this->getParameter('octave.cms.super_admin_role'))
             ? $this->get('security.authorization_checker')
-                ->isGranted($this->getParameter('vig.cms.super_admin_role'))
+                ->isGranted($this->getParameter('octave.cms.super_admin_role'))
             : true;
         $isPublish = $request->get('publish');
 
@@ -42,11 +42,11 @@ class BlockController extends Controller
             $originalBlocks->add($block);
         }
 
-        $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
+        $pageType = $this->get('octave.cms.page_type.factory')->get($page->getType());
 
         if ($version && $isPublish) {
 
-            $versionRepository = $this->get('vig.cms.page_version.repository');
+            $versionRepository = $this->get('octave.cms.page_version.repository');
             $pageVersion = $versionRepository->findOneByVersion($page, $version);
             if ($pageVersion) {
                 $page = $pageType->unserialize($pageVersion);
@@ -70,7 +70,7 @@ class BlockController extends Controller
                 $page->setName(sprintf('simple_text_%s', time()));
             }
 
-            $page->setController($this->getParameter('vig.cms.block_controller'));
+            $page->setController($this->getParameter('octave.cms.block_controller'));
             $page->setOption('id', $page->getId());
 
             /** @var Block $block */
@@ -80,7 +80,7 @@ class BlockController extends Controller
 
             if ($version) {
 
-                $newVersion = $this->get('vig.cms.page.version.manager')->storeVersion($page, $version);
+                $newVersion = $this->get('octave.cms.page.version.manager')->storeVersion($page, $version);
 
                 if ($isPublish) {
 
@@ -120,7 +120,7 @@ class BlockController extends Controller
             }
         }
 
-        return $this->render('VideInfraCMSBundle:Block:edit.html.twig', [
+        return $this->render('OctaveCMSBundle:Block:edit.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
@@ -135,10 +135,10 @@ class BlockController extends Controller
      */
     public function showAction(Page $page)
     {
-        $template = $this->getParameter('vig.cms.block_template');
+        $template = $this->getParameter('octave.cms.block_template');
         return $this->render($template, [
             'page' => $page,
-            'content' => $this->get('vig.cms.block.manager')->renderPage($page)
+            'content' => $this->get('octave.cms.block.manager')->renderPage($page)
         ]);
     }
 }

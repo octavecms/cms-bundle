@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Routing;
+namespace Octave\CMSBundle\Routing;
 
 use Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class EntityResource implements SelfCheckingResourceInterface, \Serializable
 {

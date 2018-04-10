@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace Octave\CMSBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Form\Type\SimpleTextType;
-use VideInfra\CMSBundle\Page\Type\SimpleTextPageType;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Form\Type\SimpleTextType;
+use Octave\CMSBundle\Page\Type\SimpleTextPageType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class SimpleTextController extends Controller
 {
@@ -23,12 +23,12 @@ class SimpleTextController extends Controller
     public function editAction(Request $request, Page $page = null, $version = null)
     {
         $isNew = !$page;
-        $pageRepository = $this->get('vig.cms.page.repository');
-        $isAdmin = ($this->getParameter('vig.cms.super_admin_role'))
+        $pageRepository = $this->get('octave.cms.page.repository');
+        $isAdmin = ($this->getParameter('octave.cms.super_admin_role'))
             ? $this->get('security.authorization_checker')
-                ->isGranted($this->getParameter('vig.cms.super_admin_role'))
+                ->isGranted($this->getParameter('octave.cms.super_admin_role'))
             : true;
-        $templates = $this->get('vig.cms.page.manager')->getSimpleTextTemplatesAsChoices();
+        $templates = $this->get('octave.cms.page.manager')->getSimpleTextTemplatesAsChoices();
         $isPublish = $request->get('publish');
 
         if (!$page) {
@@ -53,7 +53,7 @@ class SimpleTextController extends Controller
             }
 
             if (!$isPublish && $version) {
-                $this->get('vig.cms.page.version.manager')->storeVersion($page, $version);
+                $this->get('octave.cms.page.version.manager')->storeVersion($page, $version);
             }
             else {
                 $content = $page->getContent();
@@ -68,7 +68,7 @@ class SimpleTextController extends Controller
                 $page->setName(sprintf('simple_text_%d', $page->getId()));
             }
 
-            $page->setController($this->getParameter('vig.cms.simple_text_controller'));
+            $page->setController($this->getParameter('octave.cms.simple_text_controller'));
             $page->setOption('id', $page->getId());
 
             if ($isPublish) {
@@ -94,7 +94,7 @@ class SimpleTextController extends Controller
             }
         }
 
-        return $this->render('VideInfraCMSBundle:SimpleText:create_simple_txt.html.twig', [
+        return $this->render('OctaveCMSBundle:SimpleText:create_simple_txt.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
@@ -111,7 +111,7 @@ class SimpleTextController extends Controller
     {
         $template = $page->getContent()->getTemplate()
             ? $page->getContent()->getTemplate()
-            : $this->getParameter('vig.cms.simple_text_template');
+            : $this->getParameter('octave.cms.simple_text_template');
 
         return $this->render($template, [
             'page' => $page

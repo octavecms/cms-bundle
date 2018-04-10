@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Entity;
+namespace Octave\CMSBundle\Entity;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 trait TranslatableEntityTrait
 {

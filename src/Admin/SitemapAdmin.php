@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Admin;
+namespace Octave\CMSBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Route\RouteCollection;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class SitemapAdmin extends AbstractAdmin
 {
@@ -24,23 +24,23 @@ class SitemapAdmin extends AbstractAdmin
         $collection->clearExcept(array('list'));
 
         $collection->add('page_create_type', 'page/create/{type}', [
-            '_controller' => 'VideInfraCMSBundle:Page:createPage'
+            '_controller' => 'OctaveCMSBundle:Page:createPage'
         ]);
 
         $collection->add('page_edit', 'page/{id}/edit', [
-            '_controller' => 'VideInfraCMSBundle:Page:edit'
+            '_controller' => 'OctaveCMSBundle:Page:edit'
         ]);
 
         $collection->add('page_add', 'page/create', [
-            '_controller' => 'VideInfraCMSBundle:Page:create'
+            '_controller' => 'OctaveCMSBundle:Page:create'
         ], [], [], '', [], ['POST']);
 
         $collection->add('page_remove', 'page/remove', [
-            '_controller' => 'VideInfraCMSBundle:Page:remove'
+            '_controller' => 'OctaveCMSBundle:Page:remove'
         ], [], [], '', [], ['POST']);
 
         $collection->add('page_move', 'page/move', [
-            '_controller' => 'VideInfraCMSBundle:Page:move'
+            '_controller' => 'OctaveCMSBundle:Page:move'
         ], [], [], '', [], ['POST']);
     }
 }

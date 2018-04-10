@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller\Media;
+namespace Octave\CMSBundle\Controller\Media;
 
 use Psr\Log\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
-use VideInfra\CMSBundle\Controller\AbstractController;
-use VideInfra\CMSBundle\Entity\MediaCategory;
+use Octave\CMSBundle\Controller\AbstractController;
+use Octave\CMSBundle\Entity\MediaCategory;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CategoryController extends AbstractController
 {
@@ -40,7 +40,7 @@ class CategoryController extends AbstractController
                 }
             }
 
-            $category = $this->get('vig.cms.media_category.repository')->create();
+            $category = $this->get('octave.cms.media_category.repository')->create();
             $category->setName($name);
             if ($parentCategory) {
                 $category->setParent($parentCategory);
@@ -120,7 +120,7 @@ class CategoryController extends AbstractController
                 throw new InvalidArgumentException('Parent ID is required');
             }
 
-            $categoryRepository = $this->get('vig.cms.media_category.repository');
+            $categoryRepository = $this->get('octave.cms.media_category.repository');
 
             $category = $categoryRepository->find($categoryId);
             if (!$category) {

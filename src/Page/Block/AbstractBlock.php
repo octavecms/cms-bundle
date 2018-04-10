@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Block;
+namespace Octave\CMSBundle\Page\Block;
 
-use VideInfra\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\Block;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 abstract class AbstractBlock implements BlockInterface
 {

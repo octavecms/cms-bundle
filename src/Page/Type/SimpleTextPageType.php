@@ -1,14 +1,14 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Type;
+namespace Octave\CMSBundle\Page\Type;
 
-use VideInfra\CMSBundle\Entity\Content;
-use VideInfra\CMSBundle\Entity\ContentTranslation;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Entity\PageVersion;
+use Octave\CMSBundle\Entity\Content;
+use Octave\CMSBundle\Entity\ContentTranslation;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\PageVersion;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class SimpleTextPageType extends BasePageType
 {
@@ -27,7 +27,7 @@ class SimpleTextPageType extends BasePageType
      */
     public function getController()
     {
-        return 'VideInfraCMSBundle:SimpleText:edit';
+        return 'OctaveCMSBundle:SimpleText:edit';
     }
 
     /**

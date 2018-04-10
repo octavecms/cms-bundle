@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle\Entity;
+namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  *
- * @ORM\Entity(repositoryClass="VideInfra\CMSBundle\Repository\PageVersionRepository")
+ * @ORM\Entity(repositoryClass="Octave\CMSBundle\Repository\PageVersionRepository")
  * @ORM\Table(
- *     name="vig_page_versions"
+ *     name="octave_page_versions"
  * )
  */
 class PageVersion

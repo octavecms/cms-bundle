@@ -33,4 +33,3 @@ If you are not familiar with the CMS yet we would suggest you to install our [de
 * [Installation guide](docs/Installation.md)
 * [Developer's guide]()
 * [Content editor's guide]() 
- 

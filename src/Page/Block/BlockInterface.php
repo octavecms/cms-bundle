@@ -1,8 +1,8 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Block;
+namespace Octave\CMSBundle\Page\Block;
 
-use VideInfra\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\Block;
 
 interface BlockInterface
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Block;
+namespace Octave\CMSBundle\Page\Block;
 
-use VideInfra\CMSBundle\Entity\Block;
-use VideInfra\CMSBundle\Form\Type\BlockImageType;
+use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Form\Type\BlockImageType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class ImageBlock extends AbstractBlock
 {

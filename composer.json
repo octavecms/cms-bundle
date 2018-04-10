@@ -4,11 +4,11 @@
   "description": "Symfony3 CMS",
   "license": "MIT",
   "keywords": ["cms"],
-  "homepage": "http://videinfra.com",
+  "homepage": "http://octavecms.com",
   "authors": [
     {
       "name": "Igor Lukashov",
-      "email": "igor.lukashov@videinfra.com",
+      "email": "igor.lukashov@octavecms.com",
       "role": "Developer"
     }
   ],
@@ -25,7 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "VideInfra\\CMSBundle\\": "src/"
+      "Octave\\CMSBundle\\": "src/"
     }
   },
   "repositories": [

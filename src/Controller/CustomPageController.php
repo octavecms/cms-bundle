@@ -1,15 +1,15 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace Octave\CMSBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Form\Type\CustomPageType;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Form\Type\CustomPageType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CustomPageController extends Controller
 {
@@ -21,15 +21,15 @@ class CustomPageController extends Controller
     public function editAction(Request $request, Page $page = null)
     {
         $isNew = !$page;
-        $repository = $this->get('vig.cms.page.repository');
-        $isAdmin = ($this->getParameter('vig.cms.super_admin_role'))
+        $repository = $this->get('octave.cms.page.repository');
+        $isAdmin = ($this->getParameter('octave.cms.super_admin_role'))
             ? $this->get('security.authorization_checker')
-                ->isGranted($this->getParameter('vig.cms.super_admin_role'))
+                ->isGranted($this->getParameter('octave.cms.super_admin_role'))
             : true;
 
         if (!$page) {
             $page = $repository->create();
-            $page->setType(\VideInfra\CMSBundle\Page\Type\CustomPageType::TYPE);
+            $page->setType(\Octave\CMSBundle\Page\Type\CustomPageType::TYPE);
         }
 
         $form = $this->createForm(CustomPageType::class, $page, [
@@ -75,7 +75,7 @@ class CustomPageController extends Controller
             }
         }
 
-        return $this->render('VideInfraCMSBundle:Page:create_custom.html.twig', [
+        return $this->render('OctaveCMSBundle:Page:create_custom.html.twig', [
             'form' => $form->createView(),
             'page' => $page,
             'isNew' => $isNew,

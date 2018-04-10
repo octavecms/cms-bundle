@@ -1,9 +1,9 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Type;
+namespace Octave\CMSBundle\Page\Type;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CustomPageType extends BasePageType
 {
@@ -22,7 +22,7 @@ class CustomPageType extends BasePageType
      */
     public function getController()
     {
-        return 'VideInfraCMSBundle:CustomPage:edit';
+        return 'OctaveCMSBundle:CustomPage:edit';
     }
 
     /**

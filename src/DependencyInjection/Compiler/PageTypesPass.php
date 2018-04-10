@@ -1,13 +1,13 @@
 <?php
 
-namespace VideInfra\CMSBundle\DependencyInjection\Compiler;
+namespace Octave\CMSBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageTypesPass implements CompilerPassInterface
 {
@@ -16,12 +16,12 @@ class PageTypesPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('vig.cms.page.manager')) {
+        if (!$container->has('octave.cms.page.manager')) {
             return;
         }
 
-        $definition = $container->findDefinition('vig.cms.page.manager');
-        $taggedServices = $container->findTaggedServiceIds('vig.page.type');
+        $definition = $container->findDefinition('octave.cms.page.manager');
+        $taggedServices = $container->findTaggedServiceIds('octave.page.type');
 
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall('addType', array(new Reference($id)));

@@ -62,13 +62,13 @@ framework:
 Add CMS and Text bundle related configuration parameters: 
 ```yaml
 # Octave CMS Configuration
-vide_infra_cms:
+octave_cms:
     media_upload_path: /uploads/
     media_resized_path: /uploads/resized/
     simple_text_templates:
         default:
             label: 'Default'
-            path: 'VideInfraCMSBundle:SimpleText:show.html.twig'
+            path: 'OctaveCMSBundle:SimpleText:show.html.twig'
 ```
 
 > **Note:** _For more information on CMS and Text Editor bundles refer to [CMS developer's guide](docs/developers-guide.md)._
@@ -146,8 +146,8 @@ Open `app/config/routing.yml` file and add the following lines:
 ```yaml
 # ...
 
-vig.cms.bundle:
-    resource: "@VideInfraCMSBundle/Resources/config/routing.yml"
+octave.cms.bundle:
+    resource: "@OctaveCMSBundle/Resources/config/routing.yml"
 
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'

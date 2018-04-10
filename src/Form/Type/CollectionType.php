@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\Type;
+namespace Octave\CMSBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType as BaseCollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use VideInfra\CMSBundle\Form\DataTransformer\JSONDataTransformer;
+use Octave\CMSBundle\Form\DataTransformer\JSONDataTransformer;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CollectionType extends AbstractType
 {
@@ -46,6 +46,6 @@ class CollectionType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'vig_collection';
+        return 'octave_collection';
     }
 }

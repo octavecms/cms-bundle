@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Block;
+namespace Octave\CMSBundle\Page\Block;
 
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class EditorBlock extends AbstractBlock
 {

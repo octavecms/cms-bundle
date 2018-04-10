@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle\Entity;
+namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  *
- * @ORM\Entity(repositoryClass="VideInfra\CMSBundle\Repository\ContentRepository")
+ * @ORM\Entity(repositoryClass="Octave\CMSBundle\Repository\ContentRepository")
  * @ORM\Table(
- *     name="vig_page_content"
+ *     name="octave_page_content"
  * )
  */
 class Content
@@ -28,7 +28,7 @@ class Content
     /**
      * @var Page
      *
-     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Page", inversedBy="content")
+     * @ORM\OneToOne(targetEntity="Octave\CMSBundle\Entity\Page", inversedBy="content")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $page;

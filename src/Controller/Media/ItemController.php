@@ -1,15 +1,15 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller\Media;
+namespace Octave\CMSBundle\Controller\Media;
 
 use Psr\Log\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use VideInfra\CMSBundle\Controller\AbstractController;
-use VideInfra\CMSBundle\Entity\MediaItem;
+use Octave\CMSBundle\Controller\AbstractController;
+use Octave\CMSBundle\Entity\MediaItem;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class ItemController extends AbstractController
 {
@@ -30,8 +30,8 @@ class ItemController extends AbstractController
                 $categoryId = null;
             }
 
-            $items = $this->get('vig.cms.media_item.repository')->findByCategory($categoryId);
-            $items = $this->get('vig.cms.media_item.serializer')->serialize($items);
+            $items = $this->get('octave.cms.media_item.repository')->findByCategory($categoryId);
+            $items = $this->get('octave.cms.media_item.serializer')->serialize($items);
 
             return new JsonResponse([
                 'status' => true,
@@ -67,14 +67,14 @@ class ItemController extends AbstractController
 
             $category = null;
             if ($categoryId != 'root') {
-                $category = $this->get('vig.cms.media_category.repository')->find($categoryId);
+                $category = $this->get('octave.cms.media_category.repository')->find($categoryId);
                 if (!$category) {
                     throw new \Exception(sprintf('Unable to find category with id %s', $categoryId));
                 }
             }
 
-            $itemRepository = $this->get('vig.cms.media_item.repository');
-            $uploadHelper = $this->get('vig.cms.media_upload.helper');
+            $itemRepository = $this->get('octave.cms.media_item.repository');
+            $uploadHelper = $this->get('octave.cms.media_upload.helper');
 
             foreach ($fileIds as $fileId) {
 
@@ -115,7 +115,7 @@ class ItemController extends AbstractController
                 throw new InvalidArgumentException('Empty list of files');
             }
 
-            $itemRepository = $this->get('vig.cms.media_item.repository');
+            $itemRepository = $this->get('octave.cms.media_item.repository');
 
             foreach ($fileIds as $fileId) {
 
@@ -127,7 +127,7 @@ class ItemController extends AbstractController
 
                 $em->remove($item);
 
-                $this->get('vig.cms.media_item.manager')->onItemDelete($item);
+                $this->get('octave.cms.media_item.manager')->onItemDelete($item);
             }
 
             $em->flush();
@@ -160,15 +160,15 @@ class ItemController extends AbstractController
 
             $category = null;
             if ($categoryId != 'root') {
-                $category = $this->get('vig.cms.media_category.repository')->find($categoryId);
+                $category = $this->get('octave.cms.media_category.repository')->find($categoryId);
             }
 
-            $items = $this->get('vig.cms.media_upload.helper')->upload($files, $category);
+            $items = $this->get('octave.cms.media_upload.helper')->upload($files, $category);
             $em->flush();
 
             return new JsonResponse([
                 'status' => true,
-                'files' => $this->get('vig.cms.media_item.serializer')->serialize($items)
+                'files' => $this->get('octave.cms.media_item.serializer')->serialize($items)
             ]);
         }
         catch (\Exception $e) {
@@ -198,17 +198,17 @@ class ItemController extends AbstractController
                 throw new InvalidArgumentException('File not found');
             }
 
-            $item = $this->get('vig.cms.media_item.repository')->find($itemId);
+            $item = $this->get('octave.cms.media_item.repository')->find($itemId);
             if (!$item) {
                 throw new \Exception(sprintf('Item with id %s not found', $itemId));
             }
 
-            $this->get('vig.cms.media_upload.helper')->replace($file, $item);
+            $this->get('octave.cms.media_upload.helper')->replace($file, $item);
             $em->flush();
 
             return new JsonResponse([
                 'status' => true,
-                'files' => $this->get('vig.cms.media_item.serializer')->serialize([$item])
+                'files' => $this->get('octave.cms.media_item.serializer')->serialize([$item])
             ]);
         }
         catch (\Exception $e) {

@@ -1,15 +1,15 @@
 <?php
 
-namespace VideInfra\CMSBundle\Entity;
+namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  *
- * @ORM\Entity(repositoryClass="VideInfra\CMSBundle\Repository\MediaCategoryRepository")
+ * @ORM\Entity(repositoryClass="Octave\CMSBundle\Repository\MediaCategoryRepository")
  * @ORM\Table(
- *     name="vig_media_categories"
+ *     name="octave_media_categories"
  * )
  */
 class MediaCategory

@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Repository;
+namespace Octave\CMSBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use VideInfra\CMSBundle\Entity\MediaItem;
+use Octave\CMSBundle\Entity\MediaItem;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaItemRepository extends EntityRepository
 {

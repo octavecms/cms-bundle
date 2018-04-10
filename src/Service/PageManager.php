@@ -1,14 +1,14 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
-use VideInfra\CMSBundle\Repository\PageRepository;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Page\Type\PageTypeInterface;
+use Octave\CMSBundle\Repository\PageRepository;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageManager
 {

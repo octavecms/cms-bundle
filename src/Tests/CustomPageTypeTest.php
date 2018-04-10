@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Tests;
+namespace Octave\CMSBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use VideInfra\CMSBundle\Factory\PageTypeFactory;
+use Octave\CMSBundle\Factory\PageTypeFactory;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CustomPageTypeTest extends WebTestCase
 {
@@ -18,7 +18,7 @@ class CustomPageTypeTest extends WebTestCase
         static::bootKernel();
         $container = static::$kernel->getContainer();
 
-        $this->pageFactory = $container->get('vig.cms.page_type.factory');
+        $this->pageFactory = $container->get('octave.cms.page_type.factory');
     }
 
     public function testEditAction()

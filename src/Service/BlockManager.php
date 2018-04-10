@@ -1,14 +1,14 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 use Symfony\Bundle\TwigBundle\TwigEngine;
-use VideInfra\CMSBundle\Entity\Block;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Page\Block\BlockInterface;
-use VideInfra\CMSBundle\Page\Type\BlockPageType;
+use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Page\Block\BlockInterface;
+use Octave\CMSBundle\Page\Type\BlockPageType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class BlockManager
 {

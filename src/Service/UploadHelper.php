@@ -1,15 +1,15 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use VideInfra\CMSBundle\Entity\MediaCategory;
-use VideInfra\CMSBundle\Entity\MediaItem;
-use VideInfra\CMSBundle\Repository\MediaItemRepository;
+use Octave\CMSBundle\Entity\MediaCategory;
+use Octave\CMSBundle\Entity\MediaItem;
+use Octave\CMSBundle\Repository\MediaItemRepository;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class UploadHelper
 {
