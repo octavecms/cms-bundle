@@ -12,10 +12,6 @@ If you already have Symfony-based project, change to project's root folder and r
 
     $ composer reqiure cms-bundle 
  
-To create a new Symfony project with CMS bundle installed:
- 
-    $ composer create-project XXX/ --prefer-dist 
-
 ## Register bundles
 
 Enable the bundle and the bundles the CMS relies on by adding the following lines in `app/AppKernel.php` file:
@@ -105,7 +101,7 @@ Add configuration for FOS User bundle:
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: AppBunlde\Entity\User
+    user_class: AppBundle\Entity\User
     from_email:
         address: "%mailer_sender%"
         sender_name: "%mailer_sender_name%"
@@ -145,9 +141,11 @@ parameters:
 
 ## Configure routes
 
-Open `app/config/routes.yml` file and add the following lines:
+Open `app/config/routing.yml` file and add the following lines:
 
 ```yaml
+# ...
+
 vig.cms.bundle:
     resource: "@VideInfraCMSBundle/Resources/config/routing.yml"
 
@@ -167,15 +165,24 @@ fos_user:
 
 ## Configure framework security
 
-Open `app/config/security.yml` file and add the following lines:
+Open `app/config/security.yml` file and replace content of the file with the one below. 
 
 ```yaml
-secutity:
-    # ...
+security:
+
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-    # ...
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            http_basic: ~
+
     role_hierarchy:
         ROLE_ADMIN:
             - ROLE_USER
@@ -190,37 +197,69 @@ secutity:
       - { path: ^/admin, role: [ROLE_ADMIN] }
 ```
 
-## Add user entity
+## Create User class
 
+This class will be used for supporting HTTP basic authentication into CMS back-end.
 
+```php
+<?php
+
+// src/AppBundle/Entity/User.php
+
+namespace AppBundle\Entity;
+
+use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="octave_user")
+ */
+
+class User extends BaseUser
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+```
 
 ## Create database
 
-    $ bin/console d:s:u --force
+Create CMS database structure. Run the following command: 
+
+    $ bin/console doctrine:schema:update --force
 
 ## Install assets
+
+Install bnunles' static assets by running the following command:
 
     $ bin/console assets:install
     
     
-## Create user and assign roles
+## Create a user CMS 
 
-    $ bin/console fos:user:create
-    
-    $bin/console fos:user:promote
-    
-    
+Create CMS user by running `fos:user:create` command:
 
+    $ bin/console fos:user:create admin admin@example.com adminpassword
+
+Assign `ROLE_ADMIN` to the user you just created:
+    
+    $ bin/console fos:user:promote admin ROLE_ADMIN
+    
+    
 ## It's all set
 
-It's all set. 
+Now it is time to start local server:
 
-
-    $ bin/console s:r
+    $ bin/console server:run
     
-    
-Go to admin
-    
-    http://localhost:8000/admin
-
-If you have any problems installing CMS and all other bundles, we suggest you to install CMS demo site and refer to its configuration.
+and get into the CMS - open browser of your choice and navigate to `http://localhost:8000/admin`. Type in username and password of th euser you created before. That's it!

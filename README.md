@@ -25,7 +25,6 @@ Drag-and-drop editors allow to change visual representation of a page and web si
 * focus on development, not content management 
 * start building new features right away - no excess learning required
 
-
 ## Documentation
 
 If you are not familiar with the CMS yet we would suggest you to install our [demo site](https://github.com/cms) first.
@@ -34,3 +33,4 @@ If you are not familiar with the CMS yet we would suggest you to install our [de
 * [Installation guide](docs/Installation.md)
 * [Developer's guide]()
 * [Content editor's guide]() 
+ 
