@@ -25,8 +25,8 @@ public function registerBundles()
         // ...               
         
         // CMS bundles
-        new Octave\SitemapBundle\OcatveSitemapBundle(),
-        new Ocatve\CMSBundle\OcatveCMSBundle(),
+        new Octave\SitemapBundle\OctaveSitemapBundle(),
+        new Octave\CMSBundle\OctaveCMSBundle(),
         
         // Sonata bundles & dependencies
         new Sonata\CoreBundle\SonataCoreBundle(),
