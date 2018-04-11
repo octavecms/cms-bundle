@@ -10,9 +10,9 @@ use Octave\CMSBundle\Entity\PageVersion;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class SimpleTextPageType extends BasePageType
+class TextPageType extends BasePageType
 {
-    const TYPE = 'simple_text';
+    const TYPE = 'text_page';
 
     /**
      * @return string
@@ -27,7 +27,7 @@ class SimpleTextPageType extends BasePageType
      */
     public function getController()
     {
-        return 'OctaveCMSBundle:SimpleText:edit';
+        return 'OctaveCMSBundle:TextPage:edit';
     }
 
     /**
@@ -35,7 +35,7 @@ class SimpleTextPageType extends BasePageType
      */
     public function canCreateRole()
     {
-        return 'ROLE_SIMPLE_TEXT_PAGE_CREATE';
+        return 'ROLE_TEXT_PAGE_CREATE';
     }
 
     /**

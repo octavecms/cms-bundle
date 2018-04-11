@@ -16,7 +16,7 @@ class PageManager
     private $types = [];
 
     /** @var array */
-    private $simpleTextTemplates = [];
+    private $textPageTemplates = [];
 
     /** @var bool|array */
     private $pages = false;
@@ -71,28 +71,28 @@ class PageManager
     /**
      * @return array
      */
-    public function getSimpleTextTemplates()
+    public function getTextPageTemplates()
     {
-        return $this->simpleTextTemplates;
+        return $this->textPageTemplates;
     }
 
     /**
-     * @param array $simpleTextTemplates
+     * @param array $textPageTemplates
      */
-    public function setSimpleTextTemplates($simpleTextTemplates)
+    public function setTextPageTemplates($textPageTemplates)
     {
-        $this->simpleTextTemplates = $simpleTextTemplates;
+        $this->textPageTemplates = $textPageTemplates;
     }
 
     /**
      * @return array
      */
-    public function getSimpleTextTemplatesAsChoices()
+    public function getTextPageTemplatesAsChoices()
     {
         $choices = [];
 
-        foreach ($this->simpleTextTemplates as $simpleTextTemplate) {
-            $choices[$simpleTextTemplate['label']] = $simpleTextTemplate['path'];
+        foreach ($this->textPageTemplates as $textPageTemplate) {
+            $choices[$textPageTemplate['label']] = $textPageTemplate['path'];
         }
 
         return $choices;

@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
-use Octave\CMSBundle\Form\Type\SimpleTextType;
-use Octave\CMSBundle\Page\Type\SimpleTextPageType;
+use Octave\CMSBundle\Form\Type\TextPageType as TextPageForm;
+use Octave\CMSBundle\Page\Type\TextPageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class SimpleTextController extends Controller
+class TextPageController extends Controller
 {
     /**
      * @param Request $request
@@ -28,15 +28,15 @@ class SimpleTextController extends Controller
             ? $this->get('security.authorization_checker')
                 ->isGranted($this->getParameter('octave.cms.super_admin_role'))
             : true;
-        $templates = $this->get('octave.cms.page.manager')->getSimpleTextTemplatesAsChoices();
+        $templates = $this->get('octave.cms.page.manager')->getTextPageTemplatesAsChoices();
         $isPublish = $request->get('publish');
 
         if (!$page) {
             $page = $pageRepository->create();
-            $page->setType(SimpleTextPageType::TYPE);
+            $page->setType(TextPageType::TYPE);
         }
 
-        $form = $this->createForm(SimpleTextType::class, $page, [
+        $form = $this->createForm(TextPageForm::class, $page, [
             'method' => 'post',
             'is_admin' => $isAdmin,
             'locales' => $this->getParameter('locales'),
@@ -89,12 +89,12 @@ class SimpleTextController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => SimpleTextPageType::TYPE]);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => TextPageType::TYPE]);
                 }
             }
         }
 
-        return $this->render('OctaveCMSBundle:SimpleText:create_simple_txt.html.twig', [
+        return $this->render('OctaveCMSBundle:TextPage:create_simple_txt.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
@@ -111,7 +111,7 @@ class SimpleTextController extends Controller
     {
         $template = $page->getContent()->getTemplate()
             ? $page->getContent()->getTemplate()
-            : $this->getParameter('octave.cms.simple_text_template');
+            : $this->getParameter('octave.cms.text_page_template');
 
         return $this->render($template, [
             'page' => $page

@@ -72,10 +72,10 @@ Add CMS and Text bundle related configuration parameters:
 octave_cms:
     media_upload_path: /uploads/
     media_resized_path: /uploads/resized/
-    simple_text_templates:
+    text_page_templates:
         default:
             label: 'Default'
-            path: 'OctaveCMSBundle:SimpleText:show.html.twig'
+            path: TextPage
 ```
 
 > **Note:** _For more information on CMS and Text Editor bundles refer to [CMS developer's guide](docs/developers-guide.md)._
@@ -193,7 +193,7 @@ security:
             - ROLE_USER
             - ROLE_BLOCK_PAGE_CREATE
             - ROLE_CUSTOM_PAGE_CREATE
-            - ROLE_SIMPLE_TEXT_PAGE_CREATE
+            - ROLE_TEXT_PAGE_CREATE
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
