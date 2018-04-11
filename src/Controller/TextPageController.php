@@ -68,7 +68,7 @@ class TextPageController extends Controller
                 $page->setName(sprintf('simple_text_%d', $page->getId()));
             }
 
-            $page->setController($this->getParameter('octave.cms.simple_text_controller'));
+            $page->setController($this->getParameter('octave.cms.text_page_controller'));
             $page->setOption('id', $page->getId());
 
             if ($isPublish) {
@@ -94,7 +94,7 @@ class TextPageController extends Controller
             }
         }
 
-        return $this->render('OctaveCMSBundle:TextPage:create_simple_txt.html.twig', [
+        return $this->render('OctaveCMSBundle:TextPage:create_text_page.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,

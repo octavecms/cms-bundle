@@ -258,7 +258,7 @@ Create CMS user by running `fos:user:create` command:
 
 Assign `ROLE_ADMIN` to the user you just created:
     
-    $ bin/console fos:user:promote admin ROLE_ADMIN
+    $ bin/console fos:user:promote admin ROLE_ADMINROLE_ADMIN
     
     
 ## It's all set
