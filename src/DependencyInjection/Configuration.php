@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface
      */
     private function createTemplatesNode()
     {
-        return $this->createNode('text_page_templates')
+        return $this->createNode('simple_text_templates')
             ->normalizeKeys(false)
             ->useAttributeAsKey('name')
             ->prototype('array')

@@ -14,7 +14,7 @@ use Octave\CMSBundle\Entity\Page;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class TextPageType extends AbstractType
+class SimpleTextType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -42,7 +42,7 @@ class TextPageType extends AbstractType
             ->add('path', TextType::class);
 
         $builder
-            ->add('content', TextPageContentType::class, [
+            ->add('content', SimpleTextContentType::class, [
                 'locales' => $options['locales'],
                 'templates' => $options['templates']
             ])

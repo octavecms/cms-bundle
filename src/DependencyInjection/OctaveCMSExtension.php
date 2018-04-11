@@ -25,8 +25,8 @@ class OctaveCMSExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $definition = $container->getDefinition('octave.cms.page.manager');
-        if (isset($config['text_page_templates'])) {
-            $definition->addMethodCall('setTextPageTemplates', [$config['text_page_templates']]);
+        if (isset($config['simple_text_templates'])) {
+            $definition->addMethodCall('setSimpleTextTemplates', [$config['simple_text_templates']]);
         }
 
         if (isset($config['media_upload_path'])) {

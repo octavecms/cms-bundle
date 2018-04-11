@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
-use Octave\CMSBundle\Form\Type\TextPageType;
-use Octave\CMSBundle\Page\Type\TextPagePageType;
+use Octave\CMSBundle\Form\Type\SimpleTextType;
+use Octave\CMSBundle\Page\Type\SimpleTextPageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class TextPageController extends Controller
+class SimpleTextController extends Controller
 {
     /**
      * @param Request $request
@@ -28,15 +28,15 @@ class TextPageController extends Controller
             ? $this->get('security.authorization_checker')
                 ->isGranted($this->getParameter('octave.cms.super_admin_role'))
             : true;
-        $templates = $this->get('octave.cms.page.manager')->getTextPageTemplatesAsChoices();
+        $templates = $this->get('octave.cms.page.manager')->getSimpleTextTemplatesAsChoices();
         $isPublish = $request->get('publish');
 
         if (!$page) {
             $page = $pageRepository->create();
-            $page->setType(TextPagePageType::TYPE);
+            $page->setType(SimpleTextPageType::TYPE);
         }
 
-        $form = $this->createForm(TextPageType::class, $page, [
+        $form = $this->createForm(SimpleTextType::class, $page, [
             'method' => 'post',
             'is_admin' => $isAdmin,
             'locales' => $this->getParameter('locales'),
@@ -49,7 +49,7 @@ class TextPageController extends Controller
             $emptyName = false;
             if (!$page->getName()) {
                 $emptyName = true;
-                $page->setName(sprintf('text_page_%s', time()));
+                $page->setName(sprintf('simple_text_%s', time()));
             }
 
             if (!$isPublish && $version) {
@@ -65,10 +65,10 @@ class TextPageController extends Controller
             }
 
             if ($emptyName) {
-                $page->setName(sprintf('text_page_%d', $page->getId()));
+                $page->setName(sprintf('simple_text_%d', $page->getId()));
             }
 
-            $page->setController($this->getParameter('octave.cms.text_page_controller'));
+            $page->setController($this->getParameter('octave.cms.simple_text_controller'));
             $page->setOption('id', $page->getId());
 
             if ($isPublish) {
@@ -89,12 +89,12 @@ class TextPageController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => TextPagePageType::TYPE]);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => SimpleTextPageType::TYPE]);
                 }
             }
         }
 
-        return $this->render('OctaveCMSBundle:TextPage:create_simple_txt.html.twig', [
+        return $this->render('OctaveCMSBundle:SimpleText:create_simple_txt.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
@@ -111,7 +111,7 @@ class TextPageController extends Controller
     {
         $template = $page->getContent()->getTemplate()
             ? $page->getContent()->getTemplate()
-            : $this->getParameter('octave.cms.text_page_template');
+            : $this->getParameter('octave.cms.simple_text_template');
 
         return $this->render($template, [
             'page' => $page

@@ -72,10 +72,10 @@ Add CMS and Text bundle related configuration parameters:
 octave_cms:
     media_upload_path: /uploads/
     media_resized_path: /uploads/resized/
-    text_page_templates:
+    simple_text_templates:
         default:
             label: 'Default'
-            path: 'OctaveCMSBundle:TextPage:show.html.twig'
+            path: 'OctaveCMSBundle:SimpleText:show.html.twig'
 ```
 
 > **Note:** _For more information on CMS and Text Editor bundles refer to [CMS developer's guide](docs/developers-guide.md)._
