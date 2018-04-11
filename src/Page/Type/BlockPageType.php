@@ -28,7 +28,7 @@ class BlockPageType extends BasePageType
      */
     public function getController()
     {
-        return 'OctaveCMSBundle:Block:edit';
+        return 'OctaveCMSBundle:PageBuilder:edit';
     }
 
     /**

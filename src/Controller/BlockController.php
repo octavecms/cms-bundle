@@ -67,7 +67,7 @@ class BlockController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             if (!$page->getName()) {
-                $page->setName(sprintf('simple_text_%s', time()));
+                $page->setName(sprintf('text_page_%s', time()));
             }
 
             $page->setController($this->getParameter('octave.cms.block_controller'));
@@ -120,7 +120,7 @@ class BlockController extends Controller
             }
         }
 
-        return $this->render('OctaveCMSBundle:Block:edit.html.twig', [
+        return $this->render('OctaveCMSBundle:PageBuilder:edit.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,

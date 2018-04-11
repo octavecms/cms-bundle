@@ -17,6 +17,6 @@ meta.title: Заголовок
 meta.keywords: Ключевые слова
 meta.description: Описание
 custom_label: Custom
-simple_text_label: Текстовая страница
+text_page_label: Текстовая страница
 block_label: Блоки
 publish: Опубликовать

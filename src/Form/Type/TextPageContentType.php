@@ -13,7 +13,7 @@ use Octave\CMSBundle\Entity\Content;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class SimpleTextContentType extends AbstractType
+class TextPageContentType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

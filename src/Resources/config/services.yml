@@ -1,11 +1,11 @@
 parameters:
 
     octave.cms.super_admin_role: 'ROLE_SUPER_ADMIN'
-    octave.cms.simple_text_controller: 'OctaveCMSBundle:SimpleText:show'
-    octave.cms.simple_text_template: 'OctaveCMSBundle:SimpleText:show.html.twig'
+    octave.cms.text_page_controller: 'OctaveCMSBundle:TextPage:show'
+    octave.cms.text_page_template: 'OctaveCMSBundle:TextPage:show.html.twig'
 
-    octave.cms.block_controller: 'OctaveCMSBundle:Block:show'
-    octave.cms.block_template: 'OctaveCMSBundle:Block:show.html.twig'
+    octave.cms.block_controller: 'OctaveCMSBundle:PageBuilder:show'
+    octave.cms.block_template: 'OctaveCMSBundle:PageBuilder:show.html.twig'
 
     octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:text.html.twig'
     octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:textarea.html.twig'
@@ -60,8 +60,8 @@ services:
         public: false
 
     # Page types
-    octave.cms.simple_text.type:
-        class: Octave\CMSBundle\Page\Type\SimpleTextPageType
+    octave.cms.text_page.type:
+        class: Octave\CMSBundle\Page\Type\TextPagePageType
         tags:
             - { name: octave.page.type }
 
