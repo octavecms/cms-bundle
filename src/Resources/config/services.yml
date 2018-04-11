@@ -5,7 +5,7 @@ parameters:
     octave.cms.text_page_template: 'OctaveCMSBundle:TextPage:show.html.twig'
 
     octave.cms.flexible_page_controller: 'OctaveCMSBundle:FlexiblePage:show'
-    octave.cms.flexible_page__template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
+    octave.cms.flexible_page_template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
 
     octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:text.html.twig'
     octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:textarea.html.twig'

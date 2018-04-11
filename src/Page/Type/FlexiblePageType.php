@@ -13,7 +13,7 @@ use Octave\CMSBundle\Entity\PageVersion;
  */
 class FlexiblePageType extends BasePageType
 {
-    const TYPE = 'flexible';
+    const TYPE = 'flexible_page';
 
     /**
      * @return string

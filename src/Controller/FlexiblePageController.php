@@ -70,7 +70,7 @@ class FlexiblePageController extends Controller
                 $page->setName(sprintf('simple_text_%s', time()));
             }
 
-            $page->setController($this->getParameter('octave.cms.block_controller'));
+            $page->setController($this->getParameter('octave.cms.flexible_page_controller'));
             $page->setOption('id', $page->getId());
 
             /** @var Block $block */
@@ -115,7 +115,7 @@ class FlexiblePageController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => FlexiblePageType::TYPE]);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => FlexiblePageForm::TYPE]);
                 }
             }
         }
@@ -135,7 +135,7 @@ class FlexiblePageController extends Controller
      */
     public function showAction(Page $page)
     {
-        $template = $this->getParameter('octave.cms.block_template');
+        $template = $this->getParameter('octave.cms.flexible_page_template');
         return $this->render($template, [
             'page' => $page,
             'content' => $this->get('octave.cms.block.manager')->renderPage($page)
