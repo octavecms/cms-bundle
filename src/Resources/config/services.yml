@@ -4,8 +4,8 @@ parameters:
     octave.cms.text_page_controller: 'OctaveCMSBundle:TextPage:show'
     octave.cms.text_page_template: 'OctaveCMSBundle:TextPage:show.html.twig'
 
-    octave.cms.block_controller: 'OctaveCMSBundle:Block:show'
-    octave.cms.block_template: 'OctaveCMSBundle:Block:show.html.twig'
+    octave.cms.flexible_page_controller: 'OctaveCMSBundle:FlexiblePage:show'
+    octave.cms.flexible_page__template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
 
     octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:text.html.twig'
     octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:textarea.html.twig'
@@ -65,8 +65,8 @@ services:
         tags:
             - { name: octave.page.type }
 
-    octave.cms.block.type:
-        class: Octave\CMSBundle\Page\Type\BlockPageType
+    octave.cms.flexible_page.type:
+        class: Octave\CMSBundle\Page\Type\FlexiblePageType
         tags:
             - { name: octave.page.type }
 

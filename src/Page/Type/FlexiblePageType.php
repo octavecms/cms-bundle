@@ -11,9 +11,9 @@ use Octave\CMSBundle\Entity\PageVersion;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class BlockPageType extends BasePageType
+class FlexiblePageType extends BasePageType
 {
-    const TYPE = 'block';
+    const TYPE = 'flexible';
 
     /**
      * @return string
@@ -28,7 +28,7 @@ class BlockPageType extends BasePageType
      */
     public function getController()
     {
-        return 'OctaveCMSBundle:Block:edit';
+        return 'OctaveCMSBundle:FlexiblePage:edit';
     }
 
     /**
@@ -36,7 +36,7 @@ class BlockPageType extends BasePageType
      */
     public function canCreateRole()
     {
-        return 'ROLE_BLOCK_PAGE_CREATE';
+        return 'ROLE_FLEXIBLE_PAGE_CREATE';
     }
 
     /**
@@ -52,7 +52,7 @@ class BlockPageType extends BasePageType
      */
     public function getLabel()
     {
-        return 'Blocks';
+        return 'Flexible';
     }
 
     /**

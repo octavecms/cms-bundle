@@ -14,7 +14,7 @@ use Octave\CMSBundle\Entity\Page;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class BlockType extends AbstractType
+class FlexiblePageType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

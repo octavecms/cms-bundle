@@ -7,13 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\Page;
-use Octave\CMSBundle\Form\Type\BlockType;
-use Octave\CMSBundle\Page\Type\BlockPageType;
+use Octave\CMSBundle\Form\Type\FlexiblePageType as FlexiblePageForm;
+use Octave\CMSBundle\Page\Type\FlexiblePageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class BlockController extends Controller
+class FlexiblePageController extends Controller
 {
     /**
      * @param Request $request
@@ -34,7 +34,7 @@ class BlockController extends Controller
 
         if (!$page) {
             $page = $pageRepository->create();
-            $page->setType(BlockPageType::TYPE);
+            $page->setType(FlexiblePageForm::TYPE);
         }
 
         $originalBlocks = new ArrayCollection();
@@ -53,7 +53,7 @@ class BlockController extends Controller
             }
         }
 
-        $form = $this->createForm(BlockType::class, $page, [
+        $form = $this->createForm(FlexiblePageType::class, $page, [
             'method' => 'post',
             'block_types' => $blockManager->getBlocks(),
             'locales' => $this->getParameter('locales'),
@@ -115,12 +115,12 @@ class BlockController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => BlockPageType::TYPE]);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => FlexiblePageType::TYPE]);
                 }
             }
         }
 
-        return $this->render('OctaveCMSBundle:Block:edit.html.twig', [
+        return $this->render('OctaveCMSBundle:FlexiblePage:edit.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,

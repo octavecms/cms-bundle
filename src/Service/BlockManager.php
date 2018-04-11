@@ -5,7 +5,7 @@ use Symfony\Bundle\TwigBundle\TwigEngine;
 use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Page\Block\BlockInterface;
-use Octave\CMSBundle\Page\Type\BlockPageType;
+use Octave\CMSBundle\Page\Type\FlexiblePageType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -59,7 +59,7 @@ class BlockManager
      */
     public function renderPage(Page $page)
     {
-        if ($page->getType() != BlockPageType::TYPE) {
+        if ($page->getType() != FlexiblePageType::TYPE) {
             throw new \LogicException(sprintf('Invalid type: %s', $page->getType()));
         }
 

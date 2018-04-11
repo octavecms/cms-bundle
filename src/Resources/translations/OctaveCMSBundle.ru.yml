@@ -18,6 +18,6 @@ meta.keywords: Ключевые слова
 meta.description: Описание
 custom_label: Custom
 text_page_label: Текстовая страница
-block_label: Блоки
+flexible_page_label: Блоки
 publish: Опубликовать
 simple_text_content_translations: Текстовый редактор

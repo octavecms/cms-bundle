@@ -191,7 +191,7 @@ security:
     role_hierarchy:
         ROLE_ADMIN:
             - ROLE_USER
-            - ROLE_BLOCK_PAGE_CREATE
+            - ROLE_FLEXIBLE_PAGE_CREATE
             - ROLE_CUSTOM_PAGE_CREATE
             - ROLE_TEXT_PAGE_CREATE
 
@@ -258,7 +258,7 @@ Create CMS user by running `fos:user:create` command:
 
 Assign `ROLE_ADMIN` to the user you just created:
     
-    $ bin/console fos:user:promote admin ROLE_ADMINROLE_ADMIN
+    $ bin/console fos:user:promote admin ROLE_ADMIN
     
     
 ## It's all set
