@@ -56,7 +56,7 @@ Enable Twig template engine and translator service:
 # ...
 
 parameters:
-    locales: [en, ru]
+    locales: [en, de, fr, it, es]
     locale: en
 
 framework:
@@ -186,7 +186,9 @@ security:
             security: false
 
         main:
-            http_basic: ~
+            http_basic:
+                provider: fos_userbundle
+            anonymous: ~
 
     role_hierarchy:
         ROLE_ADMIN:
@@ -254,7 +256,7 @@ Install bnunles' static assets by running the following command:
 
 Create CMS user by running `fos:user:create` command:
 
-    $ bin/console fos:user:create admin admin@example.com adminpassword
+    $ bin/console fos:user:create admin admin@example.com password
 
 Assign `ROLE_ADMIN` to the user you just created:
     
