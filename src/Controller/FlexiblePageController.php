@@ -53,7 +53,7 @@ class FlexiblePageController extends Controller
             }
         }
 
-        $form = $this->createForm(FlexiblePageType::class, $page, [
+        $form = $this->createForm(FlexiblePageForm::class, $page, [
             'method' => 'post',
             'block_types' => $blockManager->getBlocks(),
             'locales' => $this->getParameter('locales'),

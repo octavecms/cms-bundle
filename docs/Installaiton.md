@@ -83,6 +83,7 @@ octave_cms:
 Configure Sonata Project bundles:
 ```yaml
 # Sonata Configuration
+title: Octave CMS
 sonata_admin:
     dashboard:
         groups:
@@ -247,7 +248,7 @@ Create CMS database structure. Run the following command:
 
 ## Install assets
 
-Install bnunles' static assets by running the following command:
+Install bundles' static assets by running the following command:
 
     $ bin/console assets:install
     
