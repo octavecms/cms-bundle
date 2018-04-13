@@ -2,13 +2,16 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class TextareaBlock extends AbstractBlock
+class LineInputBlock extends AbstractBlock
 {
+    const NAME = 'line_input';
+    const LABEL = 'Line input';
+
     /** @var string */
     private $template;
 
@@ -26,7 +29,7 @@ class TextareaBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'textarea';
+        return self::NAME;
     }
 
     /**
@@ -34,7 +37,7 @@ class TextareaBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Text';
+        return self::LABEL;
     }
 
     /**
@@ -42,7 +45,7 @@ class TextareaBlock extends AbstractBlock
      */
     public function getIcon()
     {
-        return 'fa fa-file-text-o';
+        return 'fa fa-file-o';
     }
 
     /**
@@ -50,7 +53,7 @@ class TextareaBlock extends AbstractBlock
      */
     public function getFormType()
     {
-        return TextareaType::class;
+        return TextType::class;
     }
 
     /**

@@ -10,6 +10,9 @@ use Octave\CMSBundle\Form\Type\BlockImageType;
  */
 class ImageBlock extends AbstractBlock
 {
+    const NAME = 'image';
+    const LABEL = 'Image';
+
     /** @var string */
     private $template;
 
@@ -26,7 +29,7 @@ class ImageBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'image';
+        return self::NAME;
     }
 
     /**
@@ -34,7 +37,7 @@ class ImageBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Image';
+        return self::IMAGE;
     }
 
     /**

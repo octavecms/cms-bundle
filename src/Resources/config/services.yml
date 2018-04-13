@@ -7,9 +7,9 @@ parameters:
     octave.cms.flexible_page_controller: 'OctaveCMSBundle:FlexiblePage:show'
     octave.cms.flexible_page_template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
 
-    octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:text.html.twig'
-    octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:textarea.html.twig'
-    octave.cms.editor.block.template: 'OctaveCMSBundle:Blocks:editor.html.twig'
+    octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:line_input.html.twig'
+    octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:text_editor.html.twig'
+    octave.cms.editor.block.template: 'OctaveCMSBundle:Blocks:rich_text_editor.html.twig'
     octave.cms.image.block.template: 'OctaveCMSBundle:Blocks:image.html.twig'
     octave.cms.gallery.block.template: 'OctaveCMSBundle:Blocks:gallery.html.twig'
 

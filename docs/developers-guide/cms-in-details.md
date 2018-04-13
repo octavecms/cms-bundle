@@ -1,28 +1,8 @@
-CMS in details
+CMS in Details
 ==============
 
-## Default blocks
+As we mentioned earlier Octave CMS comes with a set of predefined pages and blocks. 
+In these below chapters yo will learn how to override default block and page templates and how to create your own features. 
 
-Octave CMS comes with the following blocks:
-
-* Image
-* Image gallery
-* Line input
-* Rich text editor
-* Text editor
-
-### Overriding default block templates
-
-
-
-## Page types
-
-As you already noticed there are three types of pages in Octave CMS:
-
-* Text page
-* Flexible page
-* Custom page
-
-### Overriding default page templates
-
-## Creating your own blocks
+* [Blocks](/docs/developers-guide/cms-in-details/blocks.md)
+* [Pages](/docs/developers-guide/cms-in-details/page-templatess.md)

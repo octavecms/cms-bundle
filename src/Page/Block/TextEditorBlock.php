@@ -2,13 +2,16 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class EditorBlock extends AbstractBlock
+class TextEditorBlock extends AbstractBlock
 {
+    const NAME = 'text_editor';
+    const LABEL = 'Text';
+
     /** @var string */
     private $template;
 
@@ -26,7 +29,7 @@ class EditorBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'editor';
+        return self::NAME;
     }
 
     /**
@@ -34,7 +37,7 @@ class EditorBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Editor';
+        return self::LABEL;
     }
 
     /**
@@ -50,7 +53,7 @@ class EditorBlock extends AbstractBlock
      */
     public function getFormType()
     {
-        return CKEditorType::class;
+        return TextareaType::class;
     }
 
     /**

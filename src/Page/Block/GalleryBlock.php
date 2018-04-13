@@ -11,6 +11,7 @@ use Octave\CMSBundle\Form\Type\MediaGalleryType;
 class GalleryBlock extends AbstractBlock
 {
     const NAME = 'gallery';
+    const LABEL = 'Gallery';
 
     /** @var string */
     private $template;
@@ -36,7 +37,7 @@ class GalleryBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Gallery';
+        return self::LABEL;
     }
 
     /**

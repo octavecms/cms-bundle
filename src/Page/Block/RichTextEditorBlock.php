@@ -2,18 +2,21 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class TextBlock extends AbstractBlock
+class RichTextEditorBlock extends AbstractBlock
 {
+    const NAME = 'rich_text_editor';
+    const LABEL = 'Editor';
+
     /** @var string */
     private $template;
 
     /**
-     * EditorBlock constructor.
+     * RichTextEditorBlock constructor.
      * @param string $template
      */
     public function __construct($template)
@@ -26,7 +29,7 @@ class TextBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'text';
+        return self::NAME;
     }
 
     /**
@@ -34,7 +37,7 @@ class TextBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Line input';
+        return self::LABEL;
     }
 
     /**
@@ -42,7 +45,7 @@ class TextBlock extends AbstractBlock
      */
     public function getIcon()
     {
-        return 'fa fa-file-o';
+        return 'fa fa-file-text-o';
     }
 
     /**
@@ -50,7 +53,7 @@ class TextBlock extends AbstractBlock
      */
     public function getFormType()
     {
-        return TextType::class;
+        return CKEditorType::class;
     }
 
     /**

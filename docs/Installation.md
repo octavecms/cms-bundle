@@ -47,9 +47,7 @@ public function registerBundles()
 
 ### config.yml
 
-Open `app/config/config.yml` file and add the below lines into the file.
-
-Enable Twig template engine and translator service:
+Open `app/config/config.yml` file. Configure locales, enable Twig template engine and translator service:
  
 ```yaml
 
@@ -60,13 +58,13 @@ parameters:
     locale: en
 
 framework:
-    ...
+    # ...
     translator: { fallbacks: ['%locale%'] }
     templating:
         engines: ['twig']
 ```
 
-Add CMS and Text bundle related configuration parameters: 
+Add Octave CMS configuration parameters: 
 ```yaml
 # Octave CMS Configuration
 octave_cms:
@@ -125,7 +123,7 @@ a2lix_translation_form:
 
 ### parameters.yml
 
-Now open `app/config/parameters.yml` file and enter database connection details:
+Now open `app/config/parameters.yml` file. Enter database connection details:
 
 ```yaml
 parameters:
@@ -205,9 +203,11 @@ security:
       - { path: ^/admin, role: [ROLE_ADMIN] }
 ```
 
+> **Note:** _For simplicity of configuration we will use HTTP basic authentication in this guide. You are free to configure authentication of your choice._
+
 ## Create User class
 
-This class will be used for supporting HTTP basic authentication into CMS back-end.
+This class will be used for supporting authentication into CMS back-end.
 
 ```php
 <?php
@@ -242,7 +242,7 @@ class User extends BaseUser
 
 ## Create database
 
-Create CMS database structure. Run the following command: 
+Create CMS database structure by running the following command: 
 
     $ bin/console doctrine:schema:update --force
 
@@ -253,7 +253,7 @@ Install bundles' static assets by running the following command:
     $ bin/console assets:install
     
     
-## Create a user CMS 
+## Create a user  
 
 Create CMS user by running `fos:user:create` command:
 
@@ -270,4 +270,5 @@ Now it is time to start local server:
 
     $ bin/console server:run
     
-and get into the CMS - open browser of your choice and navigate to `http://localhost:8000/admin`. Type in username and password of th euser you created before. That's it!
+and get into the CMS - open browser of your choice and navigate to `http://img.octavecms.com/admin`. 
+Type in username and password of the user you created in previous step. That's it!
