@@ -33,7 +33,7 @@ Drag-and-drop the `Editor` icon from the toolbar onto ...
 
 and type `Hello world!` into the editor's window. 
 Click the `Publish` button.
-Make sure you don't have any controllers listening on  `/` route and open `http://img.octavecms.com/` in your browser.
+Make sure you don't have any controllers listening on  `/` route and open `http://localhost:8000/` in your browser.
 
 Viola! Your first Octave CMS page is live. 
 

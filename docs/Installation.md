@@ -270,5 +270,5 @@ Now it is time to start local server:
 
     $ bin/console server:run
     
-and get into the CMS - open browser of your choice and navigate to `http://img.octavecms.com/admin`. 
+and get into the CMS - open browser of your choice and navigate to `http://localhost:8000/admin`. 
 Type in username and password of the user you created in previous step. That's it!

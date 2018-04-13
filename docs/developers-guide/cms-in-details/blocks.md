@@ -11,7 +11,7 @@ Octave CMS comes with the following default blocks:
 * Text editor
 * Rich text editor
 
-Blocks' PHP code is located at `vendor/ocatve/cms-bundle/src/Page/Block` and default TWIG templates are under `vendor/ocatve/cms-bundle/src/Resources/views/Blocks`.
+Blocks' PHP code is located at `vendor/octave/cms-bundle/src/Page/Block` and default TWIG templates are under `vendor/octave/cms-bundle/src/Resources/views/Blocks`.
 
 Let's go ahead and modify **Rich Text Editor** block's template.
 
@@ -19,7 +19,7 @@ Let's go ahead and modify **Rich Text Editor** block's template.
 
 Create `app/Resources/OctaveCMSBundle/views/Blocks` folder in your project. 
 That's the place where Octave CMS will search for block templates first. 
-If there is no such folder or there is no relevant block template in that folder, Octave CMS will fallback to default template location at `vendor/ocatve/cms-bundle/src/Resources/views/Blocks`.
+If there is no such folder or there is no relevant block template in that folder, Octave CMS will fallback to default template location at `vendor/octave/cms-bundle/src/Resources/views/Blocks`.
 
 Default **Rich Text Editor** block's template outputs just the text (`<div>{{ content | raw }}</div>`) you entered when editing page. 
 Let's add current page title to block's output. 
@@ -202,7 +202,7 @@ That's it!. Block is configured now and can be added to a page.
 
 ## Conclusion
 
-A few words on what we've done.  
+A few words on what we've done. 
 We created block configuration by adding parameters to `FormBuilder` object in `src/AppBundle/Form/ArticleType.php` file. 
 Like you normally do when you are building a form with the help of Symfony's FormBuilder object. 
 
