@@ -26,8 +26,8 @@
 
             <div class="btn-group">
                 <a class="btn btn-primary sonata-action-element js-image-change">
-                    <span class="form-control-image__not-empty">{{ 'change_image' | trans({}, 'VideInfraCMSBundle') }}</span>
-                    <span class="form-control-image__empty">{{ 'select_image' | trans({}, 'VideInfraCMSBundle') }}</span>
+                    <span class="form-control-image__not-empty">{{ 'change_image' | trans({}, 'OctaveCMSBundle') }}</span>
+                    <span class="form-control-image__empty">{{ 'select_image' | trans({}, 'OctaveCMSBundle') }}</span>
                 </a>
                 <a class="btn btn-danger sonata-action-element js-image-reset">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -60,7 +60,7 @@
         <div class="btn-group">
             <a class="btn btn-primary sonata-action-element js-gallery-add">
                 <i class="fa fa-plus"></i>
-                {{ 'add_image' | trans({}, 'VideInfraCMSBundle') }}
+                {{ 'add_image' | trans({}, 'OctaveCMSBundle') }}
             </a>
         </div>
 
@@ -72,7 +72,7 @@
     </script>
 {% endblock %}
 
-{% block vig_collection_widget %}
+{% block octave_collection_widget %}
     <div id="{{ id }}_widget" class="form-control-collection">
         {% set html %}
             <li class="well well-small">
@@ -100,7 +100,7 @@
         <div class="btn-group">
             <a class="btn btn-primary sonata-action-element js-collection-add">
                 <i class="fa fa-plus"></i>
-                {{ 'add_collection_item' | trans({}, 'VideInfraCMSBundle') }}
+                {{ 'add_collection_item' | trans({}, 'OctaveCMSBundle') }}
             </a>
         </div>
     </div>

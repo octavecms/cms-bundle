@@ -1,16 +1,16 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace Octave\CMSBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Entity\PageTranslation;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\PageTranslation;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageController extends AbstractController
 {
@@ -20,7 +20,7 @@ class PageController extends AbstractController
      */
     public function createPageAction($type)
     {
-        $pageType = $this->get('vig.cms.page_type.factory')->get($type);
+        $pageType = $this->get('octave.cms.page_type.factory')->get($type);
 
         return $this->forward($pageType->getController());
     }
@@ -32,14 +32,14 @@ class PageController extends AbstractController
      */
     public function editAction(Request $request, $id = null)
     {
-        $page = $this->get('vig.cms.page.repository')->find($id);
+        $page = $this->get('octave.cms.page.repository')->find($id);
         if (!$page) {
             throw new NotFoundHttpException(sprintf('Unable to find Page entity with id %s', $id));
         }
 
-        $pageType = $this->get('vig.cms.page_type.factory')->get($page->getType());
+        $pageType = $this->get('octave.cms.page_type.factory')->get($page->getType());
 
-        $usePageVersions = $this->getParameter('vig.cms.page_use_versions');
+        $usePageVersions = $this->getParameter('octave.cms.page_use_versions');
         $defaultVersion = $usePageVersions ? 'draft' : null;
 
         $version = $request->get('version', $defaultVersion);
@@ -49,7 +49,7 @@ class PageController extends AbstractController
 
         if ($usePageVersions && $version && !$isPublish) {
 
-            $versionRepository = $this->get('vig.cms.page_version.repository');
+            $versionRepository = $this->get('octave.cms.page_version.repository');
 
             $pageVersion = $versionRepository->findOneByVersion($page, $version);
             if (!$pageVersion) {
@@ -91,7 +91,7 @@ class PageController extends AbstractController
                 throw new \Exception('Path is required');
             }
 
-            $pageRepository = $this->get('vig.cms.page.repository');
+            $pageRepository = $this->get('octave.cms.page.repository');
 
             /** @var Page|null $parent */
             $parent = null;
@@ -106,7 +106,7 @@ class PageController extends AbstractController
                 $path = ($parent ? $parent->getPath() : '') . '/' . $path;
             }
 
-            $type = $this->get('vig.cms.page_type.factory')->get($typeId);
+            $type = $this->get('octave.cms.page_type.factory')->get($typeId);
             if ($type->canCreateRole() && !$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
                 throw new AccessDeniedException(sprintf('You are not allowed to create page with %s type', $typeId));
             }
@@ -137,7 +137,7 @@ class PageController extends AbstractController
 
             return new JsonResponse([
                 'status' => true,
-                'data' => $this->get('vig.cms.page.serializer')->toArray($page)
+                'data' => $this->get('octave.cms.page.serializer')->toArray($page)
             ]);
 
         }
@@ -161,12 +161,12 @@ class PageController extends AbstractController
             }
 
             /** @var Page $page */
-            $page = $this->get('vig.cms.page.repository')->find($id);
+            $page = $this->get('octave.cms.page.repository')->find($id);
             if (!$page) {
                 throw new \Exception(sprintf('Unable to find page with id %s', $id));
             }
 
-            $type = $this->get('vig.cms.page_type.factory')->get($page->getType());
+            $type = $this->get('octave.cms.page_type.factory')->get($page->getType());
             if ($type->canCreateRole() && !$this->get('security.authorization_checker')->isGranted($type->canCreateRole())) {
                 throw new AccessDeniedException(sprintf('You are not allowed to remove page with %s type',
                     $page->getType()));
@@ -202,7 +202,7 @@ class PageController extends AbstractController
                 throw new \Exception('Reference is missing');
             }
 
-            $pageRepository = $this->get('vig.cms.page.repository');
+            $pageRepository = $this->get('octave.cms.page.repository');
 
             /** @var Page|null $reference */
             $reference = null;

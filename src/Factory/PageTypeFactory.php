@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Factory;
+namespace Octave\CMSBundle\Factory;
 
-use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
-use VideInfra\CMSBundle\Service\PageManager;
+use Octave\CMSBundle\Page\Type\PageTypeInterface;
+use Octave\CMSBundle\Service\PageManager;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageTypeFactory
 {

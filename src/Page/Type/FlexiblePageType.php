@@ -1,19 +1,19 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Type;
+namespace Octave\CMSBundle\Page\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use VideInfra\CMSBundle\Entity\Block;
-use VideInfra\CMSBundle\Entity\BlockTranslation;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Entity\PageVersion;
+use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\BlockTranslation;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\PageVersion;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class BlockPageType extends BasePageType
+class FlexiblePageType extends BasePageType
 {
-    const TYPE = 'block';
+    const TYPE = 'flexible_page';
 
     /**
      * @return string
@@ -28,7 +28,7 @@ class BlockPageType extends BasePageType
      */
     public function getController()
     {
-        return 'VideInfraCMSBundle:Block:edit';
+        return 'OctaveCMSBundle:FlexiblePage:edit';
     }
 
     /**
@@ -36,7 +36,7 @@ class BlockPageType extends BasePageType
      */
     public function canCreateRole()
     {
-        return 'ROLE_BLOCK_PAGE_CREATE';
+        return 'ROLE_FLEXIBLE_PAGE_CREATE';
     }
 
     /**
@@ -52,7 +52,7 @@ class BlockPageType extends BasePageType
      */
     public function getLabel()
     {
-        return 'Blocks';
+        return 'Flexible';
     }
 
     /**

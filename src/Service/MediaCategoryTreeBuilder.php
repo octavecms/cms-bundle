@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 
-use VideInfra\CMSBundle\Entity\MediaCategory;
+use Octave\CMSBundle\Entity\MediaCategory;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaCategoryTreeBuilder
 {

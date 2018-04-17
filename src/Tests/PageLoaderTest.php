@@ -1,13 +1,13 @@
 <?php
 
-namespace VideInfra\CMSBundle\Tests;
+namespace Octave\CMSBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\RouteCollection;
-use VideInfra\CMSBundle\Routing\PageLoader;
+use Octave\CMSBundle\Routing\PageLoader;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageLoaderTest extends WebTestCase
 {
@@ -19,7 +19,7 @@ class PageLoaderTest extends WebTestCase
         static::bootKernel();
         $container = static::$kernel->getContainer();
 
-        $this->loader = $container->get('vig.cms.page.loader');
+        $this->loader = $container->get('octave.cms.page.loader');
     }
 
     public function testLoad()

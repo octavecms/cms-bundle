@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 
 use Symfony\Component\Routing\RouterInterface;
-use VideInfra\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\Page;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageSerializer
 {

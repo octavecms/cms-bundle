@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Type;
+namespace Octave\CMSBundle\Page\Type;
 use Symfony\Component\Routing\RouteCollection;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Entity\PageVersion;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\PageVersion;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 interface PageTypeInterface
 {

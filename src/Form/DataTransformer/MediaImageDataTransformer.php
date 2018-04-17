@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\DataTransformer;
+namespace Octave\CMSBundle\Form\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
-use VideInfra\CMSBundle\Model\MediaImage;
-use VideInfra\CMSBundle\Model\MediaImageTranslation;
+use Octave\CMSBundle\Model\MediaImage;
+use Octave\CMSBundle\Model\MediaImageTranslation;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaImageDataTransformer implements DataTransformerInterface
 {

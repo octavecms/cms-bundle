@@ -34,12 +34,12 @@
 
                         <div class="media-gridlist-popover hidden">
                             <p>
-                                <label class="media-gridlist-popover-label">{{ 'file_size' | trans({}, 'VideInfraCMSBundle') }}:</label>
+                                <label class="media-gridlist-popover-label">{{ 'file_size' | trans({}, 'OctaveCMSBundle') }}:</label>
                                 <span class="media-gridlist-popover-value"><%= formatSize(data.size) %></span>
                             </p>
                             <% if (data.width || data.height) { %>
                                 <p>
-                                    <label class="media-gridlist-popover-label">{{ 'dimensions' | trans({}, 'VideInfraCMSBundle') }}:</label>
+                                    <label class="media-gridlist-popover-label">{{ 'dimensions' | trans({}, 'OctaveCMSBundle') }}:</label>
                                     <span class="media-gridlist-popover-value"><%= data.width %>x<%= data.height %></span>
                                 </p>
                             <% } %>
@@ -47,11 +47,11 @@
                             <p class="media-gridlist-popover-buttons">
                                 <button type="button" class="btn btn-primary js-media-replace">
                                     <span class="fa fa-upload"></span>
-                                    {{ 'replace' | trans({}, 'VideInfraCMSBundle') }}
+                                    {{ 'replace' | trans({}, 'OctaveCMSBundle') }}
                                 </button>
                                 <button type="button" class="btn btn-danger js-media-remove">
                                     <span class="fa fa-trash-o"></span>
-                                    {{ 'delete' | trans({}, 'VideInfraCMSBundle') }}
+                                    {{ 'delete' | trans({}, 'OctaveCMSBundle') }}
                                 </button>
                             </p>
 
@@ -59,7 +59,7 @@
                                 <p class="media-gridlist-popover-buttons">
                                     <a class="btn btn-primary js-media-download js-selectable-ignore" download="a.jpg" href="<%= data.image %>">
                                         <span class="fa fa-download"></span>
-                                        {{ 'download' | trans({}, 'VideInfraCMSBundle') }}
+                                        {{ 'download' | trans({}, 'OctaveCMSBundle') }}
                                     </a>
                                 </p>
                             <% } %>
@@ -67,7 +67,7 @@
                             {% if selectmode %}
                                 <p class="media-gridlist-popover-buttons">
                                     <button type="button" class="btn btn-primary js-media-select-opened">
-                                        {{ 'select' | trans({}, 'VideInfraCMSBundle') }}
+                                        {{ 'select' | trans({}, 'OctaveCMSBundle') }}
                                     </button>
                                 </p>
                             {% endif %}

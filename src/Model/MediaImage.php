@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Model;
+namespace Octave\CMSBundle\Model;
 
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaImage
 {

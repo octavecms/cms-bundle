@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Tests\Controller;
+namespace Octave\CMSBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -8,7 +8,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CategoryControllerTest extends WebTestCase
 {

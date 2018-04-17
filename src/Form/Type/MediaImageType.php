@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\Type;
+namespace Octave\CMSBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaImageType extends AbstractType
 {

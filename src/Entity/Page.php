@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Entity;
+namespace Octave\CMSBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,11 +9,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  *
- * @ORM\Entity(repositoryClass="VideInfra\CMSBundle\Repository\PageRepository")
+ * @ORM\Entity(repositoryClass="Octave\CMSBundle\Repository\PageRepository")
  * @ORM\Table(
- *     name="vig_pages"
+ *     name="octave_pages"
  * )
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("name")
@@ -88,7 +88,7 @@ class Page
 
     /**
      * @var Content
-     * @ORM\OneToOne(targetEntity="VideInfra\CMSBundle\Entity\Content", mappedBy="page", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Octave\CMSBundle\Entity\Content", mappedBy="page", cascade={"persist"})
      */
     private $content;
 

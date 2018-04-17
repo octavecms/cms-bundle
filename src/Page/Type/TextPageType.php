@@ -1,18 +1,18 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Type;
+namespace Octave\CMSBundle\Page\Type;
 
-use VideInfra\CMSBundle\Entity\Content;
-use VideInfra\CMSBundle\Entity\ContentTranslation;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Entity\PageVersion;
+use Octave\CMSBundle\Entity\Content;
+use Octave\CMSBundle\Entity\ContentTranslation;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\PageVersion;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class SimpleTextPageType extends BasePageType
+class TextPageType extends BasePageType
 {
-    const TYPE = 'simple_text';
+    const TYPE = 'text_page';
 
     /**
      * @return string
@@ -27,7 +27,7 @@ class SimpleTextPageType extends BasePageType
      */
     public function getController()
     {
-        return 'VideInfraCMSBundle:SimpleText:edit';
+        return 'OctaveCMSBundle:TextPage:edit';
     }
 
     /**
@@ -35,7 +35,7 @@ class SimpleTextPageType extends BasePageType
      */
     public function canCreateRole()
     {
-        return 'ROLE_SIMPLE_TEXT_PAGE_CREATE';
+        return 'ROLE_TEXT_PAGE_CREATE';
     }
 
     /**

@@ -14,7 +14,7 @@
                     </a>
 
                     {% if not element.readonly %}
-                        <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'VideInfraCMSBundle') }}">
+                        <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'OctaveCMSBundle') }}">
                             <i class="fa  fa-trash-o"></i>
                         </a>
                     {% endif %}
@@ -40,7 +40,7 @@
                 <a class="sonata-tree__item__edit" href="<%= data.edit_url %>"><%= data.name %></a>
 
                 <% if (!data.readonly) { %>
-                    <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'VideInfraCMSBundle') }}">
+                    <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'OctaveCMSBundle') }}">
                         <i class="fa  fa-trash-o"></i>
                     </a>
                 <% } %>

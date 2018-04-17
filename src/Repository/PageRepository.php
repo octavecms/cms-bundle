@@ -1,13 +1,13 @@
 <?php
 
-namespace VideInfra\CMSBundle\Repository;
+namespace Octave\CMSBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use VideInfra\CMSBundle\Entity\Page;
-use VideInfra\CMSBundle\Service\PageTreeBuilder;
+use Octave\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Service\PageTreeBuilder;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageRepository extends EntityRepository
 {
@@ -120,7 +120,7 @@ class PageRepository extends EntityRepository
     public function increasePositionAfter(Page $page)
     {
         $this->createQueryBuilder('p')
-            ->update('VideInfraCMSBundle:Page', 'p')
+            ->update('OctaveCMSBundle:Page', 'p')
             ->set('p.position', 'p.position + 1')
             ->andWhere('p.position > :position')
             ->setParameter('position', $page->getPosition())

@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller\Media;
+namespace Octave\CMSBundle\Controller\Media;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaController extends CRUDController
 {
@@ -14,13 +14,13 @@ class MediaController extends CRUDController
      */
     public function listAction()
     {
-        $categories = $this->get('vig.cms.media_category.repository')->getTree();
+        $categories = $this->get('octave.cms.media_category.repository')->getTree();
         $request = $this->getRequest();
         $currentCategory = $request->get('category', 'root');
 
         $selectMode = $request->get('select_mode');
-        $template = 'VideInfraCMSBundle:Media:list.html.twig';
-        if ($selectMode) $template = 'VideInfraCMSBundle:Media:list_raw.html.twig';
+        $template = 'OctaveCMSBundle:Media:list.html.twig';
+        if ($selectMode) $template = 'OctaveCMSBundle:Media:list_raw.html.twig';
 
         return $this->render($template, [
             'current_category_id' => $currentCategory,

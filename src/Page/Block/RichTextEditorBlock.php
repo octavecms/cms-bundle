@@ -1,19 +1,22 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Block;
+namespace Octave\CMSBundle\Page\Block;
 
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class EditorBlock extends AbstractBlock
+class RichTextEditorBlock extends AbstractBlock
 {
+    const NAME = 'rich_text_editor';
+    const LABEL = 'Editor';
+
     /** @var string */
     private $template;
 
     /**
-     * EditorBlock constructor.
+     * RichTextEditorBlock constructor.
      * @param string $template
      */
     public function __construct($template)
@@ -26,7 +29,7 @@ class EditorBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'editor';
+        return self::NAME;
     }
 
     /**
@@ -34,7 +37,7 @@ class EditorBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Editor';
+        return self::LABEL;
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Service;
+namespace Octave\CMSBundle\Service;
 
-use VideInfra\CMSBundle\Entity\MediaItem;
+use Octave\CMSBundle\Entity\MediaItem;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaItemSerializer
 {

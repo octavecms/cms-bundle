@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\Type;
+namespace Octave\CMSBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
@@ -10,10 +10,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use VideInfra\CMSBundle\Model\MediaGalleryItem;
+use Octave\CMSBundle\Model\MediaGalleryItem;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaGalleryItemType extends AbstractType
 {

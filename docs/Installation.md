@@ -25,8 +25,8 @@ public function registerBundles()
         // ...               
         
         // CMS bundles
-        new Octave\SitemapBundle\OcatveSitemapBundle(),
-        new Ocatve\CMSBundle\OcatveCMSBundle(),
+        new Octave\SitemapBundle\OctaveSitemapBundle(),
+        new Octave\CMSBundle\OctaveCMSBundle(),
         
         // Sonata bundles & dependencies
         new Sonata\CoreBundle\SonataCoreBundle(),
@@ -47,28 +47,33 @@ public function registerBundles()
 
 ### config.yml
 
-Open `app/config/config.yml` file and add the below lines into the file.
-
-Enable Twig template engine and translator service:
+Open `app/config/config.yml` file. Configure locales, enable Twig template engine and translator service:
  
 ```yaml
+
+# ...
+
+parameters:
+    locales: [en, de, fr, it, es]
+    locale: en
+
 framework:
-    ...
+    # ...
     translator: { fallbacks: ['%locale%'] }
     templating:
         engines: ['twig']
 ```
 
-Add CMS and Text bundle related configuration parameters: 
+Add Octave CMS configuration parameters: 
 ```yaml
 # Octave CMS Configuration
-vide_infra_cms:
+octave_cms:
     media_upload_path: /uploads/
     media_resized_path: /uploads/resized/
-    simple_text_templates:
+    text_page_templates:
         default:
             label: 'Default'
-            path: 'VideInfraCMSBundle:SimpleText:show.html.twig'
+            path: TextPage
 ```
 
 > **Note:** _For more information on CMS and Text Editor bundles refer to [CMS developer's guide](docs/developers-guide.md)._
@@ -76,13 +81,12 @@ vide_infra_cms:
 Configure Sonata Project bundles:
 ```yaml
 # Sonata Configuration
+title: Octave CMS
 sonata_admin:
     dashboard:
         groups:
-
             CMS:
                 label: CMS
-
             sonata_user:
                 label: Users
         
@@ -119,7 +123,7 @@ a2lix_translation_form:
 
 ### parameters.yml
 
-Now open `app/config/parameters.yml` file and enter database connection details:
+Now open `app/config/parameters.yml` file. Enter database connection details:
 
 ```yaml
 parameters:
@@ -146,8 +150,8 @@ Open `app/config/routing.yml` file and add the following lines:
 ```yaml
 # ...
 
-vig.cms.bundle:
-    resource: "@VideInfraCMSBundle/Resources/config/routing.yml"
+octave.cms.bundle:
+    resource: "@OctaveCMSBundle/Resources/config/routing.yml"
 
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
@@ -181,14 +185,16 @@ security:
             security: false
 
         main:
-            http_basic: ~
+            http_basic:
+                provider: fos_userbundle
+            anonymous: ~
 
     role_hierarchy:
         ROLE_ADMIN:
             - ROLE_USER
-            - ROLE_BLOCK_PAGE_CREATE
+            - ROLE_FLEXIBLE_PAGE_CREATE
             - ROLE_CUSTOM_PAGE_CREATE
-            - ROLE_SIMPLE_TEXT_PAGE_CREATE
+            - ROLE_TEXT_PAGE_CREATE
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
@@ -197,9 +203,11 @@ security:
       - { path: ^/admin, role: [ROLE_ADMIN] }
 ```
 
+> **Note:** _For simplicity of configuration we will use HTTP basic authentication in this guide. You are free to configure authentication of your choice._
+
 ## Create User class
 
-This class will be used for supporting HTTP basic authentication into CMS back-end.
+This class will be used for supporting authentication into CMS back-end.
 
 ```php
 <?php
@@ -234,22 +242,22 @@ class User extends BaseUser
 
 ## Create database
 
-Create CMS database structure. Run the following command: 
+Create CMS database structure by running the following command: 
 
     $ bin/console doctrine:schema:update --force
 
 ## Install assets
 
-Install bnunles' static assets by running the following command:
+Install bundles' static assets by running the following command:
 
     $ bin/console assets:install
     
     
-## Create a user CMS 
+## Create a user  
 
 Create CMS user by running `fos:user:create` command:
 
-    $ bin/console fos:user:create admin admin@example.com adminpassword
+    $ bin/console fos:user:create admin admin@example.com password
 
 Assign `ROLE_ADMIN` to the user you just created:
     
@@ -262,4 +270,5 @@ Now it is time to start local server:
 
     $ bin/console server:run
     
-and get into the CMS - open browser of your choice and navigate to `http://localhost:8000/admin`. Type in username and password of th euser you created before. That's it!
+and get into the CMS - open browser of your choice and navigate to `http://localhost:8000/admin`. 
+Type in username and password of the user you created in previous step. That's it!

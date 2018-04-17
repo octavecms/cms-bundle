@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace Octave\CMSBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 abstract class AbstractController extends Controller
 {

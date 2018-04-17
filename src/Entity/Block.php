@@ -1,18 +1,18 @@
 <?php
 
-namespace VideInfra\CMSBundle\Entity;
+namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use VideInfra\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\Page;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use VideInfra\CMSBundle\Page\Block\GalleryBlock;
+use Octave\CMSBundle\Page\Block\GalleryBlock;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  *
  * @ORM\Entity()
  * @ORM\Table(
- *     name="vig_page_blocks"
+ *     name="octave_page_blocks"
  * )
  */
 class Block

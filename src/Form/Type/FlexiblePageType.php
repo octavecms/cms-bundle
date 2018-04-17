@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\Type;
+namespace Octave\CMSBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
@@ -9,12 +9,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use VideInfra\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\Page;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class SimpleTextType extends AbstractType
+class FlexiblePageType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -39,19 +39,23 @@ class SimpleTextType extends AbstractType
             ->add('includeInSitemap', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('path', TextType::class);
-
-        $builder
-            ->add('content', SimpleTextContentType::class, [
-                'locales' => $options['locales'],
-                'templates' => $options['templates']
+            ->add('path', TextType::class)
+            ->add('blocks', BlockCollectionType::class, [
+                'entry_type' => BlockItemType::class,
+                'entry_options' => [
+                    'locales' => $options['locales']
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'block_types' => $options['block_types'],
+                'locales' => $options['locales']
             ])
         ;
 
         $builder
             ->add('translations', TranslationsType::class, [
-                'locales' => $options['locales'],
                 'label' => false,
+                'locales' => $options['locales'],
                 'fields' => [
                     'title' => [
                         'required' => true,
@@ -79,10 +83,10 @@ class SimpleTextType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'is_admin' => false,
             'data_class' => Page::class,
+            'is_admin' => false,
             'locales' => ['en'],
-            'templates' => false
+            'block_types' => []
         ));
     }
 }

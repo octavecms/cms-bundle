@@ -1,17 +1,17 @@
 <?php
 
-namespace VideInfra\CMSBundle\Routing;
+namespace Octave\CMSBundle\Routing;
 
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use VideInfra\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\Page;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use VideInfra\CMSBundle\Page\Type\PageTypeInterface;
-use VideInfra\CMSBundle\Service\PageManager;
+use Octave\CMSBundle\Page\Type\PageTypeInterface;
+use Octave\CMSBundle\Service\PageManager;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class PageLoader implements LoaderInterface
 {
@@ -67,7 +67,7 @@ class PageLoader implements LoaderInterface
      */
     public function supports($resource, $type = null)
     {
-        return 'vigcmsrouting' === $type;
+        return 'octavecmsrouting' === $type;
     }
 
     /**

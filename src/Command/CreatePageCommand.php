@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Command;
+namespace Octave\CMSBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
@@ -8,10 +8,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use VideInfra\CMSBundle\Repository\PageRepository;
+use Octave\CMSBundle\Repository\PageRepository;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CreatePageCommand extends Command
 {
@@ -39,7 +39,7 @@ class CreatePageCommand extends Command
 
     protected function configure()
     {
-        $this->setName('vig:page:create')
+        $this->setName('octave:page:create')
             ->setDefinition(
                 [
                     new InputArgument('name', InputArgument::REQUIRED, 'The name'),

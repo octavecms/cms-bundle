@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\DependencyInjection;
+namespace Octave\CMSBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -16,7 +16,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('vide_infra_cms');
+        $root = $treeBuilder->root('octave_cms');
 
         $root
             ->children()
@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface
      */
     private function createTemplatesNode()
     {
-        return $this->createNode('simple_text_templates')
+        return $this->createNode('text_page_templates')
             ->normalizeKeys(false)
             ->useAttributeAsKey('name')
             ->prototype('array')

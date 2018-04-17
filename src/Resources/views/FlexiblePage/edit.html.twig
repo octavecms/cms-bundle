@@ -1,10 +1,10 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 
-{% import 'VideInfraCMSBundle:Block:macros.html.twig' as blocks %}
+{% import 'OctaveCMSBundle:FlexiblePage:macros.html.twig' as blocks %}
 
 {% set blockTypes = form.blocks.vars.block_types %}
 
-{% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'VideInfraCMSBundle::fields.html.twig' %}
+{% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'OctaveCMSBundle::fields.html.twig' %}
 
 {% block sonata_page_content_header %}
 
@@ -13,13 +13,13 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
                     {% if isNew %}
-                        {{ 'add_new' | trans({}, 'VideInfraCMSBundle') }}
+                        {{ 'add_new' | trans({}, 'OctaveCMSBundle') }}
                     {% else %}
 
                         {% if version %}
-                            {{ 'edit_version' | trans({'%version%' : version}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+                            {{ 'edit_version' | trans({'%version%' : version}, 'OctaveCMSBundle') }} "{{ page.title }}"
                         {% else %}
-                            {{ 'edit' | trans({}, 'VideInfraCMSBundle') }} "{{ page.title }}"
+                            {{ 'edit' | trans({}, 'OctaveCMSBundle') }} "{{ page.title }}"
                         {% endif %}
 
                     {% endif %}
@@ -90,7 +90,7 @@
 
             <div class="box box-primary {% if boxCollapsed %}collapsed-box{% endif %}">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'general' | trans({}, 'VideInfraCMSBundle') }}</h3>
+                    <h3 class="box-title">{{ 'general' | trans({}, 'OctaveCMSBundle') }}</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -119,7 +119,7 @@
         <div class="col-md-12">
             <div class="box box-primary {% if boxCollapsed %}collapsed-box{% endif %}">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'seo' | trans({}, 'VideInfraCMSBundle') }}</h3>
+                    <h3 class="box-title">{{ 'seo' | trans({}, 'OctaveCMSBundle') }}</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -143,7 +143,7 @@
     {{ blocks.block_list_start() }}
 
         <h4 class="blocks-list-empty-message">
-            {{ 'add_block' | trans({}, 'VideInfraCMSBundle') }}
+            {{ 'add_block' | trans({}, 'OctaveCMSBundle') }}
         </h4>
 
         {% for block in form.blocks %}
@@ -167,15 +167,15 @@
     <div class="sonata-ba-form-actions well well-small form-actions">
 
         {% if version %}
-            <button class="btn btn-primary" type="submit" name="publish" value="1">{{ 'publish' | trans({}, 'VideInfraCMSBundle') }}</button>
+            <button class="btn btn-primary" type="submit" name="publish" value="1">{{ 'publish' | trans({}, 'OctaveCMSBundle') }}</button>
         {% endif %}
 
         {% if isNew %}
-            <button class="btn btn-success" type="submit" name="create_and_list" value="1">{{ 'create_and_list' | trans({}, 'VideInfraCMSBundle') }}</button>
-            <button class="btn btn-success" type="submit" name="create_and_create" value="1">{{ 'create_and_create' | trans({}, 'VideInfraCMSBundle') }}</button>
+            <button class="btn btn-success" type="submit" name="create_and_list" value="1">{{ 'create_and_list' | trans({}, 'OctaveCMSBundle') }}</button>
+            <button class="btn btn-success" type="submit" name="create_and_create" value="1">{{ 'create_and_create' | trans({}, 'OctaveCMSBundle') }}</button>
         {% else %}
-            <button class="btn btn-success" type="submit" name="update_and_list" value="1">{{ 'update_and_list' | trans({}, 'VideInfraCMSBundle') }}</button>
-            <button class="btn btn-success" type="submit" name="update_and_edit" value="1">{{ 'update_and_edit' | trans({}, 'VideInfraCMSBundle') }}</button>
+            <button class="btn btn-success" type="submit" name="update_and_list" value="1">{{ 'update_and_list' | trans({}, 'OctaveCMSBundle') }}</button>
+            <button class="btn btn-success" type="submit" name="update_and_edit" value="1">{{ 'update_and_edit' | trans({}, 'OctaveCMSBundle') }}</button>
         {% endif %}
     </div>
 
@@ -184,8 +184,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/blocks/dist/main.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/videinfracms/media/dist/main.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/octavecms/blocks/dist/main.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/octavecms/media/dist/main.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
@@ -193,6 +193,6 @@
     <script>
         var MEDIA_LIBRARY_URL = '{{ path('media_list', {'select_mode': '1'}) }}';
     </script>
-    <script src="{{ asset('bundles/videinfracms/blocks/dist/main.js') }}"></script>
-    <script src="{{ asset('bundles/videinfracms/media/dist/main.js') }}"></script>
+    <script src="{{ asset('bundles/octavecms/blocks/dist/main.js') }}"></script>
+    <script src="{{ asset('bundles/octavecms/media/dist/main.js') }}"></script>
 {% endblock %}

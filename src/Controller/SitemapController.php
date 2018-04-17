@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Controller;
+namespace Octave\CMSBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class SitemapController extends CRUDController
 {
@@ -14,10 +14,10 @@ class SitemapController extends CRUDController
      */
     public function listAction()
     {
-        $pageTypes = $this->get('vig.cms.page.manager')->getAllowedPageTypes();
-        $pages = $this->get('vig.cms.page.repository')->getTree(null, true);
+        $pageTypes = $this->get('octave.cms.page.manager')->getAllowedPageTypes();
+        $pages = $this->get('octave.cms.page.repository')->getTree(null, true);
 
-        return $this->render('VideInfraCMSBundle:Sitemap:list.html.twig', [
+        return $this->render('OctaveCMSBundle:Sitemap:list.html.twig', [
             'page_types' => $pageTypes,
             'root_page' => [
                 'id' => 'root',

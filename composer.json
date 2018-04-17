@@ -1,14 +1,14 @@
 {
-  "name": "vig/cms-bundle",
+  "name": "octave/cms-bundle",
   "type": "library",
   "description": "Symfony3 CMS",
   "license": "MIT",
   "keywords": ["cms"],
-  "homepage": "http://videinfra.com",
+  "homepage": "http://octavecms.com",
   "authors": [
     {
       "name": "Igor Lukashov",
-      "email": "igor.lukashov@videinfra.com",
+      "email": "igor.lukashov@octavecms.com",
       "role": "Developer"
     }
   ],
@@ -21,11 +21,11 @@
     "egeloen/ckeditor-bundle": "~4.0",
     "knplabs/doctrine-behaviors": "~1.1",
     "friendsofsymfony/user-bundle": "~2.0",
-    "vig/sitemap-bundle" : ">=1.0.5"
+    "octave/sitemap-bundle" : ">=1.0.5"
   },
   "autoload": {
     "psr-4": {
-      "VideInfra\\CMSBundle\\": "src/"
+      "Octave\\CMSBundle\\": "src/"
     }
   },
   "repositories": [

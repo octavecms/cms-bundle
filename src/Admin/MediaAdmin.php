@@ -1,12 +1,12 @@
 <?php
 
-namespace VideInfra\CMSBundle\Admin;
+namespace Octave\CMSBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Route\RouteCollection;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaAdmin extends AbstractAdmin
 {
@@ -24,35 +24,35 @@ class MediaAdmin extends AbstractAdmin
         $collection->clearExcept(array('list'));
 
         $collection->add('category_add', 'category/create', [
-            '_controller' => 'VideInfraCMSBundle:Media\Category:create'
+            '_controller' => 'OctaveCMSBundle:Media\Category:create'
         ], [], [], '', [], ['POST']);
 
         $collection->add('category_remove', 'category/remove', [
-            '_controller' => 'VideInfraCMSBundle:Media\Category:remove'
+            '_controller' => 'OctaveCMSBundle:Media\Category:remove'
         ], [], [], '', [], ['POST']);
 
         $collection->add('category_move', 'category/move', [
-            '_controller' => 'VideInfraCMSBundle:Media\Category:move'
+            '_controller' => 'OctaveCMSBundle:Media\Category:move'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_list', 'item/list', [
-            '_controller' => 'VideInfraCMSBundle:Media\Item:list'
+            '_controller' => 'OctaveCMSBundle:Media\Item:list'
         ]);
 
         $collection->add('item_move', 'item/move', [
-            '_controller' => 'VideInfraCMSBundle:Media\Item:move'
+            '_controller' => 'OctaveCMSBundle:Media\Item:move'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_remove', 'item/remove', [
-            '_controller' => 'VideInfraCMSBundle:Media\Item:remove'
+            '_controller' => 'OctaveCMSBundle:Media\Item:remove'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_upload', 'item/upload', [
-            '_controller' => 'VideInfraCMSBundle:Media\Item:upload'
+            '_controller' => 'OctaveCMSBundle:Media\Item:upload'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_replace', 'item/replace', [
-            '_controller' => 'VideInfraCMSBundle:Media\Item:replace'
+            '_controller' => 'OctaveCMSBundle:Media\Item:replace'
         ], [], [], '', [], ['POST']);
     }
 }

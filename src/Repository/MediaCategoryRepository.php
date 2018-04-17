@@ -1,13 +1,13 @@
 <?php
 
-namespace VideInfra\CMSBundle\Repository;
+namespace Octave\CMSBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use VideInfra\CMSBundle\Entity\MediaCategory;
-use VideInfra\CMSBundle\Service\MediaCategoryTreeBuilder;
+use Octave\CMSBundle\Entity\MediaCategory;
+use Octave\CMSBundle\Service\MediaCategoryTreeBuilder;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaCategoryRepository extends EntityRepository
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\DataTransformer;
+namespace Octave\CMSBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use VideInfra\CMSBundle\Model\MediaGalleryItem;
-use VideInfra\CMSBundle\Model\MediaGalleryItemTranslation;
+use Octave\CMSBundle\Model\MediaGalleryItem;
+use Octave\CMSBundle\Model\MediaGalleryItemTranslation;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class MediaGalleryItemDataTransformer implements DataTransformerInterface
 {

@@ -1,14 +1,17 @@
 <?php
 
-namespace VideInfra\CMSBundle\Page\Block;
+namespace Octave\CMSBundle\Page\Block;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class TextBlock extends AbstractBlock
+class LineInputBlock extends AbstractBlock
 {
+    const NAME = 'line_input';
+    const LABEL = 'Line input';
+
     /** @var string */
     private $template;
 
@@ -26,7 +29,7 @@ class TextBlock extends AbstractBlock
      */
     public function getName()
     {
-        return 'text';
+        return self::NAME;
     }
 
     /**
@@ -34,7 +37,7 @@ class TextBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return 'Line input';
+        return self::LABEL;
     }
 
     /**

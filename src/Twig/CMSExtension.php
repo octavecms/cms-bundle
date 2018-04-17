@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Twig;
+namespace Octave\CMSBundle\Twig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class CMSExtension extends \Twig_Extension
 {
@@ -35,9 +35,9 @@ class CMSExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('vig_route_exists', [$this, 'routeExists']),
-            new \Twig_SimpleFunction('vig_cms_menu', [$this, 'getMenu']),
-            new \Twig_SimpleFunction('vig_current_page', [$this, 'getCurrentPage'])
+            new \Twig_SimpleFunction('octave_route_exists', [$this, 'routeExists']),
+            new \Twig_SimpleFunction('octave_cms_menu', [$this, 'getMenu']),
+            new \Twig_SimpleFunction('octave_current_page', [$this, 'getCurrentPage'])
         ];
     }
 
@@ -47,7 +47,7 @@ class CMSExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('vig_resize', [$this, 'resize'])
+            new \Twig_SimpleFilter('octave_resize', [$this, 'resize'])
         ];
     }
 
@@ -71,7 +71,7 @@ class CMSExtension extends \Twig_Extension
             return $this->menu[$itemName];
         }
 
-        $pageRepository = $this->container->get('vig.cms.page.repository');
+        $pageRepository = $this->container->get('octave.cms.page.repository');
 
         if ($itemName != 'root') {
             $page = $pageRepository->findOneBy(['name' => $itemName, 'active' => true]);
@@ -94,7 +94,7 @@ class CMSExtension extends \Twig_Extension
      */
     public function getCurrentPage()
     {
-        return $this->container->get('vig.cms.page.manager')->getCurrentPage();
+        return $this->container->get('octave.cms.page.manager')->getCurrentPage();
     }
 
     /**
@@ -105,6 +105,6 @@ class CMSExtension extends \Twig_Extension
      */
     public function resize($path, $width, $height)
     {
-        return $this->container->get('vig.cms.image.processor')->resize($path, $width, $height);
+        return $this->container->get('octave.cms.image.processor')->resize($path, $width, $height);
     }
 }

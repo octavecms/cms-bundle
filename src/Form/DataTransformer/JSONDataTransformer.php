@@ -1,11 +1,11 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\DataTransformer;
+namespace Octave\CMSBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class JSONDataTransformer implements DataTransformerInterface
 {

@@ -5,9 +5,11 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    {% set currentPage = octave_current_page() %}
+    <title>{% block title %}{% if currentPage %}{{ currentPage.translate(app.request.locale).metaTitle ?? currentPage.translate(app.request.locale).title }}{% endif %}{% endblock %}</title>
 </head>
 <body>
-{{ content | raw }} 
+{% block body %}
+{% endblock %}
 </body>
 </html>

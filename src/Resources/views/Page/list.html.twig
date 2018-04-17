@@ -34,10 +34,10 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown sonata-actions">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    {{ 'create_page'|trans({}, 'VideInfraCMSBundle') }} <b class="caret"></b></a>
+                                    {{ 'create_page'|trans({}, 'OctaveCMSBundle') }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu" role="menu">
                                     {% for type in types %}
-                                        <li><a href="{{ admin.generateUrl('create_type', {'type': type.name}) }}">{{ (type.name ~ '_label') | trans({}, 'VideInfraCMSBundle') }}</a></li>
+                                        <li><a href="{{ admin.generateUrl('create_type', {'type': type.name}) }}">{{ (type.name ~ '_label') | trans({}, 'OctaveCMSBundle') }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>

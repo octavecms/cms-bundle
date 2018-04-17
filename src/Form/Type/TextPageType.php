@@ -1,6 +1,6 @@
 <?php
 
-namespace VideInfra\CMSBundle\Form\Type;
+namespace Octave\CMSBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
@@ -9,12 +9,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use VideInfra\CMSBundle\Entity\Page;
+use Octave\CMSBundle\Entity\Page;
 
 /**
- * @author Igor Lukashov <igor.lukashov@videinfra.com>
+ * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class BlockType extends AbstractType
+class TextPageType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -39,23 +39,19 @@ class BlockType extends AbstractType
             ->add('includeInSitemap', CheckboxType::class, [
                 'required' => false
             ])
-            ->add('path', TextType::class)
-            ->add('blocks', BlockCollectionType::class, [
-                'entry_type' => BlockItemType::class,
-                'entry_options' => [
-                    'locales' => $options['locales']
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'block_types' => $options['block_types'],
-                'locales' => $options['locales']
+            ->add('path', TextType::class);
+
+        $builder
+            ->add('content', SimpleTextContentType::class, [
+                'locales' => $options['locales'],
+                'templates' => $options['templates']
             ])
         ;
 
         $builder
             ->add('translations', TranslationsType::class, [
-                'label' => false,
                 'locales' => $options['locales'],
+                'label' => false,
                 'fields' => [
                     'title' => [
                         'required' => true,
@@ -83,10 +79,10 @@ class BlockType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Page::class,
             'is_admin' => false,
+            'data_class' => Page::class,
             'locales' => ['en'],
-            'block_types' => []
+            'templates' => false
         ));
     }
 }

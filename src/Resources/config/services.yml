@@ -1,244 +1,244 @@
 parameters:
 
-    vig.cms.super_admin_role: 'ROLE_SUPER_ADMIN'
-    vig.cms.simple_text_controller: 'VideInfraCMSBundle:SimpleText:show'
-    vig.cms.simple_text_template: 'VideInfraCMSBundle:SimpleText:show.html.twig'
+    octave.cms.super_admin_role: 'ROLE_SUPER_ADMIN'
+    octave.cms.text_page_controller: 'OctaveCMSBundle:TextPage:show'
+    octave.cms.text_page_template: 'OctaveCMSBundle:TextPage:show.html.twig'
 
-    vig.cms.block_controller: 'VideInfraCMSBundle:Block:show'
-    vig.cms.block_template: 'VideInfraCMSBundle:Block:show.html.twig'
+    octave.cms.flexible_page_controller: 'OctaveCMSBundle:FlexiblePage:show'
+    octave.cms.flexible_page_template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
 
-    vig.cms.text.block.template: 'VideInfraCMSBundle:Blocks:text.html.twig'
-    vig.cms.textarea.block.template: 'VideInfraCMSBundle:Blocks:textarea.html.twig'
-    vig.cms.editor.block.template: 'VideInfraCMSBundle:Blocks:editor.html.twig'
-    vig.cms.image.block.template: 'VideInfraCMSBundle:Blocks:image.html.twig'
-    vig.cms.gallery.block.template: 'VideInfraCMSBundle:Blocks:gallery.html.twig'
+    octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:line_input.html.twig'
+    octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:text_editor.html.twig'
+    octave.cms.editor.block.template: 'OctaveCMSBundle:Blocks:rich_text_editor.html.twig'
+    octave.cms.image.block.template: 'OctaveCMSBundle:Blocks:image.html.twig'
+    octave.cms.gallery.block.template: 'OctaveCMSBundle:Blocks:gallery.html.twig'
 
-    vig.cms.page_use_versions: true
+    octave.cms.page_use_versions: true
 
     locales: ['en']
 
 services:
 
     # Repositories
-    vig.cms.page.repository:
-        class: VideInfra\CMSBundle\Repository\PageRepository
+    octave.cms.page.repository:
+        class: Octave\CMSBundle\Repository\PageRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ VideInfraCMSBundle:Page ]
+        arguments: [ OctaveCMSBundle:Page ]
         calls:
-          - [ 'setTreeBuilder', ['@vig.cms.page.tree_builder']]
+          - [ 'setTreeBuilder', ['@octave.cms.page.tree_builder']]
 
-    vig.cms.content.repository:
-        class: VideInfra\CMSBundle\Repository\ContentRepository
+    octave.cms.content.repository:
+        class: Octave\CMSBundle\Repository\ContentRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ VideInfraCMSBundle:Content ]
+        arguments: [ OctaveCMSBundle:Content ]
 
-    vig.cms.media_category.repository:
-        class: VideInfra\CMSBundle\Repository\MediaCategoryRepository
+    octave.cms.media_category.repository:
+        class: Octave\CMSBundle\Repository\MediaCategoryRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ VideInfraCMSBundle:MediaCategory ]
+        arguments: [ OctaveCMSBundle:MediaCategory ]
         calls:
-          - [ 'setTreeBuilder', ['@vig.cms.media_category.tree_builder']]
+          - [ 'setTreeBuilder', ['@octave.cms.media_category.tree_builder']]
 
-    vig.cms.media_item.repository:
-        class: VideInfra\CMSBundle\Repository\MediaItemRepository
+    octave.cms.media_item.repository:
+        class: Octave\CMSBundle\Repository\MediaItemRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ VideInfraCMSBundle:MediaItem ]
+        arguments: [ OctaveCMSBundle:MediaItem ]
 
-    vig.cms.page_version.repository:
-        class: VideInfra\CMSBundle\Repository\PageVersionRepository
+    octave.cms.page_version.repository:
+        class: Octave\CMSBundle\Repository\PageVersionRepository
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ VideInfraCMSBundle:PageVersion ]
+        arguments: [ OctaveCMSBundle:PageVersion ]
 
     # Commands
-    vig.cms.page.create.command:
-        class: VideInfra\CMSBundle\Command\CreatePageCommand
+    octave.cms.page.create.command:
+        class: Octave\CMSBundle\Command\CreatePageCommand
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@vig.cms.page.repository'
+            - '@octave.cms.page.repository'
         tags:
             - { name: console.command }
         public: false
 
     # Page types
-    vig.cms.simple_text.type:
-        class: VideInfra\CMSBundle\Page\Type\SimpleTextPageType
+    octave.cms.text_page.type:
+        class: Octave\CMSBundle\Page\Type\TextPageType
         tags:
-            - { name: vig.page.type }
+            - { name: octave.page.type }
 
-    vig.cms.block.type:
-        class: VideInfra\CMSBundle\Page\Type\BlockPageType
+    octave.cms.flexible_page.type:
+        class: Octave\CMSBundle\Page\Type\FlexiblePageType
         tags:
-            - { name: vig.page.type }
+            - { name: octave.page.type }
 
-    vig.cms.custom_page.type:
-        class: VideInfra\CMSBundle\Page\Type\CustomPageType
+    octave.cms.custom_page.type:
+        class: Octave\CMSBundle\Page\Type\CustomPageType
         tags:
-            - { name: vig.page.type }
+            - { name: octave.page.type }
 
     # Blocks
-    vig.cms.text.block:
-        class: VideInfra\CMSBundle\Page\Block\TextBlock
-        arguments: ['%vig.cms.text.block.template%']
+    octave.cms.text.block:
+        class: Octave\CMSBundle\Page\Block\TextBlock
+        arguments: ['%octave.cms.text.block.template%']
         tags:
-            - { name: vig.block.type }
+            - { name: octave.block.type }
 
-    vig.cms.textarea.block:
-        class: VideInfra\CMSBundle\Page\Block\TextareaBlock
-        arguments: ['%vig.cms.textarea.block.template%']
+    octave.cms.textarea.block:
+        class: Octave\CMSBundle\Page\Block\TextareaBlock
+        arguments: ['%octave.cms.textarea.block.template%']
         tags:
-            - { name: vig.block.type }
+            - { name: octave.block.type }
 
-    vig.cms.editor.block:
-        class: VideInfra\CMSBundle\Page\Block\EditorBlock
-        arguments: ['%vig.cms.editor.block.template%']
+    octave.cms.editor.block:
+        class: Octave\CMSBundle\Page\Block\EditorBlock
+        arguments: ['%octave.cms.editor.block.template%']
         tags:
-            - { name: vig.block.type }
+            - { name: octave.block.type }
 
-    vig.cms.image.block:
-        class: VideInfra\CMSBundle\Page\Block\ImageBlock
-        arguments: ['%vig.cms.image.block.template%']
+    octave.cms.image.block:
+        class: Octave\CMSBundle\Page\Block\ImageBlock
+        arguments: ['%octave.cms.image.block.template%']
         tags:
-            - { name: vig.block.type }
+            - { name: octave.block.type }
 
-    vig.cms.gallery.block:
-        class: VideInfra\CMSBundle\Page\Block\GalleryBlock
-        arguments: ['%vig.cms.gallery.block.template%']
+    octave.cms.gallery.block:
+        class: Octave\CMSBundle\Page\Block\GalleryBlock
+        arguments: ['%octave.cms.gallery.block.template%']
         tags:
-            - { name: vig.block.type }
+            - { name: octave.block.type }
 
     # Services
-    vig.cms.page.manager:
-        class: VideInfra\CMSBundle\Service\PageManager
+    octave.cms.page.manager:
+        class: Octave\CMSBundle\Service\PageManager
         arguments:
-            - '@vig.cms.page.repository'
+            - '@octave.cms.page.repository'
             - '@request_stack'
             - '@security.authorization_checker'
 
-    vig.cms.page.version.manager:
-        class: VideInfra\CMSBundle\Service\PageVersionManager
+    octave.cms.page.version.manager:
+        class: Octave\CMSBundle\Service\PageVersionManager
         arguments:
-            - '@vig.cms.page.manager'
-            - '@vig.cms.page_version.repository'
+            - '@octave.cms.page.manager'
+            - '@octave.cms.page_version.repository'
             - '@doctrine.orm.entity_manager'
 
-    vig.cms.block.manager:
-        class: VideInfra\CMSBundle\Service\BlockManager
+    octave.cms.block.manager:
+        class: Octave\CMSBundle\Service\BlockManager
         arguments: ['@templating']
 
-    vig.cms.page_type.factory:
-        class: VideInfra\CMSBundle\Factory\PageTypeFactory
+    octave.cms.page_type.factory:
+        class: Octave\CMSBundle\Factory\PageTypeFactory
         arguments:
-            - '@vig.cms.page.manager'
+            - '@octave.cms.page.manager'
 
-    vig.cms.image.processor:
-        class: VideInfra\CMSBundle\Service\ImageProcessor
+    octave.cms.image.processor:
+        class: Octave\CMSBundle\Service\ImageProcessor
         arguments:
             - '%kernel.root_dir%'
-            - '%vig.cms.media.upload_dir%'
-            - '%vig.cms.media.resized_dir%'
+            - '%octave.cms.media.upload_dir%'
+            - '%octave.cms.media.resized_dir%'
 
-    vig.cms.media_category.tree_builder:
-        class: VideInfra\CMSBundle\Service\MediaCategoryTreeBuilder
+    octave.cms.media_category.tree_builder:
+        class: Octave\CMSBundle\Service\MediaCategoryTreeBuilder
 
-    vig.cms.page.tree_builder:
-        class: VideInfra\CMSBundle\Service\PageTreeBuilder
+    octave.cms.page.tree_builder:
+        class: Octave\CMSBundle\Service\PageTreeBuilder
         arguments:
-            - '@vig.cms.page.serializer'
+            - '@octave.cms.page.serializer'
 
-    vig.cms.page.loader:
-        class: VideInfra\CMSBundle\Routing\PageLoader
+    octave.cms.page.loader:
+        class: Octave\CMSBundle\Routing\PageLoader
         arguments:
-            - '@vig.cms.page.manager'
+            - '@octave.cms.page.manager'
         tags:
             - { name: routing.loader }
 
-    vig.cms.media_item.serializer:
-        class: VideInfra\CMSBundle\Service\MediaItemSerializer
+    octave.cms.media_item.serializer:
+        class: Octave\CMSBundle\Service\MediaItemSerializer
 
-    vig.cms.page.serializer:
-        class: VideInfra\CMSBundle\Service\PageSerializer
+    octave.cms.page.serializer:
+        class: Octave\CMSBundle\Service\PageSerializer
         arguments:
             - '@router'
 
-    vig.cms.media_upload.helper:
-        class: VideInfra\CMSBundle\Service\UploadHelper
+    octave.cms.media_upload.helper:
+        class: Octave\CMSBundle\Service\UploadHelper
         arguments:
-            - '@vig.cms.media_item.repository'
-            - '@vig.cms.media_item.manager'
-            - '%vig.cms.media.upload_dir%'
+            - '@octave.cms.media_item.repository'
+            - '@octave.cms.media_item.manager'
+            - '%octave.cms.media.upload_dir%'
             - '%kernel.root_dir%'
 
-    vig.cms.media_item.manager:
-        class: VideInfra\CMSBundle\Service\MediaItemManager
+    octave.cms.media_item.manager:
+        class: Octave\CMSBundle\Service\MediaItemManager
         arguments:
             - '%kernel.root_dir%'
 
-    vig.cms.twig.extension:
-        class: VideInfra\CMSBundle\Twig\CMSExtension
+    octave.cms.twig.extension:
+        class: Octave\CMSBundle\Twig\CMSExtension
         arguments:
             - '@router'
             - '@service_container'
         tags:
             - { name: twig.extension }
 
-    vig.cms.media_gallery_item.data_transformer.default:
-        class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryItemDataTransformer
+    octave.cms.media_gallery_item.data_transformer.default:
+        class: Octave\CMSBundle\Form\DataTransformer\MediaGalleryItemDataTransformer
         arguments: ['%locales%']
 
-    vig.cms.media_image.data_transformer:
-        class: VideInfra\CMSBundle\Form\DataTransformer\MediaImageDataTransformer
+    octave.cms.media_image.data_transformer:
+        class: Octave\CMSBundle\Form\DataTransformer\MediaImageDataTransformer
         arguments: ['%locales%']
 
-    vig.cms.media_gallery.data_transformer.default:
-        class: VideInfra\CMSBundle\Form\DataTransformer\MediaGalleryDataTransformer
+    octave.cms.media_gallery.data_transformer.default:
+        class: Octave\CMSBundle\Form\DataTransformer\MediaGalleryDataTransformer
 
-    vig.cms.media_gallery_item.form_type:
-        class: VideInfra\CMSBundle\Form\Type\MediaGalleryItemType
+    octave.cms.media_gallery_item.form_type:
+        class: Octave\CMSBundle\Form\Type\MediaGalleryItemType
         arguments:
-            - '@vig.cms.media_gallery_item.data_transformer'
+            - '@octave.cms.media_gallery_item.data_transformer'
         tags:
             - { name: form.type }
 
-    vig.cms.block_image.form_type:
-        class: VideInfra\CMSBundle\Form\Type\BlockImageType
+    octave.cms.block_image.form_type:
+        class: Octave\CMSBundle\Form\Type\BlockImageType
         arguments:
-           - '@vig.cms.media_image.data_transformer'
+           - '@octave.cms.media_image.data_transformer'
         tags:
             - { name: form.type }
 
-    vig.cms.media_gallery.form_type:
-        class: VideInfra\CMSBundle\Form\Type\MediaGalleryType
+    octave.cms.media_gallery.form_type:
+        class: Octave\CMSBundle\Form\Type\MediaGalleryType
         arguments:
-            - '@vig.cms.media_gallery.data_transformer'
+            - '@octave.cms.media_gallery.data_transformer'
         tags:
             - { name: form.type }
 
     # Admin
-    vig.cms.sitemap.admin:
-        class: VideInfra\CMSBundle\Admin\SitemapAdmin
+    octave.cms.sitemap.admin:
+        class: Octave\CMSBundle\Admin\SitemapAdmin
         tags:
             - name: sonata.admin
               manager_type: orm
               group: "CMS"
               label: "Sitemap"
               label_catalogue: "admin"
-        arguments: [~, ~, 'VideInfraCMSBundle:Sitemap']
+        arguments: [~, ~, 'OctaveCMSBundle:Sitemap']
 
-    vig.cms.media.admin:
-        class: VideInfra\CMSBundle\Admin\MediaAdmin
+    octave.cms.media.admin:
+        class: Octave\CMSBundle\Admin\MediaAdmin
         tags:
             - name: sonata.admin
               manager_type: orm
               group: "CMS"
               label: "Media"
               label_catalogue: "admin"
-        arguments: [~, ~, 'VideInfraCMSBundle:Media\Media']
+        arguments: [~, ~, 'OctaveCMSBundle:Media\Media']
         
-    vig.cms.sitemap.source:
-        class: VideInfra\CMSBundle\Service\SitemapSource
+    octave.cms.sitemap.source:
+        class: Octave\CMSBundle\Service\SitemapSource
         arguments:
             - '@router'
-            - '@vig.cms.page.repository'
-            - '%vig.sitemap.host%'
+            - '@octave.cms.page.repository'
+            - '%octave.sitemap.host%'
         tags:
-            - { name: vig.sitemap.source }
+            - { name: octave.sitemap.source }
