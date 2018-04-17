@@ -10,7 +10,7 @@ Octave CMS stores all the content and web site structure in the database.
 
 If you already have Symfony-based project, change to project's root folder and require CMS bundle: 
 
-    $ composer reqiure cms-bundle 
+    $ composer require cms-bundle 
  
 ## Register bundles
 
@@ -87,9 +87,7 @@ sonata_admin:
         groups:
             CMS:
                 label: CMS
-            sonata_user:
-                label: Users
-        
+                
 sonata_block:
     default_contexts: [cms]
     blocks:
