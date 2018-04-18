@@ -10,16 +10,16 @@ The synergy between the systems allows for customization while keeping web devel
 
 ## Key benefits to website editor:
 * drag-and-drop website structure management
-* drag-and-drop to assemble web pages out of collection of features 
+* drag-and-drop to create web pages from collection of features 
 * media library
 * content versions
 * customizable user roles
 
 ## Key benefits to developer:
-* out of the box controllers and editors for creating new website features in a matter of minutes
-* adding new features to web pages without writing even a line of code  
+* out-of-the-box controllers and editors for creating new website features in a matter of minutes
+* adding new features to web pages without writing a single of code  
 * focus on development, not content management 
-* start building new features right away - no excess learning required
+* start building new features right away — no excess learning required
 
 ## Documentation
 
