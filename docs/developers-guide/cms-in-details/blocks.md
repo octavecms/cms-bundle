@@ -78,7 +78,7 @@ class ArticleType extends AbstractType
 }
 ```
 
-The above code tells Octave CMS what controls our block will have, their names and types. 
+The above code specifies which controls the block will have, their names and types. 
 Based on that information Octave CMS will create a form as soon as we add this block to a page. 
 
 ### Block code
@@ -199,8 +199,8 @@ That's it! The block is now configured and can be added to a page.
 
 ## Conclusion
 
-A few words on what we've done. 
-We created block configuration by creating `FormBuilder` object (`src/AppBundle/Form/ArticleType.php`) and adding parameters to it. 
+A few words on what we've done here. 
+First, we've created a block configuration by creating `FormBuilder` object (`src/AppBundle/Form/ArticleType.php`) and adding parameters to it. 
 Like you normally do when you are building a form with the help of Symfony's FormBuilder object. 
 
 ```php
@@ -211,11 +211,11 @@ Like you normally do when you are building a form with the help of Symfony's For
             ->add('text', CKEditorType::class);
 ```
 
-The form then is rendered by CMS Page Editor when the block is added to a page. 
+The form then is rendered by CMS Page Editor when this block is added to a page. 
 
 >**Note**: _For full list of available Symfony Form types refer to [documentation](https://symfony.com/doc/current/reference/forms/types.html)._
 
-Then, we created block class file in `src/AppBudnle/Page/Blocks/ArticleBlock.php`. 
+Then, we've created a block class file in `src/AppBudnle/Page/Blocks/ArticleBlock.php`. 
 In most cases, when creating a block you set block name, label, and make necessary tweaks to parameter values (in `getContent` method) prior to sending them to the block template. 
 
 ```php
