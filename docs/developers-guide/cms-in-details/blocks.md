@@ -36,9 +36,6 @@ Refresh project's home page in your browser. Here we go:
 
 ![Home page](http://img.octavecms.com/assets/images/developers-guide/07-hello-wolrd-page-title.png)
 
-
->**Note**: _For full set of Octave CMS variables refer to ..._
-
 ## Creating a block
 
 Let's imagine we want to publish articles on our website. 
@@ -203,7 +200,7 @@ That's it!. Block is configured now and can be added to a page.
 ## Conclusion
 
 A few words on what we've done. 
-We created block configuration by adding parameters to `FormBuilder` object in `src/AppBundle/Form/ArticleType.php` file. 
+We created block configuration by creating `FormBuilder` object (`src/AppBundle/Form/ArticleType.php`) and adding parameters to that. 
 Like you normally do when you are building a form with the help of Symfony's FormBuilder object. 
 
 ```php
@@ -214,10 +211,12 @@ Like you normally do when you are building a form with the help of Symfony's For
             ->add('text', CKEditorType::class);
 ```
 
+The form then is rendered by CMS Page Editor when the block is added to a page. 
+
 >**Note**: _For full list of available Symfony Form types refer to [documentation](https://symfony.com/doc/current/reference/forms/types.html)._
 
 Then, we created block class file in `src/AppBudnle/Page/Blocks/ArticleBlock.php`. 
-In most of the cases, when creating a block, you set block name, label, and make necessary tweaks to parameter values (in `getContent` method) prior to sending them to block template. 
+In most of the cases, when creating a block, you set block name, label, and make necessary tweaks to parameter values (in `getContent` method) prior to sending them to the block template. 
 
 ```php
     public function getContent(Block $block)
@@ -228,4 +227,3 @@ In most of the cases, when creating a block, you set block name, label, and make
         return $blockData;
     }
 ```
-

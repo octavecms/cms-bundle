@@ -37,7 +37,7 @@ class ImageBlock extends AbstractBlock
      */
     public function getLabel()
     {
-        return self::IMAGE;
+        return self::LABEL;
     }
 
     /**

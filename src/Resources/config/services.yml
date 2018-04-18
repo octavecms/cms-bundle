@@ -7,9 +7,9 @@ parameters:
     octave.cms.flexible_page_controller: 'OctaveCMSBundle:FlexiblePage:show'
     octave.cms.flexible_page_template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
 
-    octave.cms.text.block.template: 'OctaveCMSBundle:Blocks:line_input.html.twig'
-    octave.cms.textarea.block.template: 'OctaveCMSBundle:Blocks:text_editor.html.twig'
-    octave.cms.editor.block.template: 'OctaveCMSBundle:Blocks:rich_text_editor.html.twig'
+    octave.cms.text_line_editor.block.template: 'OctaveCMSBundle:Blocks:text_line_editor.html.twig'
+    octave.cms.text_editor.block.template: 'OctaveCMSBundle:Blocks:text_editor.html.twig'
+    octave.cms.rich_text_editor.block.template: 'OctaveCMSBundle:Blocks:rich_text_editor.html.twig'
     octave.cms.image.block.template: 'OctaveCMSBundle:Blocks:image.html.twig'
     octave.cms.gallery.block.template: 'OctaveCMSBundle:Blocks:gallery.html.twig'
 
@@ -76,21 +76,21 @@ services:
             - { name: octave.page.type }
 
     # Blocks
-    octave.cms.text.block:
-        class: Octave\CMSBundle\Page\Block\TextBlock
-        arguments: ['%octave.cms.text.block.template%']
+    octave.cms.text_line_editor.block:
+        class: Octave\CMSBundle\Page\Block\TextLineEditorBlock
+        arguments: ['%octave.cms.text_line_editor.block.template%']
         tags:
             - { name: octave.block.type }
 
-    octave.cms.textarea.block:
-        class: Octave\CMSBundle\Page\Block\TextareaBlock
-        arguments: ['%octave.cms.textarea.block.template%']
+    octave.cms.text_editor.block:
+        class: Octave\CMSBundle\Page\Block\TextEditorBlock
+        arguments: ['%octave.cms.text_editor.block.template%']
         tags:
             - { name: octave.block.type }
 
-    octave.cms.editor.block:
-        class: Octave\CMSBundle\Page\Block\EditorBlock
-        arguments: ['%octave.cms.editor.block.template%']
+    octave.cms.rich_text_editor.block:
+        class: Octave\CMSBundle\Page\Block\RichTextEditorBlock
+        arguments: ['%octave.cms.rich_text_editor.block.template%']
         tags:
             - { name: octave.block.type }
 

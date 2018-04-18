@@ -7,10 +7,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class LineInputBlock extends AbstractBlock
+class TextLineEditorBlock extends AbstractBlock
 {
-    const NAME = 'line_input';
-    const LABEL = 'Line input';
+    const NAME = 'text_line_editor';
+    const LABEL = 'Text Line Editor';
 
     /** @var string */
     private $template;
