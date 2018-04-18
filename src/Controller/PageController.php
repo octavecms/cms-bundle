@@ -103,7 +103,7 @@ class PageController extends AbstractController
             }
 
             if ($path[0] !== '/') {
-                $path = ($parent ? $parent->getPath() : '') . '/' . $path;
+                $path = (($parent && $parent->getPath() != '/') ? $parent->getPath() : '') . '/' . $path;
             }
 
             $type = $this->get('octave.cms.page_type.factory')->get($typeId);
