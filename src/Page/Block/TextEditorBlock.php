@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class TextEditorBlock extends AbstractBlock
 {
     const NAME = 'text_editor';
-    const LABEL = 'Text';
+    const LABEL = 'Text Editor';
 
     /** @var string */
     private $template;

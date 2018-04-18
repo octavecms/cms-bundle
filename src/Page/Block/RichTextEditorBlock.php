@@ -10,7 +10,7 @@ use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 class RichTextEditorBlock extends AbstractBlock
 {
     const NAME = 'rich_text_editor';
-    const LABEL = 'Editor';
+    const LABEL = 'Rich Text Editor';
 
     /** @var string */
     private $template;

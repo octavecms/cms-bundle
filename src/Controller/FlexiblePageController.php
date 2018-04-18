@@ -34,7 +34,7 @@ class FlexiblePageController extends Controller
 
         if (!$page) {
             $page = $pageRepository->create();
-            $page->setType(FlexiblePageForm::TYPE);
+            $page->setType(FlexiblePageType::TYPE);
         }
 
         $originalBlocks = new ArrayCollection();
