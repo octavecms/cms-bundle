@@ -3,18 +3,18 @@ Octave CMS Installation
 
 ## Database setup
 
-Create a database if you don't have one yet. 
+Create a database if you do not already have one. 
 Octave CMS stores all the content and website structure in the database. 
 
 ## Require CMS bundle with composer
 
-If you already have a Symfony-based project, change to project's root folder and require CMS bundle: 
+If you already have a Symfony-based project, change to the project's root folder and require CMS bundle: 
 
     $ composer require cms-bundle 
  
 ## Register bundles
 
-Enable the bundle and the bundles the CMS relies on by adding the following lines in `app/AppKernel.php` file:
+Enable the bundle and the bundles CMS relies on by adding the following lines in `app/AppKernel.php` file:
 
 ```php
 
@@ -264,5 +264,5 @@ Now it is time to start local server:
 
     $ bin/console server:run
     
-and get into the CMS - open browser of your choice and navigate to `http://localhost:8000/admin`. 
-Type in username and password of the user you created in previous step. That's it!
+and get into the CMS - open the browser of your choice and navigate to `http://localhost:8000/admin`. 
+Type in the username and password of the user you created in previous step. That's it!
