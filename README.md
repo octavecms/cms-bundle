@@ -6,7 +6,7 @@ It is built on top of popular tools you already know and love: [Symfony PHP fram
 Octave comes with a set of predefined controllers and reusable features (learn more about them in the [Developer's guide](docs/Developers-guide.md)) to enable seamless integration into any kind of project. 
 While Octave CMS has native website-building components, you are welcome to combine standard Symfony web-application development approach with Octave's.
 Using an intuitive drag-and-drop interface to control website structure and page functions makes everyday content management tasks easier.
-The synergy between the systems allows for customization while keeping web development and content maintenance easy and hassle-free.
+The synergy between the systems allows for customization while keeping web development and content maintenance hassle-free.
 
 ## Key benefits to website editor:
 * drag-and-drop website structure management
