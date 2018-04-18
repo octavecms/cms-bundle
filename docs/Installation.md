@@ -3,12 +3,12 @@ Octave CMS Installation
 
 ## Database setup
 
-Create a database if you don't have one already. 
-Octave CMS stores all the content and web site structure in the database. 
+Create a database if you don't have one yet. 
+Octave CMS stores all the content and website structure in the database. 
 
 ## Require CMS bundle with composer
 
-If you already have Symfony-based project, change to project's root folder and require CMS bundle: 
+If you already have a Symfony-based project, change to project's root folder and require CMS bundle: 
 
     $ composer require cms-bundle 
  
