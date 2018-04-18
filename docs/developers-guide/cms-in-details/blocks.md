@@ -21,8 +21,8 @@ Create `app/Resources/OctaveCMSBundle/views/Blocks` folder in your project.
 That's where Octave CMS will search for block templates first. 
 If there is no such folder or there are no relevant block templates in that folder, Octave CMS will fallback to default template location at `vendor/octave/cms-bundle/src/Resources/views/Blocks`.
 
-Default **Rich Text Editor** block's template outputs just the text (`<div>{{ content | raw }}</div>`) you entered when editing page. 
-Let's add current page title to block's output. 
+Default **Rich Text Editor** block's template outputs the text (`<div>{{ content | raw }}</div>`) you entered when editing the page. 
+Let's add current page title to the block's output. 
 
 Create an empty file `rich_text_editor.html.twig` in `app/Resources/OctaveCMSBundle/views/Blocks` folder. 
 Copy the below lines into the file and save it.    
