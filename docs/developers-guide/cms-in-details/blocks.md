@@ -56,7 +56,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Octave\CMSBundle\Form\DataTransformer\JSONDataTransformer;
+use Octave\CMSBundle\Form\DataTransformer\SerializeDataTransformer;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 class ArticleType extends AbstractType
@@ -73,7 +73,7 @@ class ArticleType extends AbstractType
             ->add('overview', TextareaType::class)
             ->add('text', CKEditorType::class);
 
-        $builder->addModelTransformer(new JSONDataTransformer());
+        $builder->addModelTransformer(new SerializeDataTransformer());
     }
 }
 ```
@@ -158,10 +158,7 @@ class ArticleBlock extends AbstractBlock
      */
     public function getContent(Block $block)
     {
-        $blockData = json_decode($block->getContent(), true);
-        $articleDate = new \DateTime($blockData['date']['date']);
-        $blockData['date'] = $articleDate;
-        return $blockData;
+        return \unserialize($block->getContent());
     }
 }
 ```
@@ -221,9 +218,6 @@ In most of the cases, when creating a block, you set block name, label, and make
 ```php
     public function getContent(Block $block)
     {
-        $blockData = json_decode($block->getContent(), true);
-        $articleDate = new \DateTime($blockData['date']['date']);
-        $blockData['date'] = $articleDate;
-        return $blockData;
+        return \unserialize($block->getContent());
     }
 ```
