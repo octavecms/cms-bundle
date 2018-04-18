@@ -18,13 +18,13 @@ Let's go ahead and modify **Rich Text Editor** block's template.
 ### Overriding default block templates
 
 Create `app/Resources/OctaveCMSBundle/views/Blocks` folder in your project. 
-That's the place where Octave CMS will search for block templates first. 
-If there is no such folder or there is no relevant block template in that folder, Octave CMS will fallback to default template location at `vendor/octave/cms-bundle/src/Resources/views/Blocks`.
+That's where Octave CMS will search for block templates first. 
+If there is no such folder or there are no relevant block templates in that folder, Octave CMS will fallback to default template location at `vendor/octave/cms-bundle/src/Resources/views/Blocks`.
 
-Default **Rich Text Editor** block's template outputs just the text (`<div>{{ content | raw }}</div>`) you entered when editing page. 
-Let's add current page title to block's output. 
+Default **Rich Text Editor** block's template outputs the text (`<div>{{ content | raw }}</div>`) you entered when editing the page. 
+Let's add current page title to the block's output. 
 
-Create empty file `rich_text_editor.html.twig` in `app/Resources/OctaveCMSBundle/views/Blocks` folder. 
+Create an empty file `rich_text_editor.html.twig` in `app/Resources/OctaveCMSBundle/views/Blocks` folder. 
 Copy the below lines into the file and save it.    
 
 ```html
@@ -32,19 +32,19 @@ Copy the below lines into the file and save it.
 <div>{{ content | raw }}</div>
 ```
 
-Refresh project's home page in your browser. Here we go:
+Refresh the project home page in your browser. Here we go:
 
 ![Home page](http://img.octavecms.com/assets/images/developers-guide/07-hello-wolrd-page-title.png)
 
 ## Creating a block
 
 Let's imagine we want to publish articles on our website. 
-An article has headline, date, short intro, and article text itself. 
+An article has a headline, a date, a short intro, and some body copy. 
   
 ### Block configuration file
 
 First, create `src/AppBundle/Form`, `src/AppBundle/Page/Blocks`, and `app/Resources/views/Blocks` folders. 
-Then create block configuration file `ArticleType.php` in `src/AppBundle/Form` and copy the below code into the file. 
+Then create a block configuration file `ArticleType.php` in `src/AppBundle/Form` and copy the below code into the file. 
 
 ```php
 <?php
@@ -78,13 +78,13 @@ class ArticleType extends AbstractType
 }
 ```
 
-The above code tells Octave CMS what controls our block has, their names, and types. 
-Based on that information Octave CMS will draw a form upon we add the block to a page. 
+The above code specifies which controls the block will have, their names and types. 
+Based on that information Octave CMS will create a form as soon as we add this block to a page. 
 
 ### Block code
 
-Now, let's add some code that takes care about rendering block view in visitor's browser.
-Create file `ArticleBlock.php` in `src/AppBudnle/Page/Blocks` folder. Copy the below code into the file.
+Now, let's add some code that takes care of how the block will be rendered in user's browser.
+Create a file `ArticleBlock.php` in `src/AppBundle/Page/Blocks` folder. Copy the below code into the file.
 
 ```php
 <?php
@@ -165,7 +165,7 @@ class ArticleBlock extends AbstractBlock
 
 ### Block template
 
-Create block template file `article.html.twig` in `app/Resources/views/Blocks` folder. 
+Create a block template file `article.html.twig` in `app/Resources/views/Blocks` folder. 
 Copy the below lines into the file.  
 
 ```html
@@ -190,14 +190,14 @@ Register your new block in `services.yml` file:
             - { name: octave.block.type }
 ```
 
-That's it!. Block is configured now and can be added to a page. 
+That's it! The block is now configured and can be added to a page. 
 
 ![Article block](http://img.octavecms.com/assets/images/developers-guide/08-article-block.png?a=1)
 
 ## Conclusion
 
-A few words on what we've done. 
-We created block configuration by creating `FormBuilder` object (`src/AppBundle/Form/ArticleType.php`) and adding parameters to that. 
+A few words on what we've done here. 
+First, we've created a block configuration by creating `FormBuilder` object (`src/AppBundle/Form/ArticleType.php`) and adding parameters to it. 
 Like you normally do when you are building a form with the help of Symfony's FormBuilder object. 
 
 ```php
@@ -208,12 +208,12 @@ Like you normally do when you are building a form with the help of Symfony's For
             ->add('text', CKEditorType::class);
 ```
 
-The form then is rendered by CMS Page Editor when the block is added to a page. 
+The form then is rendered by CMS Page Editor when this block is added to a page. 
 
 >**Note**: _For full list of available Symfony Form types refer to [documentation](https://symfony.com/doc/current/reference/forms/types.html)._
 
-Then, we created block class file in `src/AppBudnle/Page/Blocks/ArticleBlock.php`. 
-In most of the cases, when creating a block, you set block name, label, and make necessary tweaks to parameter values (in `getContent` method) prior to sending them to the block template. 
+Then, we've created a block class file in `src/AppBudnle/Page/Blocks/ArticleBlock.php`. 
+In most cases, when creating a block you set block name, label, and make necessary tweaks to parameter values (in `getContent` method) prior to sending them to the block template. 
 
 ```php
     public function getContent(Block $block)

@@ -3,14 +3,14 @@ Page Templates
 
 ## Page types
 
-You may be already noticed there are three types of pages in Octave CMS:
+You may have already noticed that there are three types of pages in Octave CMS:
 
 * Flexible page
 * Text page
 * Custom page
 
-We hope you already familiar with the **Flexible page** type. 
-If not, we would suggest you to start your journey from learning Octave CMS [Blocks](/docs/developers-guide/cms-in-details/blocks.md) and then return back here. 
+We hope you're already familiar with the **Flexible page** type. 
+If not, we suggest you start your journey from learning the Octave CMS [Blocks](/docs/developers-guide/cms-in-details/blocks.md) and then return back here. 
 
 ## Flexible page
 
@@ -96,6 +96,6 @@ octave_cms:
 
 ## Custom page
 
-Custom page has now template
+Custom page now has template
 
 ## Overriding default page templates
