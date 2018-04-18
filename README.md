@@ -9,7 +9,7 @@ Using an intuitive drag-and-drop interface to control website structure and page
 The synergy between the systems allows for customization while keeping web development and content maintenance hassle-free.
 
 ## Key benefits to website editor:
-* drag-and-drop website structure management
+* drag-and-drop to manage website structure 
 * drag-and-drop to create web pages from collection of features 
 * media library
 * content versions
