@@ -30,7 +30,8 @@ class UploadHelper
         'image/gif',
         'image/jpeg',
         'image/jpg',
-        'image/png'
+        'image/png',
+        'image/svg+xml'
     ];
 
     /** @var array */
@@ -38,7 +39,8 @@ class UploadHelper
         'image/gif',
         'image/jpeg',
         'image/jpg',
-        'image/png'
+        'image/png',
+        'image/svg+xml'
     ];
 
     /**
