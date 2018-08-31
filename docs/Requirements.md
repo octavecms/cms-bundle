@@ -1,7 +1,7 @@
 Requirements 
 ============
 
-Requirements are the same as for standard Symfony-based project. 
+Requirements are the same as for a standard Symfony-based project. 
 Minimal Symfony, PHP, and MySQL versions:
 
 * Symfony >= 3.4

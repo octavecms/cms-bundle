@@ -3,17 +3,17 @@ First Steps
 
 ## Creating your very first Octave CMS page
 
-Start local web server if you did not yet:
+Start local web server if it is not already running:
 
     $ bin/console s:r
     
-and type `http://img.octavecms.com/admin`. Sign in with user name and password you created during setting up the CMS.
+and type `http://img.octavecms.com/admin`. Sign in with the user name and password you created when setting up the CMS.
 
-You should see standard Sonata dashboard now.
+You should see a standard Sonata dashboard now.
 
 ![Sonata dashboard](http://img.octavecms.com/assets/images/developers-guide/01-sonata-dashboard.png)
  
-On the left hand-side menu choose `CMS->Sitemap`.
+On the left hand side menu choose `CMS->Sitemap`.
 
 Drag-and-drop the `Flexible` icon from the toolbar onto `Site tree`.
 
@@ -35,7 +35,7 @@ and type `Hello world!` into the editor's window.
 Click the `Publish` button.
 Make sure you don't have any controllers listening on  `/` route and open `http://localhost:8000/` in your browser.
 
-Viola! Your first Octave CMS page is live. 
+Voila! Your first Octave CMS page is live. 
 
 ![Hello world](http://img.octavecms.com/assets/images/developers-guide/06-hello-world.png)
 
