@@ -31,7 +31,8 @@ class UploadHelper
         'image/jpeg',
         'image/jpg',
         'image/png',
-        'image/svg+xml'
+        'image/svg+xml',
+        'text/html'
     ];
 
     /** @var array */
@@ -40,7 +41,6 @@ class UploadHelper
         'image/jpeg',
         'image/jpg',
         'image/png',
-        'image/svg+xml'
     ];
 
     /**
