@@ -8,10 +8,8 @@
   "scripts": {
     "development": "gulp",
     "production": "gulp production",
-
     "watch": "npm run development",
     "build": "npm run production",
-
     "postinstall": "npm run production"
   },
   "devDependencies": {

@@ -16,6 +16,7 @@ class GalleryWidget {
 
     static get defaultOptions () {
         return {
+            orderCssSelector : ORDER_INPUT_CSS_SELECTOR,
             listSelector: '.js-gallery-list'
         };
     }
@@ -72,7 +73,7 @@ class GalleryWidget {
      */
 
     _getMaxIndex () {
-        const $inputs = this.$list.find(ORDER_INPUT_CSS_SELECTOR);
+        const $inputs = this.$list.find(this.options.orderCssSelector);
         let   index   = 0;
 
         $inputs.each((i, input) => {
@@ -91,7 +92,7 @@ class GalleryWidget {
     }
 
     _updateBlockOrder () {
-        var $inputs = this.$list.find(ORDER_INPUT_CSS_SELECTOR);
+        var $inputs = this.$list.find(this.options.orderCssSelector);
 
         $inputs.each(function (index, input) {
             $(input).val(index);
