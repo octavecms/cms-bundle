@@ -15,7 +15,9 @@ const REGEX_MATCH_NUMBERS = /\d+/g;
 class GalleryWidget {
 
     static get defaultOptions () {
-        return {};
+        return {
+            listSelector: '.js-gallery-list'
+        };
     }
 
     constructor (element, options) {
@@ -27,7 +29,7 @@ class GalleryWidget {
 
     _init () {
         const $element = this.$element;
-        const $list    = this.$list    = $element.find('.js-gallery-list');
+        const $list    = this.$list    = $element.find(this.options.listSelector);
         const $button  = this.$button  = $element.find('.js-gallery-add');
 
         // Item counter
