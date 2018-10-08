@@ -232,7 +232,7 @@ services:
               group: "CMS"
               label: "Media"
               label_catalogue: "admin"
-        arguments: [~, ~, 'OctaveCMSBundle:Media\Media']
+        arguments: [~, ~, Octave\CMSBundle\Controller\Media\MediaController]
         
     octave.cms.sitemap.source:
         class: Octave\CMSBundle\Service\SitemapSource
