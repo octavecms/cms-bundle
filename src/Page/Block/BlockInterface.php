@@ -2,7 +2,7 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\BlockTrait;
 
 interface BlockInterface
 {
@@ -42,8 +42,8 @@ interface BlockInterface
     public function getOptions();
 
     /**
-     * @param Block $block
+     * @param BlockTrait $block
      * @return mixed
      */
-    public function getContent(Block $block);
+    public function getContent(BlockTrait $block);
 }

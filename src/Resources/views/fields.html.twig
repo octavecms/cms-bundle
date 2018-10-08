@@ -111,3 +111,82 @@
         });
     </script>
 {% endblock %}
+
+{% block blocks_widget %}
+
+    {% import 'OctaveCMSBundle:FlexiblePage:macros.html.twig' as blocks %}
+
+    {% set blockTypes = form.vars.block_types %}
+
+    {% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'OctaveCMSBundle::fields.html.twig' %}
+
+    <link rel="stylesheet" href="{{ asset('bundles/octavecms/blocks/dist/main.css') }}">
+    <script src="{{ asset('bundles/octavecms/blocks/dist/main.js') }}"></script>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+
+            <div class="navbar-blocks"
+                 data-widget="navbar-blocks">
+                <a class="navbar-blocks__previous js-navbar-previous disabled" role="button" aria-disabled="true">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                </a>
+                <ul class="js-navbar-list">
+
+                    {% if form.vars.block_prototypes is defined %}
+
+                        {% for type, prototype in form.vars.block_prototypes %}
+
+                            {% set data = blockTypes[type] %}
+
+                            {% set html %}
+                                {{ blocks.block_start(data.label) }}
+                                {{ form_widget(prototype) }}
+                                {{ blocks.block_end() }}
+                            {% endset %}
+
+                            <li>
+                                <a class="btn btn-app"
+                                   data-widget="blocks-add"
+                                   data-prototype="{{ html|e('html_attr') }}">
+
+                                    <i class="{{ data.icon }}" aria-hidden="true"></i>
+                                    <span>{{ data.label }}</span>
+                                </a>
+                            </li>
+
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+                <a class="navbar-blocks__next js-navbar-next disabled" role="button" aria-disabled="true">
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    {{ blocks.block_list_start() }}
+
+    <h4 class="blocks-list-empty-message">
+        {{ 'add_block' | trans({}, 'OctaveCMSBundle') }}
+    </h4>
+
+    {% for block in form %}
+
+        {% set blockType = block.vars.block_type %}
+        {% set blockData = blockTypes[blockType] %}
+
+        {% if blockData %}
+            {{ blocks.block_start(blockData.label) }}
+            {{ form_widget(block) }}
+            {{ blocks.block_end() }}
+        {% endif %}
+
+    {% endfor %}
+
+    {% do form.setRendered() %}
+
+    {{ blocks.block_list_end() }}
+
+{% endblock %}

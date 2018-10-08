@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("name")
  * @UniqueEntity("path")
  */
-class Page
+class Page implements Blockable
 {
     use ORMBehaviors\Translatable\Translatable;
     use TranslatableEntityTrait;

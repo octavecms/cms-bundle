@@ -1,8 +1,9 @@
 <?php
 
 namespace Octave\CMSBundle\Service;
+use Octave\CMSBundle\Entity\Blockable;
+use Octave\CMSBundle\Entity\BlockTrait;
 use Symfony\Bundle\TwigBundle\TwigEngine;
-use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Page\Block\BlockInterface;
 use Octave\CMSBundle\Page\Type\FlexiblePageType;
@@ -53,19 +54,19 @@ class BlockManager
     }
 
     /**
-     * @param Page $page
+     * @param Blockable $page
      * @return string
      * @throws \Exception
      */
-    public function renderPage(Page $page)
+    public function renderPage(Blockable $page)
     {
-        if ($page->getType() != FlexiblePageType::TYPE) {
+        if ($page instanceof Page && $page->getType() != FlexiblePageType::TYPE) {
             throw new \LogicException(sprintf('Invalid type: %s', $page->getType()));
         }
 
         $content = '';
 
-        /** @var Block $blockEntity */
+        /** @var BlockTrait $blockEntity */
         foreach ($page->getBlocks() as $blockEntity) {
 
             /** @var BlockInterface $blockType */
