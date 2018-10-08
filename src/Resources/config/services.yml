@@ -242,3 +242,10 @@ services:
             - '%octave.sitemap.host%'
         tags:
             - { name: octave.sitemap.source }
+
+    blocks.form.type:
+        class: Octave\CMSBundle\Form\BlocksType
+        arguments:
+            - '@octave.cms.block.manager'
+        tags:
+            - { name: form.type }
