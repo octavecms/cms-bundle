@@ -243,8 +243,8 @@ services:
         tags:
             - { name: octave.sitemap.source }
 
-    blocks.form.type:
-        class: Octave\CMSBundle\Form\BlocksType
+    octave.cms.blocks.form.type:
+        class: Octave\CMSBundle\Form\Type\BlocksType
         arguments:
             - '@octave.cms.block.manager'
         tags:

@@ -1,9 +1,8 @@
 <?php
 
-namespace Octave\CMSBundle\Form;
+namespace Octave\CMSBundle\Form\Type;
 
 use Octave\CMSBundle\Entity\Block;
-use Octave\CMSBundle\Form\Type\BlockItemType;
 use Octave\CMSBundle\Page\Block\BlockInterface;
 use Octave\CMSBundle\Service\BlockManager;
 use Symfony\Component\Form\AbstractType;
