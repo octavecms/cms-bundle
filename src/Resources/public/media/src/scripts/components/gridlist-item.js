@@ -50,8 +50,11 @@ export default class MediaGridListItem {
         }
 
         // Drag & drop
+        const $cloneContainer = $container.closest('.modal');
+
         $container.draggable({
             helper  : 'clone',
+            appendTo: $cloneContainer.length ? $cloneContainer : 'body',
             zIndex  : 999999,
             cursorAt: { left: -10, top: -10 },
             start   : this.handleMoveStart.bind(this),

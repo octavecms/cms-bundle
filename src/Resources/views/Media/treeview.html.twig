@@ -1,7 +1,7 @@
 {% macro navigate_child(collection, admin, root, current_category_id, depth) %}
     {% import _self as tree %}
 
-    <ul{% if root %} class="sonata-tree sonata-tree--small sonata-tree--toggleable" data-widget="media-treeview"{% endif %}>
+    <ul{% if root %} class="sonata-tree sonata-tree--small sonata-tree--toggleable media-treeview--scrollable" data-widget="media-treeview"{% endif %}>
         {% for element in collection if element is not null %}
             <li>
                 <div class="sonata-tree__item{% if element.id == current_category_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
