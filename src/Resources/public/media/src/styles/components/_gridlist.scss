@@ -12,6 +12,17 @@
 
     user-select: none;
 
+    // Scrollable
+    &--scrollable {
+        max-height: calc(100vh - 170px);
+        overflow: hidden;
+        overflow-y: auto;
+    
+        .modal & {
+            max-height: calc(100vh - 300px);
+        }
+    }    
+
     &-box {
         flex: 0 0 $grid-item-size;
         max-width: $grid-item-size;
@@ -21,6 +32,8 @@
         padding: 2px;
         border-radius: 3px;
         border: 1px solid transparent;
+
+        list-style: none;
 
         &-thumbnail {
             display: block;
@@ -171,7 +184,8 @@
     }
 
     // Dragging label
-    .label {
+    .label,
+    &-box .label {
         position: absolute;
         right: -6px;
         top: -6px;
@@ -181,6 +195,7 @@
 .media-out-of-screen {
     position: absolute;
     left: -9000px;
+    top: -9000px;
 }
 
 

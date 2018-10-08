@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce';
 import fileupload from 'blueimp-file-upload';
 import { uploadedFiles, updatedFile } from 'modules/actions';
 
@@ -18,7 +19,9 @@ class Uploader {
         this.dropTimeout = null;
 
         this.uploadComplete = [];
+        this.$dropZones = $();
         this.$progress = $('.js-media-gridlist-progress');
+        this.updateDropZones = debounce(this.updateDropZones, 60);
         this.create();
     }
 
@@ -96,7 +99,7 @@ class Uploader {
     }
 
     handleDropZoneDragOver (e) {
-        const $dropZones = this.$input.fileupload('option', 'dropZone');
+        const $dropZones = this.$dropZones;
 
         if (this.dropTimeout) {
             clearTimeout(this.dropTimeout);
@@ -114,7 +117,7 @@ class Uploader {
     }
 
     resetDropZones () {
-        const $dropZones = this.$input.fileupload('option', 'dropZone');
+        const $dropZones = this.$dropZones;
         this.dropTimeout = null;
         $dropZones.removeClass('dropzone--in dropzone--hover');
     }
@@ -167,7 +170,8 @@ class Uploader {
         $element.data('dropZone', uid);
         $element.addClass('dropzone');
 
-        this.$input.fileupload('option', 'dropZone', $dropZones.add($element));
+        this.$dropZones = this.$dropZones.add($element);
+        this.updateDropZones();
     }
 
     unregisterDropZone ($element) {
@@ -184,7 +188,12 @@ class Uploader {
         $element.removeData('dropZone');
         $element.removeClass('dropzone');
 
-        this.$input.fileupload('option', 'dropZone', $dropZones.not($element));
+        this.$dropZones = this.$dropZones.not($element);
+        this.updateDropZones();
+    }
+
+    updateDropZones () {
+        this.$input.fileupload('option', 'dropZone', this.$dropZones);
     }
 
 
