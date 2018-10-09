@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Form\Type;
 
 use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Entity\BlockTrait;
 use Octave\CMSBundle\Page\Block\BlockInterface;
 use Octave\CMSBundle\Service\BlockManager;
 use Symfony\Component\Form\AbstractType;
@@ -80,7 +81,7 @@ class BlocksType extends AbstractType
             foreach ($data as $name => $value) {
 
                 $childOptions = $form->get($name)->getConfig()->getOptions();
-                $type = ($value instanceof Block) ? $value->getType() : $value['type'];
+                $type = ($value instanceof BlockTrait) ? $value->getType() : $value['type'];
 
                 /** @var BlockInterface $block */
                 $block = $blockTypes[$type];
