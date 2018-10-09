@@ -89,7 +89,7 @@ class BlocksType extends AbstractType
                 $childOptions['content_type'] = $block->getFormType();
                 $childOptions['locales'] = $options['locales'];
 
-                $childOptions = array_merge($childOptions, $block->getOptions());
+                $childOptions = array_merge($options['block_options'], $childOptions, $block->getOptions());
 
                 $form->remove($name);
                 $form->add($name, BlockItemType::class, $childOptions);
@@ -126,7 +126,8 @@ class BlocksType extends AbstractType
     {
         $resolver->setDefaults(array(
             'block_types' => [],
-            'locales' => ['en']
+            'locales' => ['en'],
+            'block_options' => []
         ));
     }
 
