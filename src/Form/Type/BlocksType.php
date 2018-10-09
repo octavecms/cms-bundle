@@ -59,7 +59,7 @@ class BlocksType extends AbstractType
                 $prototypeOptions['block_type'] = $typeData->getName();
                 $prototypeOptions['locales'] = $options['locales'];
 
-                $prototypeOptions = array_merge($prototypeOptions, $typeData->getOptions());
+                $prototypeOptions = array_merge($options['block_options'], $prototypeOptions, $typeData->getOptions());
 
                 $prototype = $builder->create($options['prototype_name'], $options['entry_type'], $prototypeOptions);
                 $blockPrototypes[$blockName] = $prototype->getForm();
