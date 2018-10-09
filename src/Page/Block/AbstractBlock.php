@@ -2,7 +2,7 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Octave\CMSBundle\Entity\BlockTrait;
+use Octave\CMSBundle\Entity\BlockEntityInterface;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -18,10 +18,10 @@ abstract class AbstractBlock implements BlockInterface
     }
 
     /**
-     * @param BlockTrait $block
+     * @param BlockEntityInterface $block
      * @return string
      */
-    public function getContent(BlockTrait $block)
+    public function getContent(BlockEntityInterface $block)
     {
         return $block->getContent();
     }

@@ -13,7 +13,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *     name="octave_page_blocks"
  * )
  */
-class Block
+class Block implements BlockEntityInterface
 {
     use ORMBehaviors\Translatable\Translatable;
     use TranslatableEntityTrait;

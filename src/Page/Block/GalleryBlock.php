@@ -2,7 +2,7 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Octave\CMSBundle\Entity\BlockTrait;
+use Octave\CMSBundle\Entity\BlockEntityInterface;
 use Octave\CMSBundle\Form\Type\MediaGalleryType;
 
 /**
@@ -65,10 +65,10 @@ class GalleryBlock extends AbstractBlock
     }
 
     /**
-     * @param BlockTrait $block
+     * @param BlockEntityInterface $block
      * @return mixed
      */
-    public function getContent(BlockTrait $block)
+    public function getContent(BlockEntityInterface $block)
     {
         return json_decode($block->getContent(), true);
     }
