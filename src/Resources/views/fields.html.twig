@@ -107,7 +107,9 @@
 
     <script>
         $(function () {
-            $('#{{ id }}_widget').collection();
+            $('#{{ id }}_widget').collection({
+                'orderCssSelector': 'input[type="hidden"][name*="[position]"]'
+            });
         });
     </script>
 {% endblock %}

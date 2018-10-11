@@ -34,7 +34,7 @@ class GalleryWidget {
         const $button  = this.$button  = $element.find('.js-gallery-add');
 
         // Item counter
-        this.index = this._getMaxIndex();
+        this.index = this.options.orderCssSelector ? this._getMaxIndex() : $list.children().length;
 
         // Sortable list
         $list
@@ -120,6 +120,7 @@ class GalleryWidget {
 
         $html.find(IMAGE_WIDGET_SELECTOR).image().image('change', image);
         Admin.shared_setup($html);
+        this._updateList();
     }
 
     /**

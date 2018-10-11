@@ -1,12 +1,22 @@
+import $ from 'lib/jquery';
+
+import map from 'lodash/map';
 import each from 'lodash/each';
 
+
 const NAMESPACE = 'collection';
+
+const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[position]"]';
+
+const REGEX_MATCH_NUMBERS = /\d+/g;
 
 
 class CollectionWidget {
 
     static get defaultOptions () {
-        return {};
+        return {
+            orderCssSelector : ORDER_INPUT_CSS_SELECTOR
+        };
     }
 
     constructor (element, options) {
@@ -22,14 +32,15 @@ class CollectionWidget {
         const $button  = this.$button  = $element.find('.js-collection-add');
 
         // Item counter
-        this.index = $list.children().length;
+        this.index = this.options.orderCssSelector ? this._getMaxIndex() : $list.children().length;
 
         // Sortable list
         $list
             .sortable({
                 placeholder         : 'form-control-collection__highlight',
                 forcePlaceholderSize: true,
-                zIndex              : 999999
+                zIndex              : 999999,
+                stop                : this._updateBlockOrder.bind(this)
             });
 
         // "Add" button click
@@ -55,8 +66,31 @@ class CollectionWidget {
      * Order
      */
 
+    _getMaxIndex () {
+        const $inputs = this.$list.find(this.options.orderCssSelector);
+        let   index   = 0;
+
+        $inputs.each((i, input) => {
+            const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
+            const numbers = map(names, name => parseInt(name, 10));
+
+            index = Math.max(index, Math.max.apply(Math, numbers));
+        });
+
+        return index + 1;
+    }
+
     _updateList () {
         this.$list.sortable('refresh');
+        this._updateBlockOrder();
+    }
+
+    _updateBlockOrder () {
+        var $inputs = this.$list.find(this.options.orderCssSelector);
+
+        $inputs.each(function (index, input) {
+            $(input).val(index);
+        });
     }
 
 
@@ -69,6 +103,7 @@ class CollectionWidget {
         this.$list.append($html);
 
         Admin.shared_setup($html);
+        this._updateList();
     }
 
     _generateItemHTML () {
