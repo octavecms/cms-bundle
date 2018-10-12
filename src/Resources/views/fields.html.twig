@@ -116,7 +116,7 @@
 
 {% block blocks_widget %}
 
-    <div style="margin-top: 30px;">
+    <div class="form-control-blocks">
 
         {% import 'OctaveCMSBundle:FlexiblePage:macros.html.twig' as blocks %}
 
@@ -125,7 +125,9 @@
         {% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'OctaveCMSBundle::fields.html.twig' %}
 
         <div class="navbar-blocks"
-             data-widget="navbar-blocks">
+            data-widget="navbar-blocks"
+            data-navbar-blocks-sticky="true">
+
             <a class="navbar-blocks__previous js-navbar-previous disabled" role="button" aria-disabled="true">
                 <i class="fa fa-chevron-left" aria-hidden="true"></i>
             </a>

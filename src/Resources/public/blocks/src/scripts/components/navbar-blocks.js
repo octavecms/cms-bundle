@@ -20,6 +20,35 @@ class NavBarBlocks {
         this.updateButtons();
         this.$list.on('scroll', debounce(this.updateButtons.bind(this), 60));
         $(window).on('resize', debounce(this.updateButtons.bind(this), 60));
+
+        if (!$container.closest('nav.navbar').length) {
+            this.stickyPosition();
+        }
+    }
+
+    /**
+     * If not inside the sticky navigation bar then make block bar sticky itself.
+     */
+    stickyPosition () {
+        const $container = this.$container;
+        const $topNavbar = $('.navbar-static-top');
+        const $navbar = $('nav.navbar');
+        const $wrapper = $('.content-wrapper');
+
+        const getStickyOffset = () => ($topNavbar.outerHeight() || 0) + ($navbar.outerHeight() || 0);
+
+        // Make it sticky
+        new Waypoint.Sticky({
+            element: $container.get(0),
+            offset: getStickyOffset,
+            handler: (direction) => {
+                if (direction == 'up') {
+                    $container.width('auto').css('top', '');
+                } else {
+                    $container.width($wrapper.outerWidth()).css('top', getStickyOffset());
+                }
+            }
+        });
     }
 
     scrollNext () {

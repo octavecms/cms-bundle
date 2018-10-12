@@ -2,7 +2,7 @@
  * Navigation bar adjustments
  */
 
- .navbar-blocks {
+.navbar-blocks {
     margin-top: 10px;
     position: relative;
     margin: 0 -15px;
@@ -57,6 +57,22 @@
     &__next {
         padding: 20px 10px 0 15px;
     }
+
+}
+
+
+/*
+ * Sticky
+ */
+
+ .navbar-blocks.stuck {
+    position: fixed;
+    top: 50px;
+    margin: 2px -15px 0 -25px;
+    z-index: 5;
+
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e7e7e7;
 }
 
 
