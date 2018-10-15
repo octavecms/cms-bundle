@@ -272,7 +272,9 @@ class UploadHelper
      */
     private function prepareFilename($filename)
     {
-        return strtolower(preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename));
+        $filename = strtolower(preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename));
+
+        return str_replace(' ', '', $filename);
     }
 
     /**
