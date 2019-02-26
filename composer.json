@@ -19,7 +19,7 @@
     "sonata-project/doctrine-orm-admin-bundle": "^3.2",
     "a2lix/translation-form-bundle": "~2.0",
     "friendsofsymfony/ckeditor-bundle": "~2.0",
-    "knplabs/doctrine-behaviors": "~1.1",
+    "knplabs/doctrine-behaviors": ">=1.1.0",
     "friendsofsymfony/user-bundle": "~2.0",
     "octave/sitemap-bundle" : ">=1.1.0"
   },
