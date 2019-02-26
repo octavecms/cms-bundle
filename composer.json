@@ -1,6 +1,6 @@
 {
   "name": "octave/cms-bundle",
-  "type": "library",
+  "type": "symfony-bundle",
   "description": "Symfony3 CMS",
   "license": "MIT",
   "keywords": ["cms"],
