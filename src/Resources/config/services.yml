@@ -19,6 +19,8 @@ parameters:
 
     locales: ['en']
 
+    octave.sitemap.host: ~
+
 services:
 
     # Repositories
