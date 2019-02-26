@@ -19,35 +19,42 @@ parameters:
 
     locales: ['en']
 
+    octave.sitemap.host: ~
+
 services:
 
     # Repositories
     octave.cms.page.repository:
         class: Octave\CMSBundle\Repository\PageRepository
+        public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ OctaveCMSBundle:Page ]
         calls:
-          - [ 'setTreeBuilder', ['@octave.cms.page.tree_builder']]
+            - [ 'setTreeBuilder', ['@octave.cms.page.tree_builder']]
 
     octave.cms.content.repository:
         class: Octave\CMSBundle\Repository\ContentRepository
+        public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ OctaveCMSBundle:Content ]
 
     octave.cms.media_category.repository:
         class: Octave\CMSBundle\Repository\MediaCategoryRepository
+        public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ OctaveCMSBundle:MediaCategory ]
         calls:
-          - [ 'setTreeBuilder', ['@octave.cms.media_category.tree_builder']]
+            - [ 'setTreeBuilder', ['@octave.cms.media_category.tree_builder']]
 
     octave.cms.media_item.repository:
         class: Octave\CMSBundle\Repository\MediaItemRepository
+        public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ OctaveCMSBundle:MediaItem ]
 
     octave.cms.page_version.repository:
         class: Octave\CMSBundle\Repository\PageVersionRepository
+        public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ OctaveCMSBundle:PageVersion ]
 
@@ -111,6 +118,7 @@ services:
     # Services
     octave.cms.page.manager:
         class: Octave\CMSBundle\Service\PageManager
+        public: true
         arguments:
             - '@octave.cms.page.repository'
             - '@request_stack'
@@ -118,6 +126,7 @@ services:
 
     octave.cms.page.version.manager:
         class: Octave\CMSBundle\Service\PageVersionManager
+        public: true
         arguments:
             - '@octave.cms.page.manager'
             - '@octave.cms.page_version.repository'
@@ -125,15 +134,18 @@ services:
 
     octave.cms.block.manager:
         class: Octave\CMSBundle\Service\BlockManager
+        public: true
         arguments: ['@templating']
 
     octave.cms.page_type.factory:
         class: Octave\CMSBundle\Factory\PageTypeFactory
+        public: true
         arguments:
             - '@octave.cms.page.manager'
 
     octave.cms.image.processor:
         class: Octave\CMSBundle\Service\ImageProcessor
+        public: true
         arguments:
             - '%kernel.root_dir%'
             - '%octave.cms.media.upload_dir%'
@@ -141,14 +153,17 @@ services:
 
     octave.cms.media_category.tree_builder:
         class: Octave\CMSBundle\Service\MediaCategoryTreeBuilder
+        public: true
 
     octave.cms.page.tree_builder:
         class: Octave\CMSBundle\Service\PageTreeBuilder
+        public: true
         arguments:
             - '@octave.cms.page.serializer'
 
     octave.cms.page.loader:
         class: Octave\CMSBundle\Routing\PageLoader
+        public: true
         arguments:
             - '@octave.cms.page.manager'
         tags:
@@ -156,14 +171,17 @@ services:
 
     octave.cms.media_item.serializer:
         class: Octave\CMSBundle\Service\MediaItemSerializer
+        public: true
 
     octave.cms.page.serializer:
         class: Octave\CMSBundle\Service\PageSerializer
+        public: true
         arguments:
             - '@router'
 
     octave.cms.media_upload.helper:
         class: Octave\CMSBundle\Service\UploadHelper
+        public: true
         arguments:
             - '@octave.cms.media_item.repository'
             - '@octave.cms.media_item.manager'
@@ -172,6 +190,7 @@ services:
 
     octave.cms.media_item.manager:
         class: Octave\CMSBundle\Service\MediaItemManager
+        public: true
         arguments:
             - '%kernel.root_dir%'
 
@@ -204,7 +223,7 @@ services:
     octave.cms.block_image.form_type:
         class: Octave\CMSBundle\Form\Type\BlockImageType
         arguments:
-           - '@octave.cms.media_image.data_transformer'
+            - '@octave.cms.media_image.data_transformer'
         tags:
             - { name: form.type }
 
@@ -235,7 +254,7 @@ services:
               label: "Media"
               label_catalogue: "admin"
         arguments: [~, ~, Octave\CMSBundle\Controller\Media\MediaController]
-        
+
     octave.cms.sitemap.source:
         class: Octave\CMSBundle\Service\SitemapSource
         arguments:
