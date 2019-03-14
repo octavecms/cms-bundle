@@ -176,6 +176,7 @@ services:
 
     octave.cms.media_upload.helper:
         class: Octave\CMSBundle\Service\UploadHelper
+        public: true
         arguments:
             - '@octave.cms.media_item.repository'
             - '@octave.cms.media_item.manager'
