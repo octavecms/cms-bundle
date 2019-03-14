@@ -55,7 +55,7 @@ class UploadHelper
     {
         $this->itemRepository = $itemRepository;
         $this->itemManager = $mediaItemManager;
-        $this->uploadPath = $rootDir . '/../web' . $uploadDir . '/';
+        $this->uploadPath = $rootDir . '/../public' . $uploadDir . '/';
         $this->webPath = $uploadDir;
     }
 
