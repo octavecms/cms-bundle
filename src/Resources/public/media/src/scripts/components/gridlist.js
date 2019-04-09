@@ -178,6 +178,12 @@ export default class MediaGridList {
 
     handleCloseListItem (e) {
         const id = this.getItemId(e);
+        const $target = $(e.target);
+
+        // Ignore if clicking on popover
+        if ($target.closest('.media-gridlist-popover-outer').length) {
+            return;
+        }
 
         if (!id) {
             this.store.dispatch(setOpenedListItem(null));

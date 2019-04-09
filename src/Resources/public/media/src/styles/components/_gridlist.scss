@@ -100,7 +100,8 @@
     }
 
 
-    .popover {
+    .popover,
+    &-popover-outer {
         max-width: none;
     }
 
