@@ -27,11 +27,5 @@
     "psr-4": {
       "Octave\\CMSBundle\\": "src/"
     }
-  },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://git.videinfra.net/vig-bundles/sitemap-bundle.git"
-    }
-  ]
+  }
 }
