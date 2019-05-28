@@ -139,6 +139,7 @@ services:
 
     octave.cms.page_type.factory:
         class: Octave\CMSBundle\Factory\PageTypeFactory
+        public: true
         arguments:
             - '@octave.cms.page.manager'
 
