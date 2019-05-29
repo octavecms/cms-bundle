@@ -150,6 +150,10 @@ services:
             - '%octave.cms.media.upload_dir%'
             - '%octave.cms.media.resized_dir%'
 
+    octave.cms.text.page.extension.manager:
+        class: Octave\CMSBundle\Service\TextPageExtensionManager
+        public: true
+
     octave.cms.media_category.tree_builder:
         class: Octave\CMSBundle\Service\MediaCategoryTreeBuilder
 

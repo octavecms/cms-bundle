@@ -113,6 +113,8 @@ class TextPageController extends Controller
             ? $page->getContent()->getTemplate()
             : $this->getParameter('octave.cms.text_page_template');
 
+        $this->get('octave.cms.text.page.extension.manager')->executeExtensions($page);
+
         return $this->render($template, [
             'page' => $page
         ]);
