@@ -42,7 +42,7 @@ class PageTreeBuilder
                 continue;
             }
 
-            $data['children'][] = $this->build($child, $showHidden);
+            $data['children'][] = $this->build($child, $showHidden, $editUrl);
         }
 
         return $data;
