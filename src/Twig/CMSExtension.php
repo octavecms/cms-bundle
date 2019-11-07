@@ -83,7 +83,7 @@ class CMSExtension extends \Twig_Extension
             $page = null;
         }
 
-        $result = $pageRepository->getTree($page);
+        $result = $pageRepository->getTree($page, false, false);
         $this->menu[$itemName] = $result;
 
         return $result;

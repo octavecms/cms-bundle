@@ -24,9 +24,10 @@ class PageSerializer
 
     /**
      * @param Page $page
+     * @param bool $editUrl
      * @return array
      */
-    public function toArray(Page $page)
+    public function toArray(Page $page, $editUrl = true)
     {
         $children = [];
 
@@ -35,7 +36,7 @@ class PageSerializer
             $children[] = $this->toArray($child);
         }
 
-        if ($page->getId()) {
+        if ($editUrl && $page->getId()) {
             $editUrl = $this->router->generate('sitemap_page_edit', ['id' => $page->getId()]);
         }
         else {

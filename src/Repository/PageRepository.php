@@ -59,9 +59,10 @@ class PageRepository extends EntityRepository
     /**
      * @param Page|null $page
      * @param bool $showHidden
+     * @param bool $editUrl
      * @return array
      */
-    public function getTree(Page $page = null, $showHidden = false)
+    public function getTree(Page $page = null, $showHidden = false, $editUrl = true)
     {
         if ($page) {
             $pages = $page->getChildren();
@@ -83,7 +84,7 @@ class PageRepository extends EntityRepository
                 continue;
             }
 
-            $output[] = $this->treeBuilder->build($page, $showHidden);
+            $output[] = $this->treeBuilder->build($page, $showHidden, $editUrl);
         }
 
         return $output;

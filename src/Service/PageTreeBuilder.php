@@ -24,11 +24,12 @@ class PageTreeBuilder
     /**
      * @param Page $page
      * @param bool $showHidden
+     * @param bool $editUrl
      * @return array
      */
-    public function build(Page $page, $showHidden = false)
+    public function build(Page $page, $showHidden = false, $editUrl = true)
     {
-        $data = $this->serializer->toArray($page);
+        $data = $this->serializer->toArray($page, $editUrl);
 
         if (!$page->getChildren()) {
             return $data;
