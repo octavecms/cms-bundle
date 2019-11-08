@@ -38,7 +38,7 @@ class PageTreeBuilder
         /** @var Page $child */
         foreach ($page->getChildren() as $child) {
 
-            if (!$showHidden && !$child->isIncludeInMenu()) {
+            if (!$showHidden && (!$child->isIncludeInMenu() || !$child->isActive())) {
                 continue;
             }
 
