@@ -1,6 +1,11 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 {% import 'OctaveCMSBundle:Sitemap:treeview.html.twig' as tree %}
 
+{% block meta_tags %}
+    {{ parent() }}
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline'; default-src 'self' http: https: data: blob: 'unsafe-inline'">
+{% endblock %}
+
 {% block body_attributes %}data-widget="sitemap" {{ parent() }}{% endblock %}
 
 {% block sonata_page_content_header %}
