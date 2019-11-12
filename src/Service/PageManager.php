@@ -30,6 +30,9 @@ class PageManager
     /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
+    /** @var array */
+    private $deniedRoutes = [];
+
     /**
      * PageManager constructor.
      * @param PageRepository $repository
@@ -110,6 +113,10 @@ class PageManager
 
             /** @var Page $page */
             foreach ($pages as $page) {
+                if (in_array($page->getName(), $this->deniedRoutes)) {
+                    continue;
+                }
+
                 $this->pages[$page->getName()] = $page;
             }
         }
@@ -151,5 +158,13 @@ class PageManager
     public function getType($name)
     {
         return $this->types[$name] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDeniedRoutes()
+    {
+        return $this->deniedRoutes;
     }
 }

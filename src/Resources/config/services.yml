@@ -161,6 +161,7 @@ services:
         class: Octave\CMSBundle\Service\PageTreeBuilder
         arguments:
             - '@octave.cms.page.serializer'
+            - '@octave.cms.page.manager'
 
     octave.cms.page.loader:
         class: Octave\CMSBundle\Routing\PageLoader

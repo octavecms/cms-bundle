@@ -12,13 +12,18 @@ class PageTreeBuilder
     /** @var PageSerializer */
     private $serializer;
 
+    /** @var PageManager */
+    private $pageManager;
+
     /**
      * PageTreeBuilder constructor.
      * @param PageSerializer $serializer
+     * @param PageManager $pageManager
      */
-    public function __construct(PageSerializer $serializer)
+    public function __construct(PageSerializer $serializer, PageManager $pageManager)
     {
         $this->serializer = $serializer;
+        $this->pageManager = $pageManager;
     }
 
     /**
@@ -37,6 +42,10 @@ class PageTreeBuilder
 
         /** @var Page $child */
         foreach ($page->getChildren() as $child) {
+
+            if (in_array($child->getName(), $this->pageManager->getDeniedRoutes())) {
+                continue;
+            }
 
             if (!$showHidden && (!$child->isIncludeInMenu() || !$child->isActive())) {
                 continue;
