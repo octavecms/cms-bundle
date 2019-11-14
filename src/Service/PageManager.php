@@ -161,6 +161,14 @@ class PageManager
     }
 
     /**
+     * @param array $deniedRoutes
+     */
+    public function setDeniedRoutes($deniedRoutes)
+    {
+        $this->deniedRoutes = $deniedRoutes;
+    }
+
+    /**
      * @return array
      */
     public function getDeniedRoutes()
