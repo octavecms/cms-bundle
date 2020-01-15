@@ -2,7 +2,7 @@
 
 namespace Octave\CMSBundle\Page\Block;
 
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
