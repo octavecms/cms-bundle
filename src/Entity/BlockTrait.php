@@ -30,6 +30,12 @@ trait BlockTrait
     private $content;
 
     /**
+     * @var array
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $options = [];
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -93,5 +99,48 @@ trait BlockTrait
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function addOption($name, $value)
+    {
+        $this->options[$name] = $value;
+    }
+
+    /**
+     * @param $name
+     * @return mixed|null
+     */
+    public function getOption($name)
+    {
+        return $this->options[$name] ?? null;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function setOption($name, $value)
+    {
+        $this->options[$name] = $value;
     }
 }

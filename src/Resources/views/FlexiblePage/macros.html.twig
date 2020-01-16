@@ -31,7 +31,14 @@
         <div class="box-body">
 {% endmacro %}
 
-{% macro block_end () %}
+{% macro block_end (options) %}
+            {% if options %}
+                {% if options.crudLink %}
+                    <div class="alert alert-info">
+                        Для изменения списка, пройдите по <a href="{{ path(options.crudLink) }}">ссылке</a>
+                    </div>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 {% endmacro %}

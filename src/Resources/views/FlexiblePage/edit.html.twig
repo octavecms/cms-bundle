@@ -155,7 +155,7 @@
             {% if blockData %}
                 {{ blocks.block_start(blockData.label) }}
                 {{ form_widget(block) }}
-                {{ blocks.block_end() }}
+                {{ blocks.block_end(block.vars.data.options) }}
             {% endif %}
 
         {% endfor %}
