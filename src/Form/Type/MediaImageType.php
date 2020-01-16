@@ -13,6 +13,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class MediaImageType extends AbstractType
 {
+    /** @var $locales */
+    private $locales;
+
+    /**
+     * MediaImageType constructor.
+     * @param $locales
+     */
+    public function __construct($locales)
+    {
+        $this->locales = $locales;
+    }
+
     /**
      * @return string
      */
@@ -47,7 +59,7 @@ class MediaImageType extends AbstractType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'locales' => ['en'],
+            'locales' => $this->locales,
             'show_label' => true
         ]);
     }

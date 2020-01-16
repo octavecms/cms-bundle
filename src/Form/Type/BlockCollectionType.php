@@ -18,6 +18,18 @@ use Octave\CMSBundle\Page\Block\BlockInterface;
  */
 class BlockCollectionType extends AbstractType
 {
+    /** @var $locales */
+    private $locales;
+
+    /**
+     * BlockCollectionType constructor.
+     * @param $locales
+     */
+    public function __construct($locales)
+    {
+        $this->locales = $locales;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -116,7 +128,7 @@ class BlockCollectionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'block_types' => [],
-            'locales' => ['en']
+            'locales' => $this->locales
         ));
     }
 

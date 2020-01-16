@@ -71,16 +71,22 @@ services:
     # Page types
     octave.cms.text_page.type:
         class: Octave\CMSBundle\Page\Type\TextPageType
+        arguments:
+            - '%locales%'
         tags:
             - { name: octave.page.type }
 
     octave.cms.flexible_page.type:
         class: Octave\CMSBundle\Page\Type\FlexiblePageType
+        arguments:
+            - '%locales%'
         tags:
             - { name: octave.page.type }
 
     octave.cms.custom_page.type:
         class: Octave\CMSBundle\Page\Type\CustomPageType
+        arguments:
+            - '%locales%'
         tags:
             - { name: octave.page.type }
 
@@ -217,6 +223,14 @@ services:
         class: Octave\CMSBundle\Form\Type\MediaGalleryItemType
         arguments:
             - '@octave.cms.media_gallery_item.data_transformer'
+            - '%locales%'
+        tags:
+            - { name: form.type }
+
+    octave.cms.block_collection.form_type:
+        class: Octave\CMSBundle\Form\Type\BlockCollectionType
+        arguments:
+            - '%locales%'
         tags:
             - { name: form.type }
 
@@ -224,6 +238,21 @@ services:
         class: Octave\CMSBundle\Form\Type\BlockImageType
         arguments:
             - '@octave.cms.media_image.data_transformer'
+            - '%locales%'
+        tags:
+            - { name: form.type }
+
+    octave.cms.block_item.form_type:
+        class: Octave\CMSBundle\Form\Type\BlockItemType
+        arguments:
+            - '%locales%'
+        tags:
+            - { name: form.type }
+
+    octave.cms.blocks.form_type:
+        class: Octave\CMSBundle\Form\Type\BlocksType
+        arguments:
+            - '%locales%'
         tags:
             - { name: form.type }
 
@@ -231,8 +260,24 @@ services:
         class: Octave\CMSBundle\Form\Type\MediaGalleryType
         arguments:
             - '@octave.cms.media_gallery.data_transformer'
+            - '%locales%'
         tags:
             - { name: form.type }
+
+    octave.cms.media_image.form_type:
+        class: Octave\CMSBundle\Form\Type\MediaImageType
+        arguments:
+            - '%locales%'
+        tags:
+            - { name: form.type }
+
+    octave.cms.simple_text_content.form_type:
+        class: Octave\CMSBundle\Form\Type\SimpleTextContentType
+        arguments:
+            - '%locales%'
+        tags:
+            - { name: form.type }
+
 
     # Admin
     octave.cms.sitemap.admin:

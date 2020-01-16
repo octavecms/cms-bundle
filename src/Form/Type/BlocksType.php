@@ -19,13 +19,18 @@ class BlocksType extends AbstractType
     /** @var BlockManager */
     private $blockManager;
 
+    /** @var $locales */
+    private $locales;
+
     /**
      * BlocksType constructor.
      * @param BlockManager $blockManager
+     * @param $locales
      */
-    public function __construct(BlockManager $blockManager)
+    public function __construct(BlockManager $blockManager, $locales)
     {
         $this->blockManager = $blockManager;
+        $this->locales = $locales;
     }
 
     /**
@@ -126,7 +131,7 @@ class BlocksType extends AbstractType
     {
         $resolver->setDefaults(array(
             'block_types' => [],
-            'locales' => ['en']
+            'locales' => $this->locales
         ));
     }
 

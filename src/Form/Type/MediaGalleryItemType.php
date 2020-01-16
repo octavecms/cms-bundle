@@ -20,13 +20,18 @@ class MediaGalleryItemType extends AbstractType
     /** @var DataTransformerInterface */
     private $transformer;
 
+    /** @var $locales */
+    private $locales;
+
     /**
      * MediaGalleryItemType constructor.
      * @param DataTransformerInterface $transformer
+     * @param $locales
      */
-    public function __construct(DataTransformerInterface $transformer)
+    public function __construct(DataTransformerInterface $transformer, $locales)
     {
         $this->transformer = $transformer;
+        $this->locales = $locales;
     }
 
     /**
@@ -77,7 +82,7 @@ class MediaGalleryItemType extends AbstractType
         $resolver->setDefaults([
             'data_class' => MediaGalleryItem::class,
             'use_translations' => true,
-            'locales' => ['en'],
+            'locales' => $this->locales,
             'image_name' => 'image',
             'title_name' => 'title',
             'order_name' => 'galleryorder'

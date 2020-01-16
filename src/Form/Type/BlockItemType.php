@@ -16,6 +16,18 @@ use Octave\CMSBundle\Entity\Block;
  */
 class BlockItemType extends AbstractType
 {
+    /** @var $locales */
+    private $locales;
+
+    /**
+     * BlockItemType constructor.
+     * @param $locales
+     */
+    public function __construct($locales)
+    {
+        $this->locales = $locales;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -99,7 +111,7 @@ class BlockItemType extends AbstractType
             'data_class' => Block::class,
             'block_type' => 'text',
             'content_type' => TextType::class,
-            'locales' => ['en'],
+            'locales' => $this->locales,
             'use_translation' => true,
             'show_title' => false
         ));

@@ -18,13 +18,18 @@ class BlockImageType extends AbstractType
     /** @var DataTransformerInterface */
     private $transformer;
 
+    /** @var $locales */
+    private $locales;
+
     /**
-     * MediaGalleryType constructor.
+     * BlockImageType constructor.
      * @param DataTransformerInterface $transformer
+     * @param $locales
      */
-    public function __construct(DataTransformerInterface $transformer)
+    public function __construct(DataTransformerInterface $transformer, $locales)
     {
         $this->transformer = $transformer;
+        $this->locales = $locales;
     }
 
     /**
@@ -56,7 +61,7 @@ class BlockImageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'locales' => ['en'],
+            'locales' => $this->locales,
             'data_class' => MediaImage::class,
         ]);
     }

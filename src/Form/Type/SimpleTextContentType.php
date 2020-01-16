@@ -15,6 +15,18 @@ use Octave\CMSBundle\Entity\Content;
  */
 class SimpleTextContentType extends AbstractType
 {
+    /** @var $locales */
+    private $locales;
+
+    /**
+     * SimpleTextContentType constructor.
+     * @param $locales
+     */
+    public function __construct($locales)
+    {
+        $this->locales = $locales;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -45,7 +57,7 @@ class SimpleTextContentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'locales' => ['en'],
+            'locales' => $this->locales,
             'data_class' => Content::class,
             'templates' => false
         ));

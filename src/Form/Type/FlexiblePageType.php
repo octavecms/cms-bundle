@@ -16,6 +16,18 @@ use Octave\CMSBundle\Entity\Page;
  */
 class FlexiblePageType extends AbstractType
 {
+    /** @var $locales */
+    private $locales;
+
+    /**
+     * FlexiblePageType constructor.
+     * @param $locales
+     */
+    public function __construct($locales = [])
+    {
+        $this->locales = $locales;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -88,7 +100,7 @@ class FlexiblePageType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => Page::class,
             'is_admin' => false,
-            'locales' => ['en'],
+            'locales' => $this->locales,
             'block_types' => []
         ));
     }
