@@ -40,6 +40,9 @@ class FlexiblePageType extends AbstractType
                 'required' => false
             ])
             ->add('path', TextType::class)
+            ->add('baseTemplate', TextType::class, [
+                'required' => false
+            ])
             ->add('blocks', BlockCollectionType::class, [
                 'entry_type' => BlockItemType::class,
                 'entry_options' => [

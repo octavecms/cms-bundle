@@ -69,6 +69,12 @@ class Page implements Blockable
 
     /**
      * @var string
+     * @ORM\Column(name="base_template", type="string", nullable=true)
+     */
+    private $baseTemplate;
+
+    /**
+     * @var string
      * @ORM\Column(type="string", length=512, nullable=true)
      */
     private $controller;
@@ -467,5 +473,21 @@ class Page implements Blockable
     public function setIncludeInSitemap($includeInSitemap)
     {
         $this->includeInSitemap = $includeInSitemap;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseTemplate()
+    {
+        return $this->baseTemplate;
+    }
+
+    /**
+     * @param $baseTemplate
+     */
+    public function setBaseTemplate($baseTemplate)
+    {
+        $this->baseTemplate = $baseTemplate;
     }
 }

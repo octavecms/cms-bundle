@@ -68,6 +68,7 @@ class FlexiblePageType extends BasePageType
         $content['active'] = $page->isActive();
         $content['include_in_menu'] = $page->isIncludeInMenu();
         $content['include_in_sitemap'] = $page->isIncludeInSitemap();
+        $content['base_template'] = $page->getBaseTemplate();
 
         $blocks = $page->getBlocks();
 
@@ -114,6 +115,7 @@ class FlexiblePageType extends BasePageType
         $page->setActive($content['active'] ?? null);
         $page->setIncludeInMenu($content['include_in_menu'] ?? null);
         $page->setIncludeInSitemap($content['include_in_sitemap'] ?? null);
+        $page->setBaseTemplate($content['base_template'] ?? null);
 
         $blocks = [];
 

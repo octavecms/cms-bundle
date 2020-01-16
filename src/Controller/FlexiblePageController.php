@@ -135,7 +135,9 @@ class FlexiblePageController extends Controller
      */
     public function showAction(Page $page)
     {
-        $template = $this->getParameter('octave.cms.flexible_page_template');
+        $template = $page->getBaseTemplate()
+            ? $page->getBaseTemplate()
+            : $this->getParameter('octave.cms.flexible_page_template');
         return $this->render($template, [
             'page' => $page,
             'content' => $this->get('octave.cms.block.manager')->renderPage($page)
