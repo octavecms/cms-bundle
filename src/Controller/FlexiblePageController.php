@@ -3,12 +3,14 @@
 namespace Octave\CMSBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\FlexiblePageType as FlexiblePageForm;
 use Octave\CMSBundle\Page\Type\FlexiblePageType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -19,7 +21,8 @@ class FlexiblePageController extends Controller
      * @param Request $request
      * @param Page|null $page
      * @param null $version
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
+     * @throws \Exception
      */
     public function editAction(Request $request, Page $page = null, $version = null)
     {
@@ -115,15 +118,19 @@ class FlexiblePageController extends Controller
                     return $this->redirectToRoute('sitemap_list');
                 }
                 else {
-                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => FlexiblePageForm::TYPE]);
+                    return $this->redirectToRoute('sitemap_page_create_type', ['type' => FlexiblePageType::TYPE]);
                 }
             }
         }
+
+        $freeze = count($page->getBlocks()) && $this->getParameter('octave.cms.freeze_pages_after_creation') &&
+            !$request->get('unfreeze');
 
         return $this->render('OctaveCMSBundle:FlexiblePage:edit.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
             'isNew' => $isNew,
+            'freeze' => $freeze,
             'isAdmin' => $isAdmin,
             'version' => $version
         ]);
@@ -131,7 +138,8 @@ class FlexiblePageController extends Controller
 
     /**
      * @param Page $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
+     * @throws \Exception
      */
     public function showAction(Page $page)
     {
