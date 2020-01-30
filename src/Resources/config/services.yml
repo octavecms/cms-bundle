@@ -14,7 +14,8 @@ parameters:
     octave.cms.gallery.block.template: 'OctaveCMSBundle:Blocks:gallery.html.twig'
 
     octave.cms.page_use_versions: true
-    octave.cms.freeze_pages_after_creation: false
+    octave.cms.freeze_page_blocks_after_creation: false
+    octave.cms.collapse_blocks_by_default: true
 
     octave.cms.media.resized_dir: ~
 

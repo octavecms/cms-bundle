@@ -123,7 +123,7 @@ class FlexiblePageController extends Controller
             }
         }
 
-        $freeze = count($page->getBlocks()) && $this->getParameter('octave.cms.freeze_pages_after_creation') &&
+        $freeze = count($page->getBlocks()) && $this->getParameter('octave.cms.freeze_page_blocks_after_creation') &&
             !$request->get('unfreeze');
 
         return $this->render('OctaveCMSBundle:FlexiblePage:edit.html.twig', [
@@ -131,6 +131,7 @@ class FlexiblePageController extends Controller
             'form' => $form->createView(),
             'isNew' => $isNew,
             'freeze' => $freeze,
+            'collapseBox' => $this->getParameter('octave.cms.collapse_blocks_by_default'),
             'isAdmin' => $isAdmin,
             'version' => $version
         ]);
