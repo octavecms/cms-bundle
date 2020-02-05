@@ -98,6 +98,8 @@ class FlexiblePageController extends Controller
                     }
 
                     $em->flush();
+
+                    return $this->redirectToRoute('sitemap_list');
                 }
             }
             else {

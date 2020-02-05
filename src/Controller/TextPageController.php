@@ -73,6 +73,8 @@ class TextPageController extends Controller
 
             if ($isPublish) {
                 $em->flush();
+
+                return $this->redirectToRoute('sitemap_list');
             }
 
             if (!$isNew) {
