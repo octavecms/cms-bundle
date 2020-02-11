@@ -52,7 +52,7 @@ class MediaGalleryItemType extends AbstractType
                     'locales' => $locales,
                     'label' => false,
                     'fields' => [
-                        $options['title_name'] => ['label' => 'Caption',]
+                        $options['title_name'] => ['label' => 'Caption', 'required' => false]
                     ]
                 ]);
         }
