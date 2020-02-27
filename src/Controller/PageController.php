@@ -44,8 +44,9 @@ class PageController extends AbstractController
 
         $version = $request->get('version', $defaultVersion);
         $isPublish = $request->get('publish');
+        $unfreeze = $request->get('unfreeze');
 
-        $options = ['page' => $page, 'version' => $version];
+        $options = ['page' => $page, 'version' => $version, 'unfreeze' => $unfreeze];
 
         if ($usePageVersions && $version && !$isPublish) {
 
@@ -53,15 +54,15 @@ class PageController extends AbstractController
 
             $pageVersion = $versionRepository->findOneByVersion($page, $version);
             if (!$pageVersion) {
-                   $pageVersion = $versionRepository->create($page, $version);
-                   $pageVersion->setContent(json_encode($pageType->serialize($page)));
-                   $this->getDoctrine()->getManager()->flush($pageVersion);
+                $pageVersion = $versionRepository->create($page, $version);
+                $pageVersion->setContent(json_encode($pageType->serialize($page)));
+                $this->getDoctrine()->getManager()->flush($pageVersion);
             }
             else {
                 $page = $pageType->unserialize($pageVersion);
             }
 
-            $options = ['page' => $page, 'version' => $version];
+            $options = ['page' => $page, 'version' => $version, 'unfreeze' => $unfreeze];
         }
 
         return $this->forward($pageType->getController(), $options);

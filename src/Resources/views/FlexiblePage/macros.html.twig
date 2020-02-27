@@ -1,6 +1,6 @@
-{% macro block_list_start () %}
+{% macro block_list_start (freeze) %}
     <div class="well well-small">
-        <div data-widget="blocks-list">
+        <div{% if not freeze %} data-widget="blocks-list"{% endif %}>
 {% endmacro %}
 
 {% macro block_list_end () %}
@@ -8,15 +8,18 @@
     </div>
 {% endmacro %}
 
-{% macro block_start (title, boxCollapsed) %}
+{% macro block_start (title, boxCollapsed, freeze) %}
     <div class="box box-success {% if boxCollapsed %}collapsed-box{% endif %}">
         <div class="box-header with-border">
-            <i class="fa">
-                <span class="fa fa-ellipsis-v"></span>
-                <span class="fa fa-ellipsis-v"></span>
-            </i>
 
-            <h3 class="box-title">{{ title }}</h3>
+            {% if not freeze %}
+                <i class="fa">
+                    <span class="fa fa-ellipsis-v"></span>
+                    <span class="fa fa-ellipsis-v"></span>
+                </i>
+            {% endif %}
+
+            <h3 class="box-title" data-widget="collapse" style="cursor: pointer;">{{ title }}</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
                     {% if boxCollapsed %}
@@ -25,20 +28,20 @@
                         <i class="fa fa-minus"></i>
                     {% endif %}
                 </button>
-                <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-remove"></i></button>
+                {% if not freeze %}
+                    <button type="button" class="btn btn-box-tool" data-widget="block-remove"><i class="fa fa-remove"></i></button>
+                {% endif %}
             </div>
         </div>
         <div class="box-body">
 {% endmacro %}
 
 {% macro block_end (options) %}
-            {% if options %}
-                {% if options.crudLink %}
-                    <div class="alert alert-info">
-                        Для изменения списка, пройдите по <a href="{{ path(options.crudLink) }}">ссылке</a>
-                    </div>
-                {% endif %}
-            {% endif %}
+        {% if options and options.crudLink %}
+            <div class="alert alert-info">
+                Для изменения списка, пройдите по <a href="{{ path(options.crudLink) }}">ссылке</a>
+            </div>
+        {% endif %}
         </div>
     </div>
 {% endmacro %}

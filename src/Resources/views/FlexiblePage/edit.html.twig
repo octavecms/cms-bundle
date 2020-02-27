@@ -30,41 +30,45 @@
                 <div class="navbar-left"></div>
             </div>
 
-            <div class="navbar-blocks"
-                data-widget="navbar-blocks">
-                <a class="navbar-blocks__previous js-navbar-previous disabled" role="button" aria-disabled="true">
-                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                </a>
-                <ul class="js-navbar-list">
-                    {% if form.blocks.vars.block_prototypes is defined %}
+            {% if not freeze %}
 
-                        {% for type, prototype in form.blocks.vars.block_prototypes %}
+                <div class="navbar-blocks"
+                     data-widget="navbar-blocks">
+                    <a class="navbar-blocks__previous js-navbar-previous disabled" role="button" aria-disabled="true">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </a>
+                    <ul class="js-navbar-list">
+                        {% if form.blocks.vars.block_prototypes is defined %}
 
-                            {% set data = blockTypes[type] %}
+                            {% for type, prototype in form.blocks.vars.block_prototypes %}
 
-                            {% set html %}
-                                {{ blocks.block_start(data.label) }}
-                                {{ form_widget(prototype) }}
-                                {{ blocks.block_end() }}
-                            {% endset %}
+                                {% set data = blockTypes[type] %}
 
-                            <li>
-                                <a class="btn btn-app"
-                                data-widget="blocks-add"
-                                data-prototype="{{ html|e('html_attr') }}">
+                                {% set html %}
+                                    {{ blocks.block_start(data.label) }}
+                                    {{ form_widget(prototype) }}
+                                    {{ blocks.block_end() }}
+                                {% endset %}
 
-                                    <i class="{{ data.icon }}" aria-hidden="true"></i>
-                                    <span>{{ data.label }}</span>
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="btn btn-app"
+                                       data-widget="blocks-add"
+                                       data-prototype="{{ html|e('html_attr') }}">
 
-                        {% endfor %}
-                    {% endif %}
-                </ul>
-                <a class="navbar-blocks__next js-navbar-next disabled" role="button" aria-disabled="true">
-                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                </a>
-            </div>
+                                        <i class="{{ data.icon }}" aria-hidden="true"></i>
+                                        <span>{{ data.label }}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                    <a class="navbar-blocks__next js-navbar-next disabled" role="button" aria-disabled="true">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+            {% endif %}
 
         </div>
     </nav>
@@ -90,7 +94,7 @@
 
             <div class="box box-primary {% if boxCollapsed %}collapsed-box{% endif %}">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'general' | trans({}, 'OctaveCMSBundle') }}</h3>
+                    <h3 class="box-title" data-widget="collapse" style="cursor: pointer">{{ 'general' | trans({}, 'OctaveCMSBundle') }}</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -120,7 +124,7 @@
         <div class="col-md-12">
             <div class="box box-primary {% if boxCollapsed %}collapsed-box{% endif %}">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'seo' | trans({}, 'OctaveCMSBundle') }}</h3>
+                    <h3 class="box-title" data-widget="collapse" style="cursor: pointer">{{ 'seo' | trans({}, 'OctaveCMSBundle') }}</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -141,7 +145,7 @@
 
     </div>
 
-    {{ blocks.block_list_start() }}
+    {{ blocks.block_list_start(freeze) }}
 
         <h4 class="blocks-list-empty-message">
             {{ 'add_block' | trans({}, 'OctaveCMSBundle') }}
@@ -153,7 +157,7 @@
             {% set blockData = blockTypes[blockType] %}
 
             {% if blockData %}
-                {{ blocks.block_start(blockData.label) }}
+                {{ blocks.block_start(blockData.label, collapseBox, freeze) }}
                 {{ form_widget(block) }}
                 {{ blocks.block_end(block.vars.data.options) }}
             {% endif %}

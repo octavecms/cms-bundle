@@ -14,6 +14,8 @@ parameters:
     octave.cms.gallery.block.template: 'OctaveCMSBundle:Blocks:gallery.html.twig'
 
     octave.cms.page_use_versions: true
+    octave.cms.freeze_page_blocks_after_creation: false
+    octave.cms.collapse_blocks_by_default: true
 
     octave.cms.media.resized_dir: ~
 
@@ -249,9 +251,10 @@ services:
         tags:
             - { name: form.type }
 
-    octave.cms.blocks.form_type:
+    octave.cms.blocks.form.type:
         class: Octave\CMSBundle\Form\Type\BlocksType
         arguments:
+            - '@octave.cms.block.manager'
             - '%locales%'
         tags:
             - { name: form.type }
@@ -278,6 +281,14 @@ services:
         tags:
             - { name: form.type }
 
+    octave.cms.sitemap.source:
+        class: Octave\CMSBundle\Service\SitemapSource
+        arguments:
+            - '@router'
+            - '@octave.cms.page.repository'
+            - '%octave.sitemap.host%'
+        tags:
+            - { name: octave.sitemap.source }
 
     # Admin
     octave.cms.sitemap.admin:
@@ -299,19 +310,3 @@ services:
               label: "Media"
               label_catalogue: "admin"
         arguments: [~, ~, Octave\CMSBundle\Controller\Media\MediaController]
-
-    octave.cms.sitemap.source:
-        class: Octave\CMSBundle\Service\SitemapSource
-        arguments:
-            - '@router'
-            - '@octave.cms.page.repository'
-            - '%octave.sitemap.host%'
-        tags:
-            - { name: octave.sitemap.source }
-
-    octave.cms.blocks.form.type:
-        class: Octave\CMSBundle\Form\Type\BlocksType
-        arguments:
-            - '@octave.cms.block.manager'
-        tags:
-            - { name: form.type }
