@@ -82,6 +82,17 @@ class TextPageType extends BasePageType
             }
         }
 
+        $seo = $page->getTranslations();
+
+        foreach ($seo as $locale => $translation) {
+            $output['seo'][$locale] = [
+                'title' => $translation->getTitle(),
+                'metaTitle' => $translation->getMetaTitle(),
+                'metaKeywords' => $translation->getMetaKeywords(),
+                'metaDescription' => $translation->getMetaDescription(),
+            ];
+        }
+
         return $output;
     }
 
@@ -99,6 +110,15 @@ class TextPageType extends BasePageType
         $page->setActive($data['active'] ?? null);
         $page->setIncludeInMenu($data['include_in_menu'] ?? null);
         $page->setIncludeInSitemap($data['include_in_sitemap'] ?? null);
+
+        if (isset($data['seo'])) {
+            foreach ($data['seo'] as $locale => $seoData) {
+                $page->translate($locale)->setTitle($seoData['title']);
+                $page->translate($locale)->getMetaTitle($seoData['metaTitle']);
+                $page->translate($locale)->getMetaKeywords($seoData['metaKeywords']);
+                $page->translate($locale)->getMetaDescription($seoData['metaDescription']);
+            }
+        }
 
         $content = $page->getContent();
         if (!$content) {

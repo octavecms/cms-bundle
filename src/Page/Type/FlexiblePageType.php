@@ -98,6 +98,17 @@ class FlexiblePageType extends BasePageType
         ksort($contentBlocks);
         $content['blocks'] = $contentBlocks;
 
+        $seo = $page->getTranslations();
+
+        foreach ($seo as $locale => $translation) {
+            $content['seo'][$locale] = [
+                'title' => $translation->getTitle(),
+                'metaTitle' => $translation->getMetaTitle(),
+                'metaKeywords' => $translation->getMetaKeywords(),
+                'metaDescription' => $translation->getMetaDescription(),
+            ];
+        }
+
         return $content;
     }
 
@@ -116,6 +127,15 @@ class FlexiblePageType extends BasePageType
         $page->setIncludeInMenu($content['include_in_menu'] ?? null);
         $page->setIncludeInSitemap($content['include_in_sitemap'] ?? null);
         $page->setBaseTemplate($content['base_template'] ?? null);
+
+        if (isset($content['seo'])) {
+            foreach ($content['seo'] as $locale => $seoData) {
+                $page->translate($locale)->setTitle($seoData['title']);
+                $page->translate($locale)->getMetaTitle($seoData['metaTitle']);
+                $page->translate($locale)->getMetaKeywords($seoData['metaKeywords']);
+                $page->translate($locale)->getMetaDescription($seoData['metaDescription']);
+            }
+        }
 
         $blocks = [];
 
