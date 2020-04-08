@@ -43,5 +43,9 @@ class OctaveCMSExtension extends Extension
             'octave.cms.media_gallery.data_transformer' => $config['media_gallery_transformer']
                 ?? 'octave.cms.media_gallery.data_transformer.default'
         ]);
+
+        if (isset($config['resize_options'])) {
+            $container->setParameter('octave.cms.media.resize_options', $config['resize_options']);
+        }
     }
 }

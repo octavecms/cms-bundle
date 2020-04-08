@@ -21,7 +21,8 @@
     "friendsofsymfony/ckeditor-bundle": "~2.0",
     "knplabs/doctrine-behaviors": ">=1.1.0",
     "friendsofsymfony/user-bundle": "~2.0",
-    "octave/sitemap-bundle" : ">=1.1.0"
+    "octave/sitemap-bundle" : ">=1.1.0",
+    "liip/imagine-bundle": "^2.2"
   },
   "autoload": {
     "psr-4": {
