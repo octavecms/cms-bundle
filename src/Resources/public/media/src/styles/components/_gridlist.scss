@@ -99,11 +99,6 @@
         box-shadow: 7px 7px 0 0 rgba(#000, 0.05);
     }
 
-
-    .popover {
-        max-width: none;
-    }
-
     &-popover {
         width: $grid-item-size * 1.75;
 
@@ -196,6 +191,15 @@
     position: absolute;
     left: -9000px;
     top: -9000px;
+}
+
+
+/*
+ * Popover
+ */
+
+.media-gridlist-container .popover {
+    max-width: none;
 }
 
 

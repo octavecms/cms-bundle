@@ -28,6 +28,8 @@ export default class MediaGridListItem {
         this.$popover    = $container.find('.media-gridlist-popover');
         this.$replace    = null;
 
+        this.$popover.attr('data-id', this.options.id);
+
         this.init();
     }
 
@@ -168,13 +170,15 @@ export default class MediaGridListItem {
                     trigger: 'null',
                     html: true,
                     placement: 'bottom',
-                    content: this.$popover.removeClass('hidden')
+                    content: this.$popover.removeClass('hidden'),
+                    container: this.$container.closest('.media-gridlist').parent()
                 });
 
                 this.initPopover();
             }
 
             this.$container.popover('show').addClass('is-active');
+            this.$popover
 
         } else if (prevOpened === id) {
             this.$container.popover('hide').removeClass('is-active');

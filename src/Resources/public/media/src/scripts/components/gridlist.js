@@ -20,7 +20,7 @@ export default class MediaGridList {
         return {
             'className': 'media-gridlist',
             'itemSelector': '.media-gridlist-box',
-            'popoverSelector': '.popover',
+            'popoverSelector': '.media-gridlist-popover',
             'store': null
         };
     }
@@ -209,9 +209,10 @@ export default class MediaGridList {
                 return $item;
             } else {
                 const $popover = $(e.target).closest(this.options.popoverSelector);
+                const id = $popover.data('id');
 
-                if ($popover.length) {
-                    return $popover.prev(this.options.itemSelector);
+                if (id) {
+                    return this.$container.find(`[data-id="${ id }"]`);
                 } else {
                     return $();
                 }
