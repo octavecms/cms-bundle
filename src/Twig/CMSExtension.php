@@ -37,7 +37,8 @@ class CMSExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFunction('octave_route_exists', [$this, 'routeExists']),
             new \Twig_SimpleFunction('octave_cms_menu', [$this, 'getMenu']),
-            new \Twig_SimpleFunction('octave_current_page', [$this, 'getCurrentPage'])
+            new \Twig_SimpleFunction('octave_current_page', [$this, 'getCurrentPage']),
+            new \Twig_SimpleFunction('octave_get_page', [$this, 'getPage']),
         ];
     }
 
@@ -95,6 +96,16 @@ class CMSExtension extends \Twig_Extension
     public function getCurrentPage()
     {
         return $this->container->get('octave.cms.page.manager')->getCurrentPage();
+    }
+
+    /**
+     * @param $routeName
+     * @return mixed
+     */
+    public function getPage($routeName)
+    {
+        $pageManager = $this->container->get('octave.cms.page.manager');
+        return isset($pageManager->getPages()[$routeName]) ? $pageManager->getPages()[$routeName] : null;
     }
 
     /**
