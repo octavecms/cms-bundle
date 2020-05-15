@@ -8,12 +8,7 @@ import uploader from 'components/uploader';
 import ErrorMessage from 'components/error-message';
 
 import { setGridList, fetchFiles, addFolder, deleteSelectedListItems } from 'modules/actions';
-
-
-const staticMediaState = window.MEDIA_LIBRARY_STATIC_STATE || (window.MEDIA_LIBRARY_STATIC_STATE = {
-    'categoryId': null
-});
-
+import { setStaticInitialState } from 'modules/static-initial-state';
 
 /**
  * Top level component
@@ -43,10 +38,7 @@ class MediaStandalone {
             'selectmode': false,
 
             // Select callback
-            'onselect': null,
-
-            // Restore previously opened path
-            'restorepath': true
+            'onselect': null
         };
     }
 
@@ -57,21 +49,8 @@ class MediaStandalone {
         this._init();
     }
 
-    _getStoreOptions () {
-        const options = {
-            'multiselect': this.options.multiselect
-        };
-
-        // Restore opened category
-        if (staticMediaState.categoryId !== null) {
-            options.categoryId = staticMediaState.categoryId;
-        }
-
-        return options;
-    }
-
     _init () {
-        const store = this.store = createStore(this._getStoreOptions());
+        const store = this.store = createStore({'multiselect': this.options.multiselect});
         const $element = this.$element;
 
         // @TODO Remove, this is for debug only
@@ -140,7 +119,10 @@ class MediaStandalone {
         const state = this.store.getState();
         const list  = state.categories[state.categoryId];
 
-        staticMediaState.categoryId = state.categoryId;
+        // Save category between media library instances
+        setStaticInitialState({
+            categoryId: state.categoryId
+        });
 
         if (list) {
             this.store.dispatch(setGridList([].concat(list)));

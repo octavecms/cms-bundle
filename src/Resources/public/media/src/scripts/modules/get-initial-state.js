@@ -1,6 +1,9 @@
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 
+import { getStaticInitialState } from './static-initial-state';
+
+
 
 function transformTreeBranch (folders) {
     let folderList = [];
@@ -82,9 +85,10 @@ export default function (state) {
         }
     }, window.MEDIA_INITIAL_STATE, state));
 
-    // Validate categoryId
-    if (intialState.categoryId && !(intialState.categoryId in intialState.tree.folders)) {
-        intialState.categoryId = 0;
+    // Validate and set categoryId
+    const staticCategoryId = getStaticInitialState().categoryId;
+    if (staticCategoryId && !state.categoryId && (staticCategoryId in intialState.tree.folders)) {
+        intialState.categoryId = staticCategoryId;
     }
 
     return intialState;
