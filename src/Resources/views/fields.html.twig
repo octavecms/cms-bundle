@@ -72,27 +72,71 @@
     </script>
 {% endblock %}
 
+                    
 {% block octave_collection_widget %}
     <div id="{{ id }}_widget" class="form-control-collection">
-        {% set html %}
-            <li class="well well-small">
-                <a class="btn btn-danger js-collection-remove form-control-collection__remove">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                </a>
+        {% macro octave_collection_widget_title(form) %}
+            {{ form.vars.label|default(form.vars.name)|humanize|capitalize }}
+        {% endmacro %}
+        {% macro octave_collection_widget_text(item) %}
+            {{ item.vars.data.title|default(item.vars.data|first)|striptags|slice(1, 255) }}
+        {% endmacro %}
 
-                {{ form_widget(form.vars.prototype) }}
+        {% set html %}
+            <li class="panel panel-default collection-item" id="{{ id }}_accordion___name__">
+                <div class="collection-item__heading panel-heading">
+                    <a
+                        class="collection-item__heading__title collapsed"
+                        role="button"
+                        data-toggle="collapse"
+                        data-parent="#{{ id }}_accordion___name__"
+                        aria-expanded="false"
+                        aria-controls="{{ id }}_accordion___name___content"
+                        href="#{{ id }}_accordion___name___content"
+                    >   
+                        <span class="collection-item__heading__title__icon"></span>
+                        <span class="collection-item__heading__title__text">{{ _self.octave_collection_widget_title(form) }}</span>
+                        <span class="collection-item__heading__title__value js-collection-list-item-title"></span>
+                    </a>
+                    <a class="btn btn-danger js-collection-remove collection-item__heading__remove">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="collection-item__content panel-collapse collapse" id="{{ id }}_accordion___name___content">
+                    <div class="collection-item__body panel-body">
+                        {{ form_widget(form.vars.prototype) }}
+                    </div>
+                </div>
             </li>
         {% endset %}
 
-        <ul class="form-control-collection__list js-collection-list" data-prototype="{{ html|e('html_attr') }}">
+        <ul class="form-control-collection__list panel-group js-collection-list" data-prototype="{{ html|e('html_attr') }}">
             {% for item in form %}
-                <li class="well well-small">
-                    <a class="btn btn-danger js-collection-remove form-control-collection__remove">
-                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                    </a>
-
-                    {{ form_errors(item) }}
-                    {{ form_widget(item) }}
+                <li class="panel panel-default collection-item" id="{{ id }}_accordion_{{ loop.index0 }}">
+                    <div class="collection-item__heading panel-heading">
+                        <a
+                            class="collection-item__heading__title collapsed"
+                            role="button"
+                            data-toggle="collapse"
+                            data-parent="#{{ id }}_accordion_{{ loop.index0 }}"
+                            aria-expanded="false"
+                            aria-controls="{{ id }}_accordion_{{ loop.index0 }}_content"
+                            href="#{{ id }}_accordion_{{ loop.index0 }}_content"
+                        >   
+                            <span class="collection-item__heading__title__icon"></span>
+                            <span class="collection-item__heading__title__text">{{ _self.octave_collection_widget_title(form) }}</span>
+                            <span class="collection-item__heading__title__value js-collection-list-item-title">{{ _self.octave_collection_widget_text(item) }}</span>
+                        </a>
+                        <a class="btn btn-danger js-collection-remove collection-item__heading__remove">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="collection-item__content panel-collapse collapse" id="{{ id }}_accordion_{{ loop.index0 }}_content">
+                        <div class="collection-item__body panel-body">
+                            {{ form_errors(item) }}
+                            {{ form_widget(item) }}
+                        </div>
+                    </div>
                 </li>
             {% endfor %}
         </ul>

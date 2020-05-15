@@ -51,6 +51,12 @@ class CollectionWidget {
 
         // When this whole widget is removed from DOM trigger 'destroy'
         $element.on(`remove.${ NAMESPACE }`, this.destroy.bind(this));
+
+        // When list item is collapsed update the item title
+        $list.on('hide.bs.collapse', this._handleCollapseItem.bind(this));
+
+        // Update list item title
+        $list.children().each((_index, item) => this._updateListItemTitle($(item)));
     }
 
     destroy () {
@@ -70,12 +76,16 @@ class CollectionWidget {
         const $inputs = this.$list.find(this.options.orderCssSelector);
         let   index   = 0;
 
-        $inputs.each((i, input) => {
-            const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
-            const numbers = map(names, name => parseInt(name, 10));
-
-            index = Math.max(index, Math.max.apply(Math, numbers));
-        });
+        if ($inputs.length) {
+            $inputs.each((i, input) => {
+                const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
+                const numbers = map(names, name => parseInt(name, 10));
+    
+                index = Math.max(index, Math.max.apply(Math, numbers));
+            });
+        } else {
+            index = this.$list.children().length - 1;
+        }
 
         return index + 1;
     }
@@ -119,6 +129,45 @@ class CollectionWidget {
         const $item = $(e.target).closest('.js-collection-list > li');
         $item.remove();
         this._updateList();
+    }
+
+    /**
+     * Update item
+     */
+
+    _handleCollapseItem (e) {
+        const $item = $(e.target).closest('.js-collection-list > li');
+        this._updateListItemTitle($item);
+    }
+    _updateListItemTitle ($item) {
+        const $title = $item.find('.js-collection-list-item-title');
+        $title.text(this._getListItemTitle($item));
+    }
+
+    _getListItemTitle ($item) {
+        // First search for title
+        const $title = $item.find('[name*="[title]"]');
+
+        if ($title) {
+            return $title.val().replace(/(<([^>]+)>)/ig,"");
+        }
+
+        // Use any input we can find
+        const $input = $inputs.eq(i);
+        const inputValue = $input.val();
+
+        if ($input.is('textarea, [type="text"], [type="email"], [type="tel"], [type="url"], [type="date"], [type="number"]')) {
+            title = inputValue;
+        } else if ($input.is('.form-control-image input[type="hidden"]')) {
+            // Image
+            title = inputValue;
+        } else if ($input.is('select')) {
+            title = $input.find('option').filter((_, option) => {
+                return option.value === inputValue;
+            }).text();
+        }
+
+        return title.replace(/.*\//, '').substr(0, 255);
     }
 }
 
