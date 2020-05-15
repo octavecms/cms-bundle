@@ -1,0 +1,24 @@
+/**
+ * Modifier
+ */
+.box-header--full {
+    display: flex;
+
+    .box-title {
+        flex: 1 1 100%;
+        position: relative;
+        margin: -10px 0 -10px 5px;
+        padding: 10px 0 11px;
+        align-items: center;
+
+        &:first-child {
+            margin-left: -10px;
+            padding-left: 10px;
+        }
+    }
+    & >.fa,
+    & >.glyphicon,
+    & >.ion {
+        flex: 0 0 auto;
+    }
+}
