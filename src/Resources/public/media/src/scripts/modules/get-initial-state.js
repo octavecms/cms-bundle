@@ -28,7 +28,7 @@ function transformTreeRoot (state) {
 }
 
 export default function (state) {
-    return transformTreeRoot($.extend(true, {
+    const intialState = transformTreeRoot($.extend(true, {
         'tree': {
             // Root folder id; if an object is passed from MEDIA_INITIAL_STATE, then it will be transformed into 'folders'
             'root': null,
@@ -81,4 +81,11 @@ export default function (state) {
             'message': '' 
         }
     }, window.MEDIA_INITIAL_STATE, state));
+
+    // Validate categoryId
+    if (intialState.categoryId && !(intialState.categoryId in intialState.tree.folders)) {
+        intialState.categoryId = 0;
+    }
+
+    return intialState;
 };

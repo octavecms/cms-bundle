@@ -1,6 +1,5 @@
-import map from 'lodash/map';
 import each from 'lodash/each';
-import difference from 'lodash/difference';
+import find from 'lodash/find';
 import { setCategory, fetchFiles, moveFiles, moveFolder } from 'modules/actions';
 
 import { isDescendantOf, isChildOf } from 'utils/folders'
@@ -55,6 +54,7 @@ export default class MediaTreeView {
             store.subscribePath('tree.folders', this.handleFolderChange.bind(this))
         ];
 
+        this.restoreInternalState();
         this.restoreTreeState();
     }
 
@@ -112,9 +112,9 @@ export default class MediaTreeView {
 
     handleCategoryChange (categoryId) {
         this.$container.find(this.options.itemSelector)
-            .removeClass('is-active')
+            .removeClass(this.options.activeClassName)
             .filter('[data-id="' + encodeURIComponent(categoryId) + '"]')
-                .addClass('is-active');
+                .addClass(this.options.activeClassName);
     }
 
     handleFolderChange (folders, prevFolders) {
@@ -233,6 +233,22 @@ export default class MediaTreeView {
         this.restoreTreeState();
     }
 
+    /**
+     * Restore internal state from the store state
+     */
+    restoreInternalState () {
+        const folders = this.store.getState().tree.folders;
+        const categoryId = this.store.getState().categoryId;
+        const states = this.states;
+
+        let folder = find(folders, {'id': categoryId});
+
+        while (folder && folder.parent !== 'root') {
+            states[folder.parent] = true;
+            folder = find(folders, {'id': folder.parent});
+        }
+    }
+
     /*
      * Restore tree active element states
      */
@@ -254,11 +270,16 @@ export default class MediaTreeView {
                 $item.next('ul').show();
             }
         }
-
         // Restore toggled elements
         const $toggled = $container.find(options.toggledSelector);
         $toggled.addClass(options.toggledClassName);
         $toggled.next('ul').show();
+
+        // Restore active element
+        const categoryId = this.store.getState().categoryId;
+        const $restoreActive = $container.find('[data-id="' + encodeURIComponent(categoryId) + '"]');
+        $active.removeClass(this.options.activeClassName);
+        $restoreActive.addClass(this.options.activeClassName);
 
         // Enable drag and drop, file upload
         $container.find(options.itemSelector).each((index, item) => {
