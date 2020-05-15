@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
-import fileupload from 'blueimp-file-upload';
-import { uploadedFiles, updatedFile } from 'modules/actions';
+import 'blueimp-file-upload';
+import { setErrorMessage, uploadedFiles, updatedFile } from 'modules/actions';
 
 
 let UID = 0;
@@ -21,6 +21,7 @@ class Uploader {
         this.uploadComplete = [];
         this.$dropZones = $();
         this.$progress = $('.js-media-gridlist-progress');
+        this.$error = $('.js-media-gridlist-error');
         this.updateDropZones = debounce(this.updateDropZones, 60);
         this.create();
     }
@@ -36,6 +37,7 @@ class Uploader {
             url: API_ENDPOINTS.filesUpload,
             dataType: 'json',
             done: this.handleFileUploadComplete.bind(this),
+            error: this.handleFileUploadError.bind(this),
             progressall: this.handleFileUploadProgress.bind(this),
             submit: this.handleFileSubmit.bind(this),
             add: this.handleFileUpload.bind(this)
@@ -58,7 +60,13 @@ class Uploader {
         this.store.dispatch(uploadedFiles(uploadComplete));
     }
 
-    handleFileUploadComplete (e, data) {
+    handleFileUploadError (response) {
+        if (response.responseJSON && response.responseJSON.message) {
+            this.store.dispatch(setErrorMessage(response.responseJSON.message));
+        }
+    }
+
+    handleFileUploadComplete (e, data, err) {
         if (data.info && data.info.replace) {
             // Was replacing file
             this.store.dispatch(updatedFile(data.result.files[0]));
