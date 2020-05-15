@@ -216,7 +216,7 @@ export default class SitemapTreeView {
     handleDropDrop (e, ui) {
         this.handleDropOut(e, ui);
         if (!this.dropTarget) return;
-
+        
         const store = this.store;
         const state = store.getState();
         const target = this.dropTarget;
@@ -289,12 +289,13 @@ export default class SitemapTreeView {
         const rect     = $item.get(0).getBoundingClientRect();
         const cursorX  = ui.offset.left - 10;
         const cursorY  = ui.offset.top - 10;
+        const scroll   = $(window).scrollTop();
 
-        let   atTop    = cursorY < rect.top + 7;
-        let   atBottom = cursorY > rect.top + rect.height - 7;
+        let   atTop    = cursorY < rect.top + scroll + 7;
+        let   atBottom = cursorY > rect.top + scroll + rect.height - 7;
         let   isInside = !atTop && !atBottom;
 
-        if (cursorX < rect.left || cursorX > rect.left + rect.width || cursorY < rect.top || cursorY > rect.top + rect.height) {
+        if (cursorX < rect.left || cursorX > rect.left + rect.width || cursorY < rect.top + scroll || cursorY > rect.top + scroll + rect.height) {
             // Outside the element
             atTop = atBottom = false;
             isInside = false;
