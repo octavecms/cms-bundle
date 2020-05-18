@@ -20,16 +20,21 @@
                 <script type="text/template">
                     <li class="media-gridlist-box" data-id="<%= data.id %>">
                         <div class="media-gridlist-box-inner">
-
-                            <span class="media-gridlist-box-thumbnail">
-                                <% if (data.image) { %>
+                            <% if (data.image) { %>
+                                <span class="media-gridlist-box-thumbnail">
                                     <img src="<%= data.image %>" alt="" />
-                                <% } %>
-                            </span>
+                                </span>
+                            <% } else if (data.icon) { %>
+                                <span class="media-gridlist-box-icon">
+                                    <span class="fa <%= data.icon %>"></span>
+                                </span>
+                            <% } else { %>
+                                <span class="media-gridlist-box-thumbnail"></span>
+                            <% } %>
+
                             <span class="media-gridlist-box-label">
                                 <%= data.filename %>
                             </span>
-
                         </div>
 
                         <div class="media-gridlist-popover hidden">

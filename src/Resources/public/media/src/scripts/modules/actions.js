@@ -156,7 +156,30 @@ function receiveFiles (categoryId, json) {
     return {
         type: RECEIVE_FILES,
         categoryId,
-        files: json.data
+        files: map(json.data, (file) => {
+            // Add icon to the file data
+            if (!file.image && !file.icon) {
+                const extension = file.filename.replace(/^.*\./, '');
+
+                if (['doc', 'docm', 'docx', 'dot', 'dotm', 'dotx'].indexOf(extension) !== 1) {
+                    file.icon = 'fa-file-word-o';
+                } else if (['xls', 'xlsb', 'xlsm', 'xlsx'].indexOf(extension) !== 1) {
+                    file.icon = 'fa-file-excel-o';
+                } else if (['pptx', 'pptm', 'ppt', 'potx', 'potm', 'pot', 'ppsx', 'pps'].indexOf(extension) !== 1) {
+                    file.icon = 'fa-file-powerpoint-o';
+                } else if (['pdf'].indexOf(extension) !== 1) {
+                    file.icon = 'fa-file-pdf-o';
+                } else if (['webm', 'avi', 'mp4', 'wmv', 'ogg', 'mpg', 'mpv', 'mpe'].indexOf(extension) !== 1) {
+                    file.icon = 'fa-file-video-o';
+                } else if (['mp3', 'oga', 'm4p', 'm4a', 'm4b', 'wav'].indexOf(extension) !== 1) {
+                    file.icon = 'fa-file-audio-o';
+                } else {
+                    file.icon = 'fa-file-o';
+                }
+            }
+            
+            return file;
+        })
     };
 }
 

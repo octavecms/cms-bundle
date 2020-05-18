@@ -35,14 +35,17 @@
 
         list-style: none;
 
-        &-thumbnail {
+        &-thumbnail,
+        &-icon {
             display: block;
             position: relative;
             overflow: hidden;
             padding-top: 100%;
-
+    
             cursor: pointer;
+        }
 
+        &-thumbnail {
             img {
                 position: absolute;
                 left: 50%;
@@ -63,6 +66,21 @@
                     object-position: center;
                     border-radius: 2px;
                 }
+            }
+        }
+        &-icon {
+            background: #f8f8f8;
+            border-radius: 2px;
+
+            .fa {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                height: auto;
+                transform: translate(-50%, -50%);
+                
+                color: #bcc4ca;
+                font-size: 70px;
             }
         }
 
