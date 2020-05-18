@@ -49,14 +49,16 @@ class UploadHelper
      * @param MediaItemManager $mediaItemManager
      * @param $uploadDir
      * @param $rootDir
+     * @param $allowedMimeTypes
      */
     public function __construct(MediaItemRepository $itemRepository, MediaItemManager $mediaItemManager, $uploadDir,
-                                $rootDir)
+                                $rootDir, $allowedMimeTypes)
     {
         $this->itemRepository = $itemRepository;
         $this->itemManager = $mediaItemManager;
         $this->uploadPath = $rootDir . '/../public' . $uploadDir . '/';
         $this->webPath = $uploadDir;
+        $this->allowedMimeTypes = $allowedMimeTypes;
     }
 
     /**
@@ -202,9 +204,7 @@ class UploadHelper
      */
     private function setFileInfo(MediaItem $item, UploadedFile $file)
     {
-        if ($this->isImage($file)) {
-            $this->setImageFileInfo($item, $file);
-        }
+        $this->setImageFileInfo($item, $file);
     }
 
     /**
@@ -230,6 +230,7 @@ class UploadHelper
     /**
      * @param UploadedFile $file
      * @return bool
+     * @deprecated
      */
     private function isImage(UploadedFile $file)
     {

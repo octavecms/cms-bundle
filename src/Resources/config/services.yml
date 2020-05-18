@@ -181,6 +181,8 @@ services:
     octave.cms.media_item.serializer:
         class: Octave\CMSBundle\Service\MediaItemSerializer
         public: true
+        arguments:
+            - '%kernel.project_dir%'
 
     octave.cms.page.serializer:
         class: Octave\CMSBundle\Service\PageSerializer
@@ -196,8 +198,10 @@ services:
             - '@octave.cms.media_item.manager'
             - '%octave.cms.media.upload_dir%'
             - '%kernel.root_dir%'
+            - '%octave.cms.media.allowed_mime_types%'
 
     octave.cms.media_item.manager:
+        public: true
         class: Octave\CMSBundle\Service\MediaItemManager
         arguments:
             - '%kernel.root_dir%'

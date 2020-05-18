@@ -44,6 +44,10 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('file_types')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(['gif', 'jpeg', 'jpg', 'png', 'svg', 'xml', 'html'])
+                ->end()
             ->end();
 
 

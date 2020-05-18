@@ -47,5 +47,9 @@ class OctaveCMSExtension extends Extension
         if (isset($config['resize_options'])) {
             $container->setParameter('octave.cms.media.resize_options', $config['resize_options']);
         }
+
+        if (isset($config['file_types'])) {
+            $container->setParameter('octave.cms.media.file_types', $config['file_types']);
+        }
     }
 }

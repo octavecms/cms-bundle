@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle;
 
 use Octave\CMSBundle\DependencyInjection\Compiler\LiipImagineFilterSetsGenerator;
+use Octave\CMSBundle\DependencyInjection\Compiler\MimeTypesPass;
 use Octave\CMSBundle\DependencyInjection\Compiler\TextPageExtensionPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -23,5 +24,6 @@ class OctaveCMSBundle extends Bundle
         $container->addCompilerPass(new BlockTypesPass());
         $container->addCompilerPass(new TextPageExtensionPass());
         $container->addCompilerPass(new LiipImagineFilterSetsGenerator());
+        $container->addCompilerPass(new MimeTypesPass());
     }
 }

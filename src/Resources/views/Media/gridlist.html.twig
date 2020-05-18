@@ -62,7 +62,7 @@
 
                             <% if (data.image) { %>
                                 <p class="media-gridlist-popover-buttons">
-                                    <a class="btn btn-primary js-media-download js-selectable-ignore" download="a.jpg" href="<%= data.image %>">
+                                    <a class="btn btn-primary js-media-download js-selectable-ignore" download="<%= data.filename %>" href="<%= data.image %>">
                                         <span class="fa fa-download"></span>
                                         {{ 'download' | trans({}, 'OctaveCMSBundle') }}
                                     </a>
