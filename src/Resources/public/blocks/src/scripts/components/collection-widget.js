@@ -148,26 +148,37 @@ class CollectionWidget {
         // First search for title
         const $title = $item.find('[name*="[title]"]');
 
-        if ($title) {
+        if ($title.length) {
             return $title.val().replace(/(<([^>]+)>)/ig,"");
         }
 
         // Use any input we can find
-        const $input = $inputs.eq(i);
-        const inputValue = $input.val();
+        const $inputs = $item.find('input, textarea, select');
 
-        if ($input.is('textarea, [type="text"], [type="email"], [type="tel"], [type="url"], [type="date"], [type="number"]')) {
-            title = inputValue;
-        } else if ($input.is('.form-control-image input[type="hidden"]')) {
-            // Image
-            title = inputValue;
-        } else if ($input.is('select')) {
-            title = $input.find('option').filter((_, option) => {
-                return option.value === inputValue;
-            }).text();
+        for (let i = 0; i < $inputs.length; i++) {
+            const $input = $inputs.eq(i);
+            const inputValue = $input.val();
+            let title = '';
+    
+            if ($input.is('textarea, [type="text"], [type="email"], [type="tel"], [type="url"], [type="date"], [type="number"]')) {
+                title = inputValue;
+            } else if ($input.is('.form-control-image input[type="hidden"]')) {
+                // Image
+                title = inputValue;
+            } else if ($input.is('select')) {
+                title = $input.find('option').filter((_, option) => {
+                    return option.value === inputValue;
+                }).text();
+            }
+    
+            title = title.replace(/.*\//, '').substr(0, 255);
+
+            if (title) {
+                return title;
+            }
         }
 
-        return title.replace(/.*\//, '').substr(0, 255);
+        return '';
     }
 }
 
