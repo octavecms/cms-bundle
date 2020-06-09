@@ -37,10 +37,11 @@ class CollectionWidget {
         // Sortable list
         $list
             .sortable({
+                cancel              : '.collection-item__content',
                 placeholder         : 'form-control-collection__highlight',
                 forcePlaceholderSize: true,
                 zIndex              : 999999,
-                stop                : this._updateBlockOrder.bind(this)
+                stop                : this._handleOrder.bind(this)
             });
 
         // "Add" button click
@@ -72,6 +73,11 @@ class CollectionWidget {
      * Order
      */
 
+    _handleOrder () {
+        this._updateBlockOrder();
+        this._reinitializeCKEditors();
+    }
+
     _getMaxIndex () {
         const $inputs = this.$list.find(this.options.orderCssSelector);
         let   index   = 0;
@@ -95,12 +101,36 @@ class CollectionWidget {
         this._updateBlockOrder();
     }
 
+    /**
+     * Update order input values to be in ascending order
+     */
     _updateBlockOrder () {
-        var $inputs = this.$list.find(this.options.orderCssSelector);
+        const $inputs = this.$list.find(this.options.orderCssSelector);
 
         $inputs.each(function (index, input) {
             $(input).val(index);
         });
+    }
+
+    /**
+     * Re-intialize CKEditor since jQuery sortable elements thus destroying
+     * CKEditor bindings
+     */
+    _reinitializeCKEditors () {
+        const $inputs = this.$list.find('textarea');
+
+        if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances) {
+            for (let i = 0; i < $inputs.length; i++) {
+                const textarea = $inputs.get(i);
+
+                if (textarea.id && textarea.id in CKEDITOR.instances) {
+                    const config = CKEDITOR.instances[textarea.id].config;
+
+                    CKEDITOR.instances[textarea.id].destroy();
+                    CKEDITOR.replace(textarea.id, config);
+                }
+            }
+        }
     }
 
 
@@ -111,6 +141,7 @@ class CollectionWidget {
     _handleAddItem () {
         const $html = $(this._generateItemHTML());
         this.$list.append($html);
+        this.$list.find('script[type="text/javascript"]').remove();
 
         Admin.shared_setup($html);
         this._updateList();
