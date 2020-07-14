@@ -63,10 +63,11 @@ class CMSExtension extends \Twig_Extension
 
     /**
      * @param $itemName
-     * @return array
+     * @param null $locale
+     * @return mixed
      * @throws \Exception
      */
-    public function getMenu($itemName)
+    public function getMenu($itemName, $locale = null)
     {
         if (isset($this->menu[$itemName])) {
             return $this->menu[$itemName];
@@ -76,6 +77,9 @@ class CMSExtension extends \Twig_Extension
 
         if ($itemName != 'root') {
             $page = $pageRepository->findOneBy(['name' => $itemName, 'active' => true]);
+            if ($locale) {
+                $page->setCurrentLocale($locale);
+            }
             if (!$page) {
                 throw new \Exception(sprintf('Page with name %s not found', $itemName));
             }
@@ -84,7 +88,7 @@ class CMSExtension extends \Twig_Extension
             $page = null;
         }
 
-        $result = $pageRepository->getTree($page, false, false);
+        $result = $pageRepository->getTree($page, false, false, $locale);
         $this->menu[$itemName] = $result;
 
         return $result;

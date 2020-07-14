@@ -30,10 +30,14 @@ class PageTreeBuilder
      * @param Page $page
      * @param bool $showHidden
      * @param bool $editUrl
+     * @param null $locale
      * @return array
      */
-    public function build(Page $page, $showHidden = false, $editUrl = true)
+    public function build(Page $page, $showHidden = false, $editUrl = true, $locale = null)
     {
+        if ($locale) {
+            $page->setCurrentLocale($locale);
+        }
         $data = $this->serializer->toArray($page, $editUrl);
 
         if (!$page->getChildren()) {
