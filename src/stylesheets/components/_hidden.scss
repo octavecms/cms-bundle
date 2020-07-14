@@ -1,0 +1,49 @@
+/**
+ * Hidden element state
+ *
+ * @demo
+ *     <div class="is-hidden">Hidden element</div>
+ *     <div class="is-hidden--sm-down">Element hidden only on mobile</div>
+ */
+
+.is-hidden,
+.is-hidden--xs-up,
+.is-hidden--xxxl-down,
+.js .is-hidden--js,
+.no-js .is-hidden--no-js,
+.has-hover .is-hidden--hover,
+.no-hover .is-hidden--no-hover {
+    display: none !important;
+}
+
+@include media-breakpoint('not-print') {
+    .is-hidden--not-print,
+    .is-visible--print-only {
+        display: none !important;
+    }
+}
+@include media-breakpoint('print') {
+    .is-hidden--print {
+        display: none !important;
+    }
+}
+
+@each $breakpoint in $media-breakpoints {
+    @include media-breakpoint('#{$breakpoint}') {
+        .is-hidden--#{$breakpoint} {
+            display: none !important;
+        }
+    }
+
+    @include media-breakpoint('#{$breakpoint}-up') {
+        .is-hidden--#{$breakpoint}-up {
+            display: none !important;
+        }
+    }
+
+    @include media-breakpoint('#{$breakpoint}-down') {
+        .is-hidden--#{$breakpoint}-down {
+            display: none !important;
+        }
+    }
+}

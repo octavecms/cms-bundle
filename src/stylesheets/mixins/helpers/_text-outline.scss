@@ -1,0 +1,33 @@
+/**
+ * Draw text outline instead of default filled text
+ *
+ * @code
+ *     .my-text {
+ *         @include text--outline($color-primary);
+ *     }
+ */
+
+@mixin text--outline ($stroke-color, $stroke-width: 1px) {
+    // Fallback
+    color: transparent;
+    text-shadow:
+        #{ -$stroke-width } #{ -$stroke-width } 0 $stroke-color,
+        #{ $stroke-width } #{ -$stroke-width } 0 $stroke-color,
+        #{ -$stroke-width } #{ $stroke-width } 0 $stroke-color,
+        #{ $stroke-width } #{ $stroke-width } 0 $stroke-color;
+
+    @supports (-webkit-text-stroke-width: 1px) {
+        text-shadow: none;
+        -webkit-text-stroke-width: $stroke-width;
+        -webkit-text-fill-color: currentColor;
+        -webkit-text-stroke-color: $stroke-color;
+    }
+}
+
+@mixin text--outline-unset () {
+    text-shadow: none;
+
+    @supports (-webkit-text-stroke-width: 1px) {
+        -webkit-text-stroke-color: transparent;
+    }
+}

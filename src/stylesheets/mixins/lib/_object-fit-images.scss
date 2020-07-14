@@ -1,0 +1,21 @@
+/**
+ * Mixin for object-fit plugin
+ *
+ * @see https://github.com/bfred-it/object-fit-images
+ * @see components/_background.scss
+ * @example
+ *   @include object-fit(contain);
+ *   @include object-fit(cover, top);
+ */
+
+@mixin object-fit($fit: fill, $position: null) {
+    object-fit: $fit;
+
+    @if $position {
+        object-position: $position;
+        font-family: 'object-fit: #{$fit}; object-position: #{$position}';
+    }
+    @else {
+        font-family: 'object-fit: #{$fit}';
+    }
+}

@@ -1,0 +1,125 @@
+@import "mixins/helpers/browsers";
+
+/**
+ * Checkbox button input control styles
+ */
+
+.form-control-checkbox {
+    display: flex;
+    align-items: center;
+
+    // padding-top: ...;
+    // padding-bottom: ...;
+
+    // Hide input out of view
+    input {
+        position: absolute;
+        clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);
+
+        // Clip path doesn't work in IE11
+        @include browser-ie () {
+            opacity: 0;
+        }
+    }
+
+    &__icon,
+    &__label {
+        position: relative;
+        min-height: 20px;
+        cursor: pointer;
+
+        // Extended hover area
+        &:after {
+            content: "";
+            @include layout-position-overlay(-10px -5px);
+        }
+    }
+
+    &__icon {
+        height: 20px;
+        width: 20px;
+        background: transparent;
+        border: 1px solid $color-primary;
+        flex-shrink: 0;
+
+        @extend %transition;
+        transition-property: border-color;
+
+        // Checkmark icon, visible when checkbox is checked
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: -1px;
+            top: -1px;
+
+            background: url(#{ $path-images }/common/checkbox.svg); // @TODO
+            background-size: cover;
+
+            @extend %transition;
+            transition-property: opacity;
+            opacity: 0;
+        }
+    }
+
+    &__label {
+        flex-grow: 1;
+
+        // Layout
+        padding: 0 0 0 10px;
+
+        // Text styles
+        // @extend %text--size-small;
+        // color: $color-light-heading;
+    }
+
+    // Disabled state
+    input[disabled] ~ &__icon,
+    input[disabled] ~ &__label {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    // Active state
+    // .has-hover &:hover .form-control-checkbox__icon,
+    // input:checked ~ &__icon,
+    // input:focus ~ &__icon,
+    // .has-hover &:hover input:checked ~ &__icon {
+    //     border-color: ...;
+    // }
+
+    input:checked ~ &__icon:before {
+        opacity: 1;
+    }
+}
+
+
+/**
+ * Link inside the label should be above the checkbox
+ * and clickable
+ */
+
+.form-control-checkbox a {
+    // @extend %link--style-...;
+    position: relative;
+    z-index: 1;
+
+    .is-ie & {
+        vertical-align: top;
+    }
+}
+
+
+/**
+ * Error styles
+ */
+
+.has-error .form-control-checkbox__icon {
+    border-color: $color-error;
+}
+
+.has-error .form-control-checkbox__label {
+    color: $color-error;
+}

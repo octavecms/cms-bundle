@@ -1,0 +1,110 @@
+/**
+ * Input outer wrapper element
+ */
+
+%input-wrapper {
+    // Prevent interaction with input if it's readonly
+    &[readonly],
+    &.readonly {
+        pointer-events: none;
+    }
+}
+
+/**
+ * Input layout styles
+ */
+%input-layout {
+    // width: ...;
+	// height: ...;
+	// padding: ...;
+	// background: ...;
+    // border-radius: ...;
+    // border: ...;
+
+    // Fix for FF extending input on large font sizes due to "size"
+    // attribute default value
+    min-width: 0;
+
+    // iOS, Android - normalize styles
+    .no-hover & {
+        -webkit-appearance: none;
+        border-radius: 0;
+    }
+
+    // Prevent interaction with input if it's readonly
+    &[readonly],
+    &.readonly {
+        pointer-events: none;
+        box-shadow: none;
+    }
+}
+
+/**
+ * Input text styles
+ */
+%input-text {
+    // Text
+    // color: ...;
+
+	line-height: normal;
+	outline: none;
+	vertical-align: middle;
+
+    // Hide autofill by delayong background color change by 1h+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+        transition: color $duration-normal $easing-out, border-color $duration-normal $easing-out, background-color 1ms ease-in-out 5000s !important;
+    }
+
+    // Placeholder styles
+    // @include placeholder () {
+    //     color: ...;
+    //     transition-duration: $duration-normal;
+    //     transition-timing-function: $easing-out;
+    // }
+
+    // Focused state
+    // &:focus {
+    //     color: ...;
+    // }
+
+    // Hide placeholder when focused
+    // .has-hover &:hover:focus,
+    // &:focus {
+    //     @include placeholder () {
+    //         color: transparent;
+    //     }
+    // }
+}
+
+%input {
+    @extend %input-layout;
+    @extend %input-text;
+
+    // Remove firefox error border
+    &:invalid {
+        box-shadow: none;
+    }
+
+    // IE clear button
+    &::-ms-clear {
+        display: none;
+    }
+
+    // Animation
+    @extend %transition;
+    transition-property: color, background-color, border-color;
+}
+
+// Hide credentials / password button
+::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
+::-ms-reveal {
+    display: none;
+}

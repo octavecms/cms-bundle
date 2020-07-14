@@ -1,0 +1,35 @@
+/*
+ * Accordion
+ */
+
+.accordion {
+}
+
+.accordion__heading {
+    // Link style
+    a {
+
+    }
+
+    // Active heading link styles
+    a.is-active {
+
+    }
+}
+
+.accordion__content {
+    > div {
+        // If padding is set directly on .accordion__content then during
+        // expand / collapse animation padding will interfere and animation will jump
+        // padding: ...;
+    }
+
+    // Hide collapsed content
+    .js &[aria-hidden="true"] {
+        display: none;
+    }
+
+    // Expanded accordion content style
+    &.is-active {
+    }
+}

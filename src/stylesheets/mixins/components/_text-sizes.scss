@@ -1,0 +1,15 @@
+/*
+ * Text size
+ *
+ * Sets different size for different breakpoints
+ */
+
+@mixin text-sizes ($sizes) {
+    @each $breakpoint, $size in $sizes {
+        @include media-breakpoint('#{$breakpoint}-up') {
+            @each $name, $value in $size {
+                #{$name}: #{$value};
+            }
+        }
+    }
+}

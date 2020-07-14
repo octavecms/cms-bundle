@@ -1,0 +1,15 @@
+/**
+ * Horizontal ruler
+ *
+ * @demo
+ *     <hr />
+ */
+
+hr {
+    border: 0;
+    border-bottom: 1px solid $color-light-line;
+}
+
+.ui-dark hr {
+    border-color: $color-dark-line;
+}

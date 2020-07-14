@@ -1,0 +1,29 @@
+/**
+ * Set input placeholder styles
+*
+ * @demo
+ *     input {
+ *         @include placeholder () {
+ *             color: #000;
+ *         }
+ *     }
+ */
+
+@mixin placeholder () {
+    &::-webkit-input-placeholder {
+        // WebKit, Blink, Edge
+        @content;
+    }
+    &::-moz-placeholder {
+        // Firefox 19+
+        @content;
+    }
+    &:-ms-input-placeholder {
+        // Internet Explorer 10-11
+        @content;
+    }
+    // &:placeholder-shown {
+    //     // Standard (https://drafts.csswg.org/selectors-4/#placeholder)
+    //     @content;
+    // }
+}

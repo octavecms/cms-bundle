@@ -1,0 +1,85 @@
+/**
+ * Button hover state background and border, using pseudo elements due to
+ * animation how hover state is shown
+ *   :after pseudo-element is used for default background / border color
+ *   :before pseudo-element is used for hover and active state background / border color
+ */
+
+.btn {
+    will-change: transform;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+
+        @extend %transition;
+        transition-property: transform, background-color, border-color, box-shadow;
+    }
+    &:before {
+        z-index: 1;
+    }
+    &:after {
+        pointer-events: none;
+    }
+}
+
+
+/**
+ * Animation where hover background slides in from bottom
+ */
+
+@mixin buttonAnimationSlideFromBottom () {
+    &:before {
+        transform: translateY(101%);
+    }
+
+    @include button-state('hover down') {
+        &:before {
+            transform: translateY(0%);
+        }
+    }
+}
+
+
+/**
+ * Animation where hover background scales in from center
+ */
+
+@mixin buttonAnimationScaleFromCenter () {
+    will-change: transform;
+    overflow: visible;
+
+    &:before {
+        transform: scale(0);
+    }
+
+    @include button-state('hover down') {
+        &:before {
+            $scale: 60 / 60;
+            transform: scale($scale);
+        }
+    }
+}
+
+
+/**
+ * Default animation
+ */
+
+.btn {
+    @include buttonAnimationSlideFromBottom();
+}
+
+
+/**
+ * Square button animation
+ */
+
+.btn--square {
+    @include buttonAnimationScaleFromCenter();
+}

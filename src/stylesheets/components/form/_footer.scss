@@ -1,0 +1,14 @@
+/**
+ * Form footer
+ *
+ * @demo
+ *     <footer class="form-footer">
+ *         <button type="submit" class="btn"><span class="btn__content">
+ *             Submit
+ *         </span></button>
+ *     </footer>
+ */
+
+.form-footer {
+    @include margins-top-bottom($spacing);
+}

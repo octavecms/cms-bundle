@@ -1,0 +1,101 @@
+/**
+ * Hide element visually while still being "visible" to the assistive
+ * technologies and keyboard input
+ *
+ * @demo
+ *     <select class="is-visually-hidden">...</select>
+ */
+
+.is-visually-hidden,
+.sr-only {
+    clip: rect(0 0 0 0);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    white-space: nowrap;
+    width: 1px;
+}
+
+
+/**
+ * Invisible content
+ *
+ * Invisible content when JS is enabled
+ * Intended to be used with JS animations, to prevent element from visually flashing during load
+ *
+ * @demo
+ *     <div class="is-invisible--js">...</div>
+ */
+
+.is-invisible {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.js .is-invisible--js {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/**
+ * Decorative element
+ * User can't interactive with decorative elements
+ *
+ * @demo
+ *     <div class="is-decorative--js">...</div>
+ */
+
+.is-decorative {
+    pointer-events: none;
+}
+
+.js .is-decorative--js {
+    pointer-events: none;
+}
+
+
+/**
+ * Invisible overlay
+ *
+ * Makes element invisible and makes it cover whole container
+ * element
+ *
+ * @demo
+ *     <a class="overlay" href="#">Click me</a>
+ */
+
+.overlay {
+    @extend %layout-position-overlay;
+
+    // Make invisible without preventing interaction
+    background: #fff;
+    opacity: 0;
+}
+
+
+/**
+ * Disable CSS based smooth scrolling
+ *
+ * @demo
+ *     <html class="disable-smooth-scrolling">...</html>
+ */
+
+.disable-smooth-scrolling,
+.css-regression-testing {
+    scroll-behavior: initial;
+}
+
+
+/**
+ * Fix container overflow background bug
+ *
+ * If in container is element which is moved out of this container using negative margin
+ * then there is an issue where container background is moved too.
+ * Adding "overflow-fix" classname to the container fixes it
+ */
+
+.overflow-fix {
+    @extend %overflow-fix;
+}

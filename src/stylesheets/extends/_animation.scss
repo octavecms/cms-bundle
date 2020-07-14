@@ -1,0 +1,37 @@
+/**
+ * Animations
+ *
+ * Enables transition for all properties for elements
+ *
+ * @see components/_animations.scss
+ * @demo
+ *     div { @extend %transition; }
+ */
+
+@mixin transition () {
+    // Edit the values in html/src/stylesheets/settings/_animations.scss
+    transition-duration: $transition-default-duration;
+    transition-timing-function: $transition-default-easing;
+}
+
+@mixin transition-slow () {
+    // Edit the values in html/src/stylesheets/settings/_animations.scss
+    transition-duration: $transition-slow-duration;
+    transition-timing-function: $transition-slow-easing;
+}
+
+@mixin transition-block () {
+    // Edit the values in html/src/stylesheets/settings/_animations.scss
+    transition-duration: $transition-block-duration;
+    transition-timing-function: $transition-block-easing;
+}
+
+%transition {
+    @include transition();
+}
+%transition-slow {
+    @include transition-slow();
+}
+%transition-block {
+    @include transition-block();
+}

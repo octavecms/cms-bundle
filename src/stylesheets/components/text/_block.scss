@@ -1,0 +1,57 @@
+/**
+ * Text block
+ *
+ * @example
+ *     <div class="text">
+ *         <p>Lorem ipsum</p>
+ *     </div>
+ */
+
+.text {
+    figure {
+        display: block;
+        position: relative;
+    }
+    picture {
+        display: block;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+        vertical-align: top;
+    }
+}
+
+
+/**
+ * Full size image
+ *
+ * @example
+ *     <img class="img-full" src="..." alt="" />
+ */
+
+.img-full,
+.img-full img {
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+}
+
+
+/**
+ * Print styles
+ *
+ * 1. Prevent CSS minification from merging selectors
+ */
+.text {
+    @include media-breakpoint(print) {
+        // Display urls for external links
+        a[href^="http"]:after {
+            content: " [" attr(href) "] ";
+        }
+        a:not(:local-link):after {
+            content: " [" attr(href) "] ";
+            color: inherit; // 1.
+        }
+    }
+}

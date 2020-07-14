@@ -1,0 +1,18 @@
+.text table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        font-weight: $text-heading-weight;
+        text-align: left;
+    }
+    td {
+        border-top: 1px solid $color-light-line;
+    }
+}
+
+.ui-dark .text table {
+    td {
+        border-color: $color-dark-line;
+    }
+}

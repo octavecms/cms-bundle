@@ -1,0 +1,29 @@
+/**
+ * Generic form error message
+ * Used to display server connection issues, etc.
+ *
+ * @demo
+ *     <p class="error-message">Error occured</p>
+ */
+
+.error-message {
+    color: $color-error;
+    // ...
+}
+
+
+/**
+ * Input error label
+ * jQuery Validate uses .error class name
+ *
+ * @demo
+ *     <label class="error">This field is required</label>
+ */
+
+label.error,
+div.error {
+    display: block;
+
+    // @extend %text--size-...;
+    color: $color-error;
+}

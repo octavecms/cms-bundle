@@ -1,0 +1,71 @@
+/**
+ *
+ */
+
+.form-control {
+    @extend %input-wrapper;
+}
+
+/**
+ * Form control
+ *
+ * @demo
+ *     <div class="form-group">
+ *         <div class="form-control form-control--input" data-plugin="inputState">
+ *             <input id="my-input-id" name="my-input-name" type="text" required />
+ *             <label for="my-input-id" class="form-label">My Input Label</label>
+ *         </div>
+ *     </div>
+ */
+
+.form-control--input input {
+    @extend %input;
+}
+
+
+/**
+ * Textarea form control modifier
+ *
+ * @demo
+ *     <div class="form-group">
+ *         <div class="form-control form-control--textarea" data-plugin="inputState">
+ *             <textarea id="my-input-id" name="my-input-name"></textarea>
+ *             <label for="my-input-id" class="form-label">My Input Label</label>
+ *         </div>
+ *     </div>
+ */
+
+.form-control--textarea textarea {
+    @extend %input;
+
+    // height: ...
+    // padding-top: ...
+    // padding-bottom: ...
+
+    // Horizontal resize will break layout
+	resize: vertical;
+}
+
+
+/**
+ * Dropdown form control modifier
+ *
+ * @demo
+ *     <div class="form-group">
+ *         <label class="form-label">Label</label>
+ *         <select class="form-control form-control--select"></select>
+ *     </div>
+ *     <div class="form-group">
+ *         <div class="form-control form-control--select" data-plugin="inputState">
+ *             <select id="my-input-id" name="my-input-name">...</select>
+ *             <label for="my-input-id" class="form-label">My Input Label</label>
+ *         </div>
+ *     </div>
+ */
+
+.form-control--select select {
+    @extend %input;
+
+    width: 100%;
+    -webkit-appearance: menulist-button;
+}

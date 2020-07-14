@@ -1,0 +1,63 @@
+@import "mixins/components/container";
+
+/**
+ * Container elements which wrap most of the content
+ *
+ * @demo
+ *   <div class="container">
+ *     ...
+ *   </div>
+ */
+
+%container-reset {
+    margin-left: auto;
+    margin-right: auto;
+
+    // Content should be relative to container
+    position: relative;
+
+    // IE11 centering fix
+    width: 100%;
+
+    // Prevent margin collapsing
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+}
+
+.container {
+    @include containers ($containers);
+
+    // Reset paddings, margins, etc.
+    @include media-breakpoint(print) {
+        @include containers-print ($containers);
+    }
+}
+
+
+/**
+ * Content, which goes outside container element and takes 100% width of
+ * the viewport
+ *
+ * @demo
+ *     <div class="container">
+ *         <div class="full-width">
+ *             ...
+ *         </div>
+ *     </div>
+ *     <div class="container-h container-v">
+ *             ...
+ *     </div>
+ */
+
+.full-width {
+    position: relative;
+    left: 50%;
+    right: 50%;
+
+    width: 100vw;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}

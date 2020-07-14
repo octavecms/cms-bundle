@@ -1,0 +1,47 @@
+/**
+ * Secondary call to action button style modifier
+ *
+ * 1. Increase specificity to prevent `.ui-dark a` from overwriting styles
+ * 2. We can't use ".ui-dark .btn..." because of CSS generated selector complexity, parent/theme selector must be specified separately
+ * 3. Hover animation effect background color
+ * 4. We are using hover animation, no need for simple background color change
+ *
+ * @demo
+ *     <a class="btn btn--secondary"><span class="btn__content">Normal state</span></a>
+ *     <a class="btn btn--secondary is-active"><span class="btn__content">Active state</span></a>
+ *     <a class="btn btn--secondary is-disabled"><span class="btn__content">Disabled state</span></a>
+ */
+
+.btn.btn--secondary { // 1.
+    $styles: (
+        // Default styles
+        'default': (
+            color:      $color-dark-heading,
+            background: $color-secondary,
+            hover-background: darken($color-secondary, 10%), // 3.
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color:      $color-dark-heading,
+            // background: darken($color-secondary, 10%), // 4.
+        ),
+    );
+
+    @include button-colors ($styles);
+    @include button-generate-focus-visible ($styles);
+}
+
+
+/*
+ * Dark theme secondary button style
+ */
+
+/*
+.btn.btn--secondary { // 1.
+    $theme: '.ui-dark'; // 2.
+    $styles: (
+    );
+
+    @include button-colors ($styles, $theme);
+}
+*/

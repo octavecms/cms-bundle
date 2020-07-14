@@ -1,0 +1,22 @@
+// Mixins are loaded after the configuration, explicitly load required functions here
+@import "mixins/lib/map-get-deep";
+@import "mixins/helpers/media";
+
+/**
+ * Layout order constants
+ */
+
+$z-index-content: unset;
+$z-index-under-header: 9;
+$z-index-header: 10;
+$z-index-modal: 11;
+$z-index-ajax-loader: 12;
+
+
+/*
+ * IMPORTANT!!!
+ * @TODO Copy content of _layout-example-percentage.scss or _layout-example-vw.scss into this file and remove those files
+ */
+
+@import "settings/layout-example-percentage";
+// @import "settings/layout-example-vw";

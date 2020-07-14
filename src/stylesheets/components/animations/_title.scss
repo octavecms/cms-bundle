@@ -1,0 +1,75 @@
+$animation-title-duration: $duration-block !default;
+$animation-title-duration-stagger: 60ms !default;
+
+/**
+ * Title animation
+ * Animate each line by moving from bottom to top
+ */
+
+.animation--title {
+    transition: border-color !important;
+    transition-duration: calc(var(--line-total) * #{ $animation-title-duration-stagger } + #{ $animation-title-duration }) !important;
+
+    .is-edge &,
+    .is-ie & {
+        transition-duration: $animation-title-duration !important;
+    }
+
+    .word,
+    .word-wrap {
+        transition: transform $easing-out $animation-title-duration;
+        transition-delay: calc(var(--line-index) * #{ $animation-title-duration-stagger });
+
+        .is-edge &,
+        .is-ie & {
+            transition-delay: 0;
+        }
+    }
+}
+
+.animation--title--inactive {
+    border-color: #fff;
+
+    .word {
+        transform: translateY(110%);
+    }
+    .word-wrap {
+        transform: translateY(-100%);
+    }
+}
+
+
+/**
+ * Adjust text position when content is split into words and chars
+ * Used by title-in animation
+ */
+
+.splitting .word,
+.splitting .word-wrap,
+.splitting .char {
+    vertical-align: top;
+}
+.splitting .word,
+.splitting .word-wrap {
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+
+    margin: -40px -5px -15px;
+    padding: 40px 5px 15px;
+}
+
+
+.words a {
+    // Make sure links are clickable and not covered by words from next line
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.words.animation--title--inactive a {
+    // Position needs to be static for 'splitting' to work correctly
+    position: static;
+    overflow: visible;
+}

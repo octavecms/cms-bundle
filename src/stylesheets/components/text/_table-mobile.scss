@@ -1,0 +1,32 @@
+/**
+ * Mobile table layout
+ */
+
+.mobile-table {
+    @include media-breakpoint(sm-down) {
+        &__hide {
+            display: none !important;
+        }
+
+        table, thead, tbody, tr, td {
+            display: block;
+        }
+
+        // Heading + content row
+        td[data-th] {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        // Heading cell
+        td[data-th]:before {
+            content: attr(data-th);
+            flex: 0 0 12em;
+        }
+
+        // Content cell
+        .mobile-table__content {
+            flex: 1 1 auto;
+        }
+    }
+}

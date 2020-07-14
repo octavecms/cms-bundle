@@ -1,0 +1,346 @@
+/**
+ * Breakpoints for devices / orientations / screens
+ *
+ * @code
+ *     @include media-breakpoint (lg-up) {
+ *         // ...
+ *     }
+ *     @include media-breakpoint (xxl) {
+ *         // ...
+ *     }
+ *     @include media-breakpoint (sm md) {
+ *         // ...
+ *     }
+ */
+
+$media-breakpoints: (
+    xs,
+    sm,
+    md,
+    lg,
+    xl,
+    xxl,
+    xxxl
+) !default;
+
+
+// Resolution at which 'xxl' will stop matching and 'xxxl' will start matching
+$media-breakpoint-xxxl:     1920px !default;
+
+// Resolution at which 'xl' will stop matching and 'xxl' will start matching
+$media-breakpoint-xxl:      1440px !default;
+
+// Resolution at which 'lg' will stop matching and 'xl' will start matching
+$media-breakpoint-xl:       1200px !default;
+
+// Resolution at which 'md' will stop matching and 'lg' will start matching
+$media-breakpoint-lg:       980px !default;
+
+// Resolution at which device will switch from 'sm' (mobile phone) to 'md' (tablet)
+$media-breakpoint-md:       668px !default;
+
+// Resolution at which device with portrait oriented device will automatically match landscape orientation query 'sm'
+// Resolution at which portrait oriented device will switch from 'xs' (mobile phone) to 'md' (tablet)
+$media-breakpoint-sm:       568px !default;
+
+// Minimal viewport size, not actually used anywhere
+$media-breakpoint-xs:       320px !default;
+
+
+// Min vertical height on md, if vertical size is smaller then "sm" will apply
+$media-breakpoint-md-min-height: 416px !default;
+
+// Min vertical height on xl, if vertical size is smaller then "lg" will apply
+$media-breakpoint-xl-min-height: 600px !default;
+
+// Min vertical height on xxl, if vertical size is smaller then "xl" will apply
+$media-breakpoint-xxl-min-height: 800px !default;
+
+// Custom queries
+$media-custom-queries: () !default;
+
+$media-breakpoint-xxxl-up:   $media-breakpoint-xxxl;
+$media-breakpoint-xxxl-down: true;
+
+$media-breakpoint-xxl-up:    $media-breakpoint-xxl;
+$media-breakpoint-xxl-down:  if($media-breakpoint-xxxl,  $media-breakpoint-xxxl - 1px,  false);
+
+$media-breakpoint-xl-up:    $media-breakpoint-xl;
+$media-breakpoint-xl-down:  if($media-breakpoint-xxl,  $media-breakpoint-xxl - 1px,  false);
+
+$media-breakpoint-lg-up:    $media-breakpoint-lg;
+$media-breakpoint-lg-down:  if($media-breakpoint-xl,  $media-breakpoint-xl - 1px,  false);
+
+$media-breakpoint-md-up:    $media-breakpoint-md;
+$media-breakpoint-md-down:  if($media-breakpoint-lg,  $media-breakpoint-lg - 1px,  false);
+
+$media-breakpoint-sm-up:    $media-breakpoint-sm;
+$media-breakpoint-sm-down:  if($media-breakpoint-md,  $media-breakpoint-md - 1px, false);
+
+$media-breakpoint-xs-down:  if($media-breakpoint-sm,  $media-breakpoint-sm - 1px,  false);
+
+// Orientation queries we are replacing with aspect ratio because when keyboard appears it will break 'orientation: ...'
+// From: https://web.archive.org/web/20160509220835/http://blog.abouthalf.com/development/orientation-media-query-challenges-in-android-browsers/
+$orientation-landscape: 'min-aspect-ratio: 13/9';
+$orientation-portrait: 'max-aspect-ratio: 13/9';
+
+
+// List of breakpoints, without duplicate media queries
+// List of depending properties are extracted from actual media queries
+// We calculate which media queries should exist based on if breakpoint exists
+$media-breakpoint-list: (
+    'xs':       if($media-breakpoint-xs-down != false,                                          true, false),
+    'xs-down':  if($media-breakpoint-xs-down != false,                                          true, false),
+    'xs-up':    true,
+    'sm':       if($media-breakpoint-sm,                                                        true, false),
+    'sm-up':    if($media-breakpoint-md-down != false and $media-breakpoint-md-up != false,     true, false),
+    'sm-down':  if($media-breakpoint-md-down != false and $media-breakpoint-sm-down != false,   true, false),
+    'md':       if($media-breakpoint-md-up != false and $media-breakpoint-md-down != false,     true, false),
+    'md-up':    if($media-breakpoint-md-up != false,                                            true, false),
+    'md-down':  if($media-breakpoint-md-down != false,                                          true, false),
+    'lg':       if($media-breakpoint-lg-up != false and $media-breakpoint-lg-down != false,     true, false),
+    'lg-up':    if($media-breakpoint-lg-up != false,                                            true, false),
+    'lg-down':  if($media-breakpoint-lg-down != false,                                          true, false),
+    'xl':       if($media-breakpoint-xl-up != false,                                            true, false),
+    'xl-up':    if($media-breakpoint-xl-up != false,                                            true, false),
+    'xl-down':  if($media-breakpoint-xl-down != false,                                          true, false),
+    'xxl':      if($media-breakpoint-xxl-up != false,                                            true, false),
+    'xxl-up':   if($media-breakpoint-xxl-up != false,                                            true, false),
+    'xxl-down': if($media-breakpoint-xxl-down != false,                                          true, false),
+    'xxxl':     if($media-breakpoint-xxxl-up != false,                                           true, false),
+    'xxxl-up':  if($media-breakpoint-xxxl-up != false,                                           true, false),
+    'xxxl-down':true
+);
+
+
+/**
+ * Returns if media query name is valid and values exist
+ */
+
+@function is-valid-media-breakpoint ($name) {
+    @if map-has-key($media-breakpoint-list, $name) {
+        @if map-get($media-breakpoint-list, $name) == true {
+            @return true;
+        }
+    }
+    @if map-has-key($media-custom-queries, $name) {
+        @return true;
+    }
+
+    @return false;
+}
+
+
+@function get-media-query ($name, $mediaPrefix: '') {
+    @if map-has-key($media-custom-queries, $name) {
+        // Custom queries
+        $query: map-get($media-custom-queries, $name);
+
+        @if $query {
+            @if str-index($query, '(') == null {
+                $query: "(#{ $query })";
+            }
+
+            @return $query;
+        } @else {
+            @return null;
+        }
+
+    } @else if is-valid-media-breakpoint($name) {
+        // Standard queries
+
+        // xxxl - Desktop PC, high-end laptop media queries with wide screen
+        @if $name == 'xxxl' or $name == 'xxxl-up' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-xxxl-up }) and (min-height: #{ $media-breakpoint-xxl-min-height })";
+        } @else if $name == 'xxxl-down' {
+            @return null;
+
+        // xxl - Desktop PC, high-end laptop media queries
+        } @else if $name == 'xxl' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-xxl-up }) and (min-height: #{ $media-breakpoint-xxl-min-height }) and (max-width: #{ $media-breakpoint-xxl-down })";
+        } @else if $name == 'xxl-up' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-xxl-up }) and (min-height: #{ $media-breakpoint-xxl-min-height })";
+        } @else if $name == 'xxl-down' {
+            @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-xxl-down }), (max-height: #{ $media-breakpoint-xxl-min-height - 1px })";
+
+            // xl - Desktop PC, high-end laptop media queries
+        } @else if $name == 'xl' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-xl-up }) and (min-height: #{ $media-breakpoint-xl-min-height }) and (max-width: #{ $media-breakpoint-xl-down }), (min-width: #{ $media-breakpoint-xl-up }) and (min-height: #{ $media-breakpoint-xl-min-height }) and (max-height: #{ $media-breakpoint-xxl-min-height - 1px })";
+        } @else if $name == 'xl-up' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-xl-up }) and (min-height: #{ $media-breakpoint-xl-min-height })";
+        } @else if $name == 'xl-down' {
+            @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-xl-down }), (max-height: #{ $media-breakpoint-xl-min-height - 1px }), (min-width: #{ $media-breakpoint-xl-up }) and (max-height: #{ $media-breakpoint-xxl-min-height - 1px })";
+
+            // lg - Desktop PC, laptop and tablet in landscape orienation media queries
+        } @else if $name == 'lg' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-lg-up }) and (max-width: #{ $media-breakpoint-lg-down }),  (min-width: #{ $media-breakpoint-lg-up }) and (max-height: #{ $media-breakpoint-xl-min-height - 1px })";
+        } @else if $name == 'lg-up' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-lg-up })";
+        } @else if $name == 'lg-down' {
+            @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-lg-down }), (max-height: #{ $media-breakpoint-xl-min-height - 1px })";
+
+            // md - Tablet in portrait orienation media queries
+        } @else if $name == 'md' {
+            @if $media-breakpoint-sm-up != false {
+                @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-sm-up }) and (#{ $orientation-portrait }) and (max-width: #{ $media-breakpoint-md-down }), #{ $mediaPrefix } (min-width: #{ $media-breakpoint-md-up }) and (min-height: #{ $media-breakpoint-md-min-height }) and (max-width: #{ $media-breakpoint-md-down })";
+            } @else {
+                @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-md-up }) and (min-height: #{ $media-breakpoint-md-min-height }) and (max-width: #{ $media-breakpoint-md-down })";
+            }
+        } @else if $name == 'md-up' {
+            @if $media-breakpoint-sm-up != false {
+                @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-sm-up }) and (#{ $orientation-portrait }), #{ $mediaPrefix } (min-width: #{ $media-breakpoint-md-up }) and (min-height: #{ $media-breakpoint-md-min-height }), #{ $mediaPrefix } (min-width: #{ $media-breakpoint-lg-up })";
+            } @else {
+                @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-md-up }) and (min-height: #{ $media-breakpoint-md-min-height })";
+            }
+        } @else if $name == 'md-down' {
+            @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-md-down })";
+
+            // sm - Mobile phones in landscape orienation media queries
+        } @else if $name == 'sm' {
+            @if $media-breakpoint-md-down != false {
+                @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-md-down} ) and (max-height: #{ $media-breakpoint-md-min-height - 1px }) and (#{ $orientation-landscape }), (max-width: #{ $media-breakpoint-sm-down} ) and (#{ $orientation-landscape })";
+            } @else {
+                @return "#{ $mediaPrefix } (max-height: #{ $media-breakpoint-md-min-height - 1px }) and (#{ $orientation-landscape })";
+            }
+        } @else if $name == 'sm-up' {
+            @return "#{ $mediaPrefix } (min-width: #{ $media-breakpoint-sm-up }), (#{ $orientation-landscape })";
+        } @else if $name == 'sm-down' {
+            @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-md-down }) and (max-height: #{ $media-breakpoint-md-min-height - 1px }) and (#{ $orientation-landscape }), (max-width: #{ $media-breakpoint-sm-down} ) and (#{ $orientation-landscape }), (max-width: #{ $media-breakpoint-xs-down }) and (#{ $orientation-portrait })";
+
+            // xs - Mobile phones in portrait orienation media queries
+        } @else if $name == 'xs' or $name == 'xs-down' {
+            @return "#{ $mediaPrefix } (max-width: #{ $media-breakpoint-xs-down }) and (#{ $orientation-portrait })";
+        } @else if $name == 'xs-up' {
+            @return null;
+        } @else {
+            @error "Media query with name '#{ $name }' is not valid, definition not found!";
+        }
+
+    } @else if $name == 'print' or $name == 'print-up' {
+        // Print queries
+        @return "print";
+
+    } @else if $name == 'not-print' or $name == 'not-print-up' {
+        // Not print queries
+        @return "not print";
+
+    } @else if not map-has-key($media-breakpoint-list, $name) {
+        // Name is a query
+        @if str-index($name, '(') == null {
+            $name: "(#{ $name })";
+        }
+
+        @return "#{ $mediaPrefix } #{ $name }";
+    } @else {
+        @error "Media query with name '#{ $name }' is not valid, breakpoint has been disabled!";
+    }
+}
+
+
+/**
+ * Output content in a media query
+ *
+ * @code
+ *     .icon {
+ *         // Styles for xl
+ *         @include media-breakpoint (xl) {
+ *             // ...
+ *         }
+ *
+ *         // Styles for mobile and tablet landscape
+ *         @include media-breakpoint (sm-down lg) {
+ *             // ...
+ *         }
+ *
+ *         // Styles for md-down, ignored in print
+ *         @include media-breakpoint (md-down, "only screen and") {
+ *             // ...
+ *         }
+ *
+ *         // Styles for lg-up and print
+ *         @include media-breakpoint (lg-up print) {
+ *             // ...
+ *         }
+ *     }
+ */
+
+@mixin media-breakpoint ($name, $mediaPrefix: 'only screen and') {
+    // If keys are not in quotes, then $name is a list
+    // Convert a list into a string and then back into a list
+    // First check if $name is a string with a media query
+    @if type-of($name) != 'string' or str-index($name, ':') == null {
+        $name: str-split("#{ $name }", " ");
+    }
+
+    @if length($name) > 1 {
+        // A list of media query names, combine them by separating them with a ","
+        $query: null;
+
+        @each $item-name in $name {
+            // Convert to string
+            $item-name: "#{ $item-name }";
+            $item-query: get-media-query($item-name, $mediaPrefix);
+
+            @if $item-query {
+                @if $query {
+                    $query: "#{ $query }, #{ $item-query }";
+                } @else {
+                    $query: $item-query;
+                }
+            }
+        }
+
+        @if $query {
+            @media #{ $query } { @content; }
+        } @else {
+            @content;
+        }
+    } @else {
+        $name: "#{ $name }";
+        $query: get-media-query($name, $mediaPrefix);
+
+        @if $query {
+            @media #{ $query } { @content; }
+        } @else {
+            @content;
+        }
+    }
+}
+
+
+/**
+ * Output content in retina display media query
+ *
+ * @code
+ *     .icon {
+ *         @include media-retina () {
+ *             // ...
+ *         }
+ *     }
+ */
+
+@mixin media-retina () {
+    @media
+        only screen and (min-device-pixel-ratio: 2),
+        only screen and (min-resolution: 192dpi),
+        only screen and (min-resolution: 2dppx) { @content; }
+}
+
+
+/**
+ * Output content in non-retina display media query
+ *
+ * @code
+ *     .icon {
+ *         @include media-non-retina () {
+ *             // ...
+ *         }
+ *     }
+ */
+
+@mixin media-non-retina () {
+    @media
+        only screen and (max-device-pixel-ratio: 1.999),
+        only screen and (max-resolution: 191dpi),
+        only screen and (max-resolution: 1.999dppx) { @content; }
+}

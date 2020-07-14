@@ -1,0 +1,43 @@
+/*
+ * Button size
+ *
+ * Sets different size for different breakpoints
+ */
+
+@mixin button-sizes ($button) {
+    @each $breakpoint, $size in $button {
+        @include media-breakpoint('#{$breakpoint}-up') {
+            // Normal styles
+            @each $name, $value in $size {
+                @if $name == 'padding' {
+                    @include paddings($value);
+                } @else if $name == 'border-radius' {
+                    &,
+                    &:before,
+                    &:after {
+                        #{$name}: #{$value};
+                    }
+                } @else {
+                    #{$name}: #{$value};
+                }
+            }
+
+            // Line height
+            // @if not map-has-key($size, 'line-height') {
+            //     line-height: map-get($size, height);
+            // }
+
+            // Adjust <button> element content if top padding was applied
+            > .btn__content {
+                @if map-has-key($size, 'padding') {
+                    $padding-top: css-nth(map-get($size, padding), 1);
+                    margin-top: -$padding-top;
+                    padding-top: $padding-top;
+                }
+                @if map-has-key($size, 'height') {
+                    height: map-get($size, height);
+                }
+            }
+        }
+    }
+}

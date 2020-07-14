@@ -1,0 +1,29 @@
+/**
+ * Tabs
+ *
+ *
+ */
+
+.tabs-contents {
+    position: relative;
+    overflow: visible !important;
+}
+
+.tabs-contents__content {
+    // DO NOT ADD ANY PADDINGS TO THIS ELEMENT! That will cause content to jump during animation.
+    // Add another inner element for paddings if they are needed!
+
+    &[aria-hidden="true"] {
+        display: none;
+    }
+
+    // Element which is fading in on top of element which is fading out
+    &--animating-in {
+        position: absolute !important;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        min-height: 100%;
+    }
+}

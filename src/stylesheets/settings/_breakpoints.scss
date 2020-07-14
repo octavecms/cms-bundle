@@ -1,0 +1,32 @@
+/**
+ * Breakpoints for devices / orientations / screens
+ * Following already are default values, uncomment if needed
+ *
+ * Media queries listed in $media-custom-queries allows to use them using `media-breakpoint` mixin.
+ *
+ * If you change any $media-breakpoint-... values you MUST update also macros/image.twig
+ *
+ * @see html/src/stylesheets/mixins/helpers/_media.scss
+ * @demo
+ *   @include media-breakpoint(lg-up-small) { ... }
+ */
+
+// $media-breakpoint-xxxl:     1920px;
+// $media-breakpoint-xxl:      1440px;
+// $media-breakpoint-xl:       1200px;
+// $media-breakpoint-lg:       980px;
+
+// $media-breakpoints: (
+//     xs,
+//     sm,
+//     md,
+//     lg,
+//     xl,
+//     xxl,
+//     xxxl
+// );
+
+$media-custom-queries: (
+    // Tablet landscape and desktop but with small vertical size
+    'lg-up-small': '(min-width: #{ $media-breakpoint-lg }) and (max-height: 720px)'
+);

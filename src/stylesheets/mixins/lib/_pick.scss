@@ -1,0 +1,20 @@
+/**
+ * Filter keys from the map
+ *
+ * @param {Map} $map - Map which to filter
+ * @param {List} $keys - List of keys which to keep
+ * @return {Map} - Map with the specified keys
+ */
+
+@function pick($map, $keys) {
+    $return: ();
+
+    @each $key in $keys {
+        @if map-has-key($map, $key) {
+            $value: map-get($map, $key);
+            $return: map-merge($return, (#{ $key }: $value));
+        }
+    }
+
+    @return $return;
+}

@@ -1,0 +1,43 @@
+@import "mixins/components/button-styles";
+
+/**
+ * Automatically generate focus-visible styles for buttons
+ * using button background or border color
+ */
+
+@mixin button-generate-focus-visible ($definitions, $parent-selector: '', $container-selector: '.btn-container') {
+    @each $states, $styles in $definitions {
+        // Convert 'default' and 'active' into focus-visible
+        $focus-visible: str-replace($states, 'default', 'focus-visible');
+        $focus-visible: str-replace($focus-visible, 'active', 'active+focus-visible');
+
+        @if str-index($focus-visible, 'focus-visible') {
+            // Styles
+            $focus-visible-styles: ();
+            $has-focus-visible-styles: false;
+
+            // Convert background and border into box-shadow
+            $background: map-get($styles, background);
+            $border: map-get($styles, border);
+
+            @if type-of($background) == 'color' {
+                $has-focus-visible-styles: true;
+                $focus-visible-styles: (
+                    box-shadow: 0 0 0 3px rgba($background, 0.4)
+                );
+            } @else if type-of($border) == 'color' {
+                $has-focus-visible-styles: true;
+                $focus-visible-styles: (
+                    box-shadow: 0 0 0 3px rgba($border, 0.4)
+                );
+            }
+
+            // Apply styles
+            @if $has-focus-visible-styles {
+                @include button-state ($focus-visible, $parent-selector, $container-selector) {
+                    @include button-color-variant($focus-visible-styles);
+                }
+            }
+        }
+    }
+}

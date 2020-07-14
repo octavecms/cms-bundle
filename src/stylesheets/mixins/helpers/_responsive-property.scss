@@ -1,0 +1,32 @@
+@import "mixins/lib/strip-unit";
+
+/**
+ * Creates a property which will change proportionally to the viewport width
+ * between given values
+ *
+ * @param {Number} $min-vw - Viewport size from which to start proportional size, either a value
+ * @param {Number} $max-vw - Viewport size to which to proportionally size, either a value
+ * @param {String} $property - CSS property name
+ * @param {Number} $min-value - CSS property value on min size
+ * @param {Number} $max-value - CSS property value on max size
+
+ * @demo
+ *     @include responsive-property(320px, 979px, 'font-size', 12px, 16px);
+ */
+
+@mixin responsive-property($min-vw, $max-vw, $property, $min-value, $max-value) {
+    $u1: unit($min-vw);
+    $u2: unit($max-vw);
+    $u3: unit($min-value);
+    $u4: unit($max-value);
+
+    @if $u1 == $u2 and $u3 == $u4 {
+        & {
+            @media screen and (min-width: $min-vw) and (max-width: $max-vw) {
+                #{ $property }: calc(#{$min-value} + #{strip-unit($max-value - $min-value)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+            }
+        }
+    } @else {
+        @error 'responsive-property(#{ $min-vw }, #{ $max-vw }, #{ $property }, #{ $min-value }, #{ $max-value }) incompatible property values';
+    }
+}

@@ -1,0 +1,12 @@
+/**
+ * Height animation, height is not a static value
+ * but is based on element size and requires JS help, used
+ * by Accordion and Tabs JS plugins
+ */
+
+.animation--height {
+    @extend %animation;
+    transition-property: height, opacity;
+    will-change: height, opacity;
+    overflow: hidden;
+}

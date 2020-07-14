@@ -1,0 +1,74 @@
+/**
+ * SVG icon
+ *
+ * @demo
+ *     <svg class="icon"></svg>
+ */
+
+.icon {
+    @extend %transition;
+    transition-property: color, transform, opacity;
+    display: inline-block;
+
+    // Icon should be fixed size, make sure it's not squeezed when in grid
+    // or a button
+    flex-shrink: 0;
+
+    a &,
+    .btn &,
+    button &,
+    &--with-margins {
+        // Links already have transition for color, two transitions would
+        // create unwanted delay
+        transition: none;
+
+        // Margin
+        &:not(:last-child) {
+            margin-right: 1rem;
+        }
+        &:not(:first-child) {
+            margin-left: 1rem;
+        }
+    }
+
+    a &--no-margins,
+    .btn &--no-margins,
+    button &--no-margins,
+    &--no-margins {
+        &:not(:last-child),
+        &:not(:first-child) {
+            margin-right: 0;
+            margin-left: 0;
+        }
+    }
+}
+
+.icon,
+.icon--with-margins ~ span {
+    vertical-align: middle;
+}
+
+
+/*
+ * In IE / Edge javascript event target could be SVG sprite element instead of a SVG which uses
+ * it. Almost none of JS libraries handle it properly, fix by disabling events on an icon
+ */
+
+a .icon,
+button .icon,
+.btn .icon {
+    pointer-events: none;
+}
+
+
+/*
+ * Fix icon alignment for icons in square buttons
+ * iOS only issue, but fix applied to all for consistency
+ */
+
+.no-hover .btn--square .icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

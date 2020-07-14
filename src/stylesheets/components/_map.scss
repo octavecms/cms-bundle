@@ -1,0 +1,10 @@
+.map {
+    position: relative;
+}
+
+.map__content {
+    position: relative;
+    height: 100vh;
+    height: var(--viewport-height);
+    max-height: 720px;
+}

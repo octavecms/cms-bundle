@@ -1,0 +1,72 @@
+/**
+ * Text size / style mixin and placeholder classname generator
+ * For each style is generated "%text--size-NAME" placeholder selector
+ *
+ * @see settings/_text.scss
+ * @demo
+ *     .class { @extend %text--size-h1; }
+ *
+ *     .class { @include text--size(h1); }
+ *
+ *     .class {
+ *         @include text--size((
+ *             xs:  ( 'font-size': 1.4rem,  'line-height': 24 / 14 * 1em )
+ *         ));
+ *     }
+ */
+
+@mixin text--size-definition ($item) {
+    @each $name, $value in $item {
+        #{$name}: #{$value};
+    }
+
+    // Reset first, last child margins
+    @if map-has-key($item, 'margin') or map-has-key($item, 'margin-top') {
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    @if map-has-key($item, 'margin') or map-has-key($item, 'margin-bottom') {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+
+@mixin text--size ($name) {
+    $arg-type: type-of($name);
+
+    @if $arg-type == string {
+        // Text size name, eg.    @include text--size(h1);
+        @each $breakpoint, $sizes in $text-sizes {
+            @include media-breakpoint('#{$breakpoint}-up') {
+                $size: map-get($sizes, $name);
+
+                @if $size {
+                    @include text--size-definition($size);
+                }
+            }
+        }
+    } @else if $arg-type == map {
+        // Text size map, eg.    @include text--size((xs: (font-size: 1rem), md: (font-size: 2rem)));
+        @each $breakpoint, $size in $name {
+            @include media-breakpoint('#{$breakpoint}-up') {
+                @include text--size-definition($size);
+            }
+        }
+    }
+}
+
+
+// Itterate and create placeholder classnames for all text sizes
+@each $breakpoint, $sizes in $text-sizes {
+    @include media-breakpoint('#{$breakpoint}-up') {
+        @each $name, $size in $sizes {
+            %text--size-#{$name} {
+                @include text--size-definition($size);
+            }
+        }
+    }
+}

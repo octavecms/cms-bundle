@@ -1,0 +1,18 @@
+/**
+ * Fade animation
+ */
+
+.animation--fade-in,
+.animation--fade-out,
+.animation--tabs-in,
+.animation--tabs-out {
+    @extend %animation;
+    will-change: opacity;
+}
+
+.animation--fade-in--inactive,
+.animation--fade-out--active,
+.animation--tabs-in--inactive,
+.animation--tabs-out--active {
+    opacity: 0;
+}

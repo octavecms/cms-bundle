@@ -1,0 +1,146 @@
+/**
+ * Viewport height CSS property, overwritten with "px" value in iOS because 100vh includes
+ * toolbar and navigation bar, which we may not want
+ *
+ * Should be used whenever 100vh shouldn't include toolbar / navbar
+ */
+:root {
+    --viewport-height: 100vh;
+    --viewport-height-actual: 100vh;
+}
+
+
+/*
+ * Body styles
+ */
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+
+    // iOS bug where with ajax page loading smooth scroll stops for unknown reason
+    -webkit-overflow-scrolling: touch;
+
+    // Smooth scroll into view, supported by FF and Chrome only
+    scroll-behavior: smooth;
+
+    // Print styles
+    @include media-breakpoint(print) {
+        height: auto;
+        overflow: visible;
+    }
+}
+body {
+    min-height: 100vh; // fallback
+    min-height: var(--viewport-height);
+
+    // Prevent scrollbars appearing
+    // CAUTION!!! Enabled this will break `position: sticky` elements
+    overflow-x: hidden;
+
+    // Make sure grid doesn't get broken when there is a scrollbar
+    width: 100vw;
+
+    // Print styles
+    @include media-breakpoint(print) {
+        overflow: visible;
+        min-height: 0;
+        width: 100%;
+    }
+}
+
+
+/*
+ * 1. IE11 main element doesn't have default browser styles
+ */
+
+main {
+    display: block; // 1.
+}
+
+
+/*
+ * Reset
+ */
+
+dl, dd, dt, blockquote {
+    margin: 0;
+}
+
+/*
+ * Fix box sizing nightmare
+ */
+
+* {
+    &,
+    &:after,
+    &:before {
+        box-sizing: border-box;
+    }
+}
+
+
+/*
+ * Images
+ */
+
+picture {
+    display: block;
+}
+
+img {
+    user-select: none;
+    vertical-align: top;
+}
+
+img[draggable="false"] {
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+
+/*
+ * Iframe size
+ */
+
+iframe {
+    display: block;
+}
+
+
+/*
+ * Hide browser-sync text
+ */
+
+#__bs_notify__ {
+    display: none !important;
+}
+
+
+/*
+ * Immediately jump any animation to the end point if the user has set their device to "prefers reduced motion".
+ * This could create bad unintended consequences. Remove as needed, and write your own appropriate code for prefers-reduced-motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *:before,
+    *:after {
+        animation-duration: 0.001s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.001s !important;
+        transition-delay: 0s !important;
+    }
+}
+
+// Same when puppeteer is used
+.css-regression-testing {
+    &,
+    *,
+    *:before,
+    *:after {
+        animation-duration: 0.001s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.001s !important;
+        transition-delay: 0s !important;
+    }
+}

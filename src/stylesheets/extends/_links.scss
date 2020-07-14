@@ -1,0 +1,113 @@
+/**
+ * Link decoration mixin and placeholder classname generator
+ *
+ * For each link decoration defined in variables/_links.scss creates
+ * a %link--decoration-NAME placeholder classname
+ *
+ * See variables/_links.scss
+ * See mixins/components/_link.scss
+ *
+ * @demo
+ *     a     { @extend %link--decoration-default; }
+ *     nav a { @extend %link--decoration-none; }
+ *
+ *     a     { @include link--decoration(default); }
+ *     nav a { @include link--decoration(none); }
+ */
+
+@mixin link--decoration ($name) {
+    $link-decoration: map-get($link-decorations, $name);
+
+    @if map-has-key($link-decoration, normal) {
+        @include link-normal () {
+            text-decoration: map-get($link-decoration, normal);
+        }
+    }
+
+    @if map-has-key($link-decoration, hover) {
+        @include link-hover () {
+            text-decoration: map-get($link-decoration, hover);
+        }
+    }
+
+    @if map-has-key($link-decoration, active) {
+        @include link-active () {
+            text-decoration: map-get($link-decoration, active);
+        }
+    }
+
+    @if map-has-key($link-decoration, is-active) {
+        &.is-active {
+            text-decoration: map-get($link-decoration, is-active);
+        }
+    }
+}
+
+@each $name, $link-decoration in $link-decorations {
+    %link--decoration-#{$name} {
+        @include link--decoration($name);
+    }
+}
+
+
+/**
+ * Link style mixin and placeholder classname generator
+ *
+ * For each link theme defined in variables/_colors.scss creates
+ * a %link--style-NAME placeholder classname
+ *
+ * See variables/_colors.scss
+ *
+ * @demo
+ *     a     { @extend %link--style-default; }
+ *     nav a { @extend %link--style-text; }
+ *
+ *     a     { @include link--style(default); }
+ *     nav a { @include link--style(text); }
+ */
+
+@mixin link--style-item ($link-style) {
+    @if map-has-key($link-style, normal) {
+        @include link-normal () {
+            color: map-get($link-style, normal);
+        }
+    }
+
+    @if map-has-key($link-style, hover) {
+        @include link-hover () {
+            color: map-get($link-style, hover);
+        }
+    }
+
+    @if map-has-key($link-style, active) {
+        @include link-active () {
+            color: map-get($link-style, active);
+        }
+    }
+
+    @if map-has-key($link-style, is-active) {
+        &.is-active {
+            color: map-get($link-style, is-active);
+        }
+    }
+}
+
+
+@mixin link--style ($name) {
+    $arg-type: type-of($name);
+
+    @if $arg-type == string {
+        // Link style name, eg.   @include link--style(default);
+        $link-style: map-get($link-styles, $name);
+        @include link--style-item($link-style);
+    } @else if $arg-type == map {
+        // Link style map, eg.   @include link--style((normal: #fff, hover: #000));
+        @include link--style-item($name);
+    }
+}
+
+@each $name, $link-style in $link-styles {
+    %link--style-#{$name} {
+        @include link--style($name);
+    }
+}

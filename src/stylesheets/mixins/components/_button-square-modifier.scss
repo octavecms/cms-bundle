@@ -1,0 +1,26 @@
+/*
+ * Square button modifier mixin
+ */
+
+@mixin button-square-modifier ($button) {
+    @each $breakpoint, $size in $button {
+        @include media-breakpoint('#{$breakpoint}-up') {
+
+            &.btn--square {
+                // Make button same width as height
+                width: map-get($size, height);
+
+                // Button has very limited space, we don't want to push content
+                // out of button bounds
+                padding-left: 0;
+                padding-right: 0;
+
+                // In case button is inside the group we need to make sure
+                // it doesn't resize
+                flex-grow: 0;
+                flex-shrink: 0;
+            }
+
+        }
+    }
+}

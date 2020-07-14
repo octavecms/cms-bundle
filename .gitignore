@@ -1,0 +1,11 @@
+.DS_Store
+.sass-cache
+.publish
+public
+public-temp
+Desktop.ini
+node_modules
+**/generated/_icons.sass
+npm-debug.log
+yarn-error.log
+.vscode

@@ -1,0 +1,18 @@
+/*
+ * Animations
+ */
+
+%animation {
+    @extend %transition;
+    pointer-events: none;
+}
+
+%animation-slow {
+    @extend %transition-slow;
+    pointer-events: none;
+}
+
+%animation-block {
+    @extend %transition-block;
+    pointer-events: none;
+}

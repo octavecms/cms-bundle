@@ -1,0 +1,29 @@
+{
+  "name": "octave-cms",
+  "version": "1.0.0",
+  "description": "Symfony3 CMS front-end",
+  "main": "index.js",
+  "author": "Vide Infra",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "builder",
+    "development": "builder",
+    "build": "builder -- build",
+    "production": "builder -- build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.videinfra.net/vig-bundles/cms"
+  },
+  "dependencies": {
+    "@videinfra/static-website-builder": "^1.2.1",
+    "jquery": "^3.5.1",
+    "normalize-scss": "^7.0.0"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11"
+  ]
+}

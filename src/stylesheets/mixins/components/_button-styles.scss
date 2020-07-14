@@ -1,0 +1,366 @@
+@import "mixins/lib/list-remove-nth";
+@import "mixins/lib/omit";
+
+/**
+ * Button normal state style mixin
+ * Sets styles to button normal state
+ *
+ * @demo
+ *     @include button-normal () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-normal ($parent-selector: '', $container-selector: '.btn-container') {
+    // We overwrite disabled state too because if classname is used, then :hover will take precedent
+    #{ $parent-selector } &,
+    #{ $parent-selector } &.is-disabled,
+    #{ $parent-selector } #{ $container-selector }.is-disabled,
+    #{ $parent-selector } &:disabled {
+        @content;
+    }
+}
+
+
+/**
+ * Button hover state style mixin
+ * Sets styles to button hover states
+ *
+ * @demo
+ *     @include button-hover () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-hover ($parent-selector: '', $container-selector: '.btn-container') {
+    .has-hover #{ $parent-selector } &:hover,
+    .has-hover #{ $parent-selector } #{ $container-selector }:hover & { // if hover events are supported
+        @content;
+    }
+}
+
+
+/**
+ * Button mouse down state style mixin
+ * Sets styles to down state
+ *
+ * @demo
+ *     @include button-down () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-down ($parent-selector: '', $container-selector: '.btn-container') {
+    .has-hover #{ $parent-selector } &:active:hover,
+    .has-hover #{ $parent-selector } #{ $container-selector }:active:hover & {  // if hover events are supported
+        @content;
+    }
+}
+
+
+/**
+ * Button active state style mixin
+ * Sets styles to active state
+ *
+ * @demo
+ *     @include button-active () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-active ($parent-selector: '', $container-selector: '.btn-container') {
+    #{ $parent-selector } &.is-active,
+    #{ $parent-selector } #{ $container-selector }.is-active & {
+        @content;
+    }
+}
+
+
+/**
+ * Button active + hover state style mixin
+ * Sets styles to button hover states when it's active
+ *
+ * @demo
+ *     @include button-active-hover () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-active-hover ($parent-selector: '', $container-selector: '.btn-container') {
+    .has-hover #{ $parent-selector } &.is-active:hover,
+    .has-hover #{ $parent-selector } #{ $container-selector }.is-active:hover & { // if hover events are supported
+        // ACTIVE=HOVER
+        @content;
+    }
+}
+
+
+/**
+ * Button active + mouse down state style mixin
+ * Sets styles to down state when it's active
+ *
+ * @demo
+ *     @include button-active-down () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-active-down ($parent-selector: '', $container-selector: '.btn-container') {
+    .has-hover #{ $parent-selector } &.is-active:active:hover,
+    .has-hover #{ $parent-selector } #{ $container-selector }.is-active:active:hover & {  // if hover events are supported
+        // ACTIVE=DOWN
+        @content;
+    }
+}
+
+
+/**
+ * Button disabled state style mixin
+ *
+ * @demo
+ *     @include button-disabled () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-disabled ($parent-selector: '', $container-selector: '.btn-container') {
+    #{ $parent-selector } &.is-disabled,
+    #{ $parent-selector } &:disabled,
+    #{ $parent-selector } #{ $container-selector }.is-disabled {
+        @content;
+    }
+}
+
+
+/**
+ * Button focus-visible state style mixin
+ * Sets styles to button when focus should be made evident on the element
+ *
+ * @demo
+ *     @include button-focus-visible () {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-focus-visible ($parent-selector: '', $container-selector: '.btn-container') {
+    #{ $parent-selector } &.focus-visible,
+    #{ $parent-selector } #{ $container-selector }.focus-visible & {
+        @content;
+    }
+}
+
+
+/**
+ * Button style mixin
+ * Sets hover, active, focus, disabled styles
+ *
+ * Button states, all are optional:
+ * * default - default button styles
+ * * hover - hovered button styles
+ * * down - mouse down button styles
+ * * focus-visible - keyboard tab focus button styles
+ * * active - button with "is-active" classname styles
+ * * disabled - disabled button styles
+ *
+ * Button state properties, all are optional:
+ * * color - text color
+ * * background - background color
+ * * hover-background - hovered button background color
+ * * border - border color
+ * * hover-border - hovered button border color
+ * * icon - Icon color, should be used only if text color doesn't match icon color
+ *
+ * Same styles can be applied to multiple button states
+ * by separating states with a space, for example 'hover active'
+ *
+ * Multiple states can be combined, for example to specify hover styles
+ * only when button is active use 'active+hover'
+ *
+ * @demo
+ *     .btn--primary {
+ *         $styles: (
+ *             'default': (
+ *                 color:      $color-background,
+ *                 background: $color-primary
+ *             ),
+ *
+ *             // Styles applied to both 'hover' and 'active' states
+ *             'hover active': (
+ *                 color:      $color-background,
+ *                 background: $color-primary
+ *             ),
+ *
+ *             // Styles applied to 'disabled' and 'disabled' when it's hovered
+ *            'disabled disabled+hover': (
+ *                 color:      $color-background,
+ *                 background: $color-primary
+ *            )
+ *         );
+ *
+ *         @include button-colors ($styles);
+ *     }
+ */
+
+@mixin button-colors ($definitions, $parent-selector: '', $container-selector: '.btn-container') {
+    @each $states, $styles in $definitions {
+        @include button-state ($states, $parent-selector, $container-selector) {
+            @include button-color-variant($styles);
+        }
+    }
+}
+
+@mixin button-state ($states, $parent-selector: '', $container-selector: '.btn-container') {
+    // If keys are not in quotes, then $states is a list
+    // Convert a list into a string and then back into a list
+    $states: str-split(unquote($states), " ");
+
+    @each $state in $states {
+        // .is-active classname will interfere with .btn-container
+        // Special handlers for them
+        $state: str-replace($state, 'active+hover', 'active-hover');
+        $state: str-replace($state, 'active+down', 'active-down');
+        $state: str-replace($state, 'hover+active', 'active-hover');
+        $state: str-replace($state, 'down+active', 'active-down');
+
+        // Each $state is for example "default", "active", "active+hover"
+        // Split combined states
+        $sub-states: str-split($state, '+');
+
+        @include button-state-item ($sub-states, $parent-selector, $container-selector) {
+            @content;
+        }
+    }
+}
+
+/**
+ * Itterate through all states recursively, create selector
+ * chain
+ *
+ * @demo
+ *   @include button-state(active hover) {
+ *       color: red;
+ *   }
+ */
+
+@mixin button-state-item ($states, $parent-selector: '', $container-selector: '.btn-container') {
+    @if length($states) == 0 {
+        @content;
+    } @else {
+        $state: nth($states, 1);
+        $states: remove-nth($states, 1);
+
+        @if $state == 'default' {
+            @include button-normal($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'disabled' {
+            @include button-disabled($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'active' {
+            @include button-active($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'hover' {
+            @include button-hover($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'down' {
+            @include button-down($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'active-hover' {
+            @include button-active-hover($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'active-down' {
+            @include button-active-down($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        } @else if $state == 'focus-visible' {
+            @include button-focus-visible($parent-selector, $container-selector) {
+                @include button-state-item($states, $parent-selector, $container-selector) {
+                    @content;
+                };
+            }
+        }
+    }
+}
+
+@mixin button-color-variant ($colors) {
+    $color:            map-get($colors, color);
+    $icon:             map-get($colors, icon);
+    $background:       map-get($colors, background);
+    $hover-background: map-get($colors, hover-background);
+    $border:           map-get($colors, border);
+    $hover-border:     map-get($colors, hover-border);
+
+    @if (type-of($color) == 'color' or $color == currentColor) and $color != transparent {
+        color: $color;
+    }
+    @if (type-of($icon) == 'color' or $icon == currentColor) and $icon != transparent {
+        // SVG icons
+        .icon {
+            color: $icon;
+        }
+    }
+
+    @if type-of($background) == 'color' or $background == currentColor {
+        &:after {
+            background-color: $background;
+        }
+    }
+
+    @if type-of($hover-background) == 'color' or $hover-background == currentColor {
+        &:before {
+            background-color: $hover-background;
+        }
+    }
+
+    @if type-of($border) == 'color' or $border == currentColor {
+        &:after {
+            border-color: $border;
+        }
+    }
+
+    @if type-of($hover-border) == 'color' or $hover-border == currentColor {
+        &:before {
+            border-color: $hover-border;
+        }
+    }
+
+    // All other properties
+    $properties: omit($colors, (color, icon, border, hover-border, background, hover-background));
+
+    @each $name, $value in $properties {
+        #{$name}: $value;
+    }
+}
+
+@mixin button-icon-animation ($colors) {
+    @if type-of($colors) == 'map' {
+        // If icon is not transparent, then its is not 'currentColor' and won't be
+        // animated automatically
+        $icon: map-get($colors, icon);
+
+        @if type-of($icon) == 'color' and $icon != currentColor and $icon != transparent {
+            .icon {
+                @extend %transition;
+            }
+        }
+    }
+}

@@ -1,0 +1,64 @@
+/**
+ * Slide-in animation
+ * Used by 'Loader' ajax page transition
+ */
+
+.animation--slide-in-bottom,
+.animation--slide-out-bottom,
+.animation--slide-in-top,
+.animation--slide-out-top {
+    @extend %animation;
+    will-change: transform;
+    overflow: hidden;
+
+    > span {
+        display: inline-block;
+    }
+    > div,
+    > span {
+        @extend %animation;
+        will-change: transform;
+    }
+
+    // Animation durations, from _durations.scss
+    &.animation--slow > div,
+    &.animation--slow > span {
+        transition-duration: $duration-slow;
+    }
+    &.animation--block > div,
+    &.animation--block > span {
+        transition-duration: $duration-block;
+    }
+}
+
+.animation--slide-in-bottom--inactive,
+.animation--slide-out-bottom--active {
+    > div,
+    > span {
+        transform: translateY(100%);
+    }
+}
+.animation--slide-in-top--inactive,
+.animation--slide-out-top--active {
+    > div,
+    > span {
+        transform: translateY(-100%);
+    }
+}
+
+/**
+ * Slide from bottom animation
+ * @TODO Is this used???
+ */
+
+.animation--slide-in {
+    @extend %animation;
+    transition-timing-function: $easing-out-subtle;
+    transition-duration: $duration-slow;
+    will-change: opacity, transform;
+}
+
+.animation--slide-in--inactive {
+    opacity: 0 !important;
+    transform: translateY(60px);
+}

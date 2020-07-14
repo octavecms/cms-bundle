@@ -1,0 +1,190 @@
+/**
+ * Modal component
+ */
+
+.modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    outline: none;
+    z-index: $z-index-modal;
+
+    // Disable scrolling, it's added when there is 'with-modal' classname
+    overflow: hidden;
+}
+
+.modal--under-header {
+    z-index: $z-index-under-header;
+}
+
+
+/**
+ * Modal toggle when JS is disabled
+ */
+
+.no-js .modal:target {
+    display: block !important;
+}
+
+
+/**
+ * Close icon
+ */
+
+.modal__close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+}
+
+
+/**
+ * Scrollable content
+ */
+
+.modal__scroller {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh; // fallback
+    height: var(--viewport-height-actual);
+    overflow: hidden;
+}
+
+
+/**
+ * Solid background
+ */
+
+.modal__background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh; // fallback
+    height: var(--viewport-height-actual);
+}
+
+
+/**
+ * Modal with overlay
+ */
+
+.modal--overlay .modal__background {
+    // @TODO Design specific
+    background: rgba($color-dark-background, 0.85);
+}
+
+
+/**
+ * Modal layout, cover whole screen
+ *
+ * This element is used to center modal content + add paddings
+ * between modal content and viewport which are needed if modal
+ * content is scrollable
+ */
+
+.modal__content-wrapper {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh; // fallback
+    min-height: var(--viewport-height-actual);
+
+    // Center all content
+    // @TODO Remove if not needed
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    // Reset .container pseudo elements
+    &:before,
+    &:after {
+        display: none;
+    }
+}
+
+
+/**
+ * Content, center all content
+ */
+
+.modal__content {
+    // @TODO Project specific styles
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    background: $color-light-background;
+    border-radius: 5px;
+}
+
+
+/**
+ * When modal is open we disable main content scrolling
+ * and enable modal content scrolling
+ *
+ * @example
+ *   <html class="with-modal">
+ */
+
+.with-modal {
+    // Visible instead of hidden to prevent 'sticky' elements from
+    // moving to the top of the page instead of staying at the top
+    // of the viewport
+    overflow: visible;
+
+    // Make sure content is not scrolled when resetting scroll position
+    // Needed for Firefox
+    scroll-behavior: initial;
+
+    body {
+        // Prevent double scrollbar, one for body, one for modal
+        overflow: hidden;
+        height: 100vh; // fallback
+        height: var(--viewport-height-actual);
+    }
+
+    .modal__scroller {
+        // Enable content scroll
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+
+/**
+ * Show / hide animation using slide-in / slide-out
+ */
+
+.animation--modal-in,
+.animation--modal-out {
+    &,
+    .modal__background,
+    .modal__scroller {
+        @extend %transition;
+        transition-property: transform;
+        transition-duration: $duration-slow;
+        transition-timing-function: $easing-out;
+    }
+}
+.animation--modal-out {
+    // When modal is animating out of view allow user to click through modal
+    // Needed because when animation is close to the end and main content is already visible
+    // clicks shouldn't be captured by modal
+    pointer-events: none;
+}
+
+.animation--modal-in--inactive,
+.animation--modal-out--active {
+    transform: translateX(100%);
+
+    .modal__background,
+    .modal__scroller {
+        transform: translateX(-100%);
+    }
+}

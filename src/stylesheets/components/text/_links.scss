@@ -1,0 +1,79 @@
+/**
+ * Link styles
+ *
+ * Link color related classnames should be added to `components/_themes.scss`
+ *
+ * @see components/_themes.scss
+ * @demo
+ *     <a>Standard link</a>
+ *     <a class="is-disabled">Disabled state</a>
+ */
+
+a {
+    @extend %link--decoration-default;
+}
+
+
+/*
+ * Cursors
+ */
+
+a,
+button,
+input[type="submit"] {
+    cursor: pointer;
+}
+
+
+/*
+ * Link animations
+ */
+
+a,
+button,
+input[type="submit"] {
+    @extend %transition;
+}
+
+
+/*
+ * Focused state
+ */
+
+a,
+button,
+input[type="submit"] {
+    &:focus {
+        outline: none;
+    }
+}
+
+::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+
+/*
+ * Keyboard tab focus state
+ */
+
+a:not(.btn):not(.btn-container),
+button:not(.btn) {
+    @include link-focus-visible () {
+        // Default Chrome outline
+        // outline: -webkit-focus-ring-color auto 3px;
+        outline: currentColor auto 3px;
+    }
+}
+
+
+/*
+ * Disabled state
+ */
+
+.is-disabled,
+:disabled,
+[disabled] {
+    pointer-events: none;
+}

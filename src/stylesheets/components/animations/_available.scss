@@ -1,0 +1,20 @@
+/**
+ * Availability / visibility animation
+ * Used by jQuery.fn.available
+ *
+ * Used by jquery.available.js to detect when element becomes
+ * visible, but visible to the DOM (eg. has width / height), not necessarily the user
+ */
+
+.animation-available {
+    animation: animation-available 0.1ms;
+}
+
+@keyframes animation-available {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

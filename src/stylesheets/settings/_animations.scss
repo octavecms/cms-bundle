@@ -1,0 +1,32 @@
+/**
+ * Animation & transition settings
+ */
+
+// Animation easing functions
+$easing-back-out:           cubic-bezier(.25,  .74, .22, 1.1); // http://cubic-bezier.com/#.25,.74,.22,1.1
+$easing-back-in:            cubic-bezier(.47,  -0.1, .5, -.06); // http://cubic-bezier.com/#.47,-0.1,.5,-.06
+
+$easing-out:                cubic-bezier(.25,  .74, .22, .99); // http://cubic-bezier.com/#.25,.74,.22,.99
+$easing-in:                 cubic-bezier(.47,  .04, .5, -.06); // http://cubic-bezier.com/#.47,.04,.5,-.06
+$easing-in-out:             cubic-bezier(.55,   0,  .1, 1   ); // http://cubic-bezier.com/#.55,0,.1,1
+
+// Smoother in-out animations
+$easing-in-subtle:          cubic-bezier(.42,  .13, .81, .47); // http://cubic-bezier.com/#.42,.13,.81,.47
+$easing-out-subtle:         cubic-bezier(.29,  .73, .45,1);    // http://cubic-bezier.com/#.29,.73,.45,1
+$easing-in-out-subtle:      ease;
+
+// Animation durations
+$duration-normal:           .4s;
+$duration-fast:             $duration-normal / 2;
+$duration-slow:             $duration-normal * 2;
+$duration-block:            $duration-normal * 4;
+
+// %transition, %animation animation settings
+$transition-default-duration: $duration-normal;
+$transition-default-easing:   $easing-out;
+
+$transition-slow-duration:    $duration-slow;
+$transition-slow-easing:      $easing-out;
+
+$transition-block-duration:   $duration-block;
+$transition-block-easing:     $easing-out;

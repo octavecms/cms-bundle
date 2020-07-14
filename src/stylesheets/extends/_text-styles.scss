@@ -1,0 +1,39 @@
+/**
+ * Text style mixin and placeholder classnames
+ *
+ * Used to keep all standard text and all headings consistent without code
+ * duplication / to improve maintainability
+ *
+ * @see settings/_text.scss
+ * @see components/text/_typography.scss
+ * @demo
+ *     body  { @extend %text--default; }
+ *     h1    { @extend %text--heading; }
+ *
+ *     body  { @include text--default(); }
+ *     h1    { @include text--heading(); }
+ */
+
+@mixin text--style-default () {
+    font-family: $text-default-font;
+    font-weight: $text-default-weight;
+
+    // Fix awkward character spacing
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal; // needed for Chrome
+}
+
+@mixin text--style-heading () {
+    font-family: $text-heading-font;
+    font-weight: $text-heading-weight;
+}
+
+
+%text--style-default {
+    @include text--style-default();
+}
+
+%text--style-heading {
+    @include text--style-heading();
+}

@@ -1,0 +1,10 @@
+/**
+ * Animation durations
+ */
+
+.animation--slow {
+    transition-duration: $duration-slow;
+}
+.animation--block {
+    transition-duration: $duration-block;
+}

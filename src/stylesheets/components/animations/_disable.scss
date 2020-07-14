@@ -1,0 +1,40 @@
+/**
+ * Disable all animations
+ *
+ * @markup
+ *   <div class="disable-transitions">...</div>
+ */
+
+.disable-transitions,
+.disable-transitions:before,
+.disable-transitions:after,
+.disable-transitions *,
+.disable-transitions *:before,
+.disable-transitions *:after {
+    transition: none !important;
+}
+
+
+/**
+ * Disable all animations if the user has requested that the system
+ * minimize the amount of animation or motion it uses
+ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *:before,
+    *:after {
+        transition: none !important;
+    }
+}
+
+/**
+ * Disable CSS animations during regression testing
+ */
+.css-regression-testing {
+    *,
+    *:before,
+    *:after {
+        transition: none !important;
+    }
+}

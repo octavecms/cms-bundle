@@ -1,0 +1,95 @@
+/*
+ * Container generator mixins
+ */
+
+/**
+ * Mixin to generate container classnames
+ *
+ * @property {map} $containers Containers configuration
+ */
+@mixin containers ($containers) {
+    // Generate classnames for each container
+    // Default container will be .container, all other will be .container-NAME
+    @each $name, $container in $containers {
+        @if $name == 'default' {
+            @extend %container-reset;
+            @include container($container);
+        } @else {
+            &-#{$name} {
+                @extend %container-reset;
+                @include container($container);
+            }
+        }
+    }
+}
+
+/**
+ * Print styles for containers
+ *
+ * @property {map} $containers Containers configuration
+ */
+@mixin containers-print ($containers) {
+    @each $name, $container in $containers {
+        @if $name == 'default' {
+            .container {
+                max-width: none;
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: 0;
+                margin-right: 0;
+            }
+        } @else {
+            .container-#{ $name } {
+                max-width: none;
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+
+/**
+ * Mixins to generate content for container classname
+ *
+ * @property {map} $container Container configuration
+ * @property {map} $container.max-width List of max-widths
+ * @property {map} $container.paddings  List of paddings
+ */
+@mixin container ($container) {
+    // Max-width
+    @if map-has-key($container, max-widths) {
+        $max-widths: map-get($container, max-widths);
+
+        @each $breakpoint, $max-width in $max-widths {
+            @if is-valid-media-breakpoint('#{$breakpoint}-up') {
+                @include media-breakpoint('#{$breakpoint}-up') {
+                    max-width: if($max-width == none or $max-width > 0, $max-width, none);
+                }
+            } @else if is-valid-media-breakpoint('#{$breakpoint}') {
+                @include media-breakpoint('#{$breakpoint}') {
+                    max-width: if($max-width == none or $max-width > 0, $max-width, none);
+                }
+            }
+        }
+    }
+
+    // Paddings
+    @if map-has-key($container, paddings) {
+        $paddings: map-get($container, paddings);
+
+        @each $breakpoint, $padding in $paddings {
+            @if is-valid-media-breakpoint('#{$breakpoint}-up') {
+                @include media-breakpoint('#{$breakpoint}-up') {
+                    @include padding-values ($padding);
+                }
+            } @else if is-valid-media-breakpoint('#{$breakpoint}') {
+                @include media-breakpoint('#{$breakpoint}') {
+                    @include padding-values ($padding);
+                }
+            }
+        }
+    }
+}

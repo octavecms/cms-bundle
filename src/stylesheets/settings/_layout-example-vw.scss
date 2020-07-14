@@ -1,0 +1,214 @@
+/**
+ * Viewport unit based grid system
+ *
+ * Grid system settings
+ * All resolution styles cascade up from mobile to desktop
+ *
+ * @demo
+ *   <div class="row">
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column</div>
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column</div>
+ *   </div>
+ *
+ * @demo
+ *   <div class="row row--pad">
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column with padding</div>
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column with padding</div>
+ *   </div>
+ *
+ * @demo
+ *   <div class="row">
+ *      <div class="col col--xs-12 col--sm-6 offset--sm-6 col--md-9 offset--sm-9 col--lg-24 offset--lg-0">
+ *        Column with left offset
+ *      </div>
+ *   </div>
+ */
+
+$grid-columns: (
+    // Mobile portrait
+    xs: (
+        // Count
+        columns: 12,
+        // Full size, all column sum, must use number + unit
+        unit: 100vw,
+        // Spacing between columns
+        gutter: 0vw,
+    ),
+
+    // Mobile landscape
+    sm: (
+        columns: 18,
+        unit: 100vw,
+        gutter: 0vw,
+    ),
+
+    // Tablet portrait
+    md: (
+        columns: 18,
+        unit: 100vw,
+        gutter: 0vw,
+    ),
+
+    // Tablet landscape + small desktop
+    lg: (
+        columns: 24,
+        unit: 100vw,
+        gutter: 0vw,
+    ),
+
+    // Large desktop, 1200+
+    xl: (
+        columns: 24,
+        unit: 100vw,
+        gutter: 0vw,
+    ),
+
+    // Very large desktop, 1440+
+    // We set fixed pixel size so that each column is 60px, we can't use % since vw
+    // unit is used in other breakpoints
+    xxl: (
+        columns: 24,
+        unit: 1440px,
+        gutter: 0vw,
+    ),
+
+    // Extremely large desktop, 1920+
+    // We set fixed pixel size so that each column is 60px, we can't use % since vw
+    // unit is used in other breakpoints
+    // xxxl: (
+        // columns: 24,
+        // unit: 1440px,
+        // gutter: 0vw,
+    // )
+);
+
+
+/**
+ * Column size, used for containers, spacing, etc.
+ * Useful only if grid unit is "vw", not "%"
+ */
+
+$size-col-xs:  1 / map-get-deep($grid-columns, 'xs', 'columns') * map-get-deep($grid-columns, 'xs', 'unit');
+$size-col-sm:  1 / map-get-deep($grid-columns, 'sm', 'columns') * map-get-deep($grid-columns, 'sm', 'unit');
+$size-col-md:  1 / map-get-deep($grid-columns, 'md', 'columns') * map-get-deep($grid-columns, 'md', 'unit');
+$size-col-lg:  1 / map-get-deep($grid-columns, 'lg', 'columns') * map-get-deep($grid-columns, 'lg', 'unit');
+$size-col-xl:  1 / map-get-deep($grid-columns, 'xl', 'columns') * map-get-deep($grid-columns, 'xl', 'unit');
+$size-col-xxl: 1 / map-get-deep($grid-columns, 'xxl', 'columns') * map-get-deep($grid-columns, 'xxl', 'unit');
+
+
+/**
+ * For each container is generated ".container-NAME" classname, except
+ * for "default", for which ".container" classname is generated
+ *
+ * 'paddings' property uses 'padding' mixin and allows 'inherit' property value.
+ * For example 'xs: 0 inherit' will set only top and bottom paddings and 'xs: inherit 0'
+ * will set left and right paddings.
+ *
+ * @demo
+ *   <div class="container"></div>
+ *   <div class="container container-footer"></div>
+ */
+
+$containers: (
+    'default': (
+        'max-widths': (
+            // sm: 480px,
+            // md: 720px,
+            // lg: 960px,
+            // xl: 1140px,
+            xxl: 1440px
+        ),
+
+        // It's prefered not to set any paddings on default and use
+        // modifier instead
+        'paddings': (
+            // xs: 0,
+            // sm: 0,
+            // md: 0,
+            // lg: 0,
+            // xl: 0
+        )
+    ),
+
+    // Generates 'container-h', a container with left and right paddings
+    // which has size of 1 column
+    'h': (
+        'max-widths': (
+            // sm: 480px,
+            // md: 720px,
+            // lg: 960px,
+            // xl: 1140px,
+            xxl: 1440px
+        ),
+        'paddings': (
+            xs:  inherit $size-col-xs,
+            sm:  inherit $size-col-sm,
+            md:  inherit $size-col-md,
+            lg:  inherit $size-col-lg,
+            xl:  inherit $size-col-xl,
+            xxl: inherit $size-col-xxl,
+        )
+    ),
+
+    // Generates 'container-v', a container with top and bottom paddings
+    // which has size of 1 column
+    'v': (
+        'paddings': (
+            xs:  $size-col-xs inherit,
+            sm:  $size-col-sm inherit,
+            md:  $size-col-md inherit,
+            lg:  $size-col-lg inherit,
+            xl:  $size-col-xl inherit,
+            xxl: $size-col-xxl inherit,
+        )
+    ),
+);
+
+
+/**
+ * Spacings
+ *
+ * Settings for spacing between most of the elements
+ *
+ * @see html/src/stylesheets/components/_blocks.scss
+ * @see html/src/stylesheets/components/form/_footer.scss
+ * @see html/src/stylesheets/components/form/_group.scss
+ * @see html/src/stylesheets/components/text/_typography.scss
+ * @see html/src/stylesheets/components/text/_lists.scss
+ * @demo
+ *   @include margins($spacing);
+ *   @include margins($spacing-medium);
+ *   @include margins-top($spacing);
+ *   @include margins-bottom($spacing);
+ *   @include margins-top-bottom($spacing);
+ */
+
+$spacing: (
+    xs:  $size-col-xs,
+    sm:  $size-col-sm,
+    md:  $size-col-md,
+    lg:  $size-col-lg,
+    xl:  $size-col-xl,
+    xxl: $size-col-xxl,
+);
+
+$spacing-none: (
+    xs:  0,
+    sm:  0,
+    md:  0,
+    lg:  0,
+    xl:  0,
+    xxl: 0,
+);
+
+$spacing-heading: (
+    xs:  1.0rem,
+    md:  2.0rem
+);
+
+$spacing-text: (
+    xs:  1.0rem,
+    md:  2.0rem
+);
+
+

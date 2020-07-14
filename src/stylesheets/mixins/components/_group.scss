@@ -1,0 +1,80 @@
+/**
+ * Mixin to generate spacing between group of items
+ *
+ * 1. We overwrite first-child to make sure if Heading / P or other elements
+ *    with default margins are used in a group then their styles won't overwrite groups
+ *
+ * 2. We set bottom margin to prevent bottom margins if Heading / P or other elements
+ *    with default margins are used in a group
+ *
+ * 3. Spacing may contain calc() so we can't use arithmetic in the SASS and must use another
+ *    calc() so that calculation is done in CSS
+ *
+ * @property {map} $spacing Spacing
+ * @property {number?} $gutter Gutter between grid columns
+ *
+ * @example
+ *    @include group (30px);
+ *    @include group ((
+ *        xs: 10px
+ *        md: 30px
+ *    );
+ */
+
+@mixin group-size ($spacing) {
+    $spacing-top: css-nth($spacing, 1);
+    $spacing-left: css-nth($spacing, 4);
+
+    &,
+    &:first-child { // 1.
+        @if $spacing-top != inherit {
+            @if $spacing-top and $spacing-top != 0px and $spacing-top != 0% {
+                margin-top: calc(#{ $spacing-top } * -1); // 3.
+            } @else {
+                margin-top: -$spacing-top;
+            }
+        }
+
+        @if $spacing-left != inherit {
+            @if $spacing-left and $spacing-left != 0px and $spacing-left != 0% {
+                margin-left: calc(#{ $spacing-left } * -1); // 3.
+            } @else {
+                margin-left: -$spacing-left;
+            }
+        }
+    }
+
+    > *,
+    > *:first-child { // 1.
+        margin-bottom: 0; // 2.
+
+        @if $spacing-top != inherit {
+            margin-top: $spacing-top;
+        }
+        @if $spacing-left != inherit {
+            margin-left: $spacing-left;
+            max-width: calc(100% - #{ $spacing-left });
+        }
+    }
+}
+
+@mixin group ($spacing) {
+    @if type-of($spacing) == 'map' and (
+        map-has-key($spacing, xs) or
+        map-has-key($spacing, sm) or
+        map-has-key($spacing, md) or
+        map-has-key($spacing, lg) or
+        map-has-key($spacing, xl) or
+        map-has-key($spacing, xxl) or
+        map-has-key($spacing, xxxl)
+    )
+    {
+        @each $breakpoint, $size in $spacing {
+            @include media-breakpoint('#{$breakpoint}-up') {
+                @include group-size($size);
+            }
+        }
+    } @else {
+        @include group-size($spacing);
+    }
+}

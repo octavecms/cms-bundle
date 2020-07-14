@@ -1,0 +1,132 @@
+/**
+ * Margins mixin
+ */
+
+
+/**
+ * Add top, right, bottom or left to the property name
+ * Handles property names with '-width' in them, eg. border-width
+ *
+ * @param {String} $property - Property name
+ * @param {String} $side - Property side name
+ * @return {String} - Full property name
+ */
+@function getSpacingPropertyName ($property, $side) {
+    $postfix: '-width';
+    $index: str-index($property, $postfix);
+
+    @if $index != null { // 'border-width' or something
+        $prefix: str-slice($property, 1, $index - 1);
+        @return $prefix + '-' + $side + $postfix; // eg. border-top-width
+    } @else {
+        @return $property + '-' + $side; // eg. padding-top
+    }
+}
+
+@mixin margin-value($property, $value, $reset-first: false, $reset-last: false) {
+    #{$property}: $value;
+
+    @if $reset-first {
+        &:first-child {
+            #{$property}: 0;
+        }
+    }
+    @if $reset-last {
+        &:last-child {
+            #{$property}: 0;
+        }
+    }
+}
+
+@mixin margin-values ($margins, $reset-first-last: true, $property: 'margin') {
+    $top:    css-nth($margins, 1);
+    $right:  css-nth($margins, 2);
+    $bottom: css-nth($margins, 3);
+    $left:   css-nth($margins, 4);
+
+    @if $top == inherit or $right == inherit or $bottom == inherit or $left == inherit {
+        // Set each property component individually
+        @if $top != inherit {
+            @include margin-value(getSpacingPropertyName($property, 'top'),    $top,    $reset-first: $reset-first-last, $reset-last: false);
+        }
+        @if $right != inherit {
+            @include margin-value(getSpacingPropertyName($property, 'right'),  $right,  $reset-first: false, $reset-last: $reset-first-last);
+        }
+        @if $bottom != inherit {
+            @include margin-value(getSpacingPropertyName($property, 'bottom'), $bottom, $reset-first: false, $reset-last: $reset-first-last);
+        }
+        @if $left != inherit {
+            @include margin-value(getSpacingPropertyName($property, 'left'),   $left,   $reset-first: $reset-first-last, $reset-last: false);
+        }
+    } @else {
+        // Shorthand
+        #{ $property }: $margins;
+
+        @if $reset-first-last {
+            &:first-child {
+                #{ getSpacingPropertyName($property, 'top') }: 0;
+                #{ getSpacingPropertyName($property, 'left') }: 0;
+            }
+            &:last-child {
+                #{ getSpacingPropertyName($property, 'right') }: 0;
+                #{ getSpacingPropertyName($property, 'bottom') }: 0;
+            }
+        }
+    }
+}
+
+
+/**
+ * Sets element margins for specific breakpoints
+ *
+ * @property {map|list} $margins Margins
+ * @property {boolean?} $reset-first-last Reset first-child and last-child margins, by default true
+ * @property {string?} $property CSS property name, by default 'margin'
+ *
+ * @example
+ *    @include margins (30px 0);
+ *    @include margins ((
+ *        xs: 10px 0
+ *        md: 30px 0
+ *    );
+ *    @include margins ((
+ *        xs: 10px inherit
+ *        md: 30px inherit
+ *    );
+ *
+ */
+@mixin margins ($margins, $reset-first-last: true, $property: 'margin') {
+    $type: type-of($margins);
+
+    @if $type == 'map' {
+        @each $breakpoint, $margin in $margins {
+            @if is-valid-media-breakpoint('#{$breakpoint}-up') {
+                @include media-breakpoint('#{$breakpoint}-up') {
+                    @include margin-values($margin, $reset-first-last, $property);
+                }
+            } @else if is-valid-media-breakpoint('#{$breakpoint}') {
+                @include media-breakpoint('#{$breakpoint}') {
+                    @include margin-values($margin, $reset-first-last, $property);
+                }
+            }
+        }
+    } @else {
+        @include margin-values($margins, $reset-first-last, $property);
+    }
+}
+
+@mixin margins-top-bottom ($margins, $reset-first-last: true, $property: 'margin') {
+    @include margins(breakpoint-pick-top-bottom($margins), $reset-first-last, $property);
+}
+
+@mixin margins-top ($margins, $reset-first-last: true, $property: 'margin') {
+    // Top margin only, rest margins are untouched
+    $top-index: 1; // in CSS 1st property is top
+    @include margins(breakpoint-pick-css-nth($margins, $top-index), $reset-first-last, $property);
+}
+
+@mixin margins-bottom ($margins, $reset-first-last: true, $property: 'margin') {
+    // Bottom margin only, rest margins are untouched
+    $bottom-index: 3; // in CSS 3rd property is bottom
+    @include margins(breakpoint-pick-css-nth($margins, $bottom-index), $reset-first-last, $property);
+}

@@ -1,0 +1,46 @@
+/**
+ * Layout component mixin and placeholder classname which covers parent
+ *
+ * @demo
+ *     .btn-large:before { @extend %layout-position-overlay; }
+ *     .btn-small:before { @extend %layout-position-overlay-extended; }
+ *
+ *     .btn-large:before { @include layout-position-overlay(); }
+ *     .btn-small:before { @include layout-position-overlay-extended(); }
+ */
+
+@mixin layout-position-overlay ($extended-area-size: 0px) {
+    display: block;
+    position: absolute;
+    top:    css-nth($extended-area-size, 1);
+    right:  css-nth($extended-area-size, 2);
+    bottom: css-nth($extended-area-size, 3);
+    left:   css-nth($extended-area-size, 4);
+}
+
+@mixin layout-position-overlay-extended () {
+    @include layout-position-overlay(-15px);
+}
+
+
+%layout-position-overlay {
+    @include layout-position-overlay();
+}
+
+%layout-position-overlay-extended {
+    @include layout-position-overlay-extended();
+}
+
+
+%overflow-fix {
+    &:after,
+    &:before {
+        content: "";
+        display: block;
+        overflow: hidden;
+        position: relative;
+
+        padding-top: 1px;
+        margin-top: -1px;
+    }
+}

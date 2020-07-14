@@ -1,0 +1,121 @@
+@import "mixins/components/group";
+
+/**
+ * Group of items with spacing between them
+ *
+ * @demo
+ *   <div class="group">
+ *     <span>Text</span>
+ *     <a class="btn">Button</a>
+ *     <a class="btn">Button</a>
+ *   </div>
+ */
+
+.group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+	justify-content: flex-start;
+
+    // @include group ((
+    //     xs: 10px 30px
+    // ));
+
+    @include group (10px 30px);
+}
+
+
+/**
+ * Group with small spacing between items
+ *
+ * @demo
+ *   <div class="group group--small">
+ *     <a class="btn">Button</a>
+ *     <a class="btn">Button</a>
+ *   </div>
+ */
+
+// .group--small {
+// 	@include group (5px);
+// }
+
+
+/**
+ * Group item alignment
+ *
+ * @demo
+ *   <div class="group group--middle">
+ *     <a class="btn">Button</a>
+ *     <a class="btn">Button</a>
+ *   </div>
+ *   <div class="group group--center">
+ *     <a class="btn">Button</a>
+ *     <a class="btn">Button</a>
+ *   </div>
+ *   <div class="group group--right">
+ *     <a class="btn">Button</a>
+ *     <a class="btn">Button</a>
+ *   </div>
+ */
+
+// vertically in the middle
+.group--middle {
+	align-items: center;
+}
+
+// horizontally in the center
+.group--center {
+	justify-content: center;
+}
+
+// horizontally on the right side
+.group--right {
+	justify-content: flex-end;
+}
+
+
+/**
+ * Group item stretching
+ *
+ * @demo
+ *   <div class="group">
+ *     <a class="btn group__fill">Left aligned button</a>
+ *     <a class="btn">Right aligned button</a>
+ *   </div>
+ */
+
+.group__fill {
+    flex-grow: 1;
+}
+
+
+/**
+ * Single right aligned item
+ *
+ * @demo
+ *   <div class="group">
+ *     <a class="btn">Left aligned button</a>
+ *     <a class="btn group__right">Right aligned button</a>
+ *   </div>
+ */
+
+.group > .group__right {
+    align-self: center;
+    margin-left: auto;
+}
+
+
+/**
+ * Prevent group from wrapping
+ *
+ * @demo
+ *   <div class="group group--nowrap">
+ *     <a class="btn">Button</a>
+ *     <a class="btn">Button</a>
+ *   </div>
+ */
+
+.group--nowrap {
+	flex-wrap: nowrap;
+}

@@ -1,0 +1,8 @@
+/*
+ * Styles, which don't generate any output and can be safely imported from
+ * all root level stylesheets
+ */
+
+@import "settings/settings";
+@import "mixins/mixins";
+@import "extends/extends";

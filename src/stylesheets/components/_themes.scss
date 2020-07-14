@@ -1,0 +1,87 @@
+/**
+ * Theme definition
+ */
+
+:root {
+    --color-primary:    #{ color($color-light-primary) };
+    --color-secondary:  #{ color($color-light-primary) };
+
+    --color-tetriary:   #{ color($color-light-tetriary) };
+    --color-background: #{ color($color-light-background) };
+    --color-disabled:   #{ color($color-light-disabled) };
+
+    --color-small:      #{ color($color-light-small) };
+    --color-text:       #{ color($color-light-text) };
+    --color-heading:    #{ color($color-light-heading) };
+
+    --color-line:       #{ color($color-light-line) };
+    --color-outline:    #{ color($color-light-outline) };
+}
+
+.ui-gray {
+    --color-primary:    #{ color($color-gray-primary) };
+    --color-secondary:  #{ color($color-gray-primary) };
+
+    --color-tetriary:   #{ color($color-gray-tetriary) };
+    --color-background: #{ color($color-gray-background) };
+    --color-disabled:   #{ color($color-gray-disabled) };
+
+    --color-small:      #{ color($color-gray-small) };
+    --color-text:       #{ color($color-gray-text) };
+    --color-heading:    #{ color($color-gray-heading) };
+
+    --color-line:       #{ color($color-gray-line) };
+    --color-outline:    #{ color($color-gray-outline) };
+}
+
+.ui-dark {
+    --color-primary:    #{ color($color-dark-primary) };
+    --color-secondary:  #{ color($color-dark-primary) };
+
+    --color-tetriary:   #{ color($color-dark-tetriary) };
+    --color-background: #{ color($color-dark-background) };
+    --color-disabled:   #{ color($color-dark-disabled) };
+
+    --color-small:      #{ color($color-dark-small) };
+    --color-text:       #{ color($color-dark-text) };
+    --color-heading:    #{ color($color-dark-heading) };
+
+    --color-line:       #{ color($color-dark-line) };
+    --color-outline:    #{ color($color-dark-outline) };
+}
+
+@include media-breakpoint(print) {
+    .ui-gray,
+    .ui-dark {
+        --color-primary:    #{ color($color-light-primary) };
+        --color-secondary:  #{ color($color-light-primary) };
+    
+        --color-tetriary:   #{ color($color-light-tetriary) };
+        --color-background: #{ color($color-light-background) };
+        --color-disabled:   #{ color($color-light-disabled) };
+    
+        --color-small:      #{ color($color-light-small) };
+        --color-text:       #{ color($color-light-text) };
+        --color-heading:    #{ color($color-light-heading) };
+    
+        --color-line:       #{ color($color-light-line) };
+        --color-outline:    #{ color($color-light-outline) };
+    }
+}
+
+
+/**
+ * Colors
+ */
+
+body {
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--color-heading);
+}
+
+.ui-background {
+    background: var(--color-background);
+}

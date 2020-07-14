@@ -1,0 +1,74 @@
+/**
+ * Selectors to target specific browsers without affecting specificity or
+ * limiting use in media queries
+ *
+ * Pros:
+ *   - Works with media queries
+ *
+ * Conts:
+ *   - Can't be used with @extend as that will invalidate other selectors
+ *
+ * See http://browserstrangeness.bitbucket.org/css_hacks.html
+ */
+
+
+/**
+ * Target Internet Explorer, but not Edge
+ *
+ * @demo
+ *     div {
+ *       @include browser-ie () {
+ *         // ...
+ *       }
+ *     }
+ */
+
+@mixin browser-ie () {
+    _:-ms-input-placeholder, :root & {
+        @content;
+    }
+}
+
+
+/**
+ * Target old Edge
+ */
+
+@mixin browser-edge () {
+    _:-ms-lang(x), _:-webkit-full-screen, & {
+        @content;
+    }
+}
+
+
+/**
+ * Target Firefox
+ */
+
+@mixin browser-firefox () {
+    @-moz-document url-prefix() {
+        @content;
+    }
+}
+
+
+/**
+ * Target Safari
+ */
+
+@mixin browser-safari () {
+    _::-webkit-full-page-media, _:future, & {
+        @content;
+    }
+}
+
+
+/**
+ * Target all WebKit browsers
+ */
+
+@mixin browser-webkit () {
+    .selector:not(*:root), & {
+        @content;
+    }
+}

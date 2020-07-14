@@ -1,0 +1,103 @@
+@import "libs/owl-carousel/core";
+@import "libs/owl-carousel/autoheight";
+
+.carousel-owl {
+    position: relative;
+
+    .owl-stage,
+    .carousel-owl__fallback {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .owl-stage-outer,
+    .owl-stage {
+        width: 100%;
+    }
+
+    .owl-nav {
+        display: none;
+    }
+
+    // Grab cursor
+    .owl-drag,
+    .owl-drag .card__overlay {
+        cursor: move; /* fallback if grab cursor is unsupported */
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+    }
+    .owl-grab,
+    .owl-grab .card__overlay,
+    .owl-grab .btn-container {
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+    }
+}
+
+.carousel-owl-item {
+    width: 100%;
+
+    picture, img {
+        width: 100%;
+        height: auto;
+        min-height: 1px;
+    }
+}
+
+
+
+/**
+ * Carousel stretching to the sides of the viewport
+ */
+
+.carousel-owl--full {
+    .owl-stage-outer {
+        overflow: visible;
+    }
+}
+
+
+/**
+ * Carousel with side content text, buttons, etc.
+ */
+
+.carousel-owl__side-content {
+    position: relative;
+    z-index: 2;
+
+    h2, h3, p, a {
+        position: relative;
+    }
+}
+
+.carousel-owl__side-background {
+    position: relative;
+    z-index: 1;
+
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        right: 0;
+        top: -1px;
+        height: calc(100% + 2px);
+        width: 100vw;
+
+        background: $color-light-background;
+
+        .ui-dark-background & {
+            background: $color-dark-background;
+        }
+    }
+}
+
+
+/**
+ * Hide elements while carousel is not ready
+ */
+
+.carousel-owl--not-ready .is-hidden--not-ready {
+    display: none !important;
+}

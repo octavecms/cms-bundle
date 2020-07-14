@@ -1,0 +1,12 @@
+/**
+ * Image appear animation
+ */
+
+.animation--image-in {
+    @extend %animation;
+    will-change: opacity;
+}
+
+.animation--image-in--inactive {
+    opacity: 0;
+}

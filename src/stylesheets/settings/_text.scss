@@ -1,0 +1,57 @@
+/*
+ * Text
+ *
+ * Settings for text, fonts, sizes
+ */
+
+$text-default-font:         Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$text-default-weight:       $regular;
+
+$text-heading-font:         $text-default-font;
+$text-heading-weight:       $bold;
+
+$text-code-font:            Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
+
+/**
+ * Text sizes
+ *
+ * Resolution specific font sizes, line height, etc.
+ * All styles cascade up
+ *
+ * For each style is generated "%text--size-NAME" placeholder selector
+ * Each style can also be used included using mixin "@include text--size(NAME);"
+ *
+ * See extends/_text-styles.scss
+ *
+ * @example
+ *     .my-text-a {
+ *         @extend %text--size-lead;
+ *     }
+ *     // or
+ *     .my-text-b {
+ *         @include text--size(lead);
+ *     }
+ */
+
+$text-sizes: (
+    xs: (
+        'default': ( 'font-size': 1.4rem,  'line-height': 18 / 14 * 1em, 'letter-spacing': 0.02em ),
+        'small':   ( 'font-size': 1.2rem,  'line-height': 14 / 10 * 1em, 'letter-spacing': 0.01em ),
+        'medium':  ( 'font-size': 1.6rem,  'line-height': 22 / 16 * 1em, 'letter-spacing': 0em ),
+
+        // Headings
+        'h1':      ( 'font-size': 2.0rem,  'line-height': 24 / 20 * 1em, 'letter-spacing': 0em ),
+        'h2':      ( 'font-size': 1.6rem,  'line-height': 20 / 16 * 1em, 'letter-spacing': 0em ),
+        'h3':      ( 'font-size': 1.6rem,  'line-height': 18 / 16 * 1em, 'letter-spacing': 0em ), // @TODO
+        'h4':      ( 'font-size': 1.4rem,  'line-height': 16 / 14 * 1em, 'letter-spacing': 0em ), // @TODO
+        'h5':      ( 'font-size': 1.4rem,  'line-height': 16 / 14 * 1em, 'letter-spacing': 0em ), // @TODO
+
+        // Code
+        'code':    ( 'font-size': 1.3rem,  'line-height': 18 / 13 * 1em )
+    ),
+
+    print: (
+        // Print specific text sizes to override very large font sizes if there are any
+    )
+);

@@ -1,0 +1,27 @@
+@function color ($color, $alpha: 1) {
+    @if type-of($color) == 'color' {
+        @return rgba($color, $alpha);
+    } @else {
+        $index: false;
+
+        @if type-of($color) == 'string' {
+            $index: str-index($color, '--');
+        }
+
+        @if $index == 0 {
+            // CSS variable name
+            @if $alpha == 1 {
+                @return #{ "rgb(var(#{ $color }))" };
+            } @else {
+                @return #{ "rgba(var(#{ $color }), #{ $alpha })" };
+            }
+        } @else {
+            // SASS property
+            @if $alpha == 1 {
+                @return #{ "rgb(#{ $color })" };
+            } @else {
+                @return #{ "rgba(#{ $color }, #{ $alpha })" };
+            }
+        }
+    }
+}

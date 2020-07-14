@@ -1,0 +1,7 @@
+// Adjust tabs animations to prevent background flashing through
+.animation--tabs-in {
+    transition-timing-function: $easing-out;
+}
+.animation--tabs-out {
+    transition-timing-function: $easing-in;
+}

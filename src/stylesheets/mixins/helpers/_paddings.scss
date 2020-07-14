@@ -1,0 +1,57 @@
+/**
+ * In each $list pair of $breakpoint: $value replaces all values with 'inherit'
+ * except for one in $index position
+ *
+ * @demo
+ *     @include padding-values(inherit 20px);
+ */
+
+@mixin padding-values ($paddings, $reset-first-last: false) {
+    @include margin-values($paddings, $reset-first-last: $reset-first-last, $property: 'padding');
+}
+
+@mixin paddings ($paddings, $reset-first-last: false) {
+    $type: type-of($paddings);
+
+    @if $type == 'map' {
+        @each $breakpoint, $padding in $paddings {
+            @if is-valid-media-breakpoint('#{$breakpoint}-up') {
+                @include media-breakpoint('#{$breakpoint}-up') {
+                    @include padding-values($padding, $reset-first-last);
+                }
+            } @else if is-valid-media-breakpoint($breakpoint) {
+                @include media-breakpoint('#{ $breakpoint }') {
+                    @include padding-values($padding, $reset-first-last);
+                }
+            } @else {
+                paddings-failed: $breakpoint;
+            }
+        }
+    } @else {
+        @include padding-values($paddings, $reset-first-last);
+    }
+}
+
+@mixin paddings-top ($paddings) {
+    // Top padding only, rest paddings are untouched
+    $top-index: 1; // in CSS 1st property is top
+    @include paddings(breakpoint-pick-css-nth($paddings, $top-index));
+}
+
+@mixin paddings-bottom ($paddings) {
+    // Bottom padding only, rest paddings are untouched
+    $bottom-index: 3; // in CSS 3rd property is bottom
+    @include paddings(breakpoint-pick-css-nth($paddings, $bottom-index));
+}
+
+@mixin paddings-right ($paddings) {
+    // Right padding only, rest paddings are untouched
+    $right-index: 2; // in CSS 2nth property is right
+    @include paddings(breakpoint-pick-css-nth($paddings, $right-index));
+}
+
+@mixin paddings-left ($paddings) {
+    // Left padding only, rest paddings are untouched
+    $left-index: 4; // in CSS 4th property is left
+    @include paddings(breakpoint-pick-css-nth($paddings, $left-index));
+}

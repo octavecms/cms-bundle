@@ -1,0 +1,60 @@
+/**
+ * Primary call to action button style modifier
+ *
+ * 1. Increase specificity to prevent `.ui-dark a` from overwriting styles
+ * 2. We can't use ".ui-dark .btn..." because of CSS generated selector complexity, parent/theme selector must be specified separately
+ * 3. Hover animation effect background color
+ * 4. We are using hover animation, no need for simple background color change
+ *
+ * @demo
+ *     <a class="btn btn--primary"><span class="btn__content">Normal state</span></a>
+ *     <a class="btn btn--primary is-active"><span class="btn__content">Active state</span></a>
+ *     <a class="btn btn--primary is-disabled"><span class="btn__content">Disabled state</span></a>
+ */
+
+.btn.btn--primary { // 1.
+    $styles: (
+        // Default styles
+        'default': (
+            color:      $color-dark-heading,
+            background: $color-primary,
+            hover-background: lighten($color-primary, 15%), // 3.
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color:      $color-dark-heading,
+            // background: lighten($color-primary, 15%), // 4.
+        ),
+
+        // .is-active styles
+        'active': (
+            color:      $color-dark-heading,
+            background: $color-dark-background,
+            hover-background: lighten($color-dark-background, 15%), // 3.
+        ),
+        // Style when button is hovered or pressed down and has .is-active classname
+        'active+hover active+down': (
+            color:      $color-dark-heading,
+            // background: lighten($color-dark-background, 15%), // 4.
+        ),
+    );
+
+    @include button-colors ($styles);
+    @include button-generate-focus-visible ($styles);
+}
+
+
+/*
+ * Dark theme primary button style
+ */
+
+/*
+.btn.btn--primary { // 1.
+    $theme: '.ui-dark'; // 2.
+    $styles: (
+    );
+
+    @include button-colors ($styles, $theme);
+}
+*/
+

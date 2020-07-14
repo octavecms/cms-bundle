@@ -1,0 +1,129 @@
+@import "mixins/helpers/browsers";
+
+/**
+ * Creates a button. Can be used with either `<a>`, `<button>`, `<input type="submit" />` or other elements.
+ * @demo
+ *     <a class="btn">Button</a>
+ *     <span role="button class="btn is-disabled">Disabled button state</span>
+ *
+ * Button element must have an inner element with btn__content classname to fix text being offset vertically in IE
+ * @demo
+ *     <button class="btn"><span class="btn__content">Button</span></button>
+ */
+
+.btn {
+    border: 0;
+    box-shadow: none;
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+
+    // Text
+    @extend %link--decoration-none;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    // Horizontally and vertically align content
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    // Animations
+    @extend %transition;
+
+    // Disabled state
+    &.is-disabled,
+    &:disabled {
+        cursor: default;
+    }
+
+    // <button> element has additional element to fix alignment issues in FF and Safari
+    &__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 100%;
+        position: relative;
+
+        // Above the :after background
+        z-index: 1;
+
+        // Center content for iOS10 Safari, on iOS11 not needed
+        @include browser-safari () {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+
+/**
+ * Button parent element, should be used when hover events / active classname / disabled classname
+ * needs to be set on one of the parent elements of the .btn element
+ * For example hover on a card should activate "hover" styles for a button which is inside the card
+ *
+ * @example
+ *     <a class="btn-container" href="#">
+ *         <span class="btn btn--primary"><span class="btn__content">My button</span></span>
+ *     </a>
+ */
+
+.btn-container {
+    cursor: pointer;
+
+    // Disabled state
+    &.is-disabled,
+    &:disabled {
+        cursor: default;
+    }
+}
+
+
+/**
+ * Button which is also an icon inside another button
+ * For example if outer button is a .btn--link and inner elements are simple text + .btn--primary
+ *
+ * @example
+ *     <a class="btn btn--link" href="#"><span class="btn__content">
+ *         <span>My button</span>
+ *         <span class="btn btn--primary btn--square"><span class="btn__content">{{ icon(...) }}</span></span>
+ *     </span></a>
+ */
+
+.btn.icon {
+    display: inline-flex;
+
+    // Animation
+    @extend %transition;
+    transition-property: all;
+}
+
+
+/**
+ * Button modifier to increase hover area (UX)
+ *
+ * @demo
+ *     <a class="btn btn--extended-area">My button</a>
+ */
+
+.btn--extended-area {
+    &:after {
+        content: "";
+        @extend %layout-position-overlay-extended;
+    }
+}
+
+
+/**
+ * Button covering all horizontal space
+ *
+ * @demo
+ *     <a class="btn btn--full">My button</a>
+ */
+
+.btn--full {
+    width: 100%;
+}

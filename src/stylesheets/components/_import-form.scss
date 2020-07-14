@@ -1,0 +1,31 @@
+/**
+ * @page components/form Form styles
+ * @parent components
+ *
+ * @demo
+ *     <form>
+ *         <div class="form-group error">
+ *             <label class="form-label">Label</label>
+ *             <input class="form-control form-control--input" />
+ *             <label class="error">...</label>
+ *         </div>
+ *         <div class="form-group">
+ *             <label class="form-label">Label</label>
+ *             <textarea class="form-control form-control--textarea"></textarea>
+ *         </div>
+ *         <footer class="form-footer">
+ *             <input type="submit" value="Submit" />
+ *         </footer>
+ *     </form>
+ */
+
+@import "mixins/helpers/placeholder";
+
+@import "components/form/base";
+@import "components/form/label";
+@import "components/form/group";
+@import "components/form/control";
+@import "components/form/control-checkbox";
+@import "components/form/recaptcha";
+@import "components/form/footer";
+@import "components/form/error";

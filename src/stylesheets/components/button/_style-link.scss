@@ -1,0 +1,25 @@
+/**
+ * Button style, which makes it look like a regular link
+ *
+ * 1. Increase specificity to prevent `.ui-dark a` from overwriting styles
+ *
+ * @demo
+ *     <a class="btn btn--link"><span class="btn__content">Normal state</span></a>
+ *     <a class="btn btn--link is-active"><span class="btn__content">Active state</span></a>
+ *     <a class="btn btn--link is-disabled"><span class="btn__content">Disabled state</span></a>
+ */
+
+.btn.btn--link { // 1.
+    // Reset button styles
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 0;
+
+    .btn__content {
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    // By default button looks like a link, that's why isn't anything style related
+    // here at the moment
+}

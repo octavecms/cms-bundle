@@ -1,0 +1,85 @@
+/*
+ * Link normal state style mixin
+ *
+ * Sets styles to link normal state
+ */
+
+@mixin link-normal () {
+    @content;
+}
+
+
+/*
+ * Link hover state style mixin
+ *
+ * Sets styles to link hover and focused states
+ */
+
+@mixin link-hover () {
+    // .has-hover &:hover,  // if hover events are supported
+    // .has-hover &:focus { // if hover events are supported
+
+    .has-hover &:hover {  // if hover events are supported
+        @content;
+    }
+}
+
+
+/*
+ * Link active state style mixin
+ *
+ * Sets styles to link active state
+ */
+
+@mixin link-active () {
+    &:hover:active,
+    &.is-active { // prevent hover styles overwriting active
+        @content;
+    }
+}
+
+
+/*
+ * Link hover and active state style mixin
+ *
+ * Sets styles to link hover, focused and active states
+ */
+
+@mixin link-hover-active () {
+    .has-hover &:hover, // if hover events are supported
+    &:hover:active,
+    &.is-active {
+        @content;
+    }
+}
+
+
+/*
+ * Link disabled state style mixin
+ *
+ * Sets styles to link disabled state
+ */
+
+@mixin link-disabled () {
+    &.is-disabled,
+    &[disabled] {
+        @content;
+    }
+}
+
+
+/**
+ * Link focus-visible state style mixin
+ * Sets styles to link when focus should be made evident on the element
+ *
+ * @demo
+ *     @include link-focus-visible () {
+ *         outline: 2px;
+ *     }
+ */
+
+@mixin link-focus-visible () {
+    &.focus-visible {
+        @content;
+    }
+}
