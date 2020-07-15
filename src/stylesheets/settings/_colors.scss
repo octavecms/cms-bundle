@@ -29,7 +29,7 @@ $color-gray-small:       188, 189, 200; // #BCBDC8
 $color-gray-text:        131, 133, 143; // #83858F
 $color-gray-heading:     60, 62, 78;    // #3C3E4E
 
-$color-gray-line:        245, 247, 239; // #F5F7F9 @TODO not defined in design
+$color-gray-line:        232, 239, 243; // #E8EFF3 @TODO not defined in design
 $color-gray-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 
 // Dark theme
@@ -44,5 +44,70 @@ $color-dark-small:       255, 255, 255; // #FFFFFF @TODO not defined in design
 $color-dark-text:        255, 255, 255; // #FFFFFF
 $color-dark-heading:     255, 255, 255; // #FFFFFF
 
-$color-dark-line:        245, 247, 239; // #F5F7F9 @TODO not defined in design
+$color-dark-line:        83, 85, 98;    // #535562 @TODO not defined in design
 $color-dark-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
+
+
+/**
+ * Coniguration for .ui-... themes
+ */
+$themes: (
+    light: (
+        selector: ':root',
+        values: (
+            primary:    $color-light-primary,
+            secondary:  $color-light-secondary,
+            tetriary:   $color-light-tetriary,
+            background: $color-light-background,
+            disabled:   $color-light-disabled,
+            small:      $color-light-small,
+            text:       $color-light-text,
+            heading:    $color-light-heading,
+            line:       $color-light-line,
+            outline:    $color-light-outline,
+        )
+    ),
+    gray: (
+        selector: '.ui-gray',
+        values: (
+            primary:    $color-gray-primary,
+            secondary:  $color-gray-secondary,
+            tetriary:   $color-gray-tetriary,
+            background: $color-gray-background,
+            disabled:   $color-gray-disabled,
+            small:      $color-gray-small,
+            text:       $color-gray-text,
+            heading:    $color-gray-heading,
+            line:       $color-gray-line,
+            outline:    $color-gray-outline,
+        )
+    ),
+    dark: (
+        selector: '.ui-dark',
+        values: (
+            primary:    $color-dark-primary,
+            secondary:  $color-dark-secondary,
+            tetriary:   $color-dark-tetriary,
+            background: $color-dark-background,
+            disabled:   $color-dark-disabled,
+            small:      $color-dark-small,
+            text:       $color-dark-text,
+            heading:    $color-dark-heading,
+            line:       $color-dark-line,
+            outline:    $color-dark-outline,
+        )
+    ),
+);
+
+
+/**
+ * Configuration for .text-color- utility classnames
+ */
+
+$text-colors: (
+    primary: var(--color-primary),
+    secondary: var(--color-secondary),
+    small: var(--color-small),
+    text: var(--color-text),
+    heading: var(--color-heading),
+);

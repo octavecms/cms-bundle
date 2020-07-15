@@ -1,5 +1,7 @@
 @import "mixins/helpers/browsers";
 @import "mixins/lib/strip-unit";
+@import "mixins/lib/str-replace";
+@import "mixins/lib/is-css-variable";
 
 /*
  * Grid generator mixins
@@ -20,14 +22,24 @@
  * @property {map|null} $namespaces Grid column and offset classnames
  */
 @mixin grid-row-pad-gutter ($gutter, $namespaces: null) {
-    $col: if($namespaces and map-has-key($namespaces, column), map-get($namespaces, column), '.col');
+    $selector: if($namespaces and map-has-key($namespaces, columnSelector), map-get($namespaces, columnSelector), '.col');
 
-    margin-left:  ($gutter / -2);
-    margin-right: ($gutter / -2);
-
-    > #{ $col } {
-        padding-left:  ($gutter / 2);
-        padding-right: ($gutter / 2);
+    @if is-css-variable($gutter) {
+        margin-left:  calc(#{ $gutter } * -0.5);
+        margin-right: calc(#{ $gutter } * -0.5);
+        
+        > #{ $selector } {
+            padding-left:  calc(#{ $gutter } / 2);
+            padding-right: calc(#{ $gutter } / 2);
+        }
+    } @else {
+        margin-left:  ($gutter / -2);
+        margin-right: ($gutter / -2);
+        
+        > #{ $selector } {
+            padding-left:  ($gutter / 2);
+            padding-right: ($gutter / 2);
+        }
     }
 }
 
@@ -71,50 +83,53 @@
  *
  * @property {map} $grid-config Grid configuration
  */
-@mixin grid-alignment ($grid-config) {
+@mixin grid-alignment ($grid-config, $namespaces: null) {
+    $selector: if($namespaces and map-has-key($namespaces, columnSelectorStyle), map-get($namespaces, columnSelectorStyle), '.col--style');
+
     @each $breakpoint, $config in $grid-config {
         @include media-breakpoint('#{$breakpoint}-up') {
-            // Horizontal alignment
-            &--start-#{$breakpoint} {
+            // Horizontal alignment, col--start-...
+            #{ str-replace($selector, (STYLE: 'start-#{ $beakpoint }')) } {
                 justify-content: flex-start;
                 text-align: start;
             }
-            &--center-#{$breakpoint} {
+
+            #{ str-replace($selector, (STYLE: 'center-#{ $beakpoint }')) } {
                 justify-content: center;
                 text-align: center;
             }
-            &--end-#{$breakpoint} {
+            #{ str-replace($selector, (STYLE: 'end-#{ $beakpoint }')) } {
                 justify-content: flex-end;
                 text-align: end;
             }
 
-            // Vertical alignment
-            &--top-#{$breakpoint} {
+            // Vertical alignment, col--top-...
+            #{ str-replace($selector, (STYLE: 'top-#{ $beakpoint }')) } {
                 align-items: flex-start;
             }
-            &--middle-#{$breakpoint} {
+            #{ str-replace($selector, (STYLE: 'middle-#{ $beakpoint }')) } {
                 align-items: center;
             }
-            &--bottom-#{$breakpoint} {
+            #{ str-replace($selector, (STYLE: 'bottom-#{ $beakpoint }')) } {
                 align-items: flex-end;
             }
 
-            // Spacing
-            &--around-#{$breakpoint} {
+            // Spacing, col--around-..., .col--between-...
+            #{ str-replace($selector, (STYLE: 'around-#{ $beakpoint }')) } {
                 justify-content: space-around;
             }
-            &--between-#{$breakpoint} {
+            #{ str-replace($selector, (STYLE: 'between-#{ $beakpoint }')) } {
                 justify-content: space-between;
             }
 
-            // Order
-            .col--order-first-#{$breakpoint} {
+            // Order, col--order-...
+            #{ str-replace($selector, (STYLE: 'order-first-#{ $beakpoint }')) } {
                 order: -1;
             }
-            .col--order-normal-#{$breakpoint} {
+            #{ str-replace($selector, (STYLE: 'order-normal-#{ $beakpoint }')) } {
                 order: 0;
             }
-            .col--order-last-#{$breakpoint} {
+            #{ str-replace($selector, (STYLE: 'order-last-#{ $beakpoint }')) } {
                 order: 1;
             }
         }
@@ -129,7 +144,7 @@
  * @property {map|null} $namespaces Grid column and offset classnames
  */
 @mixin grid-columns ($grid-config, $namespaces: null) {
-    $col: if($namespaces and map-has-key($namespaces, column), map-get($namespaces, column), '.col');
+    $col: if($namespaces and map-has-key($namespaces, columnSelector), map-get($namespaces, columnSelector), '.col');
 
     #{ $col } {
         flex: 1;         // allow growing to accomodate all content, no specific size
@@ -144,6 +159,9 @@
 }
 
 @mixin grid-columns-breakpoint ($config, $breakpoint, $namespaces: null) {
+    $colSelector: if($namespaces and map-has-key($namespaces, columnSelectorSize), map-get($namespaces, columnSelectorSize), '.col--BREAKPOINT-SIZE');
+    $offsetSelector: if($namespaces and map-has-key($namespaces, columnSelectorOffset), map-get($namespaces, columnSelectorOffset), '.offset--BREAKPOINT-SIZE');
+
     $col: if($namespaces and map-has-key($namespaces, column), map-get($namespaces, column), '.col');
     $offset: if($namespaces and map-has-key($namespaces, offset), map-get($namespaces, offset), '.offset');
 
@@ -160,26 +178,21 @@
         @for $i from 1 through $columns {
             $width: $i / $columns * $unit;
 
-            #{ $col }--#{$breakpoint}-#{$i} {
+            #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, SIZE: $i)) } {
                 @include grid-column($width);
             }
-            #{ $offset }--#{$breakpoint}-#{$i} {
+
+            #{ str-replace($offsetSelector, (BREAKPOINT: $breakpoint, SIZE: $i)) } {
                 @include grid-offset($width);
             }
-            // .height--#{$breakpoint}-#{$i} {
-            //     height: $width;
-            // }
         }
 
-        #{ $col }--#{$breakpoint}-full {
+        #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, SIZE: 'full')) } {
             @include grid-column(100%);
         }
-        #{ $offset }--#{$breakpoint}-0 {
+        #{ str-replace($offsetSelector, (BREAKPOINT: $breakpoint, SIZE: 0)) } {
             @include grid-offset(0);
         }
-        // .height--#{$breakpoint}-auto {
-        //     height: auto;
-        // }
     }
 
     // Custom column widths
@@ -187,25 +200,22 @@
 
     @if $custom and type-of($custom) == 'map' {
         @each $name, $width in $custom {
-            #{ $col }--#{$breakpoint}-#{$name} {
+            #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, SIZE: $name)) } {
                 @include grid-column($width);
             }
-            #{ $offset }--#{$breakpoint}-#{$name} {
+            #{ str-replace($offsetSelector, (BREAKPOINT: $breakpoint, SIZE: $name)) } {
                 @include grid-offset($width);
             }
-            // .height--#{$breakpoint}-#{$i} {
-            //     height: $width;
-            // }
         }
     }
 
     // Column wihch takes as little space as needed
-    #{ $col }--#{$breakpoint}-auto {
+    #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, SIZE: 'auto')) } {
         @include grid-column-auto($unit);
     }
 
     // Column fills all available space
-    #{ $col }--#{$breakpoint}-fill {
+    #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, SIZE: 'fill')) } {
         @include grid-column-fill($unit);
     }
 }
@@ -245,10 +255,6 @@
     flex: 0 1 $width-fixed;
     width: $width-fixed;
 
-    @include browser-ie() {
-        min-width: $width-fixed; // 1.
-        max-width: $width-fixed; // 1.
-    }
     @include browser-firefox() {
         max-width: $width-fixed; // 2.
     }
@@ -268,10 +274,6 @@
     flex: 0 0 $width;
     width: $width;
 
-    @include browser-ie() {
-        min-width: $width; // 1.
-        max-width: $width; // 1.
-    }
     @include browser-firefox() {
         max-width: $width; // 2.
     }
@@ -286,10 +288,6 @@
     flex: 0 0 auto;
     width: auto;
 
-    @include browser-ie() {
-        min-width: $unit * 0;
-        max-width: $unit;
-    }
     @include browser-firefox() {
         max-width: none;
     }
@@ -304,10 +302,6 @@
     flex: 1 1 auto;
     width: auto;
 
-    @include browser-ie() {
-        min-width: $unit * 0;
-        max-width: $unit;
-    }
     @include browser-firefox() {
         max-width: none;
     }

@@ -1,0 +1,53 @@
+/**
+ * Percentage based grid system
+ *
+ * Grid system settings
+ * All resolution styles cascade up from mobile to desktop
+ *
+ * @demo
+ *   <div class="row">
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column</div>
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column</div>
+ *   </div>
+ *
+ * @demo
+ *   <div class="row row--pad">
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column with padding</div>
+ *      <div class="col col--xs-12 col--sm-6 col--md-9 col--lg-12 col--xl-12">Column with padding</div>
+ *   </div>
+ *
+ * @demo
+ *   <div class="row">
+ *      <div class="col col--xs-12 col--sm-6 offset--sm-6 col--md-9 offset--sm-9 col--lg-24 offset--lg-0">
+ *        Column with left offset
+ *      </div>
+ *   </div>
+ */
+
+$grid-selectors: (
+    rowSelector: '.row',
+    rowSelectorPad: '.row-pad',
+    columnSelector: '.col',
+    columnSelectorSize: '.col-BREAKPOINT-SIZE',
+    columnSelectorStyle: '.col-STYLE',
+    columnSelectorOffset: '.offset-BREAKPOINT-SIZE',
+);
+
+$grid-columns: (
+    // Mobile portrait
+    xs: (
+        // Count
+        columns: 12,
+        // Full size, all column sum, must use number + unit
+        unit: 100%,
+        // Spacing between columns
+        gutter: var(--spacer-5),
+    ),
+
+    // Extremely large desktop, 1920+
+    // xxxl: (
+    //     columns: 24,
+    //     unit: 100%,
+    //     gutter: 30px,
+    // ),
+) !default;

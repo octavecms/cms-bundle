@@ -1,0 +1,106 @@
+/*
+ * Example grid styles
+ */
+
+@import "imports";
+
+
+/**
+* Demo specific code
+*/
+
+.media-preview,
+.col {
+    code {
+        white-space: nowrap;
+        position: relative;
+    }
+}
+
+.media-preview__row {
+    display: flex;
+
+    &__item {
+        $size: 100% / 6;
+        position: relative;
+        flex: 0 0 $size;
+        width: $size;
+        border: 1px solid var(--color-outline);
+        padding: 4px 10px 6px;
+        border-radius: 4px;
+
+        b {
+            font-weight: $text-default-weight;
+        }
+    }
+
+    @for $i from 2 to 7 {
+        &__item--#{ $i } {
+            $size: 100% / 6 * $i;
+            flex: 0 0 $size;
+            width: $size;
+        }
+    }
+}
+
+@each $breakpoint, $valid in $media-breakpoint-list {
+    @if $valid {
+        .media-preview__row__item--#{ $breakpoint } {
+            // Miss
+            // color: mix($color-light-text, $color-light-background, 40%);
+
+            // Match
+            @include media-breakpoint($breakpoint) {
+                background: var(--color-primary);
+                border-color: var(--color-secondary);
+                color: var(--color-background);
+
+                &.media-preview__row__item--main:before {
+                    content: "";
+                    position: absolute;
+                    z-index: 1;
+                    left: 50%;
+                    top: -10px;
+                    bottom: -244px;
+                    border-left: 2px dashed #000;
+                }
+            }
+        }
+    }
+}
+
+@each $breakpoint in $media-breakpoints {
+    @include media-breakpoint('#{$breakpoint}') {
+        .is-visible--#{$breakpoint} {
+            display: block !important;
+        }
+    }
+}
+
+.col {
+    border: 1px solid var(--color-outline);
+    border-radius: 3px;
+}
+
+.grid-example {
+    .col {
+        position: relative;
+        border-radius: 3px;
+        overflow: hidden;
+
+        &:hover {
+            overflow: visible;
+            z-index: 10;
+
+            code {
+                z-index: 11;
+            }
+        }
+
+    }
+    code {
+        border-radius: 3px;
+        width: 100%;
+    }
+}
+ 

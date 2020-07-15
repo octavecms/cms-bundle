@@ -1,7 +1,3 @@
-// Mixins are loaded after the configuration, explicitly load required functions here
-@import "mixins/lib/map-get-deep";
-@import "mixins/helpers/media";
-
 /**
  * Layout order constants
  */
@@ -10,13 +6,51 @@ $z-index-content: unset;
 $z-index-under-header: 9;
 $z-index-header: 10;
 $z-index-modal: 11;
-$z-index-ajax-loader: 12;
 
-
-/*
- * IMPORTANT!!!
- * @TODO Copy content of _layout-example-percentage.scss or _layout-example-vw.scss into this file and remove those files
+/**
+ * Spacings
+ *
+ * Settings for spacing between most of the elements
+ *
+ * @see html/src/stylesheets/components/_blocks.scss
+ * @see html/src/stylesheets/components/form/_footer.scss
+ * @see html/src/stylesheets/components/form/_group.scss
+ * @see html/src/stylesheets/components/text/_typography.scss
+ * @see html/src/stylesheets/components/text/_lists.scss
+ * @demo
+ *   @include margins($spacing);
+ *   @include margins($spacing-medium);
+ *   @include margins-top($spacing);
+ *   @include margins-bottom($spacing);
+ *   @include margins-top-bottom($spacing);
  */
 
-@import "settings/layout-example-percentage";
-// @import "settings/layout-example-vw";
+$spacing: (
+    xs:  10px,
+    sm:  10px,
+    md:  20px,
+    lg:  20px,
+    xl:  30px,
+    xxl: 30px,
+);
+
+$spacing-none: (
+    xs:  0,
+    sm:  0,
+    md:  0,
+    lg:  0,
+    xl:  0,
+    xxl: 0,
+);
+
+$spacing-heading: (
+    xs:  1.0rem,
+    md:  2.0rem
+);
+
+$spacing-text: (
+    xs:  1.0rem,
+    md:  2.0rem
+);
+
+

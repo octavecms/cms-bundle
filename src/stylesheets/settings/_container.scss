@@ -1,0 +1,69 @@
+/**
+ * For each container is generated ".container-NAME" classname, except
+ * for "default", for which ".container" classname is generated
+ *
+ * 'paddings' property uses 'padding' mixin and allows 'inherit' property value.
+ * For example 'xs: 0 inherit' will set only top and bottom paddings and 'xs: inherit 0'
+ * will set left and right paddings.
+ *
+ * @demo
+ *   <div class="container"></div>
+ *   <div class="container container-footer"></div>
+ */
+
+$containers: (
+    'default': (
+        'max-widths': (
+            // sm: 480px,
+            // md: 720px,
+            // lg: 960px,
+            // xl: 1140px,
+            xxl: 1440px,
+        ),
+
+        // It's prefered not to set any paddings on default and use
+        // modifier instead
+        'paddings': (
+            // xs: 0,
+            // sm: 0,
+            // md: 0,
+            // lg: 0,
+            // xl: var(--spacer-7),
+        )
+    ),
+
+    // Generates 'container-h', a container with left and right paddings
+    // which has size of 1 column
+    'h': (
+        'max-widths': (
+            // sm: 480px,
+            // md: 720px,
+            // lg: 960px,
+            // xl: 1140px,
+            // xxl: 1440px,
+        ),
+        'paddings': (
+            // xs:  inherit 10px,
+            // sm:  inherit 10px,
+            // md:  inherit 20px,
+            // lg:  inherit 20px,
+            // xl:  inherit 30px,
+            // xxl: inherit 30px,
+            xl: inherit var(--spacer-7),
+        )
+    ),
+
+    // Generates 'container-v', a container with top and bottom paddings
+    // which has size of 1 column
+    'v': (
+        'paddings': (
+            // xs:  10px inherit,
+            // sm:  10px inherit,
+            // md:  20px inherit,
+            // lg:  20px inherit,
+            // xl:  30px inherit,
+            // xxl: 30px inherit,
+            xl: var(--spacer-7) inherit,
+        )
+    ),
+);

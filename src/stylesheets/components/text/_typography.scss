@@ -79,3 +79,56 @@ hr, p, blockquote, table, iframe, object, pre {
 figure {
     margin: 0;
 }
+
+
+/**
+ * Heading style/size classnames for elements
+ *
+ * @demo
+ *     <h2 class="h1">Looks like first level heading</h2>
+ */
+
+.h1 {
+    @extend h1;
+}
+.h2 {
+    @extend h2;
+}
+.h3 {
+    @extend h3;
+}
+.h4 {
+    @extend h4;
+}
+.h5 {
+    @extend h5;
+}
+
+
+/**
+ * Heading font family / style classname
+ *
+ * @demo
+ *     <p class="text--heading">Text with same style as heading</p>
+ */
+
+.text--heading {
+    @extend %text--style-heading;
+}
+
+
+/**
+ * Font size classnames for elements
+ *
+ * @demo
+ *     <p class="text--small">Small text size</p>
+ *     <p><small>Small text size</small></p>
+ *     <p class="text--medium">Medium text size</p>
+ */
+
+.text--small {
+    @extend %text--size-small;
+}
+.text--medium {
+    @extend %text--size-medium;
+}

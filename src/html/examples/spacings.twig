@@ -1,0 +1,40 @@
+{% from 'macros/icon.twig' import icon %}
+{% extends 'layouts/base.twig' %}
+
+
+{% block body %}
+    <h1>Spacings</h1>
+
+    {% for size in [0,1,2,3,4,5,6,7,'auto'] %}
+        <div class="spacings-example-wrapper">
+            <div class="spacings-example-element ui-gray ui-background mx-{{ size }} my-{{ size }} px-2 py-2">
+                .mx-{{ size }}.my-{{ size }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <br />
+    
+    {% for size in [0,1,2,3,4,5,6,7] %}
+        <div class="spacings-example-wrapper">
+            <div class="spacings-example-element ui-gray ui-background px-{{ size }} py-{{ size }}">
+                .px-{{ size }}.py-{{ size }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .spacings-example-wrapper {
+            border: 1px dashed var(--color-outline);
+            overflow: hidden;
+        }
+        .spacings-example-element {
+            border: 1px solid var(--color-outline);
+        }
+        .spacings-example-element.mx-auto {
+            max-width: 600px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,53 @@
+/**
+ * Convert classnames into CSS selector with breakpoint and postfix and add non-breakpoint prefixed selector for 'xs'
+ *
+ * @example
+ *     get-utility-classname(foo bar, 'xs', '3'); // => ".foo-3,.bar-3,.foo-xs-3,.bar-xs-3"
+ *     get-utility-classname(foo bar, 'md', '3'); // => ".foo-md-3,.bar-md-3"
+ */
+
+@function get-utility-selector ($classnames, $breakpoint: '', $postfix: '') {
+    $selectors: ();
+
+    @each $classname in $classnames {
+        @if $breakpoint {
+            $selectors: append($selectors, '.#{ $classname }-#{ $breakpoint }#{ $postfix }', comma);
+        }
+
+        @if $breakpoint == '' or $breakpoint == 'xs' {
+            $selectors: append($selectors, '.#{ $classname }#{ $postfix }', comma);
+        }
+    }
+
+    @return zip($selectors);
+}
+
+
+/**
+ * Generate utility classnames
+ */
+
+@mixin generate-utility ($utility, $breakpoint) {
+    $class: map-get($utility, class);
+    $values: map-get($utility, values);
+    $properties: map-get($utility, property);
+
+    @each $key, $value in $values {
+        // If values is a list instead of a map then $value is null
+        @if type-of($value) == 'null' {
+            $value: $key;
+        }
+
+        $selector: get-utility-selector($class, $breakpoint, '-#{ $key }');
+
+        #{ $selector } {
+            @if type-of($properties) == 'list' {
+                @each $property in $properties {
+                    #{ $property }: #{ $value };
+                }
+            } @else {
+                #{ $properties }: #{ $value };
+            }
+        }
+    }
+}

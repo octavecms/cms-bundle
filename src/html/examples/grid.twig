@@ -1,0 +1,109 @@
+{% from 'macros/icon.twig' import icon %}
+{% extends 'layouts/base.twig' %}
+
+
+{% block title %}Example grid{% endblock %}
+
+{% block body %}
+    <section class="container-v">
+        <div class="container-h">
+            <nav class="block">
+                <a href="/page-list.html">Back to page list</a>
+            </nav>
+
+            <h1 class="h2">
+                Media match
+            </h1>
+
+            <p>
+                Current matches for <code>@include media-breakpoint(...)</code>
+            </p>
+
+            <div class="is-hidden--hover">
+                <p>
+                    Input is to test that mobile keyboard doesn't affect layout
+                </p>
+
+                <input type="text" style="width: 100%" />
+            </div>
+
+            <div class="media-preview">
+                <div class="media-preview__row">
+
+                    <div class="media-preview__row__item media-preview__row__item--main media-preview__row__item--xs"><b>xs</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--main media-preview__row__item--sm"><b>sm</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--main media-preview__row__item--md"><b>md</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--main media-preview__row__item--lg"><b>lg</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--main media-preview__row__item--xl"><b>xl</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--main media-preview__row__item--xxl"><b>xxl</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <div class="media-preview__row__item media-preview__row__item--1 media-preview__row__item--xs-down"><b>xs-down</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--5 media-preview__row__item--sm-up">  <b>sm-up</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <div class="media-preview__row__item media-preview__row__item--2 media-preview__row__item--sm-down"><b>sm-down</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--4 media-preview__row__item--md-up">  <b>md-up</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <div class="media-preview__row__item media-preview__row__item--3 media-preview__row__item--md-down"><b>md-down</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--3 media-preview__row__item--lg-up">  <b>lg-up</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <div class="media-preview__row__item media-preview__row__item--4 media-preview__row__item--lg-down"><b>lg-down</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--2 media-preview__row__item--xl-up">  <b>xl-up</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <div class="media-preview__row__item media-preview__row__item--5 media-preview__row__item--xl-down"><b>xl-down</b></div>
+                    <div class="media-preview__row__item media-preview__row__item--1 media-preview__row__item--xxl-up">  <b>xxl-up</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <!-- xs-up -->
+                    <div class="media-preview__row__item media-preview__row__item--6 media-preview__row__item--xs-up"><b>xs-up</b></div>
+
+                </div>
+                <div class="media-preview__row">
+
+                    <!-- xl-down -->
+                    <div class="media-preview__row__item media-preview__row__item--6 media-preview__row__item--xxl-down"><b>xxl-down</b></div>
+
+                </div>
+            </div>
+
+
+            <h1 class="h2 block-top">
+                Grid
+            </h1>
+
+        </div>
+
+        <div class="grid-example block" data-grid-generator>
+
+        </div>
+
+    </section>
+{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/assets/stylesheets/example-grid.css" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/assets/javascripts/example-grid.js"></script>
+{% endblock %}

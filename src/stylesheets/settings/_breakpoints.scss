@@ -1,3 +1,6 @@
+// Mixins are loaded after the configuration, explicitly load required functions here
+@import "mixins/helpers/media";
+
 /**
  * Breakpoints for devices / orientations / screens
  * Following already are default values, uncomment if needed
@@ -29,4 +32,4 @@
 $media-custom-queries: (
     // Tablet landscape and desktop but with small vertical size
     'lg-up-small': '(min-width: #{ $media-breakpoint-lg }) and (max-height: 720px)'
-);
+) !default;

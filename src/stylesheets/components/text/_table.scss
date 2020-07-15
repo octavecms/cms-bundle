@@ -1,18 +1,74 @@
-.text table {
+/**
+ * HTML table
+ */
+
+.table {
     width: 100%;
     border-collapse: collapse;
 
+    thead td,
     th {
-        font-weight: $text-heading-weight;
+        @extend %text--size-small;
+        color: var(--color-small);
         text-align: left;
     }
+    
+    th,
     td {
-        border-top: 1px solid $color-light-line;
+        padding: 23px 16px 24px;
+        border-top: 1px solid var(--color-line);
+
+        &:first-child {
+            padding-left: 0px;
+        }
+        &:last-child {
+            padding-right: 0px;
+        }
+    }
+
+    // Remove top border from first row
+    thead {
+        th,
+        td {
+            border-top: 0;
+        }
+    }
+    tbody:first-child tr:first-child {
+        th,
+        td {
+            border-top: 0;
+        }
     }
 }
 
-.ui-dark .text table {
-    td {
-        border-color: $color-dark-line;
-    }
-}
+
+/**
+ * More compact table
+ */
+
+// .table-sm {
+//     >:not(caption)>*>* {
+//     }
+// }
+
+
+/**
+ * Table with borders on all sides
+ */
+
+// .table-bordered {
+//     >:not(caption)>*>* {
+//     }
+// }
+
+
+/**
+ * Table without any borders
+ */
+
+// .table-borderless {
+//     >:not(caption)>*>* {
+//         border: 0;
+//     }
+// }
+

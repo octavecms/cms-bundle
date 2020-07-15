@@ -15,11 +15,6 @@
     input {
         position: absolute;
         clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);
-
-        // Clip path doesn't work in IE11
-        @include browser-ie () {
-            opacity: 0;
-        }
     }
 
     &__icon,

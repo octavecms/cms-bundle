@@ -1,0 +1,63 @@
+@import "mixins/helpers/utilities";
+
+/**
+ * Spacer CSS variables
+ */
+
+:root {
+    --spacer: #{ $spacer };
+
+    @each $spacer-key, $css-variable-value in $spacers-css-variables {
+        $css-variable-name: str-replace($spacers-css-property, SIZE, $spacer-key);
+        #{ $css-variable-name }: #{ $css-variable-value };
+    }
+}
+
+
+/**
+ * Non-responsive utilities
+ */
+
+@each $breakpoint in $utilities-breakpoints {
+    // Loop over each utility property
+    @each $key, $utility in $utilities {
+        @if not map-get($utility, responsive) {
+            @include generate-utility($utility, '');
+        }
+    }
+}
+
+
+/**
+ * Responsive utility classnames
+ */
+
+@each $breakpoint in $utilities-breakpoints {
+    // Generate media query if needed
+    @if is-valid-media-breakpoint('#{ $breakpoint }-up') {
+        @include media-breakpoint('#{ $breakpoint }-up') {
+            // Loop over each utility property
+            @each $key, $utility in $utilities {
+                @if map-get($utility, responsive) == true {
+                    @include generate-utility($utility, $breakpoint);
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Print utilities
+ */
+
+@include media-breakpoint(print) {
+    @each $breakpoint in $utilities-breakpoints {
+        // Loop over each utility property
+        @each $key, $utility in $utilities {
+            @if map-get($utility, print) == true {
+                @include generate-utility($utility, 'print');
+            }
+        }
+    }
+}

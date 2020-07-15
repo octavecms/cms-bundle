@@ -19,10 +19,22 @@
 /// @param {String} $replace ('') - New value
 /// @return {String} - Updated string
 @function str-replace($string, $search, $replace: '') {
-    $index: str-index($string, $search);
+    @if type-of($search) == 'map' and $replace == '' {
+        @return str-replace-map($string, $search);
+    } @else {
+        $index: str-index($string, $search);
+    
+        @if $index {
+            @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+        }
+    
+        @return $string;
+    }
+}
 
-    @if $index {
-        @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+@function str-replace-map($string, $map) {
+    @each $key, $value in $map {
+        $string: str-replace($string, $key, $value);
     }
 
     @return $string;

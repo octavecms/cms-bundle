@@ -5,5 +5,8 @@
 module.exports = {
     'admin': [
         './components/sample',
+    ],
+    'example-grid': [
+        './example-grid',
     ]
 };

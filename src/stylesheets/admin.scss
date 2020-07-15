@@ -9,6 +9,12 @@
 @import "base/helpers";
 @import "base/fonts";
 
+// Utility classnames
+@import "utilities/utilities";
+// @import "utilities/hidden";
+@import "utilities/container";
+@import "utilities/grid";
+
 // @import "generated/icons";
 @import "components/import-text";
 // @import "components/import-button";
@@ -21,9 +27,6 @@
 // @import "components/themes";
 // @import "components/icons";
 // @import "components/block";
-// @import "components/container";
-// @import "components/grid";
-// @import "components/hidden";
 // @import "components/group";
 // @import "components/cookie-consent";
 

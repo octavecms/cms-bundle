@@ -1,0 +1,19 @@
+/**
+ * Returns true if value is a CSS variable or is using a calc
+ *
+ * @property {stirng} $value Value
+ */
+
+@function is-css-variable ($value) {
+    @if type-of($value) == 'string' {
+        @if str-index($value, 'var(') {
+            @return true;
+        } @else if str-index($value, 'calc(') {
+            @return true;
+        } @else {
+            @return false;
+        }
+    } @else {
+        @return false;
+    }
+}

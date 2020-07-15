@@ -18,12 +18,15 @@
   },
   "dependencies": {
     "@videinfra/static-website-builder": "^1.2.1",
-    "jquery": "^3.5.1",
     "normalize-scss": "^7.0.0"
   },
   "browserslist": [
     "defaults",
     "not IE 11",
     "not IE_Mob 11"
-  ]
+  ],
+  "devDependencies": {
+    "jquery": "^3.5.1",
+    "lodash": "^4.17.19"
+  }
 }

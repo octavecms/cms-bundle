@@ -1,0 +1,30 @@
+// Mixins are loaded after the configuration, explicitly load required functions here
+@import "mixins/lib/str-replace";
+
+
+// Default spacer size
+$spacer: 1.6rem !default;
+
+// Spacer CSS property name
+$spacers-css-property: '--spacer-SIZE' !default;
+
+// Spacer CSS variable definitions
+$spacers-css-variables: (
+    0: calc(var(--spacer) * 0),     // 0px
+    1: calc(var(--spacer) * 0.25),  // 4px
+    2: calc(var(--spacer) * 0.5),   // 8px
+    3: var(--spacer),               // 16px
+    4: calc(var(--spacer) * 1.5),   // 24px
+    5: calc(var(--spacer) * 2),     // 32px
+    6: calc(var(--spacer) * 3),     // 48px
+    7: calc(var(--spacer) * 4),     // 64px
+) !default;
+
+// Create $spacers map from $spacers-css-variables
+$spacers-definitions: ();
+@each $spacer-key, $spacer-value in $spacers-css-variables {
+    $css-variable-name: str-replace($spacers-css-property, SIZE, $spacer-key);
+    $spacers-definitions: map-merge($spacers-definitions, ($spacer-key: var(#{ $css-variable-name })));
+}
+
+$spacers: $spacers-definitions !default;
