@@ -39,7 +39,18 @@
 </head>
 <body>
 
-    {% block body %}{% endblock %}
+    <div class="main-page">
+        {% include 'partials/header.twig' %}
+
+        {% block body %}
+            <div class="ui-gray-background row row-pad main-content">
+                {% block sidebar %}{% endblock %}
+                {% block content %}{% endblock %}
+            </div>
+        {% endblock %}
+
+        {% include 'partials/footer.twig' %}
+    </div>
 
     {# JS #}
     <script src="/assets/javascripts/shared.js"></script> {# @TODO We shouldn't need to do this #}

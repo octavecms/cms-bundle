@@ -14,17 +14,10 @@
 .btn {
     $sizes: (
         xs: (
-            'height':          32px,
-            'padding':         0 9px,
-            'border-radius':   3px,
-            'font-size':       1.6rem
+            'height':          var(--spacer-5),
+            'padding':         0 var(--spacer-3),
+            'border-radius':   $border-radius,
         ),
-        md: (
-            'height':          36px,
-            'padding':         0 18px,
-            'border-radius':   3px,
-            'font-size':       1.8rem
-        )
     );
 
     @include button-sizes ($sizes);
@@ -36,16 +29,8 @@
 .btn--sm {
     $sizes: (
         xs: (
-            'height':          24px,
-            'padding':         0 8px,
-            'border-radius':   3px,
-            'font-size':       1.2rem
-        ),
-        md: (
-            'height':          24px,
-            'padding':         0 8px,
-            'border-radius':   3px,
-            'font-size':       1.2rem
+            'height':          var(--spacer-4),
+            'padding':         0 var(--spacer-3),
         )
     );
 
@@ -58,16 +43,8 @@
 .btn--lg {
     $sizes: (
         xs: (
-            'height':          36px,
-            'padding':         0 8px,
-            'border-radius':   3px,
-            'font-size':       1.8rem
-        ),
-        md: (
-            'height':          48px,
-            'padding':         0 22px,
-            'border-radius':   2px,
-            'font-size':       2.0rem
+            'height':          var(--spacer-6),
+            'padding':         0 var(--spacer-4),
         )
     );
 

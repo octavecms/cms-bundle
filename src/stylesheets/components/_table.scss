@@ -1,0 +1,108 @@
+/**
+ * HTML table
+ */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead td,
+    th {
+        @extend %text--size-small;
+        color: var(--color-small);
+        text-align: left;
+    }
+    
+    th,
+    td {
+        padding: 23px 16px 24px;
+        border-top: 1px solid var(--color-line);
+
+        &:first-child {
+            padding-left: 0px;
+        }
+        &:last-child {
+            padding-right: 0px;
+        }
+    }
+
+    // Remove top border from first row
+    thead {
+        th,
+        td {
+            border-top: 0;
+        }
+    }
+    tbody:first-child tr:first-child {
+        th,
+        td {
+            border-top: 0;
+        }
+    }
+}
+
+
+/**
+ * More compact table
+ */
+
+// .table-sm {
+//     >:not(caption)>*>* {
+//     }
+// }
+
+
+/**
+ * Table with borders on all sides
+ */
+
+// .table-bordered {
+//     >:not(caption)>*>* {
+//     }
+// }
+
+
+/**
+ * Table without any borders
+ */
+
+// .table-borderless {
+//     >:not(caption)>*>* {
+//         border: 0;
+//     }
+// }
+
+
+
+/**
+ * Mobile table layout
+ */
+
+// .mobile-table {
+//     @include media-breakpoint(sm-down) {
+//         &__hide {
+//             display: none !important;
+//         }
+
+//         table, thead, tbody, tr, td {
+//             display: block;
+//         }
+
+//         // Heading + content row
+//         td[data-th] {
+//             display: flex;
+//             flex-wrap: nowrap;
+//         }
+
+//         // Heading cell
+//         td[data-th]:before {
+//             content: attr(data-th);
+//             flex: 0 0 12em;
+//         }
+
+//         // Content cell
+//         .mobile-table__content {
+//             flex: 1 1 auto;
+//         }
+//     }
+// }

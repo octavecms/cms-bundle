@@ -127,3 +127,15 @@
 .btn--full {
     width: 100%;
 }
+
+
+/**
+ * Pill button
+ *
+ * @demo
+ *     <a class="btn btn--pill">My button</a>
+ */
+
+.btn--pill {
+    border-radius: 200px;
+}

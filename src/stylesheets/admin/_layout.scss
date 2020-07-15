@@ -1,0 +1,14 @@
+.main-page {
+    min-height: var(--viewport-height);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    > * {
+        width: 100%;
+    }
+}
+
+.main-content {
+    flex-grow: 1;
+}

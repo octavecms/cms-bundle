@@ -4,9 +4,11 @@
 */
 module.exports = {
     'admin': [
+        './components/common/init',
         './components/sample',
     ],
     'example-grid': [
+        './components/common/init',
         './example-grid',
     ]
 };

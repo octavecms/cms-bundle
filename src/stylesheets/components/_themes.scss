@@ -16,6 +16,33 @@
 
 
 /**
+ * Element colors
+ */
+
+body {
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--color-heading);
+}
+
+small {
+    color: var(--color-small);
+}
+
+.ui-background {
+    background: var(--color-background);
+}
+.ui-gray-background {
+    background: color($color-gray-background);
+}
+.ui-dark-background {
+    background: color($color-dark-background);
+}
+
+
+/**
  * For print reset theme to default
  */
 
@@ -38,25 +65,9 @@
             --color-#{ $property }: #{ color($color) };
         }
     }
-}
 
-
-/**
- * Element colors
- */
-
-body {
-    color: var(--color-text);
-}
-
-h1, h2, h3, h4, h5 {
-    color: var(--color-heading);
-}
-
-small {
-    color: var(--color-small);
-}
-
-.ui-background {
-    background: var(--color-background);
+    .ui-gray-background,
+    .ui-dark-background {
+        background: color($color-light-background);
+    }
 }

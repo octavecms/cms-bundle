@@ -17,12 +17,6 @@
     flex-wrap: wrap;
     align-items: flex-start;
 	justify-content: flex-start;
-
-    // @include group ((
-    //     xs: 10px 30px
-    // ));
-
-    @include group (10px 30px);
 }
 
 
@@ -35,6 +29,16 @@
  *     <a class="btn">Button</a>
  *   </div>
  */
+
+.group--3 {
+    @include group (var(--spacer-3));
+}
+.group--5 {
+    @include group (var(--spacer-5));
+}
+.group--6 {
+    @include group (var(--spacer-6));
+}
 
 // .group--small {
 // 	@include group (5px);
@@ -87,6 +91,23 @@
 
 .group__fill {
     flex-grow: 1;
+}
+
+
+/**
+ * Separator element
+ */
+.group__separator {
+    align-self: stretch;
+    position: relative;
+    width: 1px;
+
+    &:before {
+        content: "";
+        height: 100%;
+        width: 1px;
+        border-left: 1px solid var(--color-outline);
+    }
 }
 
 

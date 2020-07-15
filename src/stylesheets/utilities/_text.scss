@@ -1,0 +1,151 @@
+/**
+ * @name Default text and font styles
+ *
+ * See extends/_text-styles.scss
+ * See extends/_text-sizes.scss
+ * See settings/_text.scss
+ *
+ * @demo
+ *     <h1>Heading 1</h1>
+ *     <h2>Heading 2</h2>
+ *     <h3>Heading 3</h3>
+ *     <h4>Heading 4</h4>
+ *     <h5>Heading 5</h5>
+ *     <p>
+ *         Paragraph text
+ *     </p>
+ *     <p>
+ *         <small>Small paragraph text</small>
+ *     </p>
+ */
+
+html {
+    font-size: 62.5%; // 1rem === 10px
+}
+
+body {
+    @extend %text--size-default;
+}
+
+body,
+input,
+textarea,
+button {
+    @extend %text--style-default;
+}
+
+small {
+    @extend %text--size-small;
+}
+
+
+/*
+ * Headings
+ */
+
+h1, h2, h3, h4, h5 {
+    @extend %text--style-heading;
+}
+
+h1 {
+    @extend %text--size-h1;
+}
+h2 {
+    @extend %text--size-h2;
+}
+h3 {
+    @extend %text--size-h3;
+}
+h4 {
+    @extend %text--size-h4;
+}
+h5 {
+    @extend %text--size-h5;
+}
+
+
+/*
+ * Margins and paddings
+ */
+
+h1, h2, h3, h4, h5 {
+    @include margins-top-bottom($spacing-heading);
+}
+
+hr, p, blockquote, table, iframe, object, pre {
+    @include margins-top-bottom($spacing-text);
+}
+
+figure {
+    margin: 0;
+}
+
+
+/**
+ * Heading style/size classnames for elements
+ *
+ * @demo
+ *     <h2 class="h1">Looks like first level heading</h2>
+ */
+
+.h1 {
+    @extend h1;
+}
+.h2 {
+    @extend h2;
+}
+.h3 {
+    @extend h3;
+}
+.h4 {
+    @extend h4;
+}
+.h5 {
+    @extend h5;
+}
+
+
+/**
+ * Heading font family / style classname
+ *
+ * @demo
+ *     <p class="text--heading">Text with same style as heading</p>
+ */
+
+.text-heading {
+    @extend %text--style-heading;
+}
+
+
+/**
+ * Font size classnames for elements
+ *
+ * @demo
+ *     <p class="text--small">Small text size</p>
+ *     <p><small>Small text size</small></p>
+ *     <p class="text--medium">Medium text size</p>
+ */
+
+.text-small {
+    @extend %text--size-small;
+}
+.text-medium {
+    @extend %text--size-medium;
+}
+
+
+/**
+ * Truncate text adding dots at the end of the line if needed
+ *
+ * @demo
+ *     <p class="text--truncate">
+ *         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+ *         pharetra sed erat convallis suscipit. Vestibulum at interdum neque.
+ *     </p>
+ */
+
+.text-truncate {
+    white-space:   nowrap   !important;
+    overflow:      hidden   !important;
+    text-overflow: ellipsis !important;
+}

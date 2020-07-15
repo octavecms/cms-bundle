@@ -70,7 +70,7 @@ class GridGenerator {
         let html = '';
 
         // Summary
-        html += `<section class="container container-h block text">
+        html += `<section class="my-5 container-h">
             <table><tr><th>Breakpoint</th><th>Column count</th><th>Column unit</th></tr>
 
             ${ map(columns, (column, breakpoint) => {
@@ -94,7 +94,7 @@ class GridGenerator {
 
             // Summary
             html += `
-                <section class="container container-h block ${ visibilityClassName }">
+                <section class="my-5 container-h ${ visibilityClassName }">
                     <h3>With padding, current breakpoint: ${ breakpoint.toUpperCase() }</h3>
                     <p>
                         Column count for ${ breakpoint } breakpoint: <b>${ column.count }</b><br />
@@ -105,11 +105,7 @@ class GridGenerator {
             `;
 
             // Only for % based grids use horizontal container
-            if (column.unit === '%') {
-                html += `<section class="container container-h block ${ visibilityClassName }">`;
-            } else {
-                html += `<section class="container block ${ visibilityClassName }">`;
-            }
+            html += `<section class="my-5 container-h ${ visibilityClassName }">`;
 
             // With padding
             for (let i = 0; i < column.count; i++) {

@@ -41,6 +41,16 @@ $grid-columns: (
         // Full size, all column sum, must use number + unit
         unit: 100%,
         // Spacing between columns
+        gutter: var(--spacer-3),
+    ),
+
+    // Tablet portrait
+    md: (
+        // Count
+        columns: 12,
+        // Full size, all column sum, must use number + unit
+        unit: 100%,
+        // Spacing between columns
         gutter: var(--spacer-5),
     ),
 
