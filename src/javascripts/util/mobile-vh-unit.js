@@ -11,7 +11,7 @@
  *     for example to enable only for tablets but ignore mobile phones use 'md-up'
  */
 
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 import responsive from 'util/responsive';
 import detect from 'util/detect';
 import 'util/jquery.passive';

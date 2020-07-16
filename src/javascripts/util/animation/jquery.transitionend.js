@@ -1,4 +1,4 @@
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 
 const REGEX_DURATION = /([\d.]+)(ms|s)/g;
 let uniqueId = 0;

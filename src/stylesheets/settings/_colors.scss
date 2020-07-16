@@ -17,7 +17,8 @@ $color-light-heading:    60, 62, 78;    // #3C3E4E
 $color-light-line:       245, 247, 239; // #F5F7F9
 $color-light-outline:    223, 227, 232; // #DFE3E8
 
-$color-light-focus:     59, 153, 252;   // #3B99FC @TODO not defined in design
+$color-light-focus:      59, 153, 252;  // #3B99FC @TODO not defined in design
+$color-light-shadow:     60, 62, 78;    // #3C3E4E
 
 // Gray theme
 $color-gray-primary:     $color-light-primary;
@@ -34,7 +35,8 @@ $color-gray-heading:     60, 62, 78;    // #3C3E4E
 $color-gray-line:        232, 239, 243; // #E8EFF3 @TODO not defined in design
 $color-gray-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 
-$color-gray-focus:      59, 153, 252;   // #3B99FC @TODO not defined in design
+$color-gray-focus:       59, 153, 252;  // #3B99FC @TODO not defined in design
+$color-gray-shadow:      60, 62, 78;    // #3C3E4E
 
 // Dark theme
 $color-dark-primary:     $color-light-primary;
@@ -52,6 +54,7 @@ $color-dark-line:        83, 85, 98;    // #535562 @TODO not defined in design
 $color-dark-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 
 $color-dark-focus:      59, 153, 252;   // #3B99FC @TODO not defined in design
+$color-dark-shadow:      60, 62, 78;    // #3C3E4E
 
 
 /**
@@ -72,6 +75,7 @@ $themes: (
             line:       $color-light-line,
             outline:    $color-light-outline,
             focus:      $color-light-focus,
+            shadow:     $color-light-shadow,
         )
     ),
     gray: (
@@ -88,6 +92,7 @@ $themes: (
             line:       $color-gray-line,
             outline:    $color-gray-outline,
             focus:      $color-gray-focus,
+            shadow:     $color-gray-shadow,
         )
     ),
     dark: (
@@ -104,6 +109,7 @@ $themes: (
             line:       $color-dark-line,
             outline:    $color-dark-outline,
             focus:      $color-dark-focus,
+            shadow:     $color-dark-shadow,
         )
     ),
 );

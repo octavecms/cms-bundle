@@ -6,7 +6,7 @@
  *     $(window).offpassive('.namespace', function () {});
  */
 
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 import intersection from 'lodash/intersection';
 
 

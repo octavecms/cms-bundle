@@ -1,4 +1,4 @@
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 
 
 /**

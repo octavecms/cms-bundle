@@ -1,4 +1,4 @@
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 
 /**
  * jQuery special event for detecting single return key press

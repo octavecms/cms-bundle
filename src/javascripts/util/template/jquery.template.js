@@ -1,4 +1,4 @@
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 import template from 'lodash/template';
 import createPlugin from 'jquery-plugin-generator';
 

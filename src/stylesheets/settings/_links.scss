@@ -16,15 +16,15 @@ $link-styles: (
     // Default link
     'default': (
         normal:             var(--color-text),
-        hover:              var(--color-primary),
-        active:             var(--color-primary),
+        hover:              var(--color-heading),
+        active:             var(--color-heading),
     ),
 
     // Small link style
     'small': (
         normal:             var(--color-small),
-        hover:              var(--color-primary),
-        active:             var(--color-primary),
+        hover:              var(--color-heading),
+        active:             var(--color-heading),
     ),
 
     // Heading link style
@@ -52,5 +52,5 @@ $link-decorations: (
 /**
  * Tab key focus style
  */
- 
+
 $link-focus-visible-shadow: 0 0 0 2px rgba(var(--color-focus-raw), 0.7), 0 0 1px 1px rgba(var(--color-focus-raw), 0.7);

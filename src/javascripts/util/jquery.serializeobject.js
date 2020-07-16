@@ -1,4 +1,4 @@
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 
 import map from 'lodash/map';
 import each from 'lodash/each';

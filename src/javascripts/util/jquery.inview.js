@@ -1,5 +1,5 @@
 /* eslint no-unused-vars: ["off"] */
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
 
 import each from 'lodash/each';

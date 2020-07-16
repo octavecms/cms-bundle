@@ -2,7 +2,7 @@
  * Run CSS transitions on elements
  */
 
-import $ from 'common/jquery';
+import $ from 'util/jquery';
 import 'util/animation/jquery.transitionend';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
@@ -174,7 +174,7 @@ $.transition.generateSequenceIn = function (...animations) {
     return map(animations, (name) => {
         if (typeof name === 'string') {
             return {
-                'before':     $el => $el.addClass(`animation animation--${ name } animation--${ name }--inactive disable-transitions`).removeClass('is-hidden is-invisible is-invisible--js is-invisible--md-up-js'),
+                'before':     $el => $el.addClass(`animation animation--${ name } animation--${ name }--inactive disable-transitions`).removeClass('d-none is-invisible is-invisible--js'),
                 'transition': $el => $el.removeClass(`animation--${ name }--inactive disable-transitions`).addClass(`animation--${ name }--active`),
                 'after':      $el => $el.removeClass(`animation animation--${ name } animation--${ name }--active`),
             };
@@ -190,7 +190,7 @@ $.transition.generateSequenceOut = function (...animations) {
             return {
                 'before':     $el => $el.addClass(`animation animation--${ name } animation--${ name }--inactive disable-transitions`),
                 'transition': $el => $el.removeClass(`animation--${ name }--inactive disable-transitions`).addClass(`animation--${ name }--active`),
-                'after':      $el => $el.removeClass(`animation animation--${ name } animation--${ name }--active`).addClass('is-hidden')
+                'after':      $el => $el.removeClass(`animation animation--${ name } animation--${ name }--active`).addClass('d-none')
             };
         } else {
             return name;
