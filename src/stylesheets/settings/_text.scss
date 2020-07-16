@@ -4,7 +4,7 @@
  * Settings for text, fonts, sizes
  */
 
-$text-default-font:         Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$text-default-font:         /*Roboto,*/ "Helvetica Neue", Helvetica, Arial, sans-serif;
 $text-default-weight:       $regular;
 
 $text-heading-font:         $text-default-font;
@@ -37,8 +37,9 @@ $text-code-font:            Consolas, "Liberation Mono", Menlo, Courier, monospa
 $text-sizes: (
     xs: (
         'default': ( 'font-size': 1.4rem,  'line-height': 18 / 14 * 1em, 'letter-spacing': 0.02em ),
-        'small':   ( 'font-size': 1.2rem,  'line-height': 14 / 10 * 1em, 'letter-spacing': 0.01em ),
         'medium':  ( 'font-size': 1.6rem,  'line-height': 22 / 16 * 1em, 'letter-spacing': 0em ),
+        'small':   ( 'font-size': 1.2rem,  'line-height': 14 / 10 * 1em, 'letter-spacing': 0.01em ),
+        'tiny':    ( 'font-size': 1.1rem,  'line-height': 16 / 11 * 1em, 'letter-spacing': 0em ),
 
         // Headings
         'h1':      ( 'font-size': 2.0rem,  'line-height': 24 / 20 * 1em, 'letter-spacing': 0em ),

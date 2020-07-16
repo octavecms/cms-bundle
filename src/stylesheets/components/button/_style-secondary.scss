@@ -16,19 +16,22 @@
     $styles: (
         // Default styles
         'default': (
-            color:      $color-dark-heading,
-            background: $color-secondary,
-            hover-background: darken($color-secondary, 10%), // 3.
+            color:      var(--color-background),
+            background: var(--color-secondary),
+            hover-background: var(--color-secondary),
         ),
         // Style when button is hovered or pressed down
         'hover down': (
-            color:      $color-dark-heading,
-            // background: darken($color-secondary, 10%), // 4.
+            color:      var(--color-background),
         ),
+
+        // Focus visible styles
+        'focus-visible': (
+            box-shadow: 0 0 0 3px rgba(var(--color-secondary-raw), 0.4),
+        )
     );
 
     @include button-colors ($styles);
-    @include button-generate-focus-visible ($styles);
 }
 
 

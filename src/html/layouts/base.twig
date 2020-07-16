@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html dir="ltr" lang="en" class="has-hover">
 <head>
     {# Default meta tags #}
         <meta charset="utf-8">
@@ -43,7 +43,7 @@
         {% include 'partials/header.twig' %}
 
         {% block body %}
-            <div class="ui-gray-background row row-pad main-content">
+            <div class="ui-gray-background main-content">
                 {% block sidebar %}{% endblock %}
                 {% block content %}{% endblock %}
             </div>

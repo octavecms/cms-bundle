@@ -1,5 +1,5 @@
 /**
- * Primary call to action button style modifier
+ * Tetriary call to action button style modifier
  *
  * 1. Increase specificity to prevent `.ui-dark a` from overwriting styles
  * 2. We can't use ".ui-dark .btn..." because of CSS generated selector complexity, parent/theme selector must be specified separately
@@ -7,27 +7,27 @@
  * 4. We are using hover animation, no need for simple background color change
  *
  * @demo
- *     <a class="btn btn--primary"><span class="btn__content">Normal state</span></a>
- *     <a class="btn btn--primary is-active"><span class="btn__content">Active state</span></a>
- *     <a class="btn btn--primary is-disabled"><span class="btn__content">Disabled state</span></a>
+ *     <a class="btn btn--tetriary"><span class="btn__content">Normal state</span></a>
+ *     <a class="btn btn--tetriary is-active"><span class="btn__content">Active state</span></a>
+ *     <a class="btn btn--tetriary is-disabled"><span class="btn__content">Disabled state</span></a>
  */
 
-.btn.btn--primary { // 1.
+.btn.btn--tetriary { // 1.
     $styles: (
         // Default styles
         'default': (
-            color:      var(--color-background),
-            background: var(--color-primary),
-            hover-background: var(--color-primary),
+            color:      var(--color-text),
+            background: var(--color-tetriary),
+            hover-background: var(--color-tetriary),
         ),
         // Style when button is hovered or pressed down
         'hover down': (
-            color:      var(--color-background),
+            color:      var(--color-heading),
         ),
 
         // Focus visible styles
         // 'focus-visible': (
-        //     box-shadow: 0 0 0 3px rgba(var(--color-primary-raw), 0.4),
+        //     box-shadow: 0 0 0 3px rgba(var(--color-text-raw), 0.4),
         // )
     );
 
@@ -36,11 +36,11 @@
 
 
 /*
- * Dark theme primary button style
+ * Dark theme tetriary button style
  */
 
 /*
-.btn.btn--primary { // 1.
+.btn.btn--tetriary { // 1.
     $theme: '.ui-dark'; // 2.
     $styles: (
     );
@@ -48,4 +48,3 @@
     @include button-colors ($styles, $theme);
 }
 */
-

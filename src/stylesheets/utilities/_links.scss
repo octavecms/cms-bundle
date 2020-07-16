@@ -10,7 +10,9 @@
  */
 
 a {
+    @extend %link--style-default;
     @extend %link--decoration-default;
+    @extend %transition;
 }
 
 
@@ -58,12 +60,23 @@ input[type="submit"] {
  * Keyboard tab focus state
  */
 
-a:not(.btn):not(.btn-container),
-button:not(.btn) {
+// a:not(.btn):not(.btn-container),
+// button:not(.btn) {
+//     @include link-focus-visible () {
+//         // Default Chrome outline
+//         // outline: -webkit-focus-ring-color auto 3px;
+//         outline: currentColor auto 3px;
+//     }
+// }
+
+a,
+button,
+input[type="submit"] {
+    outline: none;
+    border-radius: 4px;
+
     @include link-focus-visible () {
-        // Default Chrome outline
-        // outline: -webkit-focus-ring-color auto 3px;
-        outline: currentColor auto 3px;
+        box-shadow: $link-focus-visible-shadow;
     }
 }
 

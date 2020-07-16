@@ -40,6 +40,13 @@
         cursor: default;
     }
 
+    // Border radius
+    &,
+    &:before,
+    &:after {
+        border-radius: $border-radius;
+    }
+
     // <button> element has additional element to fix alignment issues in FF and Safari
     &__content {
         display: flex;
@@ -56,6 +63,10 @@
             margin-left: auto;
             margin-right: auto;
         }
+    }
+
+    @include button-focus-visible () {
+        outline: none;
     }
 }
 
@@ -137,5 +148,9 @@
  */
 
 .btn--pill {
-    border-radius: 200px;
+    &,
+    &:before,
+    &:after {
+        border-radius: 200px;
+    }
 }

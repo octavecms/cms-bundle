@@ -60,3 +60,32 @@ $spacing-text: (
 );
 
 
+/** 
+ * Navigation bar
+ */
+
+$nav-link-padding-x: var(--spacer-3);
+$nav-link-padding-y: var(--spacer-2);
+
+
+/** 
+ * Breadcrumbs
+ */
+
+$breadcrumb-link-padding-x: var(--spacer-3);
+$breadcrumb-link-padding-y: var(--spacer-2);
+$breadcrumb-min-height: var(--spacer-4);
+
+
+/** 
+ * Badge
+ */
+
+$badge-padding-x: calc(var(--spacer-3) - 4px);
+$badge-padding-y: 0;
+
+
+/**
+ *
+ */
+

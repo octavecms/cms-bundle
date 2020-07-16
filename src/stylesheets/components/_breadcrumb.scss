@@ -1,0 +1,19 @@
+.breadcrumb {
+    > * {
+        // Vertically align items
+        display: flex;
+        align-items: center;
+        min-height: $breadcrumb-min-height;
+    }
+
+    .icon {
+        display: block;
+    }
+
+    &__item a {
+        display: block;
+        position: relative;
+        margin: calc(#{ $breadcrumb-link-padding-y } * -1) calc(#{ $breadcrumb-link-padding-x } * -1);
+        padding: $breadcrumb-link-padding-y $breadcrumb-link-padding-x;
+    }
+}

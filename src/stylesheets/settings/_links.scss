@@ -13,19 +13,26 @@
  */
 
 $link-styles: (
-    // Light theme default link
-    'default-light': (
-        normal:             $color-light-primary,
-        hover:              $color-light-heading,
-        active:             $color-light-heading,
+    // Default link
+    'default': (
+        normal:             var(--color-text),
+        hover:              var(--color-primary),
+        active:             var(--color-primary),
     ),
 
-    // Dark theme default link
-    'default-dark': (
-        normal:             $color-dark-primary,
-        hover:              $color-dark-heading,
-        active:             $color-dark-heading,
-    )
+    // Small link style
+    'small': (
+        normal:             var(--color-small),
+        hover:              var(--color-primary),
+        active:             var(--color-primary),
+    ),
+
+    // Heading link style
+    'heading': (
+        normal:             var(--color-heading),
+        hover:              var(--color-primary),
+        active:             var(--color-primary),
+    ),
 );
 
 $link-decorations: (
@@ -33,8 +40,6 @@ $link-decorations: (
         normal:             none,
         hover:              none,
         active:             none,
-        // hover:              underline,
-        // active:             underline,
     ),
     'none': (
         normal:             none,
@@ -42,3 +47,10 @@ $link-decorations: (
         active:             none,
     )
 );
+
+
+/**
+ * Tab key focus style
+ */
+ 
+$link-focus-visible-shadow: 0 0 0 2px rgba(var(--color-focus-raw), 0.7), 0 0 1px 1px rgba(var(--color-focus-raw), 0.7);

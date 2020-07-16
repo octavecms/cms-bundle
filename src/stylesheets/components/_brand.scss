@@ -1,0 +1,79 @@
+/**
+ * Brand
+ */
+.brand {
+    display: flex;
+    align-items: center;
+
+    &__image {
+        overflow: hidden;
+
+        img {
+            display: block;
+        }
+    }
+    &__text {
+        @extend %text--style-heading;
+    }
+
+    &__image:not(:first-child),
+    &__text:not(:first-child) {
+        margin-left: var(--spacer-3);
+    }
+}
+
+a.brand,
+button.brand {
+    @extend %link--style-heading;
+    @extend %link--decoration-none;
+    outline: none;
+
+    .brand__image {
+        @extend %transition;
+        transition-property: box-shadow;
+        transition-duration: $duration-fast;
+    }
+
+    @include link-focus-visible () {
+        box-shadow: none;
+
+        .brand__image {
+            // box-shadow: 0 0 0 3px rgba(var(--color-primary-raw), 0.75);
+            // box-shadow: 0 0 0 2px -webkit-focus-ring-color;
+            box-shadow: $link-focus-visible-shadow;
+        }
+    }
+}
+
+/**
+ * Fixed height brand
+ */
+
+.brand--fixed {
+    height: var(--spacer-4);
+}
+
+/**
+ * Square size
+ */
+.brand--square .brand__image {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/**
+ * Brand image with outline
+ */
+.brand--outline .brand__image {
+    border: 1px solid var(--color-outline);
+}
+
+/**
+ * Brand image with outline
+ */
+.brand--pill .brand__image {
+    border-radius: 200px;
+}

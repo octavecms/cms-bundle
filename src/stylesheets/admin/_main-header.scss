@@ -1,0 +1,7 @@
+.main-header {
+    &__sub-header {
+        padding-top: calc(var(--spacer-3) + 4px);
+        padding-bottom: calc(var(--spacer-3) + 4px);
+        border-top: 1px solid var(--color-line);
+    }
+}

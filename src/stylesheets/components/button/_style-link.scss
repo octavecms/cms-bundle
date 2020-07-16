@@ -10,16 +10,32 @@
  */
 
 .btn.btn--link { // 1.
+    $styles: (
+        // Default styles
+        'default': (
+            color:      var(--color-text),
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color:      var(--color-heading),
+        ),
+
+        // Focus visible styles
+        // 'focus-visible': (
+        //     box-shadow: 0 0 0 3px rgba(var(--color-text-raw), 0.4),
+        // )
+    );
+
+    @include button-colors ($styles);
+}
+
+.btn.btn--no-paddings {
     // Reset button styles
     padding-left: 0;
     padding-right: 0;
-    border-radius: 0;
 
     .btn__content {
         justify-content: flex-start;
         text-align: left;
     }
-
-    // By default button looks like a link, that's why isn't anything style related
-    // here at the moment
 }

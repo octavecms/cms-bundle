@@ -1,0 +1,24 @@
+{% from 'macros/icon.twig' import icon %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb group group--middle group--4 text-small text-color-small">
+        <li class="breadcrumb__item"><a href="#">
+            {{ icon('nav-grid', {'width': 12, 'height': 12}) }}
+        </a></li>
+        <li aria-hidden="true">{{ icon('nav-arrow', {'width': 4, 'height': 10}) }}</li>
+
+        <li class="breadcrumb__item"><a href="#">
+            Academy
+        </a></li>
+        <li aria-hidden="true">{{ icon('nav-arrow', {'width': 4, 'height': 10}) }}</li>
+
+        <li class="breadcrumb__item"><a href="#">
+            Articles
+        </a></li>
+        <li aria-hidden="true">{{ icon('nav-arrow', {'width': 4, 'height': 10}) }}</li>
+
+        <li class="breadcrumb__item is-active" aria-current="page">
+            Виды коммерческой недвижимости: сектора, типы и форматы
+        </li>
+    </ol>
+</nav>

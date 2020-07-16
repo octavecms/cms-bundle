@@ -10,6 +10,7 @@
     #{ $selector } {
         @each $property, $color in $values {
             --color-#{ $property }: #{ color($color) };
+            --color-#{ $property }-raw: #{ $color };
         }
     }
 }
@@ -27,7 +28,8 @@ h1, h2, h3, h4, h5 {
     color: var(--color-heading);
 }
 
-small {
+small,
+.text-color-small {
     color: var(--color-small);
 }
 

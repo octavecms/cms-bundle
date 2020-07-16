@@ -1,80 +1,56 @@
 <header class="main-header">
-    <div class="container">
-        <div class="group">
+    <div class="container container-h mt-4">
+        <div class="group group--middle group--6">
             {# Logo #}
-            <a href="#" class="brand group group--6">
-
-            </a>
+            <div>
+                {% include 'partials/header/brand.twig' %}
+            </div>
 
             {# Vertical line #}
             <div class="group__separator"></div>
 
             {# Sitemap #}
-            <div>
-                SELECTOR
+            <div class="group__fill">
+                {% include 'partials/header/sitemap.twig' %}
             </div>
 
             {# Navigation, right aligned #}
-            <ol class="group group--5">
-                <li><a href="#">Media</a></li>
-                <li><a href="#">Global Data</a></li>
-                <li><a href="#">Sitemap</a></li>
-                <li><a href="#">Settings</a></li>
-                <li class="group__separator"></li>
-                <li><a href="#">
-                    Log
-                    <span class="badge badge--square badge--pill badge--inverted">3</span>
-                </a></li>
-            </ol>
+            <div>
+                <div class="group group--middle group--5">
+                    <div>
+                        {% include 'partials/header/navigation.twig' %}
+                    </div>
 
-            {# Profile #}
-            <div class="dropdown">
-                <button class="dropdown__toggle" data-toggle="dropdown" aria-expanded="false" id="navbarUserDropdown">
-                    <img src="/assets/images/profile.png" width="40" height="40" alt="" />
-                </button>
-                <ul class="dropdown__menu" aria-labelledby="navbarUserDropdown">
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-6">
-        <div class="group group--3 group--center">
-            <a href="#" class="btn btn--primary btn--pill"><span class="btn__content">
-                Articles
-            </span></a>
-            <a href="#" class="btn btn--link"><span class="btn__content">
-                Categories
-            </span></a>
-        </div>
-    </div>
-
-    <div class="container mt-4">
-        <div class="group group--center">
-
-            {# Breacrumbs #}
-            <div class="group group--4">
-                
-            </div>
-
-            {# Language navigation #}
-            <div class="group__right">
-                <div class="group group--1">
-                    <a href="#" class="btn btn--sm btn--primary btn--pill"><span class="btn__content">
-                        Ru
-                    </span></a>
-                    <a href="#" class="btn btn--sm btn--tetriary btn--pill"><span class="btn__content">
-                        En
-                    </span></a>
+                    {# Profile #}
+                    <div>
+                        {% include 'partials/header/profile.twig' %}
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 
+    {# CRUD selector #}
+    <div class="container container-h mt-6">
+        {% include 'partials/header/crud-list.twig' %}
+    </div>
 
-    LOGO | Sitemap -- nav | nav | profile
-    Curd list
-    Breacrumbs
+    {# Breadcrumbs and language switch #}
+    <div class="main-header__sub-header mt-4">
+        <div class="container container-h">
+            <div class="group group--5 group--middle">
 
+                {# Breacrumbs #}
+                <div class="group__fill">
+                    {% include 'partials/header/breadcrumbs.twig' %}
+                </div>
+                
+                {# Language navigation #}
+                <div>
+                    {% include 'partials/header/language-switch.twig' %}
+                </div>
+
+            </div>
+        </div>
+    </div>
 </header>

@@ -1,0 +1,16 @@
+/**
+ * Navigation
+ */
+
+.nav {
+    .icon {
+        display: block;
+    }
+
+    &__item a {
+        display: block;
+        position: relative;
+        margin: calc(#{ $nav-link-padding-y } * -1) calc(#{ $nav-link-padding-x } * -1);
+        padding: $nav-link-padding-y $nav-link-padding-x;
+    }
+}

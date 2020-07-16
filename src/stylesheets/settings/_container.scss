@@ -18,7 +18,7 @@ $containers: (
             // md: 720px,
             // lg: 960px,
             // xl: 1140px,
-            xxl: 1440px,
+            // xxl: 1440px,
         ),
 
         // It's prefered not to set any paddings on default and use
@@ -43,12 +43,8 @@ $containers: (
             // xxl: 1440px,
         ),
         'paddings': (
-            // xs:  inherit 10px,
-            // sm:  inherit 10px,
-            // md:  inherit 20px,
-            // lg:  inherit 20px,
-            // xl:  inherit 30px,
-            // xxl: inherit 30px,
+            xs: inherit var(--spacer-3),
+            md: inherit var(--spacer-5),
             xl: inherit var(--spacer-7),
         )
     ),
@@ -57,12 +53,8 @@ $containers: (
     // which has size of 1 column
     'v': (
         'paddings': (
-            // xs:  10px inherit,
-            // sm:  10px inherit,
-            // md:  20px inherit,
-            // lg:  20px inherit,
-            // xl:  30px inherit,
-            // xxl: 30px inherit,
+            xs: var(--spacer-3) inherit,
+            md: var(--spacer-5) inherit,
             xl: var(--spacer-7) inherit,
         )
     ),

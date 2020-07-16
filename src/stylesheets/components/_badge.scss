@@ -1,0 +1,88 @@
+/**
+ * Badge text
+ */
+
+.badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+
+    padding: $badge-padding-y $badge-padding-x;
+    height: var(--spacer-4);
+
+    color: var(--color-heading);
+    background: var(--color-tetriary);
+    @extend %text--size-medium;
+}
+
+sup.badge {
+    top: -0.7em;
+
+    &:not(:first-child) {
+        margin-left: var(--spacer-2);
+    }
+}
+
+
+/**
+ * Link badge
+ */
+
+a.badge,
+button.badge {
+    @include link-hover () {
+        // @TODO
+    }
+}
+
+
+/**
+ * Tiny size badge
+ */
+
+.badge--tiny {
+    height: var(--spacer-3);
+    @extend %text--size-tiny;
+}
+
+/** 
+ * Square sized badge
+ */
+.badge--square {
+    width: var(--spacer-4);
+    padding: 0;
+}
+
+.badge--tiny.badge--square {
+    width: var(--spacer-3);
+}
+
+
+/** 
+ * Badge with round corners
+ */
+
+.badge--pill {
+    border-radius: 200px;
+}
+
+
+/**
+ * Badge with colors inverted
+ */
+
+.badge--inverted {
+    color: var(--color-background);
+    background: var(--color-heading);
+}
+
+a.--inverted,
+button.--inverted {
+    @include link-hover () {
+        // @TODO
+    }
+}
