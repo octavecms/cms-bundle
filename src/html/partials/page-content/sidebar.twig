@@ -1,11 +1,53 @@
-<div class="ui-light-background form-sidebar">
-    <header class="form-sidebar__header px-5 py-5 bb-1">
+{% from 'macros/icon.twig' import icon %}
 
+<div class="form-sidebar card card--small">
+    <header class="form-sidebar__header card__header">
+        HEADER
     </header>
-    <header class="form-sidebar__content px-5 py-5">
+    <div class="card__content">
+        <div class="form-sidebar__content card__body card__body--short">
+            CONTENT
+        </div>
+        <div class="form-sidebar__content card__body card__body--short">
+            CONTENT
+        </div>
+        <div class="form-sidebar__content card__body">
+            CONTENT
+        </div>
+        <footer class="form-sidebar__footer card__footer">
+            
+            <div class="btn-group btn-group--full">
+                <button type="submit" class="btn-group__fill btn btn--secondary btn--lg"><span class="btn__content">
+                    Update
+                </span></button>
 
-    </header>
-    <footer class="form-sidebar__footer px-5 py-5 bt-1">
+                <div class="dropdown">
 
-    </footer>
+                {# More options dropdown #}
+                <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
+                    <button class="dropdown__toggle btn btn--secondary btn--lg btn--square" title="More options" aria-expanded="false" id="moreOptionsDropdown">
+                        <span class="btn__content">
+                            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+                        </span>
+                    </button>
+                    
+                    <div class="dropdown__menu d-none" aria-labelledby="moreOptionsDropdown">
+                        <ul class="dropdown__menu__content">
+                            <li>
+                                <a href="#" class="dropdown__item">
+                                    Schedule
+                                </a>
+                            </li>
+                            <li class="dropdown__divider"></li>
+                            <li class="dropdown__form">
+                                Or maybe here should be a form???
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </footer>
+    </div>
 </div>

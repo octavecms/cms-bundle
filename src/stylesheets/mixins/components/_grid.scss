@@ -84,52 +84,53 @@
  * @property {map} $grid-config Grid configuration
  */
 @mixin grid-alignment ($grid-config, $namespaces: null) {
-    $selector: if($namespaces and map-has-key($namespaces, columnSelectorStyle), map-get($namespaces, columnSelectorStyle), '.col--style');
+    $rowSelector: if($namespaces and map-has-key($namespaces, rowSelectorStyle), map-get($namespaces, rowSelectorStyle), '.row--BREAKPOINT-STYLE');
+    $colSelector: if($namespaces and map-has-key($namespaces, columnSelectorStyle), map-get($namespaces, columnSelectorStyle), '.col--BREAKPOINT-STYLE');
 
     @each $breakpoint, $config in $grid-config {
         @include media-breakpoint('#{$breakpoint}-up') {
-            // Horizontal alignment, col--start-...
-            #{ str-replace($selector, (STYLE: 'start-#{ $beakpoint }')) } {
+            // Horizontal alignment, row--...-start
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'start')) } {
                 justify-content: flex-start;
                 text-align: start;
             }
 
-            #{ str-replace($selector, (STYLE: 'center-#{ $beakpoint }')) } {
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'center')) } {
                 justify-content: center;
                 text-align: center;
             }
-            #{ str-replace($selector, (STYLE: 'end-#{ $beakpoint }')) } {
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'end')) } {
                 justify-content: flex-end;
                 text-align: end;
             }
 
-            // Vertical alignment, col--top-...
-            #{ str-replace($selector, (STYLE: 'top-#{ $beakpoint }')) } {
+            // Vertical alignment, row--...-top
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'top')) } {
                 align-items: flex-start;
             }
-            #{ str-replace($selector, (STYLE: 'middle-#{ $beakpoint }')) } {
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'middle')) } {
                 align-items: center;
             }
-            #{ str-replace($selector, (STYLE: 'bottom-#{ $beakpoint }')) } {
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'bottom')) } {
                 align-items: flex-end;
             }
 
-            // Spacing, col--around-..., .col--between-...
-            #{ str-replace($selector, (STYLE: 'around-#{ $beakpoint }')) } {
+            // Spacing, row--...-around, .row--...-between-...
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'around')) } {
                 justify-content: space-around;
             }
-            #{ str-replace($selector, (STYLE: 'between-#{ $beakpoint }')) } {
+            #{ str-replace($rowSelector, (BREAKPOINT: $breakpoint, STYLE: 'between')) } {
                 justify-content: space-between;
             }
 
             // Order, col--order-...
-            #{ str-replace($selector, (STYLE: 'order-first-#{ $beakpoint }')) } {
+            #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, STYLE: 'order-first')) } {
                 order: -1;
             }
-            #{ str-replace($selector, (STYLE: 'order-normal-#{ $beakpoint }')) } {
+            #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, STYLE: 'order-normal')) } {
                 order: 0;
             }
-            #{ str-replace($selector, (STYLE: 'order-last-#{ $beakpoint }')) } {
+            #{ str-replace($colSelector, (BREAKPOINT: $breakpoint, STYLE: 'order-last')) } {
                 order: 1;
             }
         }

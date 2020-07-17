@@ -7,32 +7,53 @@
  *     <a class="btn btn--dropdown is-disabled"><span class="btn__content">Disabled state</span></a>
  */
 
-.btn.btn--dropdown { // 1.
-
+.btn.btn--dropdown {
     $styles: (
         // Default styles
         'default': (
-            color:            var(--color-heading),
+            color:            var(--color-text),
             background:       var(--color-tetriary),
-            hover-background: transparent,
-            icon:             var(--color-text),
+            hover-background: var(--color-tetriary),
             border:           var(--color-tetriary),
             hover-border:     var(--color-tetriary),
+            icon:             var(--color-text),
         ),
-        // Style when button is hovered or pressed down
-        'hover down': (
-            color:      var(--color-heading),
+
+        // Active style
+        'active': (
+            background:       var(--color-background),
+            hover-background: var(--color-background),
+            border:           var(--color-outline),
+            hover-border:     var(--color-outline),
         ),
     );
-
-    &:before,
-    &:after {
-        border: 1px solid;
-    }
 
     .btn__content {
         justify-content: space-between;
     }
+
+    // Hover / active state border
+    &:before,
+    &:after {
+        border: 1px solid var(--color-tetriary);
+    }
+
+    @include buttonAnimationFade();
+    @include button-colors ($styles);
+}
+
+
+/**
+ * Heading color text
+ */
+
+.btn.btn--dropdown--heading {
+    $styles: (
+        // Default styles
+        'default': (
+            color:            var(--color-heading),
+        ),
+    );
 
     @include button-colors ($styles);
 }

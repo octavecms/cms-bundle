@@ -1,11 +1,27 @@
 {# Right top corner user profile #}
-<div class="dropdown">
-    <button class="dropdown__toggle brand brand--fixed brand--square brand--pill" data-plugin="dropdown" aria-expanded="false" id="navbarUserDropdown">
+<div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
+    <button class="dropdown__toggle brand brand--fixed brand--square brand--pill" aria-expanded="false" id="navbarUserDropdown" title="User profile">
         <span class="brand__image">
             <img src="/assets/images/temp/profile.png" width="40" height="40" alt="" />
         </span>
     </button>
     
-    <ul class="dropdown__menu" aria-labelledby="navbarUserDropdown">
-    </ul>
+    <div class="dropdown__menu d-none" aria-labelledby="navbarUserDropdown">
+        <ul class="dropdown__menu__content">
+            <li class="dropdown__text">
+                Pariatur magna eu labore sit deserunt ipsum eiusmod commodo. Laborum et occaecat Lorem esse tempor. Enim in excepteur in culpa Lorem et voluptate officia tempor proident consequat anim quis mollit. Proident ad reprehenderit laborum in est voluptate. Ad duis occaecat reprehenderit laborum mollit minim eu consectetur nulla elit labore.
+            </li>
+            <li class="dropdown__divider"></li>
+            <li>
+                <a href="#" class="dropdown__item">
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" class="dropdown__item">
+                    Log out
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>

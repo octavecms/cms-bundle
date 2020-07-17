@@ -2,34 +2,31 @@
  * Accordion
  */
 
-.accordion {
-}
+.accordion__header {
+    // Theme animation
+    @extend %transition;
+    transition-property: background, color;
 
-.accordion__heading {
-    // Link style
-    a {
-
+    // Arrow icon
+    .icon-accordion {
+        @include transition-fast();
+        transition-property: transform;
+        transform-origin: center;
     }
-
-    // Active heading link styles
-    a.is-active {
-
+    .accordion--expanded > & .icon-accordion {
+        transform: rotate(-180deg);
     }
 }
 
 .accordion__content {
-    > div {
-        // If padding is set directly on .accordion__content then during
-        // expand / collapse animation padding will interfere and animation will jump
-        // padding: ...;
-    }
-
     // Hide collapsed content
     .js &[aria-hidden="true"] {
         display: none;
     }
+}
 
-    // Expanded accordion content style
-    &.is-active {
-    }
+
+.accordion--expanded > .accordion__header .accordion__expanded-hidden,
+.accordion--collapsed > .accordion__header .accordion__collapsed-hidden {
+    display: none;
 }

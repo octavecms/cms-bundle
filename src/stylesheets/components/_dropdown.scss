@@ -1,11 +1,20 @@
-@import "components/animations/dropdown";
-
 .dropdown {
     position: relative;
 
     // Toggle element
     &__toggle {
         cursor: pointer;
+
+        // Arrow which will rotate 180deg when dropdown is open
+        .icon-dropdown-arrow {
+            @include transition-fast();
+            transition-property: transform, color;
+            transform-origin: center;
+        }
+
+        &.is-active .icon-dropdown-arrow {
+            transform: rotate(180deg);
+        }
     }
 
     // Menu
@@ -56,6 +65,12 @@
         }
     }
 
+    // Menu text
+    &__text,
+    &__form {
+        padding: 0 var(--spacer-3);
+    }
+
     // Arrow
     &__menu__content:before {
         content: "";
@@ -84,7 +99,7 @@
     &__divider {
         position: relative;
         border-top: 1px solid var(--color-line);
-        margin: var(--spacer-2) calc(#{ $dropdown-padding-x }*-1);
+        margin: var(--spacer-4) calc(#{ $dropdown-padding-x }*-1);
     }
 
     // Hover indicator
@@ -98,7 +113,7 @@
 
         @extend %transition;
         transition-duration: $duration-fast;
-        transition-property: transform, width, height, background-color;
+        transition-property: transform, width, height, background-color, opacity;
 
         &--dropdown {
             background: var(--color-tetriary);
@@ -139,10 +154,18 @@
 
 .dropdown > .dropdown__item {
     &.is-focused {
-        color: var(--color-text);
+        & {
+            color: var(--color-text);
+        }
+        .icon {
+            color: var(--color-small);
+        }
     }
     &.is-active {
-        color: var(--color-heading);
+        &,
+        .icon {
+            color: var(--color-heading);
+        }
     }
 }
 
@@ -170,19 +193,49 @@
 
 
 /**
+ * Dropdown which opens at the bottom
+ */
+
+.dropdown__menu[data-popper-placement="bottom-end"],
+.dropdown__menu[data-popper-placement="top-end"] {
+    .dropdown__menu__content:before {
+        left: auto;
+        right: var(--spacer-5);
+    }
+}
+
+
+/**
+ * Dropdown which opens at the top
+ */
+
+.dropdown__menu[data-popper-placement="top-start"],
+.dropdown__menu[data-popper-placement="top-end"] {
+    // Arrow
+    .dropdown__menu__content:before {
+        content: "";
+        bottom: auto;
+        top: 100%;
+        border-width: var(--spacer-2) var(--spacer-2) 0 var(--spacer-2);
+        border-color: var(--color-background) transparent transparent transparent;
+    }
+
+    // Extended hover area to prevent menu from collapsing when
+    // moving mouse from toggle to menu
+    .dropdown__menu__content:after {
+        bottom: auto;
+        top: 100%;
+    }
+}
+
+
+/**
  * Dropdown which opens to the right side
  */
 
 .dropdown--right {
     .dropdown__toggle .icon {
         transform: rotate(-90deg);
-    }
-}
-
-.dropdown__menu[data-popper-placement="bottom-end"] {
-    .dropdown__menu__content:before {
-        left: auto;
-        right: var(--spacer-5);
     }
 }
 

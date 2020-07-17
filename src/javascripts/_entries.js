@@ -6,6 +6,7 @@ module.exports = {
     'admin': [
         './components/common/init',
         './components/dropdown',
+        './components/accordion',
     ],
     'example-grid': [
         './components/common/init',

@@ -26,11 +26,12 @@
 
 $grid-selectors: (
     rowSelector: '.row',
-    rowSelectorPad: '.row-pad',
+    rowSelectorPad: '.row--pad',
+    rowSelectorStyle: '.row--BREAKPOINT-STYLE',
     columnSelector: '.col',
-    columnSelectorSize: '.col-BREAKPOINT-SIZE',
-    columnSelectorStyle: '.col-STYLE',
-    columnSelectorOffset: '.offset-BREAKPOINT-SIZE',
+    columnSelectorSize: '.col--BREAKPOINT-SIZE',
+    columnSelectorOffset: '.offset--BREAKPOINT-SIZE',
+    columnSelectorStyle: '.col--BREAKPOINT-STYLE',
 );
 
 $grid-columns: (

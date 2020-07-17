@@ -1,0 +1,125 @@
+{% from 'macros/icon.twig' import icon %}
+
+<div class="card-list">
+    <div class="card accordion accordion--collapsed"
+        data-plugin="accordion"
+        data-accordion-active-heading-parent-class-name="ui-dark"
+    >
+        {% include 'partials/page-content/content-header.twig' with {
+            'title': 'General',
+            'id': 'contentGeneral'
+        } %}
+        <div role="region" aria-labelledby="contentGeneralHeader" id="contentGeneral" aria-hidden="true" class="accordion__content card__content">
+            <div class="card__body">
+                Form...
+            </div>
+        </div>
+    </div>
+
+    <div class="card accordion accordion--collapsed"
+        data-plugin="accordion"
+        data-accordion-active-heading-parent-class-name="ui-dark"
+    >
+        {% include 'partials/page-content/content-header.twig' with {
+            'title': 'SEO Settings',
+            'id': 'contentSEO'
+        } %}
+        <div role="region" aria-labelledby="contentSEOHeader" id="contentSEO" aria-hidden="true" class="accordion__content card__content">
+            <div class="card__body">
+                Form...
+            </div>
+        </div>
+    </div>
+
+    <div class="card accordion accordion--expanded"
+        data-plugin="accordion"
+        data-accordion-active-heading-parent-class-name="ui-dark"
+    >
+        {% include 'partials/page-content/content-header.twig' with {
+            'title': 'Article Content',
+            'id': 'contentSections',
+            'expanded': true,
+            'withEditor': true
+        } %}
+
+        <div role="region" aria-labelledby="contentSectionsHeader" id="contentSections" aria-hidden="false" class="accordion__content card__content">
+            <div class="card__body card-list card-list--small">
+                {# Article content sections #}
+
+                <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                    {% include 'partials/page-content/content-section-header.twig' with {
+                        'title': 'Text',
+                        'id': 'contentSections1',
+                        'expanded': true,
+                        'changed': true
+                    } %}
+                    <div role="region" aria-labelledby="contentSections1Header" id="contentSections1" aria-hidden="false" class="accordion__content card__content">
+                        <div class="card__body">
+                            Form...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                    {% include 'partials/page-content/content-section-header.twig' with {
+                        'title': 'Quote',
+                        'id': 'contentSections2',
+                        'expanded': true,
+                        'changed': true
+                    } %}
+                    <div role="region" aria-labelledby="contentSections2Header" id="contentSections2" aria-hidden="false" class="accordion__content card__content">
+                        <div class="card__body">
+                            Form...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                    {% include 'partials/page-content/content-section-header.twig' with {
+                        'title': 'Image',
+                        'id': 'contentSections3',
+                        'expanded': true,
+                        'changed': false
+                    } %}
+                    <div role="region" aria-labelledby="contentSections3Header" id="contentSections3" aria-hidden="false" class="accordion__content card__content">
+                        <div class="card__body">
+                            Form...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                    {% include 'partials/page-content/content-section-header.twig' with {
+                        'title': 'Image Gallery',
+                        'expanded': true,
+                        'id': 'contentSections4',
+                        'changed': false
+                    } %}
+                    <div role="region" aria-labelledby="contentSections4Header" id="contentSections4" aria-hidden="false" class="accordion__content card__content">
+                        <div class="card__body">
+                            Form...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                    {% include 'partials/page-content/content-section-header.twig' with {
+                        'title': 'Table',
+                        'expanded': true,
+                        'id': 'contentSections5',
+                        'changed': true
+                    } %}
+                    <div role="region" aria-labelledby="contentSections5Header" id="contentSections5" aria-hidden="false" class="accordion__content card__content">
+                        <div class="card__body">
+                            Form...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <footer class="card__footer card__footer--short">
+                {% include 'partials/page-content/add-section.twig' %}
+            </footer>
+        </div>
+    </div>
+</div>

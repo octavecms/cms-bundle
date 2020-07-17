@@ -109,7 +109,7 @@ class GridGenerator {
 
             // With padding
             for (let i = 0; i < column.count; i++) {
-                html += '<div class="row row-pad">';
+                html += '<div class="row row--pad">';
                 if (i > 0) {
                     html += `<div class="col col-${ breakpoint }-${ i }"><code>col col-${ breakpoint }-${ i }</code></div>`;
                 }

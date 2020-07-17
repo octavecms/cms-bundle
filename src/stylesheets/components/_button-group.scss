@@ -1,0 +1,52 @@
+/**
+ * Button group
+ */
+
+@mixin button-border-radius ($radius) {
+    &,
+    &:before,
+    &:after {
+        border-radius: $radius;
+    }
+}
+
+.btn-group {
+    display: flex;
+
+    > * + * {
+        margin-left: 1px;
+    }
+
+    > .btn:first-child,
+    > *:first-child .btn {
+        @include button-border-radius($border-radius 0 0 $border-radius);
+    }
+
+    > .btn-pill:first-child,
+    > *:first-child .btn-pill {
+        @include button-border-radius(200px 0 0 200px);
+    }
+
+    > .btn:last-child,
+    > *:last-child .btn {
+        @include button-border-radius(0 $border-radius $border-radius 0);
+    }
+    > .btn-pill:last-child,
+    > *:last-child .btn-pill {
+        @include button-border-radius(0 200px 200px 0);
+    }
+
+    > .btn:first-child:last-child,
+    > *:first-child:last-child .btn {
+        @include button-border-radius($border-radius);
+    }
+
+    > .btn--pill:first-child:last-child,
+    > *:first-child:last-child .btn--pill {
+        @include button-border-radius(200px);
+    }
+
+    &__fill {
+        flex-grow: 1;
+    }
+}

@@ -312,7 +312,7 @@
     $border:           map-get($colors, border);
     $hover-border:     map-get($colors, hover-border);
 
-    @if (type-of($color) == 'color' or $color == currentColor or is-css-variable($color)) and $color != transparent {
+    @if (type-of($color) == 'string' or type-of($color) == 'color' or $color == currentColor or is-css-variable($color)) and $color != transparent {
         color: $color;
     }
     @if (type-of($icon) == 'color' or $icon == currentColor or is-css-variable($icon)) and $icon != transparent {
@@ -322,27 +322,35 @@
         }
     }
 
-    @if type-of($background) == 'color' or $background == currentColor or is-css-variable($background) {
+    @if type-of($background) == 'string' or type-of($background) == 'color' or $background == currentColor or is-css-variable($background) {
         &:after {
             background-color: $background;
         }
     }
 
-    @if type-of($hover-background) == 'color' or $hover-background == currentColor or is-css-variable($hover-background) {
+    @if type-of($hover-background) == 'string' or type-of($hover-background) == 'color' or $hover-background == currentColor or is-css-variable($hover-background) {
         &:before {
             background-color: $hover-background;
         }
     }
 
-    @if type-of($border) == 'color' or $border == currentColor or is-css-variable($border) {
+    @if type-of($border) == 'string' or type-of($border) == 'color' or $border == currentColor or is-css-variable($border) {
         &:after {
             border-color: $border;
         }
+    } @else if $border {
+        &:after {
+            border: $border;
+        }
     }
 
-    @if type-of($hover-border) == 'color' or $hover-border == currentColor or is-css-variable($hover-border) {
+    @if type-of($hover-border) == 'string' or type-of($hover-border) == 'color' or $hover-border == currentColor or is-css-variable($hover-border) {
         &:before {
             border-color: $hover-border;
+        }
+    } @else if $hover-border {
+        &:before {
+            border: $hover-border;
         }
     }
 

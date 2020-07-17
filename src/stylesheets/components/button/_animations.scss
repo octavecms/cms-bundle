@@ -68,6 +68,27 @@
 
 
 /**
+ * Animation where hover background fades in
+ */
+
+@mixin buttonAnimationFade () {
+    will-change: opacity;
+    overflow: visible;
+
+    &:before {
+        transform: none;
+    }
+
+    @include button-state('hover down') {
+        &:before {
+            transform: none;
+            opacity: 0;
+        }
+    }
+}
+
+
+/**
  * Default animation
  */
 

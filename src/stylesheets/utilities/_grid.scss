@@ -52,7 +52,6 @@ $rowSelectorPad: if(map-has-key($grid-selectors, rowSelectorPad), map-get($grid-
 $colSelector: if(map-has-key($grid-selectors, columnSelector), map-get($grid-selectors, columnSelector), '.col');
 #{ $colSelector } {
     // Alias, unfortunatelly we can't extend dynamic selector, @TODO or can we???
-    @extend .col-xs !optional;
     @extend .col--xs !optional;
 }
 
@@ -76,7 +75,4 @@ $colSelector: if(map-has-key($grid-selectors, columnSelector), map-get($grid-sel
  *     <div class="row row--end-xs"></div>
  */
 
-// $rowSelector: if(map-has-key($grid-selectors, rowSelector), map-get($grid-selectors, rowSelector), '.row');
-// #{ $rowSelector } {
-//     @include grid-alignment ($grid-columns, $grid-selectors);
-// }
+@include grid-alignment ($grid-columns, $grid-selectors);

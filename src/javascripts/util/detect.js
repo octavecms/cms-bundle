@@ -132,7 +132,7 @@ function isTablet () {
  * Check if motion should be reduced
  */
 function isReducedMotion () {
-    return matchMedia('(prefers-reduced-motion: reduce)').matches || isCSSRegressionTesting();
+    return matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 

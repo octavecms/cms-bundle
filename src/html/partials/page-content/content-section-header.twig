@@ -1,0 +1,48 @@
+{% set title = title|default('') %}
+{% set changed = changed|default(false) %}
+{% set expanded = expanded|default(false) %}
+{% set id = id|default(null) %}
+
+<header class="card__header accordion__header">
+    
+    {# Draggable icon #}
+    <a class="card__header__draggable" title="Drag to re-order sections or use arrow up and arrow down keys" tabindex="0" role="button">
+        {{ icon('draggable', {width: 6, height: 16}) }}
+    </a>
+
+    <div class="group group--middle group--5">
+        {# Title #}
+        <h3 class="group__fill">{{ title }}</h3>
+
+        {# Unsaved change dot / indicator #}
+        <span class="status {% if changed %}status--primary{% endif %}" aria-hidden="true">Unsaved changes</span>
+
+        {# Buttons #}
+        <div><div class="group group--2">
+            <button class="btn btn--tetriary btn--square btn--pill" title="Section options"><span class="btn__content">
+                {{ icon('more', {width: 14, height: 4}) }}
+            </span></button>
+
+            {# Accordion buttons, one to open it, another to close it #}
+            <button
+                title="Edit section"
+                class="btn btn--tetriary btn--square btn--pill accordion__expanded-hidden"
+                aria-expanded="{% if expanded %}true{% else %}false{% endif %}"
+                id="{{ id }}Header"
+                aria-controls="{{ id }}"
+            ><span class="btn__content">
+                {{ icon('edit', {width: 32, height: 32}) }}
+            </span></button>
+
+            <button
+                title="Collapse section"
+                class="btn btn--tetriary btn--square btn--pill accordion__collapsed-hidden"
+                aria-expanded="{% if expanded %}true{% else %}false{% endif %}"
+                id="{{ id }}Header"
+                aria-controls="{{ id }}"
+            ><span class="btn__content">
+                {{ icon('accordion', {width: 32, height: 32}) }}
+            </span></button>
+        </div></div>
+    </div>
+</header>

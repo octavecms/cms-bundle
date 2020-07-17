@@ -1,0 +1,32 @@
+{% set title = title|default('') %}
+{% set withEditor = withEditor|default(false) %}
+{% set expanded = expanded|default(false) %}
+{% set id = id|default(null) %}
+
+<header class="card__header accordion__header {% if expanded %}ui-dark{% endif %}">
+    <div class="group group--middle group--5">
+        {# Title #}
+        <h2 class="group__fill">{{ title }}</h2>
+
+        {# Buttons #}
+        <div><div class="group group--2">
+            {# WYSIWYG editor #}
+            {% if withEditor %}
+                <button class="btn btn--primary btn--square btn--pill" title="Preview"><span class="btn__content">
+                    {{ icon('editor', {width: 32, height: 32}) }}
+                </span></button>
+            {% endif %}
+
+            {# Accordion buttons, one to open it, another to close it #}
+            <button
+                title="Toggle accordion"
+                class="btn btn--tetriary btn--square btn--pill"
+                aria-expanded="{% if expanded %}true{% else %}false{% endif %}"
+                id="{{ id }}Header"
+                aria-controls="{{ id }}"
+            ><span class="btn__content">
+                {{ icon('accordion', {width: 32, height: 32}) }}
+            </span></button>
+        </div></div>
+    </div>
+</header>

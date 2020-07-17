@@ -1,3 +1,5 @@
+@import "mixins/lib/color";
+
 /**
  * Primary call to action button style modifier
  *
@@ -16,36 +18,18 @@
     $styles: (
         // Default styles
         'default': (
-            color:      var(--color-background),
+            color: color($color-light-background),
             background: var(--color-primary),
             hover-background: var(--color-primary),
         ),
         // Style when button is hovered or pressed down
         'hover down': (
-            color:      var(--color-background),
+            color: color($color-light-background),
         ),
-
-        // Focus visible styles
-        // 'focus-visible': (
-        //     box-shadow: 0 0 0 3px rgba(var(--color-primary-raw), 0.4),
-        // )
     );
+
+    aaa: color($color-light-background);
+    @debug  type-of(color($color-light-background));
 
     @include button-colors ($styles);
 }
-
-
-/*
- * Dark theme primary button style
- */
-
-/*
-.btn.btn--primary { // 1.
-    $theme: '.ui-dark'; // 2.
-    $styles: (
-    );
-
-    @include button-colors ($styles, $theme);
-}
-*/
-

@@ -1,0 +1,18 @@
+/**
+ * Status indicators / dots
+ */ 
+
+.status {
+    @extend %transition;
+    transition-property: background, opacity;
+    text-indent: -1000px;
+    overflow: hidden;
+    width: var(--spacer-2);
+    height: var(--spacer-2);
+    border-radius: 200px;
+    background: var(--color-outline);
+}
+
+.status--primary {
+    background: var(--color-primary);
+}

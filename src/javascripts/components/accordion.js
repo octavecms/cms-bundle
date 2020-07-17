@@ -25,22 +25,28 @@ class Accordion extends ResponsiveComponent {
             // Complex selector to prevent matching tab heading
             'headingSelector': '[aria-controls]:not([data-tabs-heading-id]):not([role="tab"]), [data-accordion-heading-id]',
 
+            // Parent selector for 'activeHeadingParentClassName'
+            'headingParentSelector': '.accordion__header',
+
             // CSS selector to find an accordion content
             'contentSelector': '[role="region"], [data-accordion-content-id]',
 
             // Classname which is added to the closed / collapsed accordion items
             // (to the parent element of the accordion content which is closed / collapsed)
-            'inactiveAccordionClassName': '',
+            'inactiveAccordionClassName': 'accordion--collapsed',
 
             // Classname which is added to the open / expanded accordion items
             // (to the parent element of the accordion content which is open / expanded)
-            'activeAccordionClassName': '',
+            'activeAccordionClassName': 'accordion--expanded',
 
             // Classname which is added to the open / expanded accordion heading item
-            'activeHeadingClassName': 'is-active',
+            'activeHeadingClassName': '',
+
+            // Classname which is added to the open / expanded accordion heading parent item, '.accordion__header'
+            'activeHeadingParentClassName': '',
 
             // Classname which is added to the open / expanded accordion content item
-            'activeContentClassName': 'is-active',
+            'activeContentClassName': '',
 
             // Animation name, if set it will be used to animate heading to active state
             'animationHeadingIn': null,
@@ -91,9 +97,6 @@ class Accordion extends ResponsiveComponent {
         const options    = this.options;
 
         this.hashReady   = false;
-
-        this.$headings   = $container.find(options.headingSelector);
-        this.$contents   = $container.find(options.contentSelector);
 
         // When opening / closing elements save height changes for autoScroll
         this.heightDiffs = map(Array(this.getAllIds().length), () => 0);
@@ -174,7 +177,7 @@ class Accordion extends ResponsiveComponent {
      * Handle heading click
      * Make sure heading belongs to this accordion instance before toggling content
      *
-     * @param {object} event Event
+     * @param {jQuery.Event} event Event
      * @protected
      */
     handleHeadingClick (event) {
@@ -328,11 +331,11 @@ class Accordion extends ResponsiveComponent {
     /**
      * Returns accordion id from an element
      *
-     * @param {object} $element Heading element
+     * @param {jQuery} $element Heading element
      * @returns {string} Accordion id
      */
     getId ($element) {
-        if ($element.is(this.$headings) || $element.is(this.$contents)) {
+        if ($element.is(this.getHeadings()) || $element.is(this.getContents())) {
             let id = $element.attr('data-accordion-heading-id');
 
             if (typeof id === 'undefined') {
@@ -357,11 +360,11 @@ class Accordion extends ResponsiveComponent {
      * @returns {Array} List of IDs
      */
     getAllIds () {
-        const headingIds = map(this.$headings.toArray(), element => {
+        const headingIds = map(this.getHeadings().toArray(), element => {
             return this.getId($(element));
         });
 
-        const contentIds = map(this.$contents.toArray(), element => {
+        const contentIds = map(this.getContents().toArray(), element => {
             return this.getId($(element));
         });
 
@@ -408,10 +411,10 @@ class Accordion extends ResponsiveComponent {
      * Returns content element by id
      *
      * @param {string} id Item id
-     * @returns {object} Content jQuery element
+     * @returns {jQuery} Content jQuery element
      */
     getContent (id) {
-        return this.$contents.filter((_, element) => {
+        return this.getContents().filter((_, element) => {
             return this.getId($(element)) === id;
         });
     }
@@ -420,12 +423,34 @@ class Accordion extends ResponsiveComponent {
      * Returns heading element by id
      *
      * @param {string} id Item id
-     * @returns {object} Heading jQuery element
+     * @returns {jQuery} Heading jQuery element
      */
     getHeading (id) {
-        return this.$headings.filter((_, element) => {
+        return this.getHeadings().filter((_, element) => {
             return this.getId($(element)) === id;
         });
+    }
+
+    /**
+     * Finds and returns all content elements
+     * 
+     * @returns {jQuery} List of content elements
+     */
+    getContents () {
+        const $container = this.$container;
+        const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }="accordion"]`);
+        return $container.find(this.options.contentSelector).not($subaccordions.find(this.options.contentSelector));
+    }
+
+    /**
+     * Finds and returns all headings
+     * 
+     * @returns {jQuery} List of heading elements
+     */
+    getHeadings () {
+        const $container = this.$container;
+        const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }="accordion"]`);
+        return $container.find(this.options.headingSelector).not($subaccordions.find(this.options.headingSelector));
     }
 
 
@@ -471,10 +496,13 @@ class Accordion extends ResponsiveComponent {
     animateHeading (id, direction) {
         const $heading = this.getHeading(id);
         const headingClassName = this.options.activeHeadingClassName;
+        const headingParentClassName = this.options.activeHeadingParentClassName;
+        const headingParentSelector = this.options.headingParentSelector;
         const expandedAttribute = this.options.expandedAttribute;
 
         if (direction === 'in') {
             $heading.addClass(headingClassName).attr(expandedAttribute, 'true');
+            $heading.closest(headingParentSelector).addClass(headingParentClassName);
 
             const headingAnimation = this.options.animationHeadingIn;
             if (headingAnimation) {
@@ -482,6 +510,7 @@ class Accordion extends ResponsiveComponent {
             }
         } else {
             $heading.removeClass(headingClassName).attr(expandedAttribute, 'false');
+            $heading.closest(headingParentSelector).removeClass(headingParentClassName);
 
             const headingAnimation = this.options.animationHeadingOut;
             if (headingAnimation) {
@@ -564,12 +593,12 @@ class Accordion extends ResponsiveComponent {
             $content.transition(animationName, animationHeight, {
                 'before':     () => {
                     $container.trigger('accordion.close');
+                    $content.parent().removeClass(this.options.activeAccordionClassName).addClass(this.options.inactiveAccordionClassName);
                 },
                 'after':      $content => {
                     $content.attr(this.options.hiddenAttribute, true);
 
                     $content.removeClass(this.options.activeContentClassName);
-                    $content.parent().removeClass(this.options.activeAccordionClassName).addClass(this.options.inactiveAccordionClassName);
 
                     $container.trigger('accordion.closed');
                     $container.trigger('appear');

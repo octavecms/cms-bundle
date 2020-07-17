@@ -1,0 +1,41 @@
+{% from 'macros/icon.twig' import icon %}
+
+{# Add section dropdown #}
+<div class="dropdown" data-plugin="dropdown" data-dropdown-placement="top-start" data-dropdown-toggle-mode="hover">
+    <button class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="addSectionDropdown">
+        <span class="btn__content">
+            <span>Add Section</span>
+            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+        </span>
+    </button>
+    
+    <div class="dropdown__menu d-none" aria-labelledby="addSectionDropdown">
+        <ul class="dropdown__menu__content">
+            <li>
+                <a role="button" tabindex="0" class="dropdown__item">
+                    Text
+                </a>
+            </li>
+            <li>
+                <a role="button" tabindex="0" class="dropdown__item">
+                    Quote
+                </a>
+            </li>
+            <li>
+                <a role="button" tabindex="0" class="dropdown__item">
+                    Image
+                </a>
+            </li>
+            <li>
+                <a role="button" tabindex="0" class="dropdown__item">
+                    Image Gallery
+                </a>
+            </li>
+            <li>
+                <a role="button" tabindex="0" class="dropdown__item">
+                    Table
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
