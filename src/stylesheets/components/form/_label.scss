@@ -52,60 +52,60 @@
  *     </div>
  */
 
-.form-control--float {
-    position: relative;
-}
-.form-control--float .form-label {
-    position: absolute;
-    padding: 0;
-    width: auto;
-    left: 0;
-    top: 0;
+// .form-control--float {
+//     position: relative;
+// }
+// .form-control--float .form-label {
+//     position: absolute;
+//     padding: 0;
+//     width: auto;
+//     left: 0;
+//     top: 0;
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    pointer-events: none;
+//     overflow: hidden;
+//     white-space: nowrap;
+//     text-overflow: ellipsis;
+//     pointer-events: none;
 
-    @extend %transition;
-    transform-origin: 0 0;
-    transition-property: transform, color;
-}
+//     @extend %transition;
+//     transform-origin: 0 0;
+//     transition-property: transform, color;
+// }
 
-.form-control--float input,
-.form-control--float textarea {
-    @include placeholder () {
-        // We use placeholder to detect when it's not shown to move label
-        // but we don't want to actually show it to the user
-        color: transparent !important;
-    }
-}
+// .form-control--float input,
+// .form-control--float textarea {
+//     @include placeholder () {
+//         // We use placeholder to detect when it's not shown to move label
+//         // but we don't want to actually show it to the user
+//         color: transparent !important;
+//     }
+// }
 
 // Move label when input is focused or has value
-$label-float-normal-font-size: 14;
-$label-float-minified-font-size: 20;
-$label-float-minified-offset: -18px;
+// $label-float-normal-font-size: 14;
+// $label-float-minified-font-size: 20;
+// $label-float-minified-offset: -18px;
 
-.form-control--float input:focus ~ .form-label,
-.form-control--float textarea:focus ~ .form-label,
-.form-control--float.is-not-empty .form-label,
-.form-control--float.is-focused:not(.form-control--select) .form-label {
-    transform: translate(0, #{ $label-float-minified-offset }) scale(#{ $label-float-normal-font-size / $label-float-minified-font-size });
-    // color: ...;
-}
+// .form-control--float input:focus ~ .form-label,
+// .form-control--float textarea:focus ~ .form-label,
+// .form-control--float.is-not-empty .form-label,
+// .form-control--float.is-focused:not(.form-control--select) .form-label {
+//     transform: translate(0, #{ $label-float-minified-offset }) scale(#{ $label-float-normal-font-size / $label-float-minified-font-size });
+//     // color: ...;
+// }
 
 // IE11 doesn't support "placeholder-shown" selector, needs to be separate from other selectors
-.form-control--float input:not(:placeholder-shown) ~ .form-label,
-.form-control--float textarea:not(:placeholder-shown) ~ .form-label {
-    transform: translate(0, #{ $label-float-minified-offset }) scale(#{ $label-float-normal-font-size / $label-float-minified-font-size });
-    // color: ...;
-}
+// .form-control--float input:not(:placeholder-shown) ~ .form-label,
+// .form-control--float textarea:not(:placeholder-shown) ~ .form-label {
+//     transform: translate(0, #{ $label-float-minified-offset }) scale(#{ $label-float-normal-font-size / $label-float-minified-font-size });
+//     // color: ...;
+// }
 
 
 /**
  * Error styles
  */
 
-.has-error .form-label {
-    color: $color-error;
-}
+// .has-error .form-label {
+//     color: $color-error;
+// }

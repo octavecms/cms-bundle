@@ -3,6 +3,7 @@
  */
 
 // Light theme
+$color-light-base:       255, 255, 255; // #FFFFFF
 $color-light-primary:    10, 98, 234;   // #0A62EA
 $color-light-secondary:  4, 174, 164;   // #04AEA4
 
@@ -20,9 +21,11 @@ $color-light-outline:    223, 227, 232; // #DFE3E8
 $color-light-focus:      59, 153, 252;  // #3B99FC @TODO not defined in design
 $color-light-shadow:     60, 62, 78;    // #3C3E4E
 
+$color-light-error:      234, 10, 10;   // #EA0A0A @TODO not defined in design
+
 // Gray theme
-$color-gray-primary:     $color-light-primary;
-$color-gray-secondary:   $color-light-secondary;
+// $color-gray-primary:     $color-light-primary;
+// $color-gray-secondary:   $color-light-secondary;
 
 $color-gray-background:  242, 246, 248; // #F2F6F8
 $color-gray-tetriary:    255, 255, 255; // #FFFFFF
@@ -35,12 +38,14 @@ $color-gray-heading:     60, 62, 78;    // #3C3E4E
 $color-gray-line:        232, 239, 243; // #E8EFF3 @TODO not defined in design
 $color-gray-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 
-$color-gray-focus:       59, 153, 252;  // #3B99FC @TODO not defined in design
-$color-gray-shadow:      60, 62, 78;    // #3C3E4E
+// $color-gray-focus:       59, 153, 252;  // #3B99FC @TODO not defined in design
+// $color-gray-shadow:      60, 62, 78;    // #3C3E4E
+
+// $color-gray-error:       234, 10, 10;   // #EA0A0A @TODO not defined in design
 
 // Dark theme
-$color-dark-primary:     $color-light-primary;
-$color-dark-secondary:   $color-light-secondary;
+// $color-dark-primary:     $color-light-primary;
+// $color-dark-secondary:   $color-light-secondary;
 
 $color-dark-background:  60, 62, 78;    // #3C3E4E
 $color-dark-tetriary:    83, 85, 98;    // #535562
@@ -53,8 +58,10 @@ $color-dark-heading:     255, 255, 255; // #FFFFFF
 $color-dark-line:        83, 85, 98;    // #535562 @TODO not defined in design
 $color-dark-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 
-$color-dark-focus:      59, 153, 252;   // #3B99FC @TODO not defined in design
-$color-dark-shadow:      60, 62, 78;    // #3C3E4E
+// $color-dark-focus:       59, 153, 252;  // #3B99FC @TODO not defined in design
+// $color-dark-shadow:      60, 62, 78;    // #3C3E4E
+
+// $color-dark-error:       234, 10, 10;   // #EA0A0A @TODO not defined in design
 
 
 /**
@@ -64,6 +71,7 @@ $themes: (
     light: (
         selector: ':root',
         values: (
+            base:       $color-light-base,
             primary:    $color-light-primary,
             secondary:  $color-light-secondary,
             tetriary:   $color-light-tetriary,
@@ -76,13 +84,14 @@ $themes: (
             outline:    $color-light-outline,
             focus:      $color-light-focus,
             shadow:     $color-light-shadow,
+            error:      $color-light-error,
         )
     ),
     gray: (
         selector: '.ui-gray',
         values: (
-            primary:    $color-gray-primary,
-            secondary:  $color-gray-secondary,
+            // primary:    $color-gray-primary,
+            // secondary:  $color-gray-secondary,
             tetriary:   $color-gray-tetriary,
             background: $color-gray-background,
             disabled:   $color-gray-disabled,
@@ -91,15 +100,16 @@ $themes: (
             heading:    $color-gray-heading,
             line:       $color-gray-line,
             outline:    $color-gray-outline,
-            focus:      $color-gray-focus,
-            shadow:     $color-gray-shadow,
+            // focus:      $color-gray-focus,
+            // shadow:     $color-gray-shadow,
+            // error:      $color-gray-error,
         )
     ),
     dark: (
         selector: '.ui-dark',
         values: (
-            primary:    $color-dark-primary,
-            secondary:  $color-dark-secondary,
+            // primary:    $color-dark-primary,
+            // secondary:  $color-dark-secondary,
             tetriary:   $color-dark-tetriary,
             background: $color-dark-background,
             disabled:   $color-dark-disabled,
@@ -108,8 +118,9 @@ $themes: (
             heading:    $color-dark-heading,
             line:       $color-dark-line,
             outline:    $color-dark-outline,
-            focus:      $color-dark-focus,
-            shadow:     $color-dark-shadow,
+            // focus:      $color-dark-focus,
+            // shadow:     $color-dark-shadow,
+            // error:      $color-dark-error,
         )
     ),
 );

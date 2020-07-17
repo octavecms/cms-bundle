@@ -22,7 +22,7 @@ $duration-slow:             $duration-normal * 2;
 $duration-block:            $duration-normal * 4;
 
 // %transition, %animation animation settings
-$transition-default-duration: $duration-normal;
+$transition-default-duration: $duration-fast;
 $transition-default-easing:   $easing-out;
 
 $transition-fast-duration:    $duration-fast;

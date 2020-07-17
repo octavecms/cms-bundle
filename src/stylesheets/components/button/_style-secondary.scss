@@ -1,3 +1,5 @@
+@import 'mixins/lib/str-replace';
+
 /**
  * Secondary call to action button style modifier
  *
@@ -13,6 +15,8 @@
  */
 
 .btn.btn--secondary { // 1.
+    @debug str-replace('#{ $link-focus-visible-shadow }', '--color-focus-raw', '--color-secondary');
+
     $styles: (
         // Default styles
         'default': (
@@ -27,24 +31,9 @@
 
         // Focus visible styles
         'focus-visible': (
-            box-shadow: 0 0 0 3px rgba(var(--color-secondary-raw), 0.4),
+            box-shadow: #{ str-replace('#{ $link-focus-visible-shadow }', '--color-focus-raw', '--color-secondary-raw') },
         )
     );
 
     @include button-colors ($styles);
 }
-
-
-/*
- * Dark theme secondary button style
- */
-
-/*
-.btn.btn--secondary { // 1.
-    $theme: '.ui-dark'; // 2.
-    $styles: (
-    );
-
-    @include button-colors ($styles, $theme);
-}
-*/

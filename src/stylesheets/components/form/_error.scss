@@ -7,7 +7,7 @@
  */
 
 .error-message {
-    color: $color-error;
+    color: var(--color-error);
     // ...
 }
 
@@ -25,5 +25,5 @@ div.error {
     display: block;
 
     // @extend %text--size-...;
-    color: $color-error;
+    color: var(--color-error);
 }

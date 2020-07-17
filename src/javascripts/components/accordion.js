@@ -187,6 +187,8 @@ class Accordion extends ResponsiveComponent {
         const activeId = this.getId($heading);
         const $content = this.getContent(activeId);
 
+        console.log(event.target, event.currentTarget, $heading);
+
         if ($content.length) {
             // Make sure we are not clicking on elements which shouldn't toggle accordion
             const $ignore  = $(event.target).closest(this.options.ignoreSelector);

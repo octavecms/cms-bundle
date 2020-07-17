@@ -1,0 +1,87 @@
+/**
+ * Switch style checkbox
+ */
+
+$switch-spacing: 6px;
+
+.form-control-switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    // Hide input out of view
+    &__input {
+        position: absolute;
+        clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);
+    }
+
+    &__label {
+        cursor: pointer;
+        text-align: right;
+
+        // Extended hover area
+        &:before {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            left: calc(var(--spacer-4) * -1);
+            top: calc(var(--spacer-4) * -1);
+            right: calc(var(--spacer-4) * -1);
+            bottom: calc(var(--spacer-4) * -1);
+        }
+    }
+
+    &__icon {
+        position: relative;
+        width: var(--spacer-6);
+        height: var(--spacer-5);
+        border-radius: 200px;
+        background: var(--color-disabled);
+
+        @extend %transition;
+        transition-property: background, box-shadow;
+        will-change: background, box-shadow;
+
+        &:before {
+            content: "";
+            background: var(--color-base);
+            width: calc(var(--spacer-5) - #{ $switch-spacing * 2 });
+            height: calc(var(--spacer-5) - #{ $switch-spacing * 2 });
+
+            position: absolute;
+            left: $switch-spacing;
+            top: $switch-spacing;
+            border-radius: 200px;
+
+            @extend %transition;
+            transition-property: transform;
+            will-change: transform;
+        }
+    }
+    
+    // Disabled state
+    &__input[disabled] ~ &__label {
+        cursor: default;
+    }
+    // input[disabled] ~ &__icon {
+    //     background: var(--color-disabled);
+    // }
+
+    // Focused
+    &__input {
+        @include link-focus-visible () {
+            & ~ .form-control-switch__icon {
+                box-shadow: $link-focus-visible-shadow;
+            }
+        }
+    }
+
+    // Checked state
+    &__input:checked ~ &__icon {
+        background: var(--color-primary);
+    }
+    &__input:checked ~ &__icon:before {
+        transform: translateX(16px);
+    }
+}

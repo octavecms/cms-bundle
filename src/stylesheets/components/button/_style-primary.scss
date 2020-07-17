@@ -18,18 +18,15 @@
     $styles: (
         // Default styles
         'default': (
-            color: color($color-light-background),
+            color: var(--color-base),
             background: var(--color-primary),
             hover-background: var(--color-primary),
         ),
         // Style when button is hovered or pressed down
         'hover down': (
-            color: color($color-light-background),
+            color: var(--color-base),
         ),
     );
-
-    aaa: color($color-light-background);
-    @debug  type-of(color($color-light-background));
 
     @include button-colors ($styles);
 }
