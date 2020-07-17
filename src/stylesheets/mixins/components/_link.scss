@@ -79,7 +79,8 @@
  */
 
 @mixin link-focus-visible () {
-    &.focus-visible {
+    &.focus-visible,
+    .no-js &:focus {
         @content;
     }
 }

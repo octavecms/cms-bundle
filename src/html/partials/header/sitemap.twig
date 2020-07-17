@@ -1,7 +1,7 @@
 {% from 'macros/icon.twig' import icon %}
 
 {# Sitemap dropdown #}
-<div class="dropdown" data-plugin="dropdown">
+<div class="dropdown dropdown--wide" data-plugin="dropdown" data-dropdown-toggle-mode="hover">
     <button class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="navbarSitemapDropdown">
         <span class="btn__content">
             <span>Company</span>
@@ -9,71 +9,77 @@
         </span>
     </button>
     
-    <ul class="dropdown__menu d-none" aria-labelledby="navbarSitemapDropdown">
-        <li>
-            <a href="#" class="dropdown__item">
-                Homepage
-            </a>
-        </li>
-        <li>
-            <a href="#" class="dropdown__item is-active">
-                Company
-            </a>
-        </li>
-        <li>
-            <a href="#" class="dropdown__item">
-                Portfolio
-            </a>
-        </li>
-        <li>
-            <a href="#" class="dropdown__item">
-                Services
-            </a>
-        </li>
-        <li>
-            <div class="dropdown dropdown--right" data-plugin="dropdown">
-                <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="navbarSitemapDropdown1">
-                    <span>Academy</span>
-                    {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+    <div class="dropdown__menu d-none" aria-labelledby="navbarSitemapDropdown">
+        <ul class="dropdown__menu__content">
+            <li>
+                <a href="#" class="dropdown__item">
+                    Homepage
                 </a>
-                <ul class="dropdown__menu d-none" aria-labelledby="navbarSitemapDropdown1">
-                    <li>
-                        <a href="#" class="dropdown__item">
-                            News
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown__item">
-                            Press Releases
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li>
-            <div class="dropdown dropdown--right" data-plugin="dropdown">
-                <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="navbarSitemapDropdown2">
-                    <span>Press Center</span>
-                    {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+            </li>
+            <li>
+                <a href="#" class="dropdown__item is-active">
+                    Company
                 </a>
-                <ul class="dropdown__menu d-none" aria-labelledby="navbarSitemapDropdown2">
-                    <li>
-                        <a href="#" class="dropdown__item">
-                            News
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown__item">
-                            Press Releases
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li>
-            <a href="#" class="dropdown__item">
-                Contact
-            </a>
-        </li>
-    </ul>
+            </li>
+            <li>
+                <a href="#" class="dropdown__item">
+                    Portfolio
+                </a>
+            </li>
+            <li>
+                <a href="#" class="dropdown__item">
+                    Services
+                </a>
+            </li>
+            <li>
+                <div class="dropdown dropdown--right" data-plugin="dropdown" data-dropdown-toggle-mode="hover">
+                    <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="navbarSitemapDropdown1">
+                        <span>Academy</span>
+                        {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+                    </a>
+                    <div class="dropdown__menu d-none" aria-labelledby="navbarSitemapDropdown1">
+                        <ul class="dropdown__menu__content">
+                            <li>
+                                <a href="#" class="dropdown__item">
+                                    News
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown__item">
+                                    Press Releases
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown dropdown--right" data-plugin="dropdown" data-dropdown-toggle-mode="hover">
+                    <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="navbarSitemapDropdown2">
+                        <span>Press Center</span>
+                        {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+                    </a>
+                    <div class="dropdown__menu d-none" aria-labelledby="navbarSitemapDropdown2">
+                        <ul class="dropdown__menu__content">
+                            <li>
+                                <a href="#" class="dropdown__item">
+                                    News
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown__item">
+                                    Press Releases
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="dropdown__item">
+                    Contact
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>

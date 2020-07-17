@@ -4,7 +4,12 @@ import createPlugin from 'jquery-plugin-generator';
 
 import 'util/animation/jquery.transition';
 import 'util/jquery.destroyed';
+import detect from 'util/detect';
 import namespace from 'util/namespace';
+import { createPopper } from '@popperjs/core';
+
+
+const MOUSE_LEAVE_DELAY = 200;
 
 
 /**
@@ -16,6 +21,8 @@ class Dropdown {
         return {
             'menuToggle': '.dropdown__toggle',
             'menuSelector': '.dropdown__menu',
+            'menuContentSelector': '.dropdown__menu__content',
+            'arrowSelector': '.dropdown__menu__arrow',
             'itemSelector': '.dropdown__item',
 
             // Dropdown position classnames
@@ -25,6 +32,9 @@ class Dropdown {
 
             // Events which trigger toggle
             'showTrigger': 'click returnkey',
+
+            // Toggle mode, either 'click' or 'hover'
+            'toggleMode': 'click',
 
             // Event names
             'eventShow': 'show.dropdown',
@@ -37,23 +47,41 @@ class Dropdown {
             'classNameDisabled': 'is-disabled',
             'classNameActive': 'is-active',
             'classNameFocused': 'is-focused',
+
+            'classNameIndicator': 'dropdown__menu__indicator',
+            'classNameIndicatorDropdown': 'dropdown__menu__indicator--dropdown',
         };
     }
 
     constructor ($container, opts) {
         const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+
+        if (options.toggleMode === 'hover' && !detect.hasHoverSupport()) {
+            options.toggleMode = 'click';
+        }
+
         this.$container = $container;
         this.$toggle = $container.children(options.menuToggle);
         this.$menu = $container.children(options.menuSelector);
-        
+        this.$menuContent = this.$menu.children(options.menuContentSelector);
+        this.$arrow = this.$menuContent.children(options.arrowSelector);
+        this.$indicator = $(`<div class="${ options.classNameIndicator }"></div>`).prependTo(this.$menuContent);
+        this.indicatorPositioned = false;
+
         this.$focused = null;
+        this.mouseLeaveTimer = null;
+        this.popper = false;
 
         this.ns = namespace();
         this.open = $container.attr('aria-expanded') == 'true';
         this.position =
-            $container.hasClass(options.classNamePositionUp) ? 'up' :
+            $container.hasClass(options.classNamePositionUp) ? 'top' :
             $container.hasClass(options.classNamePositionRight) ? 'right' : 
             $container.hasClass(options.classNamePositionLeft) ? 'left' : 'bottom';
+        this.placement =
+            $container.hasClass(options.classNamePositionUp) ? 'top-start' :
+            $container.hasClass(options.classNamePositionRight) ? 'right-start' : 
+            $container.hasClass(options.classNamePositionLeft) ? 'left-start' : 'bottom-start';
 
         // Clean up global events to prevent memory leaks and errors, if pages are dynamically loaded using JS
         // Needed only if attaching listeners to document, window, body or element outside the #ajax-page-loader-wrapper
@@ -62,9 +90,18 @@ class Dropdown {
 
         // // Global events
         // $(window).on(`resize.${ this.ns }`, this.handleResize.bind(this));
+        
         this.$toggle
             .on('click', this.toggle.bind(this))
             .on('keydown', this.handleToggleKey.bind(this));
+
+        if (options.toggleMode === 'hover') {
+            this.$toggle
+                .on('mouseenter', this.handleMouseEnter.bind(this));
+            
+            this.$container
+                .on('mouseleave', this.handleMouseLeave.bind(this));
+        }
     }
 
     toggle () {
@@ -87,10 +124,14 @@ class Dropdown {
 
                 this.$container.addClass(classNameOpen);
                 this.$toggle.attr('aria-expanded', true);
+
+                this.createPopper();
     
                 this.$menu.transitionstop(() => {
-                    this.$menu.transition(`dropdown-${ this.position }-in`, {
+                    
+                    this.$menu.transition(`dropdown-in`, {
                         'before': () => {
+                            this.updatePopper();
                             this.focusActiveItem();
                         },
                         'after': () => {
@@ -122,9 +163,10 @@ class Dropdown {
                 this.$toggle.attr('aria-expanded', false);
 
                 this.$menu.transitionstop(() => {
-                    this.$menu.transition(`dropdown-${ this.position }-out`, {
+                    this.$menu.transition(`dropdown-out`, {
                         'after': () => {
                             this.$container.trigger(eventHidden);
+                            this.positionIndicator(null);
                         }
                     });
                 });
@@ -181,6 +223,7 @@ class Dropdown {
         if ($item && $item.length) {
             if (!this.$focused || !this.$focused.is($item)) {
                 this.$focused = $item;
+                this.positionIndicator($item);
                 $item.addClass(classNameFocused);
             }
 
@@ -311,6 +354,124 @@ class Dropdown {
         if (!$target.closest(this.$container).length) {
             this.hide();
         }
+    }
+
+
+    /**
+     * Indicator
+     */
+
+    /**
+     * Position indicator below the item
+     * 
+     * @param {object} $item Item element
+     * @protected
+     */
+    positionIndicator ($item) {
+        if ($item && $item.length) {
+            const menuBox = this.$menuContent.get(0).getBoundingClientRect();
+            const itemBox = $item.get(0).getBoundingClientRect();
+    
+            this.$indicator
+                .toggleClass(this.options.classNameIndicatorDropdown, $item.parent().hasClass('dropdown'))
+                .css({
+                    'width': itemBox.width,
+                    'height': itemBox.height,
+                    'transform': `translate(${ itemBox.left - menuBox.left }px, ${ itemBox.top - menuBox.top }px)`
+                });
+            
+            if (!this.indicatorPositioned) {
+                this.$indicator.css('transition', 'none');
+
+                requestAnimationFrame(() => {
+                    this.$indicator.css('transition', '');
+                });
+            }
+            this.indicatorPositioned = true;
+        } else {
+            this.indicatorPositioned = false;
+        }
+    }
+
+
+    /**
+     * Popper
+     * ------------------------------------------------------------------------
+     */
+
+    /**
+     * Create popper
+     * 
+     * @protected
+     */
+    createPopper () {
+        if (!this.popper) {
+            const isSubDropdown = !!this.$container.parent().closest('.dropdown').length;
+
+            this.popper = createPopper(this.$toggle.get(0), this.$menu.get(0), {
+                placement: this.placement,
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: ({ placement }) => {
+                                if (isSubDropdown) {
+                                    return [placement.indexOf('start') !== -1 ? -24 : 24, 24];
+                                } else {
+                                    return [placement.indexOf('start') !== -1 ? -16 : 16, 16];
+                                }
+                            },
+                        },
+                    },
+                ],
+            });
+        }
+    }
+
+    /**
+     * Update popper position
+     * 
+     * @protected
+     */
+    updatePopper () {
+        this.popper.update();
+        this.placement = this.popper.state.placement;
+        this.position =
+            this.placement.indexOf('bottom') !== -1 ? 'bottom' :
+            this.placement.indexOf('top') !== -1 ? 'top' :
+            this.placement.indexOf('left') !== -1 ? 'left' : 'right';
+    }
+
+
+    /**
+     * Hover mode
+     * ------------------------------------------------------------------------
+     */
+
+     /**
+      * On mouse enter reset leave timer or show the menu
+      * 
+      * @protected
+      */
+    handleMouseEnter () {
+        if (this.mouseLeaveTimer) {
+            clearTimeout(this.mouseLeaveTimer);
+            this.mouseLeaveTimer = null;
+        }
+
+        this.show();
+    }
+
+    /**
+      * On mouse leave wait before hiding menu
+      * 
+      * @protected
+      */
+    handleMouseLeave () {
+        this.mouseLeaveTimer = setTimeout(() => {
+            this.mouseLeaveTimer = null;
+            this.hide();
+        }, MOUSE_LEAVE_DELAY);
     }
 }
 

@@ -1,0 +1,38 @@
+/**
+ * Dropdown button style
+ *
+ * @demo
+ *     <a class="btn btn--dropdown"><span class="btn__content">Normal state</span></a>
+ *     <a class="btn btn--dropdown is-active"><span class="btn__content">Active state</span></a>
+ *     <a class="btn btn--dropdown is-disabled"><span class="btn__content">Disabled state</span></a>
+ */
+
+.btn.btn--dropdown { // 1.
+
+    $styles: (
+        // Default styles
+        'default': (
+            color:            var(--color-heading),
+            background:       var(--color-tetriary),
+            hover-background: transparent,
+            icon:             var(--color-text),
+            border:           var(--color-tetriary),
+            hover-border:     var(--color-tetriary),
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color:      var(--color-heading),
+        ),
+    );
+
+    &:before,
+    &:after {
+        border: 1px solid;
+    }
+
+    .btn__content {
+        justify-content: space-between;
+    }
+
+    @include button-colors ($styles);
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en" class="has-hover">
+<html dir="ltr" lang="en" class="has-hover no-js">
 <head>
     {# Default meta tags #}
         <meta charset="utf-8">
@@ -21,6 +21,11 @@
         <meta name="theme-color" content="#0275d8" />
         <meta name="msapplication-config" content="/assets/manifest/browserconfig.xml" />
 
+    {# Mark JS as active, set viewport size variables, this is important for UI to prevent content jumping #}
+        <script>
+            document.documentElement.classList.remove('no-js');
+            document.documentElement.classList.add('js');
+        </script>
 
     {# CSS #}
         <link rel="stylesheet" href="/assets/stylesheets/admin.css" />
