@@ -117,7 +117,7 @@ class Dropdown {
      */
     toggle (event) {
         if (this.open) {
-            this.hide();
+            this.hide(event);
         } else {
             this.show(event);
         }
@@ -174,6 +174,11 @@ class Dropdown {
                 this.$menu
                     .on(`focus.${ namespace } mouseenter.${ namespace }`, itemSelector, this.handleItemMouseEnter.bind(this))
                     .on(`keydown.${ namespace }`, itemSelector, this.handleKey.bind(this));
+
+                // Prevent clicking on a button from submitting a form or link navigation
+                if (event && event.type === 'click') {
+                    event.preventDefault();
+                }
             }
         }
     }
@@ -181,14 +186,14 @@ class Dropdown {
     /**
      * Hide dropdown
      */
-    hide () {
+    hide (event) {
         if (!this.isDisabled() && this.open) {
             const { eventHide, eventHidden, classNameOpen, classNameToggleActive } = this.options;
             const namespace = this.ns;
-            const event = $.Event(eventHide);
-            this.$container.trigger(event);
+            const hideEventObject = $.Event(eventHide);
+            this.$container.trigger(hideEventObject);
 
-            if (!event.isDefaultPrevented()) {
+            if (!hideEventObject.isDefaultPrevented()) {
                 this.open = false;
 
                 this.$container.removeClass(classNameOpen);
@@ -216,6 +221,11 @@ class Dropdown {
 
                 $(document).off(`.${ namespace }`);
                 this.$menu.off(`.${ namespace }`);
+
+                // Prevent clicking on a button from submitting a form or link navigation
+                if (event && event.type === 'click') {
+                    event.preventDefault();
+                }
             }
         }
     }
@@ -592,9 +602,21 @@ class Dropdown {
                         options: {
                             offset: ({ placement }) => {
                                 if (isSubDropdown) {
-                                    return [placement.indexOf('start') !== -1 ? -24 : 24, 24];
+                                    if (placement.indexOf('start') !== -1) {
+                                        return [-24, 24];
+                                    } else if (placement.indexOf('end') !== -1) {
+                                        return [24, 24];
+                                    } else {
+                                        return [0, 24];
+                                    }
                                 } else {
-                                    return [placement.indexOf('start') !== -1 ? -16 : 16, 16];
+                                    if (placement.indexOf('start') !== -1) {
+                                        return [-16, 16];
+                                    } else if (placement.indexOf('end') !== -1) {
+                                        return [16, 16];
+                                    } else {
+                                        return [0, 16];
+                                    }
                                 }
                             },
                         },

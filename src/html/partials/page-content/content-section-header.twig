@@ -19,9 +19,27 @@
 
         {# Buttons #}
         <div><div class="group group--2">
-            <button class="btn btn--tetriary btn--square btn--pill" title="Section options"><span class="btn__content">
-                {{ icon('more', {width: 14, height: 4}) }}
-            </span></button>
+
+            <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom">
+                <button class="dropdown__toggle btn btn--tetriary btn--square btn--pill" title="Section options" aria-expanded="false" id="{{ id }}Options"><span class="btn__content">
+                    {{ icon('more', {width: 14, height: 4}) }}
+                </span></button>
+                
+                <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options">
+                    <ul class="dropdown__menu__content">
+                        <li>
+                            <a href="#" class="dropdown__item">
+                                Action 1
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown__item">
+                                Action 2
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             {# Accordion buttons, one to open it, another to close it #}
             <button

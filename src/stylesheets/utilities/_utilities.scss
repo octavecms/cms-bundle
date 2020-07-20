@@ -1,4 +1,5 @@
 @import "mixins/helpers/utilities";
+@import "mixins/lib/map-get-deep";
 
 /**
  * Spacer CSS variables
@@ -22,7 +23,24 @@
     // Loop over each utility property
     @each $key, $utility in $utilities {
         @if not map-get($utility, responsive) {
-            @include generate-utility($utility, '');
+            $values: map-get($utility, values);
+            $skip: false;
+
+            // Search if all of the value keys are actually breakpoints
+            @if type-of($values) == 'map' {
+                $skip: true;
+
+                // Check if any of the '$breakpoint' is not an actual breakpoint
+                @each $breakpoint, $value in $values {
+                    @if $skip and not is-valid-media-breakpoint($breakpoint) {
+                        $skip: false;
+                    }
+                }
+            }
+            
+            @if not $skip {
+                @include generate-utility($utility, '');
+            }
         }
     }
 }
@@ -40,6 +58,12 @@
             @each $key, $utility in $utilities {
                 @if map-get($utility, responsive) == true {
                     @include generate-utility($utility, $breakpoint);
+                } @else if type-of(map-get($utility, values)) == 'map' and map-has-key(map-get($utility, values), $breakpoint) {
+                    // Values is (xs: (...), sm: (...), ...)
+                    $values-override: map-get-deep($utility, values, $breakpoint);
+                    @if $values-override {
+                        @include generate-utility($utility, '', $values-override);
+                    }
                 }
             }
         }

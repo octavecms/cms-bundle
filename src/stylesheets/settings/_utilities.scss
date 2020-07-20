@@ -5,24 +5,44 @@
 $utilities: () !default;
 
 $utilities: map-merge((
+    /*
+     * Generates text align classnames
+     *   .align-baseline, .align-top, ...
+     */
     'align': (
         property: vertical-align,
         class: align,
         values: baseline top middle bottom text-bottom text-top,
     ),
 
+    /*
+     * Generates text align classnames
+     *   .text-left, .text-center, .text-right
+     */
     'text-align': (
         responsive: true,
         property: text-align,
-        values: left center, right
+        values: left center right,
         class: text,
     ),
+
+    /*
+     * Generates text color classnames
+     *   .text-color-primary, .text-color-secondar, ...
+     */
     'text-color': (
         property: color,
         values: $text-colors,
         class: text-color
     ),
 
+    /*
+     * Generates padding utility classnames
+     *   .pt-0, .pt-1, ..., .pt-sm-0, .pt-sm-1, ..., .py-0, ...
+     *   .pb-0, .pb-1, ..., .pb-sm-0, .pb-sm-1, ...
+     *   .pl-0, ..., .px-0, ...
+     *   .pr-0, ...
+     */
     'padding-top': (
         responsive: true,
         property: padding-top,
@@ -48,6 +68,13 @@ $utilities: map-merge((
         values: $spacers,
     ),
 
+    /*
+     * Generates margin utility classnames
+     *   .mt-0, .mt-1, ..., .mt-sm-0, .mt-sm-1, ..., .my-0, ...
+     *   .mb-0, .mb-1, ..., .mb-sm-0, .mb-sm-1, ...
+     *   .ml-0, ..., .mx-0, ...
+     *   .mr-0, ...
+     */
     'margin-top': (
         responsive: true,
         property: margin-top,
@@ -73,6 +100,11 @@ $utilities: map-merge((
         values: map-merge($spacers, (auto: auto)),
     ),
 
+    /*
+     * Generates display utility classnames
+     *   .d-none, .d-inline, ...
+     *   .d-sm-none, .d-sm-inline, ...
+     */
     'display': (
         responsive: true,
         print: true,
@@ -80,6 +112,45 @@ $utilities: map-merge((
         values: none inline inline-block block table table-row table-cell flex inline-flex,
         class: d,
     ),
+
+    /**
+     * Generates classnames with different values for different breakpoints, but all
+     * breakpoints will use the same classname, making the classname responsive without
+     * generating per breakpoint classnames
+     *   .block-small, .block-large
+     */
+    /*
+    'block-top': (
+        property: margin-top,
+        class: block,
+        use: reset-first-child,
+        values: (
+            xs: (
+                'small': 12px,
+                'large': 24px
+            ),
+            md: (
+                'small': 36px,
+                'large': 72px
+            )
+        )
+    ),
+    'block-bottom': (
+        property: margin-bottom,
+        class: block,
+        use: reset-last-child,
+        values: (
+            xs: (
+                'small': 12px,
+                'large': 24px
+            ),
+            md: (
+                'small': 36px,
+                'large': 72px
+            )
+        )
+    ),
+    */
 
 ), $utilities);
 

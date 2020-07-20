@@ -10,7 +10,7 @@
     $selectors: ();
 
     @each $classname in $classnames {
-        @if $breakpoint {
+        @if $breakpoint and $breakpoint != '' {
             $selectors: append($selectors, '.#{ $classname }-#{ $breakpoint }#{ $postfix }', comma);
         }
 
@@ -27,10 +27,19 @@
  * Generate utility classnames
  */
 
-@mixin generate-utility ($utility, $breakpoint) {
+@mixin generate-utility ($utility, $breakpoint, $values-override: false) {
     $class: map-get($utility, class);
     $values: map-get($utility, values);
     $properties: map-get($utility, property);
+    $use: map-get($utility, use);
+
+    @if $use and type-of($use) == 'string' {
+        $use: str-split($use, " ");
+    }
+
+    @if $values-override {
+        $values: $values-override;
+    }
 
     @each $key, $value in $values {
         // If values is a list instead of a map then $value is null
@@ -42,12 +51,60 @@
 
         #{ $selector } {
             @if type-of($properties) == 'list' {
+                // A list of properties, eg. 'padding-top padding-bottom'
                 @each $property in $properties {
                     #{ $property }: #{ $value };
                 }
             } @else {
+                // Single property
                 #{ $properties }: #{ $value };
             }
+
+            // Apply use
+            @if index($use, reset-first-child) {
+                @include use-reset-first-child($utility);
+            }@else if index($use, reset-last-child) {
+                @include use-reset-last-child($utility);
+            }
+        }
+    }
+}
+
+
+/**
+ * Modifiers to reset value if element is first child
+ */
+@mixin use-reset-first-child ($utility) {
+    $properties: map-get($utility, property);
+
+    &:first-child {
+        @if type-of($properties) == 'list' {
+            // A list of properties, eg. 'padding-top padding-bottom'
+            @each $property in $properties {
+                #{ $property }: 0;
+            }
+        } @else {
+            // Single property
+            #{ $properties }: 0;
+        }
+    }
+}
+
+/**
+ * Modifiers to reset value if element is last child
+ */
+@mixin use-reset-last-child ($utility) {
+    $properties: map-get($utility, property);
+
+    &:last-child {
+        @if type-of($properties) == 'list' {
+            // A list of properties, eg. 'padding-top padding-bottom'
+            @each $property in $properties {
+                #{ $property }: 0;
+            }
+        } @else {
+            // Single property
+            #{ $properties }: 0;
         }
     }
 }

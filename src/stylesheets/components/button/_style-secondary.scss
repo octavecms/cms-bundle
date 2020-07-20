@@ -15,8 +15,6 @@
  */
 
 .btn.btn--secondary { // 1.
-    @debug str-replace('#{ $link-focus-visible-shadow }', '--color-focus-raw', '--color-secondary');
-
     $styles: (
         // Default styles
         'default': (

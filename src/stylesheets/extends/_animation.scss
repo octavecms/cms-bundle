@@ -17,7 +17,13 @@
 @mixin transition-fast () {
     // Edit the values in html/src/stylesheets/settings/_animations.scss
     transition-duration: $transition-fast-duration;
-    transition-timing-function: $transition-slow-easing;
+    transition-timing-function: $transition-fast-easing;
+}
+
+@mixin transition-faster () {
+    // Edit the values in html/src/stylesheets/settings/_animations.scss
+    transition-duration: $transition-faster-duration;
+    transition-timing-function: $transition-faster-easing;
 }
 
 @mixin transition-slow () {
@@ -37,6 +43,9 @@
 }
 %transition-fast {
     @include transition-fast();
+}
+%transition-faster {
+    @include transition-faster();
 }
 %transition-slow {
     @include transition-slow();

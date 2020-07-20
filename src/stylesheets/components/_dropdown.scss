@@ -92,7 +92,7 @@
         left: 0;
         bottom: 100%;
         width: 100%;
-        height: var(--spacer-4);
+        height: var(--spacer-3);
     }
 
     // Divider line
@@ -111,8 +111,7 @@
         border-radius: 200px;
         background: var(--color-primary);
 
-        @extend %transition;
-        transition-duration: $duration-fast;
+        @extend %transition-faster;
         transition-property: transform, width, height, background-color, opacity;
 
         &--dropdown {
@@ -196,8 +195,19 @@
  * Dropdown which opens at the bottom
  */
 
+.dropdown__menu[data-popper-placement="bottom"],
+.dropdown__menu[data-popper-placement="top"] {
+    // Arrow
+    .dropdown__menu__content:before {
+        margin-left: calc(var(--spacer-2)*-1);
+        left: 50%;
+        right: auto;
+    }
+}
+
 .dropdown__menu[data-popper-placement="bottom-end"],
 .dropdown__menu[data-popper-placement="top-end"] {
+    // Arrow
     .dropdown__menu__content:before {
         left: auto;
         right: var(--spacer-5);

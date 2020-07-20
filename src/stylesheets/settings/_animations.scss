@@ -17,6 +17,7 @@ $easing-in-out-subtle:      ease;
 
 // Animation durations
 $duration-normal:           .4s;
+$duration-faster:           .15s;
 $duration-fast:             $duration-normal / 2;
 $duration-slow:             $duration-normal * 2;
 $duration-block:            $duration-normal * 4;
@@ -27,6 +28,9 @@ $transition-default-easing:   $easing-out;
 
 $transition-fast-duration:    $duration-fast;
 $transition-fast-easing:      $easing-out;
+
+$transition-faster-duration:  $duration-faster;
+$transition-faster-easing:    $easing-out;
 
 $transition-slow-duration:    $duration-slow;
 $transition-slow-easing:      $easing-out;
