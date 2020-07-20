@@ -1,0 +1,58 @@
+{% from 'macros/icon.twig' import icon %}
+
+{# "General" form #}
+<div class="form-group">
+    <label class="form-label" for="contentGeneralTitle">Article Title</label>
+    <div class="input-group">
+        <div class="input-group__input form-control form-control--input input-group__merge">
+            <input id="contentGeneralTitle" name="title" type="text" required maxlength="167" value="Виды коммерческой недвижимости: сектора, типы и форматы" />
+        </div>
+        <label class="form-label input-group__text input-group__merge text-small text-color-small" for="contentGeneralTitle">
+            167
+        </label>
+    </div>
+</div>
+
+
+{# Category #}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        <label class="form-label" for="contentGeneralCategory">Category</label>
+        <div class="form-control form-control--select">
+            <select id="contentGeneralCategory" name="category" required data-plugin="select2">
+                <option value="a" selected>Основы</option>
+                <option value="b">Lorem ipsum</option>
+                <option value="c">Dolor sit amet</option>
+            </select>
+        </div>
+    </div></div>
+</div>
+
+
+{# URL #}
+<div class="form-group">
+    <label class="form-label" for="contentGeneralUrl">URL</label>
+    <div class="input-group">
+        <label class="form-label input-group__text input-group__merge text-medium" for="contentGeneralUrl">
+            academy/
+        </label>
+        <div class="input-group__input input-group__merge form-control form-control--input">
+            <input id="contentGeneralUrl" name="url" type="text" required value="vidy-kommercheskoi-nedvizhimosti-sektora-tipy-i-formaty" />
+        </div>
+    </div>
+</div>
+
+{# Date #}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        <label class="form-label" for="contentGeneralDate">Publication date</label>
+        <div class="input-group">
+            <div class="input-group__input form-control form-control--input">
+                <input id="contentGeneralDate" name="date" type="text" required value="19 мая 2020, 10:00" />
+            </div>
+            <label class="form-label input-group__icon" for="contentGeneralDate">
+                {{ icon('calendar', {width: 32, height: 32, 'aria-label': 'Calendar'}) }}
+            </label>
+        </div>
+    </div></div>
+</div>

@@ -14,12 +14,12 @@
  * Input layout styles
  */
 %input-layout {
-    // width: ...;
-	// height: ...;
-	// padding: ...;
-	// background: ...;
-    // border-radius: ...;
-    // border: ...;
+    width: 100%;
+	height: var(--spacer-6);
+	padding: 0 var(--spacer-3);
+	background: var(--color-background);
+    border-radius: $border-radius;
+    border: 1px solid var(--color-outline);
 
     // Fix for FF extending input on large font sizes due to "size"
     // attribute default value
@@ -44,7 +44,8 @@
  */
 %input-text {
     // Text
-    // color: ...;
+    color: var(--color-heading);
+    @extend %text--size-medium;
 
 	line-height: normal;
 	outline: none;
@@ -66,9 +67,9 @@
     // }
 
     // Focused state
-    // &:focus {
-    //     color: ...;
-    // }
+    &:focus {
+        box-shadow: $link-focus-visible-shadow;
+    }
 
     // Hide placeholder when focused
     // .has-hover &:hover:focus,

@@ -7,6 +7,7 @@ module.exports = {
         './components/common/init',
         './components/dropdown',
         './components/accordion',
+        './components/form/select2',
     ],
     'example-grid': [
         './components/common/init',

@@ -13,5 +13,7 @@
  */
 
 .form-group {
-    @include margins-top-bottom($spacing);
+    @include margins-top-bottom((
+        xs: calc(var(--spacer-4) + 4px),
+    ));
 }

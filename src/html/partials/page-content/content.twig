@@ -1,17 +1,18 @@
 {% from 'macros/icon.twig' import icon %}
 
 <div class="card-list">
-    <div class="card accordion accordion--collapsed"
+    <div class="card accordion accordion--expanded"
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
         {% include 'partials/page-content/content-header.twig' with {
             'title': 'General',
-            'id': 'contentGeneral'
+            'id': 'contentGeneral',
+            'expanded': true,
         } %}
-        <div role="region" aria-labelledby="contentGeneralHeader" id="contentGeneral" aria-hidden="true" class="accordion__content card__content">
+        <div role="region" aria-labelledby="contentGeneralHeader" id="contentGeneral" aria-hidden="false" class="accordion__content card__content">
             <div class="card__body">
-                Form...
+                {% include 'partials/page-content/content-section-general.twig' %}
             </div>
         </div>
     </div>

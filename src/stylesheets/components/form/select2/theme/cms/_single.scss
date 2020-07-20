@@ -1,0 +1,86 @@
+@import "mixins/lib/svg-to-data-url";
+
+.select2-selection--single {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-outline);
+    border-radius: $border-radius;
+
+    .select2-selection__rendered {
+        color: #444;
+        line-height: $select2-height;
+    }
+
+    .select2-selection__clear {
+        cursor: pointer;
+        float: right;
+        height: calc(#{ $select2-height } - 2px);
+        margin-right: 20px;
+        padding-right: 0px;
+    }
+
+    .select2-selection__placeholder {
+        color: var(--color-light);
+    }
+
+    .select2-selection__arrow {
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        
+        width: var(--spacer-6);
+        height: calc(#{ $select2-height } - 2px);
+        
+        b {
+            background: svg-to-data-url('<svg width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3L5 7 1 3" stroke="rgb(#{ $color-light-text })" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -5px 0 0 -5px;
+
+            @include transition-fast();
+            transition-property: transform;
+            transform-origin: center;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: $link-focus-visible-shadow;
+    }
+}
+
+&[dir="rtl"] {
+    .select2-selection--single {
+        .select2-selection__clear {
+           float: left;
+        }
+
+        .select2-selection__arrow {
+            left: 1px;
+            right: auto;
+        }
+    }
+}
+
+&.select2-container--disabled {
+    .select2-selection--single {
+        background-color: #eee;
+        cursor: default;
+
+        .select2-selection__clear {
+            display: none;
+        }
+    }
+}
+
+&.select2-container--open {
+    .select2-selection--single {
+        .select2-selection__arrow {
+            b {
+                transform: rotate(-180deg);
+            }
+        }
+    }
+}

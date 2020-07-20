@@ -1,0 +1,78 @@
+.input-group {
+    display: flex;
+    border-radius: $border-radius;
+
+    &__icon,
+    &__text {
+        white-space: nowrap;
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: var(--spacer-6);
+        width: auto;
+    
+        border: 1px solid var(--color-outline);
+        padding: 0 var(--spacer-3);
+        border-radius: $border-radius;
+    }
+    &__merge {
+        &:not(:last-child),
+        &:not(:last-child) input {
+            border-right: 0;
+            padding-right: 0;
+        }
+        & + .input-group__merge,
+        & + .input-group__merge input {
+            border-left: 0;
+            padding-left: 0;
+        }
+    }
+    &__icon {
+        padding-left: 0;
+        padding-right: 0;
+        min-width: var(--spacer-6);
+    }
+    &__text {
+        border: 1px solid var(--color-outline);
+    }
+    &__input {
+        flex-grow: 1;
+    }
+
+    &:focus-within {
+        box-shadow: $link-focus-visible-shadow;
+
+        input,
+        select {
+            box-shadow: none;
+        }
+    }
+
+    > * {
+        &, input, select {
+            border-radius: 0;
+        }
+    }
+    > *:not(:last-child) {
+        &, input, select {
+            border-right: 0
+        }
+    }
+
+    > *:first-child {
+        &, input, select {
+            border-radius: $border-radius 0 0 $border-radius;
+        }
+    }
+    > *:last-child {
+        &, input, select {
+            border-radius: 0 $border-radius $border-radius 0;
+        }
+    }
+    > *:first-child:last-child {
+        &, input, select {
+            border-radius: $border-radius;
+        }
+    }
+}

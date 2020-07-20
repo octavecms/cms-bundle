@@ -23,7 +23,8 @@
     "focus-visible": "^5.1.0",
     "jquery-app": "^1.4.0",
     "jquery-plugin-generator": "^1.4.0",
-    "normalize-scss": "^7.0.0"
+    "normalize-scss": "^7.0.0",
+    "select2": "^4.0.13"
   },
   "browserslist": [
     "defaults",

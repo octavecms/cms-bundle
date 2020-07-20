@@ -10,12 +10,13 @@
     display: block;
     overflow: hidden;
     width: 100%;
-    // padding: ...;
-
+    padding: 0 0 calc(var(--spacer-3) - 4px);
+    
     // Prevent text selection when clicked twice
     user-select: none;
-
+    
     // Styles
+    cursor: pointer;
     // @extend %text--size-input;
     // color: $color-light-text;
 
