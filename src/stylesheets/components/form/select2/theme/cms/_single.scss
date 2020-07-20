@@ -45,6 +45,25 @@
         }
     }
 
+    // Image
+    .select2-selection__image {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-top: -1px; // Due to border
+        margin-left: calc(var(--spacer-2) * -1);
+
+        img {
+            flex-grow: 0;
+            flex-shrink: 0;
+            width: var(--spacer-5);
+            height: var(--spacer-5);
+            object-fit: cover;
+            margin-right: var(--spacer-3);
+            border-radius: 2px;
+        }
+    }
+
     &:focus {
         outline: none;
         box-shadow: $link-focus-visible-shadow;

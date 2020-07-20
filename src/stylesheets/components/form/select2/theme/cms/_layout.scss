@@ -70,6 +70,24 @@
                 }
             }
         }
+
+        // Image
+        .select2-results__option__image {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: var(--spacer-2) 0;
+
+            img {
+                flex-grow: 0;
+                flex-shrink: 0;
+                width: var(--spacer-5);
+                height: var(--spacer-5);
+                object-fit: cover;
+                margin-right: var(--spacer-3);
+                border-radius: 2px;
+            }
+        }
     }
 
     .select2-results__option--group {
