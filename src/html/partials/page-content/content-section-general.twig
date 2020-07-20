@@ -30,7 +30,7 @@
 {# Author #}
 <div class="form-group">
     <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-        <label class="form-label" for="contentGeneralAuthor">Author <span>Optional</span></label>
+        <label class="form-label" for="contentGeneralAuthor">Author <small>(Optional)</small></label>
         <div class="form-control form-control--select">
             <select id="contentGeneralAuthor" name="category" required data-plugin="select2">
                 <option data-image="/assets/images/temp/select-user.png" value="a" selected>Андрей Богданов</option>
@@ -44,7 +44,10 @@
 
 {# URL #}
 <div class="form-group">
-    <label class="form-label" for="contentGeneralUrl">URL</label>
+    <label class="form-label" for="contentGeneralUrl">
+        URL
+        <span class="tooltip-icon" data-plugin="tooltip" data-tooltip-placement="right" title="Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.">?</span>
+    </label>
     <div class="input-group">
         <label class="form-label input-group__text input-group__merge text-medium" for="contentGeneralUrl">
             academy/

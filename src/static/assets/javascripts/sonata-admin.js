@@ -125,7 +125,6 @@ var Admin = {
                         // NEXT_MAJOR: Remove Select2 v3 support.
                         return Admin.get_select2_width(window.Select2 ? this.element : select);
                     },
-                    theme: 'cms',
                     dropdownAutoWidth: true,
                     minimumResultsForSearch: minimumResultsForSearch,
                     allowClear: allowClearEnabled,

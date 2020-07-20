@@ -44,8 +44,9 @@
  */
 %input-text {
     // Text
-    color: var(--color-heading);
+    @extend %text--style-default;
     @extend %text--size-medium;
+    color: var(--color-heading);
 
 	line-height: normal;
 	outline: none;

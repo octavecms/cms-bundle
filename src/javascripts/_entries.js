@@ -6,6 +6,7 @@ module.exports = {
     'admin': [
         './components/common/init',
         './components/dropdown',
+        './components/tooltip',
         './components/accordion',
         './components/form/select2',
     ],

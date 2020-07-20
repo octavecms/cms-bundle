@@ -34,6 +34,13 @@
         display: inline-block;
     }
 
+    // Small
+    small {
+        font-size: inherit;
+        line-height: inherit;
+        color: var(--color-small);
+    }
+
     // Extended :hover area
     &:before {
         content: "";

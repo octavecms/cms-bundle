@@ -1,13 +1,16 @@
 @import "mixins/lib/svg-to-data-url";
 
 .select2-selection--single {
+    @extend %text--size-medium;
+
     background-color: var(--color-background);
     border: 1px solid var(--color-outline);
     border-radius: $border-radius;
 
     .select2-selection__rendered {
         color: #444;
-        line-height: $select2-height;
+        // line-height: $select2-height;
+        line-height: calc(#{ $select2-height } - 2px);
     }
 
     .select2-selection__clear {
@@ -50,12 +53,10 @@
         position: relative;
         display: flex;
         align-items: center;
-        margin-top: -1px; // Due to border
-        margin-left: calc(var(--spacer-2) * -1);
+        margin-left: calc(var(--spacer-2) * -1 - 1px); // -1px due to border
 
         img {
-            flex-grow: 0;
-            flex-shrink: 0;
+            flex: 0 0 var(--spacer-5);
             width: var(--spacer-5);
             height: var(--spacer-5);
             object-fit: cover;

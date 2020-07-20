@@ -34,7 +34,8 @@ function formatResult (state) {
 const originalSelect2Plugin = $.fn.select2;
 
 $.fn.select2 = function (options = {}) {
-    originalSelect2Plugin.call($(this), $.extend({
+    return originalSelect2Plugin.call($(this), $.extend({
+        theme: 'cms',
         templateResult: formatResult,
         templateSelection: formatSelection,
     }, options));
