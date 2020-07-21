@@ -1,0 +1,13 @@
+{% set text = text|default('') %}
+{% set tooltip = tooltip|default('') %}
+{% set required = required|default(false) %}
+{% set attrs = attrs|default({}) %}
+{% set attrFor = attrs.for|default('') %}
+
+<label class="form-label" {% if attrFor %}for="{{ attrFor }}"{% endif %}>
+    {{ text }}
+    {% if not required %}<small>(Optional)</small>{% endif %}
+    {% if tooltip %}
+        <span class="tooltip-icon" data-plugin="tooltip" data-tooltip-placement="right" title="{{ tooltip }}">?</span>
+    {% endif %}
+</label>

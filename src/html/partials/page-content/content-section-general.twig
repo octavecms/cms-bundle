@@ -1,152 +1,95 @@
 {% from 'macros/icon.twig' import icon %}
 
 {# "General" form #}
-<div class="form-group">
-    <label class="form-label" for="contentGeneralTitle">Article Title</label>
-    <div class="input-group">
-        <div class="input-group__input form-control form-control--input input-group__merge">
-            <input id="contentGeneralTitle" name="title" type="text" required maxlength="167" value="Виды коммерческой недвижимости: сектора, типы и форматы" />
-        </div>
-        <label class="form-label input-group__text input-group__merge text-small text-color-small" for="contentGeneralTitle">
-            167
-        </label>
-    </div>
-</div>
+{% include 'partials/form/text.twig' with {
+    label: 'Article Title',
+    name: 'title',
+    value: 'Виды коммерческой недвижимости: сектора, типы и форматы',
+    maxlength: 255,
+    required: true
+} %}
 
 {# Category #}
-<div class="form-group">
-    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-        <label class="form-label" for="contentGeneralCategory">Category</label>
-        <div class="form-control form-control--select">
-            <select id="contentGeneralCategory" name="category" required data-plugin="select2">
-                <option value="a" selected>Основы</option>
-                <option value="b">Lorem ipsum</option>
-                <option value="c">Dolor sit amet</option>
-            </select>
-        </div>
-    </div></div>
-</div>
+{% include 'partials/form/select.twig' with {
+    label: 'Category',
+    name: 'category',
+    value: 'a',
+    values: [
+        {id: 'a', text: 'Основы'},
+        {id: 'b', text: 'Lorem ipsum'},
+        {id: 'c', text: 'Dolor sit amet'}
+    ],
+    required: true
+} %}
 
 {# Author #}
-<div class="form-group">
-    <div class="row row--pad"><div class="col col--xs-12 col--lg-6">
-        <label class="form-label" for="contentGeneralAuthor">Author <small>(Optional)</small></label>
-        <div class="form-control form-control--select">
-            <select id="contentGeneralAuthor" name="category" required data-plugin="select2">
-                <option data-image="/assets/images/temp/select-user.png" value="a" selected>Андрей Богданов</option>
-                <option data-image="/assets/images/temp/select-user.png" value="b">Lorem ipsum</option>
-                <option data-image="/assets/images/temp/select-user.png" value="c">Dolor sit amet</option>
-            </select>
-        </div>
-    </div></div>
-</div>
+{% include 'partials/form/select.twig' with {
+    label: 'Author',
+    name: 'author',
+    value: 'a',
+    values: [
+        {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
+        {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
+        {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
+    ],
+    required: false
+} %}
 
 
 <div class="row row--pad form-group">
     <div class="col col--xs-12 col--lg-6">
 
-        {# Image #}
-        <label class="form-label" for="contentGeneralThumbnail">Thumbnail</label>
-
-        <div class="form-control-image">
-            <a class="form-control-image__preview ui-gray btn-container" role="button" aria-label="Replace image" tabindex="0">
-
-                <img class="form-control-image__preview__image" src="/assets/images/temp/image-thumb-1.png" alt="" />
-
-                <span class="form-control-image__preview__icon btn btn--square btn--pill btn--shadow btn--tetriary"><span class="btn__content">
-                    {{ icon('edit', {width: 32, height: 32}) }}
-                </span></span>
-            </a>
-            <div class="form-control-image__content">
-                <span class="form-control-image__content__title">
-                    academy_thumb_01.jpg
-                </span>
-                <a class="form-control-image__content__link" href="/assets/images/temp/image-thumb-1.png" target="_blank">
-                    Preview
-                </a>
-
-                <span class="form-control-image__content__spacer"></span>
-                <span class="form-control-image__content__meta">
-                    620×620
-                </span>
-
-
-                <div class="form-control-image__content__action">
-                    <a class="btn btn--square btn--pill btn--tetriary" role="button" tabindex="0" aria-label="Remove image"><span class="btn__content">
-                        {{ icon('delete', {width: 32, height: 32}) }}
-                    </span></a>
-                </div>
-            </div>
-        </div>
+        {# Thumbnail image #}
+        {% include 'partials/form/image.twig' with {
+            label: 'Thumbnail',
+            name: 'thumbnail',
+            value: {
+                id: 'a',
+                thumbnail: '/assets/images/temp/image-thumb-1.png',
+                preview: '/assets/images/temp/image-thumb-1.png',
+                fileName: 'academy_thumb_01.jpg',
+                width: 620,
+                height: 620
+            },
+            required: true
+        } %}
 
     </div>
     <div class="col col--xs-12 col--lg-6 form-group mt-lg-0">
 
-        {# Image #}
-        <label class="form-label" for="contentGeneralBackground">Background Image</label>
-
-        <div class="form-control-image">
-            <a class="form-control-image__preview ui-gray btn-container" role="button" aria-label="Replace image" tabindex="0">
-
-                <img class="form-control-image__preview__image" src="/assets/images/temp/image-thumb-2.png" alt="" />
-
-                <span class="form-control-image__preview__icon btn btn--square btn--pill btn--shadow btn--tetriary"><span class="btn__content">
-                    {{ icon('edit', {width: 32, height: 32}) }}
-                </span></span>
-            </a>
-            <div class="form-control-image__content">
-                <span class="form-control-image__content__title">
-                    academy_background_01.jpg
-                </span>
-                <a class="form-control-image__content__link" href="/assets/images/temp/image-thumb-2.png" target="_blank">
-                    Preview
-                </a>
-
-                <span class="form-control-image__content__spacer"></span>
-                <span class="form-control-image__content__meta">
-                    1620×675
-                </span>
-
-
-                <div class="form-control-image__content__action">
-                    <a class="btn btn--square btn--pill btn--tetriary" role="button" tabindex="0" aria-label="Remove image"><span class="btn__content">
-                        {{ icon('delete', {width: 32, height: 32}) }}
-                    </span></a>
-                </div>
-            </div>
-        </div>
+        {# Background image #}
+        {% include 'partials/form/image.twig' with {
+            label: 'Background Image',
+            name: 'background',
+            value: {
+                id: 'a',
+                thumbnail: '/assets/images/temp/image-thumb-2.png',
+                preview: '/assets/images/temp/image-thumb-2.png',
+                fileName: 'academy_background_01.jpg',
+                width: 1620,
+                height: 675
+            },
+            required: true
+        } %}
 
     </div>
 </div>
 
 
 {# URL #}
-<div class="form-group">
-    <label class="form-label" for="contentGeneralUrl">
-        URL
-        <span class="tooltip-icon" data-plugin="tooltip" data-tooltip-placement="right" title="Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.">?</span>
-    </label>
-    <div class="input-group">
-        <label class="form-label input-group__text input-group__merge text-medium" for="contentGeneralUrl">
-            academy/
-        </label>
-        <div class="input-group__input input-group__merge form-control form-control--input">
-            <input id="contentGeneralUrl" name="url" type="text" required value="vidy-kommercheskoi-nedvizhimosti-sektora-tipy-i-formaty" />
-        </div>
-    </div>
-</div>
+{% include 'partials/form/text.twig' with {
+    'label': 'URL',
+    'labelTooltip': 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
+    'name': 'title',
+    'value': 'vidy-kommercheskoi-nedvizhimosti-sektora-tipy-i-formaty',
+    'prefixText': 'academy/',
+    'required': true
+} %}
 
 {# Date #}
-<div class="form-group">
-    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-        <label class="form-label" for="contentGeneralDate">Publication date</label>
-        <div class="input-group">
-            <div class="input-group__input form-control form-control--input">
-                <input id="contentGeneralDate" name="date" type="text" required value="19 мая 2020, 10:00" />
-            </div>
-            <label class="form-label input-group__icon" for="contentGeneralDate">
-                {{ icon('calendar', {width: 32, height: 32, 'aria-label': 'Calendar'}) }}
-            </label>
-        </div>
-    </div></div>
-</div>
+{% include 'partials/form/date.twig' with {
+    'label': 'Publication date',
+    'name': 'date',
+    'value': '2020-07-21 10:00:00',
+    'required': true
+} %}

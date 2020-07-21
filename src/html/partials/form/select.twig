@@ -1,0 +1,43 @@
+{% set label = label|default('') %}
+{% set labelTooltip = labelTooltip|default('') %}
+
+{% set name = name|default('') %}
+{% set value = value|default('') %}
+{% set values = values|default([]) %}
+{% set maxlength = maxlength|default(null) %}
+{% set required = required|default(false) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
+{% set id = 'input-' ~ random() %}
+
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            'text': label,
+            'tooltip': labelTooltip,
+            'required': required,
+            'attrs': {
+                'for': id
+            }
+        }) %}
+
+        <div class="form-control form-control--select">
+            <select
+                id="{{ id }}"
+                name="{{ name }}"
+                data-plugin="select2"
+                {% if required %}required{% endif %}
+                {% if disabled %}disabled{% endif %}
+                {% if readonly %}readonly{% endif %}
+            >
+                {% for valueItem in values %}
+                    <option
+                        value="{{ valueItem.id }}"
+                        {% if valueItem.id == value %}selected{% endif %}
+                        {% if valueItem.image %}data-image="{{ valueItem.image }}"{% endif %}
+                    >{{ valueItem.text }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div></div>
+</div>

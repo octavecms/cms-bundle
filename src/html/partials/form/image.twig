@@ -1,0 +1,73 @@
+{% set label = label|default('') %}
+{% set labelTooltip = labelTooltip|default('') %}
+
+{% set name = name|default('') %}
+{% set value = value|default({}) %}
+{% set valueId = value.id|default(null) %}
+{% set valueThumbnail = value.thumbnail|default(null) %}
+{% set valuePreview = value.preview|default(null) %}
+{% set valueFileName = value.fileName|default(null) %}
+{% set valueWidth = value.width|default(null) %}
+{% set valueHeight = value.height|default(null) %}
+
+{% set required = required|default(false) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
+{% set id = 'input-' ~ random() %}
+{% set prefixText = prefixText|default('') %}
+
+
+{# Label #}
+{% include 'partials/form/label.twig' with ({
+    'text': label,
+    'tooltip': labelTooltip,
+    'required': required,
+    'attrs': {
+        'for': id
+    }
+}) %}
+
+{# Input #}
+<div class="form-control-image
+    {% if not valueId %}form-control-image--empty{% endif %}
+    {% if disabled %}form-control-image--disabled{% endif %}
+    {% if readonly %}form-control-image--readonly{% endif %}
+">
+    <input
+        type="hidden"
+        name="{{ name }}"
+        id="{{ id }}"
+        value="{{ value }}"
+        {% if disabled %}disabled{% endif %}
+        />
+    
+    <a class="form-control-image__preview ui-gray btn-container" role="button" aria-label="Replace image" tabindex="0">
+
+        <img class="form-control-image__preview__image" src="{{ valueThumbnail }}" alt="" />
+
+        {# Edit icon #}
+        <span class="form-control-image__preview__icon btn btn--square btn--pill btn--shadow btn--tetriary"><span class="btn__content">
+            {{ icon('edit', {width: 32, height: 32}) }}
+        </span></span>
+    </a>
+    <div class="form-control-image__content">
+        <span class="form-control-image__content__title">
+            {{ valueFileName }}
+        </span>
+        <a class="form-control-image__content__link" href="{{ valuePreview }}" target="_blank">
+            Preview
+        </a>
+
+        <span class="form-control-image__content__spacer"></span>
+        <span class="form-control-image__content__meta">
+            {{ valueWidth }}×{{ valueHeight }}
+        </span>
+
+
+        <div class="form-control-image__content__action">
+            <a class="btn btn--square btn--pill btn--tetriary" role="button" tabindex="0" aria-label="Remove image"><span class="btn__content">
+                {{ icon('delete', {width: 32, height: 32}) }}
+            </span></a>
+        </div>
+    </div>
+</div>

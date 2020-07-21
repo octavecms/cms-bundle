@@ -51,6 +51,7 @@
     margin-top: var(--spacer-4);
     left: calc(#{ $select2-padding } * -1);
     min-width: calc(100% + #{ $select2-padding } * 2);
+    width: calc(100% + #{ $select2-padding } * 2);
 }
 
 // .select2-container--open .select2-dropdown--above {
