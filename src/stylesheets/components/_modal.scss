@@ -120,7 +120,7 @@
     max-width: 720px;
     margin: 0 auto;
     background: $color-light-background;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
 }
 
 

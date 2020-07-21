@@ -88,13 +88,23 @@ $.fn.transition = function () {
 		let obj = args[i];
 
 		if (typeof obj === 'string') {
-            // generate a sequence if it doesn't exist
-            if (!(obj in $.transition.sequences)) {
-                $.transition.sequences[obj] = $.transition.generateSequence(obj);
+            // String may be a space separated list of animation names
+            const objList = obj.split(' ');
+            let   objArr = [];
+
+            for (let k = 0; k < objList.length; k++) {
+                const name = objList[k];
+
+                // generate a sequence if it doesn't exist
+                if (!(name in $.transition.sequences)) {
+                    $.transition.sequences[name] = $.transition.generateSequence(name);
+                }
+
+                // string -> object
+                objArr = objArr.concat($.transition.sequences[name]);
             }
 
-			// string -> object
-            obj = $.transition.sequences[obj];
+            obj = objArr;
         }
 
         if ($.isPlainObject(obj)) {

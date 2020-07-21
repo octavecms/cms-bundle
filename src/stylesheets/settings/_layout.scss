@@ -6,6 +6,7 @@ $z-index-content: unset;
 $z-index-under-header: 9;
 $z-index-header: 10;
 $z-index-dropdown: 11;
+$z-index-tooltip: 11;
 $z-index-modal: 12;
 
 /**
@@ -13,6 +14,7 @@ $z-index-modal: 12;
  */
 
 $border-radius: 4px;
+$border-radius-small: 2px;
 
 /**
  * Spacings
@@ -94,6 +96,17 @@ $dropdown-padding-x: var(--spacer-3);
 $dropdown-padding-y: var(--spacer-4);
 $dropdown-shadow: 0 1px 0 rgba(var(--color-shadow-raw), 0.04), 0 8px 64px rgba(var(--color-shadow-raw), 0.16);
 $dropdown-menu-min-width: 304px;
+
+
+/**
+ * Tooltip
+ */
+
+$tooltip-padding-x: var(--spacer-4);
+$tooltip-padding-y: var(--spacer-3);
+$tooltip-shadow: 0 1px 0 rgba(var(--color-shadow-raw), 0.04), 0 4px 16px rgba(var(--color-shadow-raw), 0.04);
+$tooltip-max-width: 450px;
+
 
 /**
  * Button

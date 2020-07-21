@@ -1,7 +1,7 @@
 {% from 'macros/icon.twig' import icon %}
 
 {# Sitemap dropdown #}
-<div class="dropdown dropdown--wide" data-plugin="dropdown" data-dropdown-toggle-mode="hover">
+<div class="dropdown dropdown--wide" data-plugin="dropdown" data-dropdown-trigger="hover">
     <button class="dropdown__toggle btn btn--dropdown btn--dropdown--heading btn--pill" aria-expanded="false" id="navbarSitemapDropdown">
         <span class="btn__content">
             <span>Company</span>
@@ -32,7 +32,7 @@
                 </a>
             </li>
             <li>
-                <div class="dropdown dropdown--right" data-plugin="dropdown" data-dropdown-toggle-mode="hover">
+                <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="right-start" data-dropdown-trigger="hover">
                     <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="navbarSitemapDropdown1">
                         <span>Academy</span>
                         {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
@@ -54,7 +54,7 @@
                 </div>
             </li>
             <li>
-                <div class="dropdown dropdown--right" data-plugin="dropdown" data-dropdown-toggle-mode="hover">
+                <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="right-start" data-dropdown-trigger="hover">
                     <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="navbarSitemapDropdown2">
                         <span>Press Center</span>
                         {{ icon('dropdown-arrow', {width: 10, height: 10}) }}

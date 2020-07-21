@@ -44,7 +44,7 @@
     &,
     &:before,
     &:after {
-        border-radius: $border-radius;
+        border-radius: var(--border-radius);
     }
 
     // <button> element has additional element to fix alignment issues in FF and Safari

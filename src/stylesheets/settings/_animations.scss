@@ -16,24 +16,20 @@ $easing-out-subtle:         cubic-bezier(.29,  .73, .45,1);    // http://cubic-b
 $easing-in-out-subtle:      ease;
 
 // Animation durations
-$duration-normal:           .4s;
-$duration-faster:           .15s;
-$duration-fast:             $duration-normal / 2;
+$duration-normal:           .2s;
+$duration-fast:             .15s;
 $duration-slow:             $duration-normal * 2;
-$duration-block:            $duration-normal * 4;
+$duration-slower:           $duration-normal * 4;
 
 // %transition, %animation animation settings
-$transition-default-duration: $duration-fast;
+$transition-default-duration: $duration-normal;
 $transition-default-easing:   $easing-out;
 
 $transition-fast-duration:    $duration-fast;
 $transition-fast-easing:      $easing-out;
 
-$transition-faster-duration:  $duration-faster;
-$transition-faster-easing:    $easing-out;
-
 $transition-slow-duration:    $duration-slow;
 $transition-slow-easing:      $easing-out;
 
-$transition-block-duration:   $duration-block;
-$transition-block-easing:     $easing-out;
+$transition-slower-duration:  $duration-slower;
+$transition-slower-easing:    $easing-out;

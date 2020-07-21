@@ -2,9 +2,12 @@
  * Animation durations
  */
 
+.animation--fast {
+    transition-duration: $duration-fast;
+}
 .animation--slow {
     transition-duration: $duration-slow;
 }
-.animation--block {
-    transition-duration: $duration-block;
+.animation--slower {
+    transition-duration: $duration-slower;
 }

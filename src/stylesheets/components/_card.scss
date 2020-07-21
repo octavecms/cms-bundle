@@ -2,19 +2,19 @@
     &__header {
         position: relative;
         background: var(--color-background);
-        border-radius: $border-radius $border-radius 0 0;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
         padding: var(--spacer-4) var(--spacer-6);
 
         @extend %transition;
         transition-property: border-radius;
 
         &:last-child {
-            border-radius: $border-radius;
+            border-radius: var(--border-radius);
         }
     }
 
     &.accordion--collapsed .card__header {
-        border-radius: $border-radius;
+        border-radius: var(--border-radius);
     }
 
     &__body,
@@ -27,16 +27,16 @@
     &__content:first-child .card__body:first-child,
     &__content:first-child .card__footer:first-child {
         border-top: 0;
-        border-radius: $border-radius $border-radius 0 0;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
     }
     .card__body:last-child,
     .card__footer:last-child {
-        border-radius: 0 0 $border-radius $border-radius;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
     }
 
     &__content:first-child .card__body:first-child:last-child,
     &__content:first-child .card__footer:first-child:last-child {
-        border-radius: $border-radius;
+        border-radius: var(--border-radius);
     }
 
     &__body--short {
@@ -45,7 +45,7 @@
 
     // Footer
     &__footer {
-        border-radius: $border-radius;
+        border-radius: var(--border-radius);
     }
     &__footer--short {
         padding: var(--spacer-4) var(--spacer-6);

@@ -20,22 +20,16 @@
     transition-timing-function: $transition-fast-easing;
 }
 
-@mixin transition-faster () {
-    // Edit the values in html/src/stylesheets/settings/_animations.scss
-    transition-duration: $transition-faster-duration;
-    transition-timing-function: $transition-faster-easing;
-}
-
 @mixin transition-slow () {
     // Edit the values in html/src/stylesheets/settings/_animations.scss
     transition-duration: $transition-slow-duration;
     transition-timing-function: $transition-slow-easing;
 }
 
-@mixin transition-block () {
+@mixin transition-slower () {
     // Edit the values in html/src/stylesheets/settings/_animations.scss
-    transition-duration: $transition-block-duration;
-    transition-timing-function: $transition-block-easing;
+    transition-duration: $transition-slower-duration;
+    transition-timing-function: $transition-slower-easing;
 }
 
 %transition {
@@ -44,12 +38,9 @@
 %transition-fast {
     @include transition-fast();
 }
-%transition-faster {
-    @include transition-faster();
-}
 %transition-slow {
     @include transition-slow();
 }
-%transition-block {
-    @include transition-block();
+%transition-slower {
+    @include transition-slower();
 }

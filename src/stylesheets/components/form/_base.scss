@@ -20,7 +20,7 @@
 	height: var(--spacer-6);
 	padding: 0 var(--spacer-3);
 	background: var(--color-background);
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
     border: 1px solid var(--color-outline);
 
     // Fix for FF extending input on large font sizes due to "size"

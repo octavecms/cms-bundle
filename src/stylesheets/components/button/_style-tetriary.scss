@@ -25,11 +25,24 @@
             color:      var(--color-heading),
         ),
 
-        // Focus visible styles
-        // 'focus-visible': (
-        //     box-shadow: 0 0 0 3px rgba(var(--color-text-raw), 0.4),
-        // )
+        // Active style
+        'active': (
+            color:      var(--color-background),
+            background: var(--color-heading),
+            hover-background: var(--color-heading),
+        ),
+        // Style when button is hovered or pressed down
+        'active+hover active+down': (
+            color:      var(--color-background),
+        ),
     );
+
+    // .is-highlighted state
+    @include button-custom-state ($state-selector: '.is-highlighted') {
+        @include button-color-variant((
+            color: var(--color-primary)
+        ));
+    }
 
     @include button-colors ($styles);
 }

@@ -5,7 +5,7 @@
 
     background-color: var(--color-background);
     border: 1px solid var(--color-outline);
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
 
     .select2-selection__rendered {
         color: #444;
@@ -61,7 +61,7 @@
             height: var(--spacer-5);
             object-fit: cover;
             margin-right: var(--spacer-3);
-            border-radius: 2px;
+            border-radius: var(--border-radius-small);
         }
     }
 

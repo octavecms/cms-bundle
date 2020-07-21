@@ -4,7 +4,6 @@
 <div class="form-group">
     {% include 'partials/form/label.twig' with ({
         text: 'Article Title',
-        required: true,
         attrs: {
             for: 'input-45552222'
         }
@@ -24,7 +23,6 @@
     <div class="row row--pad"><div class="col col--xs-12 col--md-6">
         {% include 'partials/form/label.twig' with ({
             text: 'Category',
-            required: true,
             attrs: {
                 for: 'input-221124135345'
             }
@@ -49,7 +47,7 @@
     <div class="row row--pad"><div class="col col--xs-12 col--md-6">
         {% include 'partials/form/label.twig' with ({
             text: 'Author',
-            required: false,
+            additionalText: 'Optional',
             attrs: {
                 for: 'input-745241232'
             }
@@ -76,7 +74,6 @@
         {# Thumbnail image #}
         {% include 'partials/form/label.twig' with ({
             text: 'Thumbnail',
-            required: true,
             attrs: {
                 for: 'input-44231212'
             }
@@ -131,7 +128,6 @@
     {% include 'partials/form/label.twig' with ({
         text: 'URL',
         tooltip: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
-        required: true,
         attrs: {
             for: 'input-76556342'
         }
@@ -151,7 +147,6 @@
     <div class="row row--pad"><div class="col col--xs-12 col--md-6">
         {% include 'partials/form/label.twig' with ({
             text: 'Publication date',
-            required: true,
             attrs: {
                 for: 'input-22212122'
             }

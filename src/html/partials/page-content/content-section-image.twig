@@ -4,7 +4,6 @@
 
         {% include 'partials/form/label.twig' with ({
             text: 'Image',
-            required: true,
             attrs: {
                 for: 'input-545656332'
             }
@@ -22,8 +21,8 @@
                 height: 620
             },
             required: true,
-            minWidth: 620,
-            minHeight: 620
+            imageMinWidth: 620,
+            imageMinHeight: 620
         } %}
 
     </div>
@@ -34,7 +33,7 @@
 <div class="form-group">
     {% include 'partials/form/label.twig' with ({
         text: 'Description',
-        required: false,
+        additionalText: 'Optional',
         attrs: {
             for: 'input-64234253'
         }
@@ -53,7 +52,7 @@
 <div class="form-group">
     {% include 'partials/form/label.twig' with ({
         text: 'Source',
-        required: false,
+        additionalText: 'Optional',
         attrs: {
             for: 'input-234235562'
         }
@@ -72,7 +71,6 @@
 <div class="form-group">
     {% include 'partials/form/label.twig' with ({
         text: 'Full width',
-        required: true,
         attrs: {
             for: 'input-745734523'
         }

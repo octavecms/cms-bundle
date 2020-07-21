@@ -19,16 +19,6 @@
         @extend %animation;
         will-change: transform;
     }
-
-    // Animation durations, from _durations.scss
-    &.animation--slow > div,
-    &.animation--slow > span {
-        transition-duration: $duration-slow;
-    }
-    &.animation--block > div,
-    &.animation--block > span {
-        transition-duration: $duration-block;
-    }
 }
 
 .animation--slide-in-bottom--inactive,

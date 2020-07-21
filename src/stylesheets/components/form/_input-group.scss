@@ -1,6 +1,6 @@
 .input-group {
     display: flex;
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
 
     &__icon,
     &__text {
@@ -14,7 +14,7 @@
     
         border: 1px solid var(--color-outline);
         padding: 0 var(--spacer-3);
-        border-radius: $border-radius;
+        border-radius: var(--border-radius);
     }
     &__merge {
         &:not(:last-child),
@@ -62,17 +62,17 @@
 
     > *:first-child {
         &, input, select {
-            border-radius: $border-radius 0 0 $border-radius;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
         }
     }
     > *:last-child {
         &, input, select {
-            border-radius: 0 $border-radius $border-radius 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
         }
     }
     > *:first-child:last-child {
         &, input, select {
-            border-radius: $border-radius;
+            border-radius: var(--border-radius);
         }
     }
 }

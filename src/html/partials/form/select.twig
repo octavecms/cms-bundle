@@ -4,6 +4,7 @@
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
+{% set multiple = multiple|default(false) %}
 {% set id = id|default('input-' ~ random()) %}
 
 <div class="form-control form-control--select">
@@ -14,6 +15,7 @@
         {% if required %}required{% endif %}
         {% if disabled %}disabled{% endif %}
         {% if readonly %}readonly{% endif %}
+        {% if multiple %}multiple{% endif %}
     >
         {% for valueItem in values %}
             <option

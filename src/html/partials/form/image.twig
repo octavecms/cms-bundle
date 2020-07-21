@@ -10,8 +10,8 @@
 {% set valueHeight = value.height|default(null) %}
 
 {% set required = required|default(false) %}
-{% set minWidth = minWidth|default(0) %}
-{% set minHeight = minHeight|default(0) %}
+{% set imageMinWidth = imageMinWidth|default(0) %}
+{% set imageMinHeight = imageMinHeight|default(0) %}
 
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
@@ -52,12 +52,12 @@
 
         <span class="form-control-image__content__spacer"></span>
         <span class="form-control-image__content__meta">
-            {% if minWidth and minHeight %}
-                {{ minWidth }}×{{ minHeight }} min
-            {% elseif minWidth %}
-                {{ minWidth }} min width
-            {% elseif minHeight %}
-                {{ minHeight }} min height
+            {% if imageMinWidth and imageMinHeight %}
+                {{ imageMinWidth }}×{{ imageMinHeight }} min
+            {% elseif imageMinWidth %}
+                {{ imageMinWidth }} min width
+            {% elseif imageMinHeight %}
+                {{ imageMinHeight }} min height
             {% else %}
                 {{ valueWidth }}×{{ valueHeight }}
             {% endif %}

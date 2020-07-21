@@ -20,27 +20,32 @@ class Dropdown {
     static get Defaults () {
         return {
             // Popper placement
-            'placement': '',
+            'placement': 'bottom-start',
 
+            // CSS selectors
             'menuToggleSelector': '.dropdown__toggle',
             'menuSelector': '.dropdown__menu',
             'menuContentSelector': '.dropdown__menu__content',
             'arrowSelector': '.dropdown__menu__arrow',
             'itemSelector': '.dropdown__item',
 
-            // Dropdown position classnames
-            'classNamePositionUp': 'dropdown--up',
-            'classNamePositionRight': 'dropdown--right',
-            'classNamePositionLeft': 'dropdown--left',
-
-            // Toggle mode, either 'click' or 'hover'
-            'toggleMode': 'click',
+            // Trigger events, either 'click' or 'hover'
+            'trigger': 'click',
 
             // Event names
             'eventShow': 'show.dropdown',
             'eventShown': 'shown.dropdown',
             'eventHide': 'hide.dropdown',
             'eventHidden': 'hidden.dropdown',
+
+            // Animations
+            'animationIn': 'dropdown-in',
+            'animationOut': 'dropdown-out',
+
+            // Position classnames
+            'classNamePlacementRight': 'dropdown--right',
+            'classNamePlacementLeft': 'dropdown--left',
+            'classNamePlacementTop': 'dropdown--top',
 
             // State classnames
             'classNameOpen': 'is-open',
@@ -58,8 +63,8 @@ class Dropdown {
     constructor ($container, opts) {
         const options = this.options = $.extend({}, this.constructor.Defaults, opts);
 
-        if (options.toggleMode === 'hover' && !detect.hasHoverSupport()) {
-            options.toggleMode = 'click';
+        if (options.trigger === 'hover' && !detect.hasHoverSupport()) {
+            options.trigger = 'click';
         }
 
         this.$container = $container;
@@ -76,40 +81,34 @@ class Dropdown {
 
         this.ns = namespace();
         this.open = $container.attr('aria-expanded') == 'true';
-        this.placement =
-            options.placement || (
-                $container.hasClass(options.classNamePositionUp) ? 'top-start' :
-                $container.hasClass(options.classNamePositionRight) ? 'right-start' : 
-                $container.hasClass(options.classNamePositionLeft) ? 'left-start' : 'bottom-start'
-            );
         
         this.position =
-            this.placement.indexOf('bottom') !== -1 ? 'bottom' :
-            this.placement.indexOf('top') !== -1 ? 'top' :
-            this.placement.indexOf('left') !== -1 ? 'left' : 'right';
-            
-        // Clean up global events to prevent memory leaks and errors, if pages are dynamically loaded using JS
-        // Needed only if attaching listeners to document, window, body or element outside the #ajax-page-loader-wrapper
-        // Requires util/jquery.destroyed.js */
+            options.placement.indexOf('bottom') !== -1 ? 'bottom' :
+            options.placement.indexOf('top') !== -1 ? 'top' :
+            options.placement.indexOf('left') !== -1 ? 'left' : 'right';
+        
+        // Events
+        const $toggle = this.$toggle;
+
         $container.on('destroyed', this.handleDestroy.bind(this));
 
-        // // Global events
-        // $(window).on(`resize.${ this.ns }`, this.handleResize.bind(this));
-        
-        this.$toggle
+        $toggle
             .on('keydown', this.handleToggleKey.bind(this));
 
-        if (options.toggleMode === 'hover') {
-            this.$toggle
+        if (options.trigger === 'hover') {
+            $toggle
                 .on('click', this.show.bind(this))
                 .on('mouseenter', this.handleMouseEnter.bind(this));
             
-            this.$container
+            $container
                 .on('mouseleave', this.handleMouseLeave.bind(this));
         } else {
-            this.$toggle
+            $toggle
                 .on('click', this.toggle.bind(this));
         }
+
+        // Position classnames
+        this.updatePositionClassName();
     }
 
     /**
@@ -130,8 +129,10 @@ class Dropdown {
      */
     show (event) {
         if (!this.isDisabled() && !this.open) {
-            const { eventShow, eventShown, itemSelector, classNameOpen, classNameToggleActive } = this.options;
+            const { eventShow, itemSelector, classNameOpen, classNameToggleActive } = this.options;
             const namespace = this.ns;
+
+            // Trigger event and show dropdown only if event wasn't prevented
             const showEventObject = $.Event(eventShow);
             this.$container.trigger(showEventObject);
 
@@ -144,29 +145,13 @@ class Dropdown {
                 this.createPopper();
     
                 this.$menu.transitionstop(() => {
-                    
-                    this.$menu.transition(`dropdown-in`, {
-                        'before': () => {
-                            this.updatePopper();
-
-                            if (event && event.type === 'keydown') {
-                                // Dropdown was opened using keyboard, focus active item
-                                // or first item we have
-                                if (!this.focusActiveItem()) {
-                                    this.focusFirstItem();
-                                }
-                            } else {
-                                // Dropdown was opened using mouse, focus only if there is
-                                // an active item
-                                this.focusActiveItem();
-                            }
-                        },
-                        'after': () => {
-                            this.$container.trigger(eventShown);
-                        }
+                    this.$menu.transition(this.options.animationIn, {
+                        'before': this.onShow.bind(this, event),
+                        'after': this.onShown.bind(this, event),
                     });
                 });
 
+                // Add event listeners
                 $(document)
                     .on(`click.${ namespace }`, this.handleDocumentClick.bind(this))
                     .on(`keydown.${ namespace }`, this.handleDocumentKey.bind(this));
@@ -184,11 +169,44 @@ class Dropdown {
     }
 
     /**
+     * Focus item when dropdown is shown
+     * 
+     * @param {jQuery.Event} [event] Optional event 
+     * @protected
+     */
+    onShow (event) {
+        this.updatePopper();
+
+        if (event && event.type === 'keydown') {
+            // Dropdown was opened using keyboard, focus active item
+            // or first item we have
+            if (!this.focusActiveItem()) {
+                this.focusFirstItem();
+            }
+        } else {
+            // Dropdown was opened using mouse, focus only if there is
+            // an active item
+            this.focusActiveItem();
+        }
+    }
+
+    /**
+     * After dropdown has been shown trigger 'shown' event
+     * 
+     * @param {jQuery.Event} [event] Optional event 
+     * @protected
+     */
+    onShown (event) {
+        const { eventShown } = this.options;
+        this.$container.trigger(eventShown);
+    }
+
+    /**
      * Hide dropdown
      */
     hide (event) {
         if (!this.isDisabled() && this.open) {
-            const { eventHide, eventHidden, classNameOpen, classNameToggleActive } = this.options;
+            const { eventHide, classNameOpen, classNameToggleActive } = this.options;
             const namespace = this.ns;
             const hideEventObject = $.Event(eventHide);
             this.$container.trigger(hideEventObject);
@@ -200,17 +218,8 @@ class Dropdown {
                 this.$toggle.removeClass(classNameToggleActive).attr('aria-expanded', false);
 
                 this.$menu.transitionstop(() => {
-                    this.$menu.transition(`dropdown-out`, {
-                        'after': () => {
-                            this.$container.trigger(eventHidden);
-                            this.positionIndicator(null);
-
-                            // Unfocus item
-                            if (this.$focused) {
-                                this.blurItem(this.$focused);
-                                this.positionIndicator();
-                            }
-                        }
+                    this.$menu.transition(this.options.animationOut, {
+                        'after': this.onHidden.bind(this, event),
                     });
                 });
 
@@ -227,6 +236,28 @@ class Dropdown {
                     event.preventDefault();
                 }
             }
+        }
+    }
+
+    /**
+     * After dropdown has been hidden trigger 'hidden' event and reset
+     * indicator
+     * 
+     * @param {jQuery.Event} [event] Optional event 
+     * @protected
+     */
+    onHidden (event) {
+        const { eventHidden } = this.options;
+
+        this.$container.trigger(eventHidden);
+
+        // Reset indicator
+        this.positionIndicator(null);
+
+        // Unfocus item
+        if (this.$focused) {
+            this.blurItem(this.$focused);
+            this.positionIndicator();
         }
     }
 
@@ -595,7 +626,7 @@ class Dropdown {
             $menu.removeClass('d-none').addClass('is-invisible');
 
             this.popper = createPopper(this.$toggle.get(0), $menu.get(0), {
-                placement: this.placement,
+                placement: this.options.placement,
                 modifiers: [
                     {
                         name: 'offset',
@@ -637,11 +668,27 @@ class Dropdown {
      */
     updatePopper () {
         this.popper.update();
-        this.placement = this.popper.state.placement;
+
+        const placement = this.popper.state.placement;
         this.position =
-            this.placement.indexOf('bottom') !== -1 ? 'bottom' :
-            this.placement.indexOf('top') !== -1 ? 'top' :
-            this.placement.indexOf('left') !== -1 ? 'left' : 'right';
+            placement.indexOf('bottom') !== -1 ? 'bottom' :
+            placement.indexOf('top') !== -1 ? 'top' :
+            placement.indexOf('left') !== -1 ? 'left' : 'right';
+
+        this.updatePositionClassName();
+    }
+
+    updatePositionClassName () {
+        const options = this.options;
+        const classNames = {
+            right: options.classNamePlacementRight,
+            left: options.classNamePlacementLeft,
+            top: options.classNamePlacementTop
+        };
+
+        this.$container
+            .removeClass(`${ options.classNamePlacementRight } ${ options.classNamePlacementLeft } ${ options.classNamePlacementTop }`)
+            .addClass(classNames[this.position]);
     }
 
 

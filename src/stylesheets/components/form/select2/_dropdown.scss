@@ -1,7 +1,7 @@
 .select2-dropdown {
     border: 0;
     background-color: var(--color-background);
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
     box-shadow: $dropdown-shadow;
 
     display: block;

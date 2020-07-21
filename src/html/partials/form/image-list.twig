@@ -1,0 +1,49 @@
+{% from 'macros/icon.twig' import icon %}
+
+{% set name = name|default('') %}
+{% set value = value|default([]) %}
+
+<div class="image-list">
+    <ol class="image-list__list">
+        {% for item in value %}
+            {% set id = item.id|default('') %}
+            {% set fileName = item.fileName|default('') %}
+            {% set thumbnail = item.thumbnail|default('') %}
+            {% set meta = item.meta|default('') %}
+            {% set hasMeta = false %}
+            {% set hasMetaValues = false %}
+
+            {% for key, value in meta %}
+                {% set hasMeta = true %}
+
+                {% if value %}
+                    {% set hasMetaValues = true %}
+                {% endif %}
+            {% endfor %}
+
+            <li class="image-list__list__item image-item" aria-label="Image {{ fileName }}">
+                <div class="image-item__image">
+                    {% if thumbnail %}
+                        <img src="{{ thumbnail }}" alt="" draggable="false" />
+                    {% endif %}
+                </div>
+                <div class="image-item__controls ui-gray">
+                    <div class="group group--2">
+                        {% if hasMeta %}
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill {% if hasMetaValues %}is-highlighted{% endif %}" aria-label="Change image information"><span class="btn__content">
+                                {{ icon('note', {width: 32, height: 32}) }}
+                            </span></a>
+                        {% endif %}
+
+                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill group__right" aria-label="Change image"><span class="btn__content">
+                            {{ icon('edit', {width: 32, height: 32}) }}
+                        </span></a>
+                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill" aria-label="Remove image"><span class="btn__content">
+                            {{ icon('delete', {width: 32, height: 32}) }}
+                        </span></a>
+                    <div>
+                </div>
+            </li>
+        {% endfor %}
+    </ol>
+</div>

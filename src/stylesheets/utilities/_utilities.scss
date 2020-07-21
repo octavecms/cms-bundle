@@ -7,6 +7,8 @@
 
 :root {
     --spacer: #{ $spacer };
+    --border-radius: #{ $border-radius };
+    --border-radius-small: #{ $border-radius-small };
 
     @each $spacer-key, $css-variable-value in $spacers-css-variables {
         $css-variable-name: str-replace($spacers-css-property, SIZE, $spacer-key);

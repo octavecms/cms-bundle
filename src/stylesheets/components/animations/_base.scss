@@ -12,7 +12,7 @@
     pointer-events: none;
 }
 
-%animation-block {
-    @extend %transition-block;
+%animation-slower {
+    @extend %transition-slower;
     pointer-events: none;
 }

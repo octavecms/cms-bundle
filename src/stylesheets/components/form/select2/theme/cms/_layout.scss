@@ -85,7 +85,7 @@
                 height: var(--spacer-5);
                 object-fit: cover;
                 margin-right: var(--spacer-3);
-                border-radius: 2px;
+                border-radius: var(--border-radius-small);
             }
         }
     }

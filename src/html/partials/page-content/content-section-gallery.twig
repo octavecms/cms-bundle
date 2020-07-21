@@ -1,0 +1,71 @@
+{# Image #}
+<div class="form-group">
+
+    {% include 'partials/form/label.twig' with ({
+        text: 'Image',
+        additionalText: '620x620 min',
+        tooltip: 'Ex in et adipisicing et ad enim eu in eu anim.',
+        attrs: {
+            for: 'input-75674567456'
+        }
+    }) %}
+
+    {% include 'partials/form/image-list.twig' with {
+        id: 'input-75674567456',
+        name: 'gallery',
+        value: [
+            {
+                id: 'qweasdzxc',
+                thumbnail: '/assets/images/temp/gallery-thumb-1.png',
+                fileName: 'gallery-thumb-1.png',
+                meta: {
+                    description: ''
+                }
+            },
+            {
+                id: 'sdfgsdfgsdfg',
+                thumbnail: '/assets/images/temp/gallery-thumb-2.png',
+                fileName: 'gallery-thumb-2.png',
+                meta: {
+                    description: ''
+                }
+            },
+            {
+                id: 'ertyertyedfg',
+                thumbnail: '/assets/images/temp/gallery-thumb-3.png',
+                fileName: 'gallery-thumb-3.png',
+                meta: {
+                    description: 'Целевые требования к активам'
+                }
+            },
+            {
+                id: 'xvbxcvbxcvb',
+                thumbnail: '/assets/images/temp/gallery-thumb-4.png',
+                fileName: 'gallery-thumb-4.png',
+                meta: {
+                    description: 'Целевые требования к активам'
+                }
+            },
+            {
+                id: 'asdfasdfas',
+                thumbnail: '/assets/images/temp/gallery-thumb-5.png',
+                fileName: 'gallery-thumb-5.png',
+                meta: {
+                    description: ''
+                }
+            },
+            {
+                id: 'rtyrurtyh',
+                thumbnail: '/assets/images/temp/gallery-thumb-6.png',
+                fileName: 'gallery-thumb-6.png',
+                meta: {
+                    description: 'Целевые требования к активам'
+                }
+            }
+        ],
+        required: true,
+        imageMinWidth: 620,
+        imageMinHeight: 620
+    } %}
+
+</div>

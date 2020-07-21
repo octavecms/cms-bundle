@@ -12,7 +12,7 @@
         <div>
             <input id="{{ id }}-{{ loop.index }}"
                 type="{% if multiple %}checkbox{% else %}radio{% endif %}"
-                name="name"
+                name="{% if multiple %}{{ name }}[]{% else %}{{ name }}{% endif %}"
                 value="{{ valueItem.id }}"
                 class="sr-only"
                 {% if readonly %}readonly{% endif %}

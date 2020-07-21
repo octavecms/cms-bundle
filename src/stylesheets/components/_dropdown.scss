@@ -7,7 +7,7 @@
 
         // Arrow which will rotate 180deg when dropdown is open
         .icon-dropdown-arrow {
-            @include transition-fast();
+            @include transition();
             transition-property: transform, color;
             transform-origin: center;
         }
@@ -27,7 +27,7 @@
         &__content {
             position: relative;
             background: var(--color-background);
-            border-radius: $border-radius;
+            border-radius: var(--border-radius);
             padding: $dropdown-padding-y $dropdown-padding-x;
             // margin-top: var(--spacer-4);
             // margin-left: calc(var(--spacer-4)*-1);
@@ -111,7 +111,7 @@
         border-radius: 200px;
         background: var(--color-primary);
 
-        @extend %transition-faster;
+        @extend %transition-fast;
         transition-property: transform, width, height, background-color, opacity;
 
         &--dropdown {

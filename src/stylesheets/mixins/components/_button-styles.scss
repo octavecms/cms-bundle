@@ -154,6 +154,23 @@
 
 
 /**
+ * Button state with custom selector style mixin
+ *
+ * @demo
+ *     @include button-custom-state ($state-selector: '.is-highlighted') {
+ *         color: red;
+ *     }
+ */
+
+@mixin button-custom-state ($parent-selector: '', $container-selector: '.btn-container', $state-selector: '') {
+    #{ $parent-selector } &#{ $state-selector },
+    #{ $parent-selector } #{ $container-selector }#{ $state-selector } & {
+        @content;
+    }
+}
+
+
+/**
  * Button style mixin
  * Sets hover, active, focus, disabled styles
  *

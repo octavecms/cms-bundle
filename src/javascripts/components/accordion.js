@@ -56,11 +56,11 @@ class Accordion extends ResponsiveComponent {
 
             // Animation name, if set will be used to animate content to the active state
             // See /docs/util/animations#js-animations-using-css-transition
-            'animationIn': '',
+            'animationIn': 'slow',
 
             // Animation name, if set will be used to animate content to the inactive state
             // See /docs/util/animations#js-animations-using-css-transition
-            'animationOut': '',
+            'animationOut': 'slow',
 
             // Animate height when expanding / collapsing contents
             'animationHeight': true,

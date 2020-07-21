@@ -18,11 +18,14 @@
 // Uncomment if $.fn.tabs is used
 // @import "components/animations/tabs";
 
+// Uncomment if $.fn.tabs or $.fn.accordion is used
+@import "components/animations/height";
+
 // Uncomment if $.fn.dropdown is used
 @import "components/animations/dropdown";
 
-// Uncomment if $.fn.tabs or $.fn.accordion is used
-@import "components/animations/height";
+// Uncomment if $.fn.tooltip is used
+@import "components/animations/tooltip";
 
 // Uncomment if $.fn.reveal is used
 // @import "components/animations/reveal";
@@ -31,4 +34,4 @@
 // @import "components/animations/available";
 
 // Animation duration classnames
-// @import "components/animations/durations";
+@import "components/animations/durations";
