@@ -4,6 +4,15 @@
 
 .form-control {
     @extend %input-wrapper;
+
+    // Info
+    &__info {
+        position: absolute;
+        right: var(--spacer);
+        bottom: var(--spacer);
+
+        pointer-events: none;
+    }
 }
 
 /**
@@ -38,9 +47,9 @@
 .form-control--textarea textarea {
     @extend %input;
 
-    // height: ...
-    // padding-top: ...
-    // padding-bottom: ...
+    min-height: calc(var(--spacer) * 9.5);
+    padding-top: calc(var(--spacer) * 0.75);
+    padding-bottom: calc(var(--spacer) * 0.75);
 
     // Horizontal resize will break layout
 	resize: vertical;

@@ -17,6 +17,10 @@
         margin-left: 1px;
     }
 
+    .btn {
+        @include button-border-radius(0);
+    }
+
     > .btn:first-child,
     > *:first-child .btn {
         @include button-border-radius($border-radius 0 0 $border-radius);
@@ -48,5 +52,11 @@
 
     &__fill {
         flex-grow: 1;
+    }
+}
+
+.btn-group--collapsed {
+    > * + * {
+        margin-left: 0;
     }
 }

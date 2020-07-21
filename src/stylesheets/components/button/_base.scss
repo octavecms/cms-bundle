@@ -141,6 +141,14 @@
 
 
 /**
+ * Wide button
+ */
+.btn--wide {
+    min-width: var(--spacer-8);
+}
+
+
+/**
  * Pill button
  *
  * @demo

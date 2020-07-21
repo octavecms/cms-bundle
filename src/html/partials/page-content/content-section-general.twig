@@ -1,47 +1,89 @@
-{% from 'macros/icon.twig' import icon %}
+{# "General" form section #}
 
-{# "General" form #}
-{% include 'partials/form/text.twig' with {
-    label: 'Article Title',
-    name: 'title',
-    value: 'Виды коммерческой недвижимости: сектора, типы и форматы',
-    maxlength: 255,
-    required: true
-} %}
+{# Title #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'Article Title',
+        required: true,
+        attrs: {
+            for: 'input-45552222'
+        }
+    }) %}
+
+    {% include 'partials/form/text.twig' with {
+        id: 'input-45552222',
+        name: 'title',
+        value: 'Виды коммерческой недвижимости: сектора, типы и форматы',
+        maxlength: 255,
+        required: true
+    } %}
+</div>
 
 {# Category #}
-{% include 'partials/form/select.twig' with {
-    label: 'Category',
-    name: 'category',
-    value: 'a',
-    values: [
-        {id: 'a', text: 'Основы'},
-        {id: 'b', text: 'Lorem ipsum'},
-        {id: 'c', text: 'Dolor sit amet'}
-    ],
-    required: true
-} %}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Category',
+            required: true,
+            attrs: {
+                for: 'input-221124135345'
+            }
+        }) %}
+
+        {% include 'partials/form/select.twig' with {
+            id: 'input-221124135345',
+            name: 'category',
+            value: 'a',
+            values: [
+                {id: 'a', text: 'Основы'},
+                {id: 'b', text: 'Lorem ipsum'},
+                {id: 'c', text: 'Dolor sit amet'}
+            ],
+            required: true
+        } %}
+    </div></div>
+</div>
 
 {# Author #}
-{% include 'partials/form/select.twig' with {
-    label: 'Author',
-    name: 'author',
-    value: 'a',
-    values: [
-        {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
-        {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
-        {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
-    ],
-    required: false
-} %}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Author',
+            required: false,
+            attrs: {
+                for: 'input-745241232'
+            }
+        }) %}
+
+        {% include 'partials/form/select.twig' with {
+            id: 'input-745241232',
+            name: 'author',
+            value: 'a',
+            values: [
+                {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
+                {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
+                {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
+            ],
+            required: false
+        } %}
+    </div></div>
+</div>
 
 
 <div class="row row--pad form-group">
     <div class="col col--xs-12 col--lg-6">
 
         {# Thumbnail image #}
+        {% include 'partials/form/label.twig' with ({
+            text: 'Thumbnail',
+            required: true,
+            attrs: {
+                for: 'input-44231212'
+            }
+        }) %}
+
         {% include 'partials/form/image.twig' with {
-            label: 'Thumbnail',
+            id: 'input-44231212',
             name: 'thumbnail',
             value: {
                 id: 'a',
@@ -58,8 +100,16 @@
     <div class="col col--xs-12 col--lg-6 form-group mt-lg-0">
 
         {# Background image #}
+        {% include 'partials/form/label.twig' with ({
+            text: 'Background Image',
+            required: true,
+            attrs: {
+                for: 'input-56745323'
+            }
+        }) %}
+
         {% include 'partials/form/image.twig' with {
-            label: 'Background Image',
+            id: 'input-56745323',
             name: 'background',
             value: {
                 id: 'a',
@@ -77,19 +127,40 @@
 
 
 {# URL #}
-{% include 'partials/form/text.twig' with {
-    'label': 'URL',
-    'labelTooltip': 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
-    'name': 'title',
-    'value': 'vidy-kommercheskoi-nedvizhimosti-sektora-tipy-i-formaty',
-    'prefixText': 'academy/',
-    'required': true
-} %}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'URL',
+        tooltip: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
+        required: true,
+        attrs: {
+            for: 'input-76556342'
+        }
+    }) %}
+
+    {% include 'partials/form/text.twig' with {
+        id: 'input-76556342',
+        name: 'title',
+        value: 'vidy-kommercheskoi-nedvizhimosti-sektora-tipy-i-formaty',
+        prefixText: 'academy/',
+        required: true
+    } %}
+</div>
 
 {# Date #}
-{% include 'partials/form/date.twig' with {
-    'label': 'Publication date',
-    'name': 'date',
-    'value': '2020-07-21 10:00:00',
-    'required': true
-} %}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Publication date',
+            required: true,
+            attrs: {
+                for: 'input-22212122'
+            }
+        }) %}
+        {% include 'partials/form/date.twig' with {
+            id: 'input-22212122',
+            name: 'date',
+            value: '2020-07-21 10:00:00',
+            required: true
+        } %}
+    </div></div>
+</div>

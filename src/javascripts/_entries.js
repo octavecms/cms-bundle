@@ -9,6 +9,7 @@ module.exports = {
         './components/tooltip',
         './components/accordion',
         './components/form/select2',
+        './components/form/input-max-length',
     ],
     'example-grid': [
         './components/common/init',

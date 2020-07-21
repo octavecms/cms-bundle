@@ -1,0 +1,61 @@
+/**
+ * Button which style changes depending on a preceding checkbox or a radio button
+ *
+ * @demo
+ *     <input type="checkbox" />
+ *     <a class="btn btn--checkbox"><span class="btn__content">Button state</span></a>
+ */
+
+.btn--checkbox {
+    $styles: (
+        // Default styles
+        'default': (
+            color: var(--color-heading),
+            background: transparent,
+            border: var(--color-outline),
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color: var(--color-heading),
+        ),
+    );
+
+    &:after {
+        border: 1px solid;
+    }
+
+    @include button-colors ($styles);
+}
+
+
+/**
+ * Checked button style
+ */
+
+input:checked + .btn--checkbox {
+    $styles: (
+        // Default styles
+        'default': (
+            color: var(--color-base),
+            border: var(--color-primary),
+            background: var(--color-primary),
+            hover-background: var(--color-primary),
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color: var(--color-base),
+        ),
+    );
+
+    @include button-colors ($styles);
+}
+
+
+/** 
+ * When input is focused highlight button
+ */
+
+input.focus-visible + .btn--checkbox {
+    box-shadow: $link-focus-visible-shadow;
+    z-index: 1;
+}

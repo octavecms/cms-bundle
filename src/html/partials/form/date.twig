@@ -1,5 +1,4 @@
-{% set label = label|default('') %}
-{% set labelTooltip = labelTooltip|default('') %}
+{% from 'macros/icon.twig' import icon %}
 
 {% set name = name|default('') %}
 {% set value = value|default('') %}
@@ -7,37 +6,26 @@
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
-{% set id = 'input-' ~ random() %}
+{% set id = id|default('input-' ~ random()) %}
 
-<div class="form-group">
-    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-        {% include 'partials/form/label.twig' with ({
-            'text': label,
-            'tooltip': labelTooltip,
-            'attrs': {
-                'for': id
-            }
-        }) %}
 
-        <div class="input-group">
-            <div class="input-group__input form-control form-control--input form-control--date">
-                {# Real date input #}
-                <input
-                    id="{{ id }}"
-                    name="{{ name }}"
-                    type="hidden" 
-                    value="{{ value }}"
-                    {% if required %}required{% endif %}
-                    {% if disabled %}disabled{% endif %}
-                    {% if readonly %}readonly{% endif %}
-                    />
+<div class="input-group">
+    <div class="input-group__input form-control form-control--input form-control--date">
+        {# Real date input #}
+        <input
+            id="{{ id }}"
+            name="{{ name }}"
+            type="hidden" 
+            value="{{ value }}"
+            {% if required %}required{% endif %}
+            {% if disabled %}disabled{% endif %}
+            {% if readonly %}readonly{% endif %}
+            />
 
-                {# Text date #}
-                <input id="{{ id }}" type="text" readonly value="{{ value|date('j F Y, H:i') }}" />
-            </div>
-            <label class="form-label input-group__icon" for="{{ id }}">
-                {{ icon('calendar', {width: 32, height: 32, 'aria-label': 'Calendar'}) }}
-            </label>
-        </div>
-    </div></div>
+        {# Text date #}
+        <input id="{{ id }}" type="text" readonly value="{{ value|date('j F Y, H:i') }}" />
+    </div>
+    <label class="form-label input-group__icon" for="{{ id }}">
+        {{ icon('calendar', {width: 32, height: 32, 'aria-label': 'Calendar'}) }}
+    </label>
 </div>

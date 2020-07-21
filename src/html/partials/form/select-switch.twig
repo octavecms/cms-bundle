@@ -1,0 +1,28 @@
+{% set name = name|default('') %}
+{% set value = value|default('') %}
+{% set values = values|default([]) %}
+{% set required = required|default(false) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
+{% set multiple = multiple|default(false) %}
+{% set id = id|default('input-' ~ random()) %}
+
+<div class="btn-group btn-group--collapsed">
+    {% for valueItem in values %}
+        <div>
+            <input id="{{ id }}-{{ loop.index }}"
+                type="{% if multiple %}checkbox{% else %}radio{% endif %}"
+                name="name"
+                value="{{ valueItem.id }}"
+                class="sr-only"
+                {% if readonly %}readonly{% endif %}
+                {% if disabled %}disabled{% endif %}
+                {% if valueItem.id == value %}checked{% endif %}
+            />
+
+            <label for="{{ id }}-{{ loop.index }}" class="btn btn--checkbox btn--lg btn--wide"><span class="btn__content">
+                {{ valueItem.text }}
+            </span></label>
+        </div>
+    {% endfor %}
+</div>

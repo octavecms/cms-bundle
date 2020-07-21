@@ -1,5 +1,4 @@
-{% set label = label|default('') %}
-{% set labelTooltip = labelTooltip|default('') %}
+{% from 'macros/icon.twig' import icon %}
 
 {% set name = name|default('') %}
 {% set value = value|default({}) %}
@@ -11,21 +10,14 @@
 {% set valueHeight = value.height|default(null) %}
 
 {% set required = required|default(false) %}
+{% set minWidth = minWidth|default(0) %}
+{% set minHeight = minHeight|default(0) %}
+
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
-{% set id = 'input-' ~ random() %}
+{% set id = id|default('input-' ~ random()) %}
 {% set prefixText = prefixText|default('') %}
 
-
-{# Label #}
-{% include 'partials/form/label.twig' with ({
-    'text': label,
-    'tooltip': labelTooltip,
-    'required': required,
-    'attrs': {
-        'for': id
-    }
-}) %}
 
 {# Input #}
 <div class="form-control-image
@@ -60,7 +52,15 @@
 
         <span class="form-control-image__content__spacer"></span>
         <span class="form-control-image__content__meta">
-            {{ valueWidth }}×{{ valueHeight }}
+            {% if minWidth and minHeight %}
+                {{ minWidth }}×{{ minHeight }} min
+            {% elseif minWidth %}
+                {{ minWidth }} min width
+            {% elseif minHeight %}
+                {{ minHeight }} min height
+            {% else %}
+                {{ valueWidth }}×{{ valueHeight }}
+            {% endif %}
         </span>
 
 

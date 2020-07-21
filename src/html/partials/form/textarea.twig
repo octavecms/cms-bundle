@@ -1,0 +1,28 @@
+{% set name = name|default('') %}
+{% set value = value|default('') %}
+{% set maxlength = maxlength|default(null) %}
+{% set required = required|default(false) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
+{% set id = id|default('input-' ~ random()) %}
+
+<div class="form-control form-control--textarea"
+    {% if maxlength %}data-plugin="inputMaxLength"{% endif %}
+>
+    <textarea
+        id="{{ id }}"
+        name="{{ name }}"
+        {% if required %}required{% endif %}
+        {% if disabled %}disabled{% endif %}
+        {% if readonly %}readonly{% endif %}
+        {% if maxlength %}maxlength="{{ maxlength }}"{% endif %} 
+    >
+        {{- value -}}
+    </textarea>
+    
+    {% if maxlength %}
+        <span class="form-control__info text-small text-color-small">
+            <span class="sr-only">Characters remaining</span> <span class="js-input-max-length-text">{{ maxlength - value|length }}</span>
+        </span>
+    {% endif %}
+</div>

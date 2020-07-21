@@ -1,6 +1,3 @@
-{% set label = label|default('') %}
-{% set labelTooltip = labelTooltip|default('') %}
-
 {% set name = name|default('') %}
 {% set value = value|default('') %}
 {% set type = type|default('text') %}
@@ -8,42 +5,34 @@
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
-{% set id = 'input-' ~ random() %}
+{% set id = id|default('input-' ~ random()) %}
 {% set prefixText = prefixText|default('') %}
 
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        'text': label,
-        'tooltip': labelTooltip,
-        'attrs': {
-            'for': id
-        }
-    }) %}
+<div class="input-group"
+    {% if maxlength %}data-plugin="inputMaxLength"{% endif %}
+>
+    {% if prefixText %}
+        <label class="form-label input-group__text input-group__merge text-medium" for="{{ id }}">
+            {{ prefixText }}
+        </label>
+    {% endif %}
 
-    <div class="input-group">
-        {% if prefixText %}
-            <label class="form-label input-group__text input-group__merge text-medium" for="{{ id }}">
-                {{ prefixText }}
-            </label>
-        {% endif %}
-
-        <div class="input-group__input form-control form-control--input input-group__merge">
-            <input
-                id="{{ id }}"
-                name="{{ name }}"
-                type="{{ type }}" 
-                value="{{ value }}"
-                {% if required %}required{% endif %}
-                {% if disabled %}disabled{% endif %}
-                {% if readonly %}readonly{% endif %}
-                {% if maxlength %}maxlength="{{ maxlength }}"{% endif %} 
-                />
-        </div>
-
-        {% if maxlength %}
-            <label class="form-label input-group__text input-group__merge text-small text-color-small" for="{{ id }}">
-                {{ maxlength - value|length }}
-            </label>
-        {% endif %}
+    <div class="input-group__input form-control form-control--input input-group__merge">
+        <input
+            id="{{ id }}"
+            name="{{ name }}"
+            type="{{ type }}" 
+            value="{{ value }}"
+            {% if required %}required{% endif %}
+            {% if disabled %}disabled{% endif %}
+            {% if readonly %}readonly{% endif %}
+            {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+            />
     </div>
+
+    {% if maxlength %}
+        <label class="form-label input-group__text input-group__merge text-small text-color-small" for="{{ id }}">
+            <span class="sr-only">Characters remaining</span> <span class="js-input-max-length-text">{{ maxlength - value|length }}</span>
+        </label>
+    {% endif %}
 </div>

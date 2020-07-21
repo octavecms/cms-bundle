@@ -1,0 +1,91 @@
+{# Image #}
+<div class="row row--pad form-group">
+    <div class="col col--xs-12 col--lg-6">
+
+        {% include 'partials/form/label.twig' with ({
+            text: 'Image',
+            required: true,
+            attrs: {
+                for: 'input-545656332'
+            }
+        }) %}
+
+        {% include 'partials/form/image.twig' with {
+            id: 'input-545656332',
+            name: 'image',
+            value: {
+                id: 'qweasdzxc',
+                thumbnail: '/assets/images/temp/image-thumb-3.png',
+                preview: '/assets/images/temp/image-thumb-3.png',
+                fileName: 'academy_article_chart_01.jpg',
+                width: 620,
+                height: 620
+            },
+            required: true,
+            minWidth: 620,
+            minHeight: 620
+        } %}
+
+    </div>
+</div>
+
+
+{# Description #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'Description',
+        required: false,
+        attrs: {
+            for: 'input-64234253'
+        }
+    }) %}
+
+    {% include 'partials/form/text.twig' with {
+        id: 'input-64234253',
+        name: 'image-description',
+        value: 'Сектора в портфеле инвестиций в недвижимость (на Июнь 2012, Мир без США)',
+        maxlength: 255,
+        required: false
+    } %}
+</div>
+
+{# Source #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'Source',
+        required: false,
+        attrs: {
+            for: 'input-234235562'
+        }
+    }) %}
+
+    {% include 'partials/form/textarea.twig' with {
+        id: 'input-234235562',
+        name: 'image-source',
+        value: 'INREV, Accent Capital. Уровни риска измерены качественно. Уровни диапазонов доходностей указаны для России (города Москва и Санкт-Петербург с областями) по данным расчетов Accent Capital за 2019 год, с учетом инвестиционных вознаграждений Accent Capital, до налогов. IRR (Internal Rate of Return) – внутренняя норма доходности (ВНД). Исключительно в качестве иллюстрации принципа соотношения риск/доходность.',
+        maxlength: 600,
+        required: false
+    } %}
+</div>
+
+{# Full width #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'Full width',
+        required: true,
+        attrs: {
+            for: 'input-745734523'
+        }
+    }) %}
+
+    {% include 'partials/form/select-switch.twig' with {
+        id: 'input-745734523',
+        name: 'image-source',
+        value: '1',
+        values: [
+            {id: '0', text: 'No'},
+            {id: '1', text: 'Yes'},
+        ],
+        required: true
+    } %}
+</div>

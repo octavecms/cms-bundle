@@ -1,0 +1,43 @@
+{# Quote text #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'Quote Text',
+        required: true,
+        attrs: {
+            for: 'input-564355343'
+        }
+    }) %}
+
+    {% include 'partials/form/textarea.twig' with {
+        id: 'input-564355343',
+        name: 'quote-text',
+        value: 'Инвесторы, готовые рассматривать больший риск для достижения более высокой прибыли и готовые отложить получение инвестиционного результата на срок 2-3 года, могут инвестировать в более рискованные стили: Value-Added и Opportunistic, которые представляют собой более сложные бизнес-модели, предполагающие потенциал более высокой отдачи.',
+        maxlength: 600,
+        required: true
+    } %}
+</div>
+
+{# Quote author #}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Author',
+            required: true,
+            attrs: {
+                for: 'input-564566434'
+            }
+        }) %}
+
+        {% include 'partials/form/select.twig' with {
+            id: 'input-564566434',
+            name: 'quote-author',
+            value: 'a',
+            values: [
+                {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
+                {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
+                {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
+            ],
+            required: true
+        } %}
+    </div></div>
+</div>

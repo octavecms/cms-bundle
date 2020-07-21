@@ -3,6 +3,8 @@
  */
 
 %input-wrapper {
+    position: relative;
+    
     // Prevent interaction with input if it's readonly
     &[readonly],
     &.readonly {
