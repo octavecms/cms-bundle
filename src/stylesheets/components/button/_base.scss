@@ -154,3 +154,11 @@
         border-radius: 200px;
     }
 }
+
+
+/**
+ * Button with shadow
+ */
+.btn--shadow {
+    box-shadow: $button-shadow;
+}

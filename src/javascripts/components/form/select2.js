@@ -6,7 +6,7 @@ function formatSelection (state) {
     if (!state.id || !image) {
         return state.text;
     } else {
-        const $state = $('<span class="select2-selection__image"><img src="" alt="" /> <span></span></span>');
+        const $state = $('<span class="select2-selection__image"><img src="" alt="" draggable="false" /> <span></span></span>');
 
         $state.find('img').attr('src', image).attr('alt', state.text);
         $state.find('span').text(state.text);
@@ -21,7 +21,7 @@ function formatResult (state) {
     if (!state.id || !image) {
         return state.text;
     } else {
-        const $state = $('<span class="select2-results__option__image"><img src="" alt="" /> <span></span></span>');
+        const $state = $('<span class="select2-results__option__image"><img src="" alt="" draggable="false" /> <span></span></span>');
 
         $state.find('img').attr('src', image).attr('alt', state.text);
         $state.find('span').text(state.text);

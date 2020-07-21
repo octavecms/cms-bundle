@@ -33,6 +33,13 @@ $link-styles: (
         hover:              var(--color-primary),
         active:             var(--color-primary),
     ),
+
+    // Primary link style
+    'primary': (
+        normal:             var(--color-primary),
+        hover:              var(--color-heading),
+        active:             var(--color-heading),
+    ),
 );
 
 $link-decorations: (

@@ -55,6 +55,26 @@ $grid-columns: (
         gutter: var(--spacer-5),
     ),
 
+    // Tablet landscape
+    lg: (
+        // Count
+        columns: 12,
+        // Full size, all column sum, must use number + unit
+        unit: 100%,
+        // Spacing between columns
+        gutter: var(--spacer-5),
+    ),
+
+    // Desktop
+    xl: (
+        // Count
+        columns: 12,
+        // Full size, all column sum, must use number + unit
+        unit: 100%,
+        // Spacing between columns
+        gutter: var(--spacer-5),
+    ),
+
     // Extremely large desktop, 1920+
     // xxxl: (
     //     columns: 24,

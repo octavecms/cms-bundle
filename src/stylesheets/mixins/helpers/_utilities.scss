@@ -31,45 +31,70 @@
     $class: map-get($utility, class);
     $values: map-get($utility, values);
     $properties: map-get($utility, property);
+
+    @if $values-override {
+        $values: $values-override;
+    }
+
+    $type: type-of($values);
+
+    @if $type == 'map' or $type == 'list' {
+        @each $key, $value in $values {
+            // If values is a list instead of a map then $value is null
+            // @if type-of($value) == 'null' {
+            //     $value: $key;
+            // }
+            
+            // If values is a list instead of a map then $value is null
+            @if $type == 'list' {
+                $value: $key;
+            }
+    
+            $selector: get-utility-selector($class, $breakpoint, '-#{ $key }');
+    
+            #{ $selector } {
+                @include generate-utility-properties($properties, $value, $utility);
+            }
+        }
+    } @else {
+        // A property value instead of a map of (classPostfix: value)
+        $selector: get-utility-selector($class, $breakpoint);
+    
+        #{ $selector } {
+            @include generate-utility-properties($properties, $values, $utility);
+        }
+    }
+}
+
+@mixin generate-utility-properties ($properties, $value, $utility) {
+    @if type-of($properties) == 'list' {
+        // A list of properties, eg. 'padding-top padding-bottom'
+        @each $property in $properties {
+            #{ $property }: #{ $value };
+        }
+    } @else {
+        // Single property
+        #{ $properties }: #{ $value };
+    }
+    
+    // Apply use
+    @include apply-use($utility);
+}
+
+
+@mixin apply-use ($utility) {
     $use: map-get($utility, use);
 
     @if $use and type-of($use) == 'string' {
         $use: str-split($use, " ");
     }
 
-    @if $values-override {
-        $values: $values-override;
-    }
-
-    @each $key, $value in $values {
-        // If values is a list instead of a map then $value is null
-        @if type-of($value) == 'null' {
-            $value: $key;
-        }
-
-        $selector: get-utility-selector($class, $breakpoint, '-#{ $key }');
-
-        #{ $selector } {
-            @if type-of($properties) == 'list' {
-                // A list of properties, eg. 'padding-top padding-bottom'
-                @each $property in $properties {
-                    #{ $property }: #{ $value };
-                }
-            } @else {
-                // Single property
-                #{ $properties }: #{ $value };
-            }
-
-            // Apply use
-            @if index($use, reset-first-child) {
-                @include use-reset-first-child($utility);
-            }@else if index($use, reset-last-child) {
-                @include use-reset-last-child($utility);
-            }
-        }
+    @if index($use, reset-first-child) {
+        @include use-reset-first-child($utility);
+    }@else if index($use, reset-last-child) {
+        @include use-reset-last-child($utility);
     }
 }
-
 
 /**
  * Modifiers to reset value if element is first child

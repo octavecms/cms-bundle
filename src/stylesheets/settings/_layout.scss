@@ -94,3 +94,9 @@ $dropdown-padding-x: var(--spacer-3);
 $dropdown-padding-y: var(--spacer-4);
 $dropdown-shadow: 0 1px 0 rgba(var(--color-shadow-raw), 0.04), 0 8px 64px rgba(var(--color-shadow-raw), 0.16);
 $dropdown-menu-min-width: 304px;
+
+/**
+ * Button
+ */
+
+$button-shadow: 0 1px 0 rgba(var(--color-shadow-raw), 0.04), 0 4px 16px rgba(var(--color-shadow-raw), 0.04);
