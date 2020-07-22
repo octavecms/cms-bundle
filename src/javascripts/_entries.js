@@ -10,6 +10,7 @@ module.exports = {
         './components/accordion',
         './components/form/select2',
         './components/form/input-max-length',
+        './components/form/image-list',
     ],
     'example-grid': [
         './components/common/init',

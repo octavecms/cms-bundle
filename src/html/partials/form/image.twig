@@ -4,7 +4,7 @@
 {% set value = value|default({}) %}
 {% set valueId = value.id|default(null) %}
 {% set valueThumbnail = value.thumbnail|default(null) %}
-{% set valuePreview = value.preview|default(null) %}
+{% set valueUrl = value.url|default(null) %}
 {% set valueFileName = value.fileName|default(null) %}
 {% set valueWidth = value.width|default(null) %}
 {% set valueHeight = value.height|default(null) %}
@@ -46,9 +46,12 @@
         <span class="form-control-image__content__title">
             {{ valueFileName }}
         </span>
-        <a class="form-control-image__content__link" href="{{ valuePreview }}" target="_blank">
-            Preview
-        </a>
+        
+        {% if valueUrl %}
+            <a class="form-control-image__content__link" href="{{ valueUrl }}" target="_blank">
+                Preview
+            </a>
+        {% endif %}
 
         <span class="form-control-image__content__spacer"></span>
         <span class="form-control-image__content__meta">

@@ -3,12 +3,13 @@
 {% set name = name|default('') %}
 {% set value = value|default([]) %}
 
-<div class="image-list">
-    <ol class="image-list__list">
+<div class="image-list" data-plugin="imageList">
+    <ol class="image-list__list js-image-list-list">
         {% for item in value %}
             {% set id = item.id|default('') %}
             {% set fileName = item.fileName|default('') %}
             {% set thumbnail = item.thumbnail|default('') %}
+            {% set url = item.url|default('') %}
             {% set meta = item.meta|default('') %}
             {% set hasMeta = false %}
             {% set hasMetaValues = false %}
@@ -21,24 +22,27 @@
                 {% endif %}
             {% endfor %}
 
-            <li class="image-list__list__item image-item" aria-label="Image {{ fileName }}">
+            <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ fileName }}">
+                <div class="image-item__sizer"></div>
                 <div class="image-item__image">
                     {% if thumbnail %}
-                        <img src="{{ thumbnail }}" alt="" draggable="false" />
+                        <img src="{{ thumbnail }}" alt="{{ fileName }}" draggable="false" {% if url %}data-full-image-url="{{ url }}"{% endif %} />
+                    {% elseif url %}
+                        <img src="{{ url }}" alt="{{ fileName }}" draggable="false" />
                     {% endif %}
                 </div>
                 <div class="image-item__controls ui-gray">
                     <div class="group group--2">
                         {% if hasMeta %}
-                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill {% if hasMetaValues %}is-highlighted{% endif %}" aria-label="Change image information"><span class="btn__content">
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable {% if hasMetaValues %}is-highlighted{% endif %}" aria-label="Change image information"><span class="btn__content">
                                 {{ icon('note', {width: 32, height: 32}) }}
                             </span></a>
                         {% endif %}
 
-                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill group__right" aria-label="Change image"><span class="btn__content">
+                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable group__right" aria-label="Change image"><span class="btn__content">
                             {{ icon('edit', {width: 32, height: 32}) }}
                         </span></a>
-                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill" aria-label="Remove image"><span class="btn__content">
+                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable" aria-label="Remove image"><span class="btn__content">
                             {{ icon('delete', {width: 32, height: 32}) }}
                         </span></a>
                     <div>
@@ -46,7 +50,8 @@
             </li>
         {% endfor %}
 
-        <li class="image-list-control-item">
+        <li class="image-list-control-item js-image-list-not-draggable js-image-list-force-end">
+            <div class="image-list-control-item__sizer"></div>
             <a role="button" tabindex="0" class="image-list-control-item__content btn-container">
                 <span class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
                     {{ icon('add', {width: 32, height: 32}) }}

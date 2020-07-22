@@ -8,9 +8,6 @@
         display: grid;
         grid-gap: var(--spacer-3);
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-
-        // &__item {
-        // }
     }
 }
 
@@ -26,7 +23,10 @@
 
     // Square
     position: relative;
-    padding-top: 100%;
+
+    &__sizer {
+        padding-top: 100%;
+    }
 
     // Animation
     @extend %transition;
@@ -44,6 +44,8 @@
 }
 
 .image-item {
+    outline: none;
+
     &__image {
         position: absolute;
         left: 0;
@@ -94,7 +96,55 @@
 
 
 /**
- *
+ * Selected item for multi drag
+ */
+
+.image-item--selected {
+    &,
+    .has-hover &:hover,
+    &:focus-within {
+        box-shadow: $link-focus-visible-shadow;
+    }
+}
+
+.image-item--dragging,
+.image-list--sorting .image-item {
+    &,
+    .has-hover &:hover,
+    &:focus-within {
+        box-shadow: none;
+        border-color: var(--color-outline);
+
+        .image-item__controls .btn {
+            opacity: 0;
+
+            &.is-highlighted {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.image-item--dragging {
+    transition: none;
+    opacity: 0.25;
+    cursor: move;
+
+    .image-item__controls {
+        display: none;
+    }
+}
+.image-item--ghost {
+    opacity: 0.25;
+}
+
+.image-list--sorting {
+    cursor: move;
+}
+
+
+/**
+ * "Add item" control
  */
 
 .image-list-control-item {

@@ -24,7 +24,8 @@
     "jquery-app": "^1.4.0",
     "jquery-plugin-generator": "^1.4.0",
     "normalize-scss": "^7.0.0",
-    "select2": "^4.0.13"
+    "select2": "^4.0.13",
+    "sortablejs": "^1.10.2"
   },
   "browserslist": [
     "defaults",
