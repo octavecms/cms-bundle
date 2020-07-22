@@ -18,7 +18,9 @@
  * Image item
  */
 
-.image-item {
+.image-item,
+.image-list-control-item {
+    background: var(--color-background);
     border: 1px solid var(--color-outline);
     border-radius: var(--border-radius);
 
@@ -30,6 +32,18 @@
     @extend %transition;
     transition-property: border-color, box-shadow;
 
+    // Hovered / focused style
+    .has-hover &:hover,
+    &:focus-within {
+        border-color: var(--color-background);
+        box-shadow:
+            0 -1px 0 rgba(var(--color-shadow-raw), 0.04),
+            0 1px 0 rgba(var(--color-shadow-raw), 0.04),
+            0 4px 16px rgba(var(--color-shadow-raw), 0.04);
+    }
+}
+
+.image-item {
     &__image {
         position: absolute;
         left: 0;
@@ -69,22 +83,37 @@
         }
     }
 
-    /**
-     * Hovered / focused style
-     */
-    .has-hover &:hover,
-    &:focus-within {
-        border-color: var(--color-background);
-        box-shadow:
-            0 -1px 0 rgba(var(--color-shadow-raw), 0.04),
-            0 1px 0 rgba(var(--color-shadow-raw), 0.04),
-            0 4px 16px rgba(var(--color-shadow-raw), 0.04);
-    }
-
+    // On hover / focus show buttons
     .has-hover &:hover,
     &:focus-within {
         .image-item__controls .btn {
             opacity: 1;
+        }
+    }
+}
+
+
+/**
+ *
+ */
+
+.image-list-control-item {
+    &__content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        
+        &__text {
+            padding-top: calc(var(--spacer-3) * 0.75);
+            @extend %text--size-small;
         }
     }
 }
