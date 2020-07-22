@@ -24,6 +24,8 @@ class ImageList {
             dragClass: 'image-item--dragging',
             listSelector: '.js-image-list-list',
             forceElementAtTheEndSelector: '.js-image-list-force-end',
+
+            disabled: false
         };
     }
 
@@ -32,7 +34,9 @@ class ImageList {
         this.$container = $container;
         this.$list = $container.find(options.listSelector);
 
-        this.createSortable();
+        if (!options.disabled) {
+            this.createSortable();
+        }
     }
 
     createSortable () {

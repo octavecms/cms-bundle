@@ -45,6 +45,13 @@
         content: "";
         @extend %layout-position-overlay-extended;
     }
+
+    // Hover
+    @include link-hover () {
+        .icon {
+            color: var(--color-heading);
+        }
+    }
 }
 
 

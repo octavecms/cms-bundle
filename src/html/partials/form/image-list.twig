@@ -2,8 +2,12 @@
 
 {% set name = name|default('') %}
 {% set value = value|default([]) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
 
-<div class="image-list" data-plugin="imageList">
+<div class="image-list {% if readonly or disabled %}image-list--disabled{% endif %}"
+    {% if not readonly and not disabled %}data-plugin="imageList"{% endif %}
+>
     <ol class="image-list__list js-image-list-list">
         {% for item in value %}
             {% set id = item.id|default('') %}
@@ -23,6 +27,8 @@
             {% endfor %}
 
             <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ fileName }}">
+                <input type="hidden" name="{{ name }}[]" value="{{ id }}" {% if disabled %}disabled{% endif %} />
+
                 <div class="image-item__sizer"></div>
                 <div class="image-item__image">
                     {% if thumbnail %}
@@ -33,31 +39,36 @@
                 </div>
                 <div class="image-item__controls ui-gray">
                     <div class="group group--2">
-                        {% if hasMeta %}
+                        {# Meta button shown on readonly #}
+                        {% if hasMeta and not disabled and (not readonly or hasMetaValues) %}
                             <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable {% if hasMetaValues %}is-highlighted{% endif %}" aria-label="Change image information"><span class="btn__content">
                                 {{ icon('note', {width: 32, height: 32}) }}
                             </span></a>
                         {% endif %}
 
-                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable group__right" aria-label="Change image"><span class="btn__content">
-                            {{ icon('edit', {width: 32, height: 32}) }}
-                        </span></a>
-                        <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable" aria-label="Remove image"><span class="btn__content">
-                            {{ icon('delete', {width: 32, height: 32}) }}
-                        </span></a>
+                        {% if not readonly and not disabled %}
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable group__right" aria-label="Change image"><span class="btn__content">
+                                {{ icon('edit', {width: 32, height: 32}) }}
+                            </span></a>
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable" aria-label="Remove image"><span class="btn__content">
+                                {{ icon('delete', {width: 32, height: 32}) }}
+                            </span></a>
+                        {% endif %}
                     <div>
                 </div>
             </li>
         {% endfor %}
 
-        <li class="image-list-control-item js-image-list-not-draggable js-image-list-force-end">
-            <div class="image-list-control-item__sizer"></div>
-            <a role="button" tabindex="0" class="image-list-control-item__content btn-container">
-                <span class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
-                    {{ icon('add', {width: 32, height: 32}) }}
-                </span></span>
-                <span class="image-list-control-item__content__text">Add Images</span>
-            </a>
-        </li>
+        {% if not readonly and not disabled %}
+            <li class="image-list-control-item js-image-list-not-draggable js-image-list-force-end">
+                <div class="image-list-control-item__sizer"></div>
+                <a role="button" tabindex="0" class="image-list-control-item__content btn-container">
+                    <span class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
+                        {{ icon('add', {width: 32, height: 32}) }}
+                    </span></span>
+                    <span class="image-list-control-item__content__text">Add Images</span>
+                </a>
+            </li>
+        {% endif %}
     </ol>
 </div>
