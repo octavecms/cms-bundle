@@ -130,10 +130,14 @@ class FlexiblePageType extends BasePageType
 
         if (isset($content['seo'])) {
             foreach ($content['seo'] as $locale => $seoData) {
-                $page->translate($locale)->setTitle($seoData['title']);
-                $page->translate($locale)->setMetaTitle($seoData['metaTitle']);
-                $page->translate($locale)->setMetaKeywords($seoData['metaKeywords']);
-                $page->translate($locale)->setMetaDescription($seoData['metaDescription']);
+                $translation = $page->translate($locale, false);
+
+                $translation->setTitle($seoData['title']);
+                $translation->setMetaTitle($seoData['metaTitle']);
+                $translation->setMetaKeywords($seoData['metaKeywords']);
+                $translation->setMetaDescription($seoData['metaDescription']);
+
+                $page->addTranslation($translation);
             }
         }
 
