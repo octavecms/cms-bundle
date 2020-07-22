@@ -1,4 +1,4 @@
-import select2 from 'select2';
+import 'select2';
 
 function formatSelection (state) {
     const image = $(state.element).data('image');
@@ -34,6 +34,7 @@ function formatResult (state) {
 const originalSelect2Plugin = $.fn.select2;
 
 $.fn.select2 = function (options = {}) {
+    console.trace();
     return originalSelect2Plugin.call($(this), $.extend({
         theme: 'cms',
         templateResult: formatResult,

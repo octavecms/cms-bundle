@@ -9,23 +9,44 @@
 {% set id = id|default('input-' ~ random()) %}
 
 
-<div class="input-group">
+<div class="input-group"
+    data-plugin="datetimepicker"
+    data-datetimepicker='{
+        "pickTime":true,
+        "pickDate":true,
+        "useCurrent":true,
+        "minDate":"1\/1\/1900",
+        "maxDate":null,
+        "showToday":true,
+        "language":"ru",
+        "defaultDate":"",
+        "disabledDates":[],
+        "enabledDates":[],
+        "icons":{"time":"fa fa-clock-o","date":"fa fa-calendar","up":"fa fa-chevron-up","down":"fa fa-chevron-down"},
+        "useStrict":false,
+        "sideBySide":false,
+        "daysOfWeekDisabled":[],
+        "collapse":true,
+        "calendarWeeks":false,
+        "viewMode":"days",
+        "minViewMode":"days",
+        "useMinutes":true,
+        "useSeconds":true,
+        "minuteStepping":1
+    }'
+>
     <div class="input-group__input form-control form-control--input form-control--date">
-        {# Real date input #}
         <input
             id="{{ id }}"
+            type="text"
             name="{{ name }}"
-            type="hidden" 
-            value="{{ value }}"
-            {% if required %}required{% endif %}
-            {% if disabled %}disabled{% endif %}
+            value="{{ value|date('j F Y., H:i:s') }}"
+            data-date-format="D MMM YYYY [г]., HH:mm:ss"
             {% if readonly %}readonly{% endif %}
-            />
-
-        {# Text date #}
-        <input id="{{ id }}" type="text" readonly value="{{ value|date('j F Y, H:i') }}" />
+        />
     </div>
     <label class="form-label input-group__icon" for="{{ id }}">
         {{ icon('calendar', {width: 32, height: 32, 'aria-label': 'Calendar'}) }}
     </label>
+
 </div>

@@ -96,7 +96,11 @@ var Admin = {
         if (Admin.get_config('USE_SELECT2')) {
             Admin.log('[core|setup_select2] configure Select2 on', subject);
 
-            jQuery('select:not([data-sonata-select2="false"])', subject).each(function() {
+            jQuery('select:not([data-sonata-select2="false"])', subject)
+                .not('.flatpickr-monthDropdown-months')
+                .each(function() {
+
+                console.log(this)
                 var select                  = jQuery(this);
                 var allowClearEnabled       = false;
                 var popover                 = select.data('popover');
