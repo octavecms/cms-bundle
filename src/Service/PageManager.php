@@ -130,6 +130,11 @@ class PageManager
     public function getCurrentPage()
     {
         $routeName = $this->requestStack->getCurrentRequest()->get('_route');
+
+        if ($this->pages === false) {
+            $this->getPages();
+        }
+
         return $this->pages[$routeName] ?? null;
     }
 
