@@ -5,5 +5,4 @@
  *     <div>{{ name }}</div>
  */
 module.exports = {
-    'name': 'World',
 };

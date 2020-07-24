@@ -1,0 +1,16 @@
+/*
+ * Example grid styles
+ */
+
+@import "imports";
+
+
+/**
+* Demo specific code
+*/
+
+@each $style, $values in $link-styles {
+    .link-#{ $style } {
+        @extend %link--style-#{ $style };
+    }
+}

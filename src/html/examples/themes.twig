@@ -1,0 +1,76 @@
+{% from 'macros/icon.twig' import icon %}
+{% extends 'layouts/base.twig' %}
+
+
+{% block body %}
+    {% set themes = [
+        '',
+        'ui-gray',
+        'ui-dark',
+    ] %}
+
+    {% for theme in themes %}
+    <section class="ui-background {{ theme }} container-h container-v">
+        {# Name from html/data/global.js #}
+        <h1>Heading {{ theme }}</h1>
+
+        {% for color in ['default', 'primary', 'secondary', 'small', 'text', 'heading'] %}
+            <p class="text-color-{{ color }}">Text {{ color }}. Ullamco fugiat irure officia in dolor consequat mollit aliqua sunt consequat.</p>
+        {% endfor %}
+
+        <div class="group group--3 mb-5">
+
+            <a href="#" class="btn btn--primary"><span class="btn__content">
+                Primary
+            </span></a>
+            <a href="#" class="btn btn--primary btn--pill"><span class="btn__content">
+                Primary
+            </span></a>
+            <a href="#" class="btn btn--primary btn--square btn--pill"><span class="btn__content">
+                {{ icon('example-arrow', {'width': 20, 'height': 20}) }}
+            </span></a>
+
+            <a href="#" class="btn btn--secondary"><span class="btn__content">
+                Secondary
+            </span></a>
+            <a href="#" class="btn btn--secondary btn--pill"><span class="btn__content">
+                Secondary
+            </span></a>
+            <a href="#" class="btn btn--secondary btn--square btn--pill"><span class="btn__content">
+                {{ icon('example-arrow', {'width': 20, 'height': 20}) }}
+            </span></a>
+
+            <a href="#" class="btn btn--tetriary"><span class="btn__content">
+                Tetriary
+            </span></a>
+            <a href="#" class="btn btn--tetriary btn--pill"><span class="btn__content">
+                Tetriary
+            </span></a>
+            <a href="#" class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
+                {{ icon('example-arrow', {'width': 20, 'height': 20}) }}
+            </span></a>
+        </div>
+
+        <div class="group group--3">
+            <a href="#" class="link-default">
+                Default link style
+            </a>
+            <a href="#" class="link-small">
+                Small link style
+            </a>
+            <a href="#" class="link-heading">
+                Heading link style
+            </a>
+            <a href="#" class="link-primary">
+                Primary link style
+            </a>
+        </div>
+    </section>
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/assets/stylesheets/example-themes.css" />
+{% endblock %}

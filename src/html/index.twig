@@ -2,38 +2,6 @@
 {% extends 'layouts/base.twig' %}
 
 
-{% block body %}
-    <section class="ui-background">
-        {# Name from html/data/global.js #}
-        <h1>Hello {{ name }}!</h1>
-
-        <a href="dark.html" class="btn">
-            <span>Dark page</span>
-            {# Icon from sprite #}
-            {{ icon('example-arrow', {'width': 20, 'height': 20}) }}
-        </a>
-    </section>
-
-    <section class="ui-background ui-gray">
-        {# Name from html/data/global.js #}
-        <h1>Hello {{ name }}!</h1>
-
-        <a href="dark.html" class="btn">
-            <span>Dark page</span>
-            {# Icon from sprite #}
-            {{ icon('example-arrow', {'width': 20, 'height': 20}) }}
-        </a>
-    </section>
-
-    <section class="ui-background ui-dark">
-        {# Name from html/data/global.js #}
-        <h1>Hello {{ name }}!</h1>
-
-        <a href="dark.html" class="btn">
-            <span>Dark page</span>
-            {# Icon from sprite #}
-            {{ icon('example-arrow', {'width': 20, 'height': 20}) }}
-        </a>
-    </section>
+{% block meta %}
+    <meta http-equiv="refresh" content="0;URL='/page-list.html'" />    
 {% endblock %}
-
