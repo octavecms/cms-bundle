@@ -1,14 +1,18 @@
 {% set name = name|default('') %}
 {% set value = value|default('') %}
 {% set type = type|default('text') %}
+{% set className = className|default('') %}
 {% set maxlength = maxlength|default(null) %}
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
+{% set placeholder = placeholder|default('') %}
 {% set id = id|default('input-' ~ random()) %}
 {% set prefixText = prefixText|default('') %}
+{% set prefixIcon = prefixIcon|default('') %}
 
-<div class="input-group"
+{% if prefixText or prefixIcon or maxlength %}
+<div class="input-group {{ className }}"
     {% if maxlength %}data-plugin="inputMaxLength"{% endif %}
 >
     {% if prefixText %}
@@ -16,8 +20,14 @@
             {{ prefixText }}
         </label>
     {% endif %}
+    {% if prefixIcon %}
+        <label class="form-label input-group__icon input-group__merge text-medium" for="{{ id }}">
+            {{ icon(prefixIcon.id, {width: prefixIcon.width, height: prefixIcon.height}) }}
+        </label>
+    {% endif %}
+{% endif %}
 
-    <div class="input-group__input form-control form-control--input input-group__merge">
+    <div class="{% if prefixText or prefixIcon or maxlength %}input-group__input input-group__merge{% endif %} form-control form-control--input {{ className }}">
         <input
             id="{{ id }}"
             name="{{ name }}"
@@ -27,12 +37,15 @@
             {% if disabled %}disabled{% endif %}
             {% if readonly %}readonly{% endif %}
             {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+            {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
             />
     </div>
 
+{% if prefixIcon or prefixText or maxlength %}
     {% if maxlength %}
         <label class="form-label input-group__text input-group__merge text-small text-color-small" for="{{ id }}">
             <span class="sr-only">Characters remaining</span> <span class="js-input-max-length-text">{{ maxlength - value|length }}</span>
         </label>
     {% endif %}
 </div>
+{% endif %}

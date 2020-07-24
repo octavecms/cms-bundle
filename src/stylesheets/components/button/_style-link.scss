@@ -10,7 +10,6 @@
  */
 
 .btn.btn--link { // 1.
-
     $styles: (
         // Default styles
         'default': (
@@ -35,16 +34,5 @@
     &:before,
     &:after {
         display: none;
-    }
-}
-
-.btn.btn--no-paddings {
-    // Reset button styles
-    padding-left: 0;
-    padding-right: 0;
-
-    .btn__content {
-        justify-content: flex-start;
-        text-align: left;
     }
 }

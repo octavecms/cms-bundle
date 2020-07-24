@@ -1,0 +1,36 @@
+{% set name = name|default('') %}
+{% set value = value|default('') %}
+{% set min = min|default(null) %}
+{% set max = max|default(null) %}
+{% set required = required|default(false) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
+{% set id = id|default('input-' ~ random()) %}
+{% set prefixText = prefixText|default('') %}
+
+{% if prefixText %}
+<div class="input-group">
+    {% if prefixText %}
+        <label class="form-label input-group__text input-group__merge text-medium" for="{{ id }}">
+            {{ prefixText }}
+        </label>
+    {% endif %}
+{% endif %}
+
+    <div class="{% if prefixText %}input-group__input input-group__merge{% endif %} form-control form-control--input">
+        <input
+            id="{{ id }}"
+            name="{{ name }}"
+            type="number" 
+            value="{{ value }}"
+            {% if min != null %}min="{{ min }}"{% endif %}
+            {% if max != null %}max="{{ max }}"{% endif %}
+            {% if required %}required{% endif %}
+            {% if disabled %}disabled{% endif %}
+            {% if readonly %}readonly{% endif %}
+            />
+    </div>
+
+{% if prefixText %}
+</div>
+{% endif %}

@@ -31,6 +31,17 @@
     @extend %input;
 }
 
+// Small control
+.form-control--input.form-control--small input {
+    @extend %input-layout-small;
+    @extend %input-text-small;
+}
+
+// Pill control
+.form-control--input.form-control--pill {
+    --border-radius: 200px;
+}
+
 
 /**
  * Textarea form control modifier

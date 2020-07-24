@@ -126,6 +126,9 @@ figure {
  *     <p class="text--medium">Medium text size</p>
  */
 
+.text-default {
+    @extend %text--size-default;
+}
 .text-small {
     @extend %text--size-small;
 }
@@ -145,6 +148,7 @@ figure {
  */
 
 .text-truncate {
+    display:       block;
     white-space:   nowrap   !important;
     overflow:      hidden   !important;
     text-overflow: ellipsis !important;

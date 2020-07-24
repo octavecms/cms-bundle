@@ -1,0 +1,87 @@
+{# "Table" form section #}
+
+{# Title #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'Table Title',
+        attrs: {
+            for: 'input-67576585676-' ~ language
+        }
+    }) %}
+
+    {% include 'partials/form/text.twig' with {
+        id: 'input-67576585676-' ~ language,
+        name: 'table-title[' ~ language ~ ']',
+        value: 'Сектора и разновидности коммерческой недвижимости',
+        required: false
+    } %}
+</div>
+
+
+{# Multi column layout #}
+<div class="row row--pad form-group">
+    <div class="col col--xs-12 col--md-6 col--lg-3">
+
+        {# Columns #}
+        <div class="form-group">
+            {% include 'partials/form/label.twig' with ({
+                text: 'Columns',
+                attrs: {
+                    for: 'input-54645674567-' ~ language
+                }
+            }) %}
+
+            {% include 'partials/form/number.twig' with {
+                id: 'input-54645674567-' ~ language,
+                name: 'table-header-columns[' ~ language ~ ']',
+                value: 2,
+                required: true
+            } %}
+        </div>
+
+    </div>
+    <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-md-0">
+
+        {# Rows #}
+        <div class="form-group">
+            {% include 'partials/form/label.twig' with ({
+                text: 'Rows',
+                attrs: {
+                    for: 'input-675678568-' ~ language
+                }
+            }) %}
+
+            {% include 'partials/form/number.twig' with {
+                id: 'input-675678568-' ~ language,
+                name: 'table-header-rows[' ~ language ~ ']',
+                value: 2,
+                required: true
+            } %}
+        </div>
+
+    </div>
+    <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-lg-0">
+
+        {# Header Row #}
+        <div class="form-group">
+            {% include 'partials/form/label.twig' with ({
+                text: 'Header Row',
+                attrs: {
+                    for: 'input-47456745-' ~ language
+                }
+            }) %}
+
+            {% include 'partials/form/select-switch.twig' with {
+                id: 'input-47456745-' ~ language,
+                name: 'table-header-row[' ~ language ~ ']',
+                value: '0',
+                values: [
+                    {id: '0', text: 'No'},
+                    {id: '1', text: 'Yes'},
+                ],
+                required: true
+            } %}
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,44 @@
+{% from 'macros/icon.twig' import icon %}
+
+<div class="card ui-light ui-background">
+    <div class="card__header">
+        
+        <div class="group group--2">
+            {# Tabs #}
+
+
+            {# Spacer #}
+            <div class="group__fill"></div>
+
+            {# Search #}
+            {% include 'partials/form/text.twig' with {
+                name: 'search',
+                className: 'form-control--small form-control--pill input-group--small input-group--pill',
+                placeholder: 'Search',
+                prefixIcon: {
+                    id: 'search',
+                    width: 15,
+                    height: 16
+                }
+            } %}
+
+            {# Filters #}
+
+
+            {# New item #}
+            <a class="btn btn--secondary btn--pill"><span class="btn__content">
+                {{ icon('add-small', {width: 10, height: 10}) }}
+                <span>New Item</span>
+            </span></a>
+        </div>
+
+    </div>
+    <div class="card__body card__body--short">
+        <div class="card__content">
+            CONTENT
+        </div>    
+    </div>
+    <div class="card__footer card__footer--short">
+        PAGINATION
+    </div>
+</div>

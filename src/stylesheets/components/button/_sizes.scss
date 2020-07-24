@@ -56,3 +56,23 @@
 .btn--text-small {
     @extend %text--size-small;
 }
+
+// Button without paddings
+.btn.btn--no-paddings {
+    // Reset button styles
+    padding-left: 0;
+    padding-right: 0;
+
+    .btn__content {
+        justify-content: flex-start;
+        text-align: left;
+    }
+}
+
+// Button with content aligned to the left side
+.btn.btn--align-left {
+    .btn__content {
+        justify-content: flex-start;
+        text-align: left;
+    }
+}

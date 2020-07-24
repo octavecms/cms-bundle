@@ -13,10 +13,10 @@
         width: auto;
     
         border: 1px solid var(--color-outline);
-        padding: 0 var(--spacer-3);
         border-radius: var(--border-radius);
     }
-    &__merge {
+
+    .input-group__merge {
         &:not(:last-child),
         &:not(:last-child) input {
             border-right: 0;
@@ -29,12 +29,12 @@
         }
     }
     &__icon {
-        padding-left: 0;
-        padding-right: 0;
         min-width: var(--spacer-6);
+        padding: 0;
     }
     &__text {
         border: 1px solid var(--color-outline);
+        padding: 0 var(--spacer-3);
     }
     &__input {
         flex-grow: 1;
@@ -75,4 +75,19 @@
             border-radius: var(--border-radius);
         }
     }
+}
+
+.input-group--small {
+    .input-group__text {
+        height: var(--spacer-5);
+        padding: 0 calc(var(--spacer-3) * 0.75);
+    }
+    .input-group__icon {
+        height: var(--spacer-5);
+        min-width: calc(var(--spacer) * 2.1875);
+    }
+}
+
+.input-group--pill {
+    --border-radius: 200px;
 }

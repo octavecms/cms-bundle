@@ -41,6 +41,11 @@
     }
 }
 
+%input-layout-small {
+    height: var(--spacer-5);
+	padding: 0 calc(var(--spacer-3) * 0.75);
+}
+
 /**
  * Input text styles
  */
@@ -81,6 +86,10 @@
     //         color: transparent;
     //     }
     // }
+}
+
+%input-text-small {
+    @include text--size(default);
 }
 
 %input {
