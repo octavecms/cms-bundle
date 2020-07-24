@@ -122,7 +122,7 @@ class Accordion extends ResponsiveComponent {
             // placed anywhere in the page + have multiple headings for single content
             // We use body instead of document to make sure we stop it before it propagates to document and callbacks for
             // other plugins are called after we have prevented default behaviour
-            $(document.body).on(`click.${ this.ns }`, options.headingSelector, this.handleHeadingClick.bind(this));
+            $(document.body).on(`click.${ this.ns } returnkey.${ this.ns }`, options.headingSelector, this.handleHeadingClick.bind(this));
 
             // Open item based on hash value
             this.handleHashChange();
@@ -137,7 +137,7 @@ class Accordion extends ResponsiveComponent {
     disable () {
         if (super.disable()) {
             // Cleanup global events
-            $(document.body).off(`click.${ this.ns }`);
+            $(document.body).off(`.${ this.ns }`);
 
             // Page loaded with accordion disabled, prevent accordion toggle when it becomes
             // enabled

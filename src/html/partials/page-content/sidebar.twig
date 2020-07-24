@@ -6,7 +6,7 @@
         {# Switch #}
         <div class="form-control-switch">
             <input class="form-control-switch__input" type="checkbox" id="formPageOnline" name="active" value="1" checked="checked" />
-            <label class="form-control-switch__label" for="formPageOnline">Online</label>
+            <label class="form-control-switch__label text-color-heading" for="formPageOnline">Online</label>
             <span class="form-control-switch__icon"></span>
         </div>
 
@@ -18,8 +18,25 @@
         <div class="form-sidebar__content card__body card__body--short">
             CONTENT
         </div>
-        <div class="form-sidebar__content card__body">
-            CONTENT
+        <div class="form-sidebar__content card__body card__body--narrow">
+            <div class="row row--pad form-sidebar__buttons">
+                <div class="col col--xs-6">
+                    <a class="btn btn--no-paddings btn--text-small btn--vertical btn--link btn-container" role="button" tabindex="0">
+                        <span class="btn btn--primary btn--square btn--pill icon"><span class="btn__content">
+                            {{ icon('preview', {width: 32, height: 32}) }}
+                        </span></span>
+                        <span>Preview</span>
+                    </a>
+                </div>
+                <div class="col col--xs-6">
+                    <a class="btn btn--no-paddings btn--text-small btn--vertical btn--link btn-container" role="button" tabindex="0">
+                        <span class="btn btn--primary btn--square btn--pill icon"><span class="btn__content">
+                            {{ icon('editor', {width: 32, height: 32}) }}
+                        </span></span>
+                        <span>Editor</span>
+                    </a>
+                </div>
+            </div>
         </div>
         <footer class="form-sidebar__footer card__footer">
             
@@ -32,7 +49,7 @@
 
                 {# More options dropdown #}
                 <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
-                    <button role="button" class="dropdown__toggle btn btn--secondary btn--lg btn--square" title="More options" aria-expanded="false" id="moreOptionsDropdown">
+                    <button type="button" class="dropdown__toggle btn btn--secondary btn--lg btn--square" title="More options" aria-expanded="false" id="moreOptionsDropdown">
                         <span class="btn__content">
                             {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
                         </span>

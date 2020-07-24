@@ -87,7 +87,6 @@ class GridGenerator {
         </section>`;
 
         // Columns
-        console.log(columns);
         html += map(columns, (column, breakpoint) => {
             const visibilityClassName = map(filter(breakpoints, b => b !== breakpoint), b => `is-hidden--${ b }-down`).join(' ') + ` is-visible--${ breakpoint }`;
             let html = '';

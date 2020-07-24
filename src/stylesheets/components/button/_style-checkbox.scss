@@ -10,9 +10,41 @@
     $styles: (
         // Default styles
         'default': (
+            color:      var(--color-text),
+            background: var(--color-tetriary),
+            hover-background: var(--color-tetriary),
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color:      var(--color-heading),
+        ),
+    );
+
+    @include button-colors ($styles);
+}
+
+
+/** 
+ * When input is focused highlight button
+ */
+
+input.focus-visible + .btn--checkbox {
+    box-shadow: $link-focus-visible-shadow;
+    z-index: 1;
+}
+
+
+/**
+ * Inactive button with outline
+ */
+.btn--checkbox--outline {
+    $styles: (
+        // Default styles
+        'default': (
             color: var(--color-heading),
             background: transparent,
             border: var(--color-outline),
+            hover-background: transparent,
         ),
         // Style when button is hovered or pressed down
         'hover down': (
@@ -48,14 +80,4 @@ input:checked + .btn--checkbox {
     );
 
     @include button-colors ($styles);
-}
-
-
-/** 
- * When input is focused highlight button
- */
-
-input.focus-visible + .btn--checkbox {
-    box-shadow: $link-focus-visible-shadow;
-    z-index: 1;
 }

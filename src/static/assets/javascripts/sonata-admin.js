@@ -100,7 +100,6 @@ var Admin = {
                 .not('.flatpickr-monthDropdown-months')
                 .each(function() {
 
-                console.log(this)
                 var select                  = jQuery(this);
                 var allowClearEnabled       = false;
                 var popover                 = select.data('popover');

@@ -1,10 +1,13 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
+import 'util/jquery.inview';
 import createPlugin from 'jquery-plugin-generator';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
+// Expose globally to allow loading locales
 window.moment = moment;
+
 // import convertMomentToFlatPickrFormat from './format-converter';
 
 /**
@@ -36,7 +39,11 @@ class DateTimePicker {
 
         $container.on('destroyed', this.destroy.bind(this));
 
-        this.createDatePicker();
+        $container.inview({
+            enter: this.createDatePicker.bind(this),
+            destroyOnEnter: true,
+            destroyOnLeave: true,
+        });
     }
 
     transformOptions (options) {
@@ -96,14 +103,11 @@ class DateTimePicker {
             return moment(datestr, format, options.useStrict).toDate();
         },
         transformed.formatDate = (date, format, locale) => {
-            // locale can also be used
             if (options.language) {
                 moment.locale(options.language);
             }
             return moment(date).format(format);
         }
-
-        console.log(transformed);
 
         return transformed;
     }
@@ -113,8 +117,10 @@ class DateTimePicker {
     }
 
     destroy () {
-        this.picker.destroy();
-        this.picker = null;
+        if (this.picker) {
+            this.picker.destroy();
+            this.picker = null;
+        }
     }
 }
 

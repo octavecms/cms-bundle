@@ -42,6 +42,10 @@
     &__body--short {
         padding: var(--spacer-5) var(--spacer-6);
     }
+    &__body--narrow {
+        padding-left: var(--spacer-3);
+        padding-right: var(--spacer-3);
+    }
 
     // Footer
     &__footer {
@@ -62,6 +66,10 @@
     }
     .card__body--short {
         padding: var(--spacer-4) var(--spacer-5);
+    }
+    .card__body--narrow {
+        padding-left: var(--spacer-3);
+        padding-right: var(--spacer-3);
     }
     .card__footer--short {
         padding: var(--spacer-4) var(--spacer-5);
@@ -119,7 +127,8 @@
     }
 }
 
-.card__header + .accordion__content > .card__body.card-list {
+.card__header + .accordion__content > .card__body.card-list,
+.card__header + .accordion__content > .tabs-contents > .tabs-contents__content > .card__body.card-list {
     margin-top: var(--spacer-2);
 }
 

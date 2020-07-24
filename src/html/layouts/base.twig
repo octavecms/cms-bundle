@@ -1,7 +1,7 @@
 {% set locale = 'ru' %}
 
 <!DOCTYPE html>
-<html dir="ltr" lang="en" class="has-hover no-js">
+<html dir="ltr" lang="{{ locale }}" class="has-hover no-js">
 <head>
     {# Default meta tags #}
         <meta charset="utf-8">
@@ -71,8 +71,11 @@
         <script src="/assets/javascripts/sonata-admin.js"></script>
     {% endblock %}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/locale/{{ locale }}.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.3/l10n/{{ locale }}.js"></script>
+    {% if locale != 'en' %}
+        {# En locale is built-in #}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/locale/{{ locale }}.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.3/l10n/{{ locale }}.js"></script>
+    {% endif %}
 
 </body>
 </html>

@@ -10,6 +10,7 @@
  */
 
 .btn.btn--link { // 1.
+
     $styles: (
         // Default styles
         'default': (
@@ -27,6 +28,14 @@
     );
 
     @include button-colors ($styles);
+    
+    // Enable content overflow
+    overflow: visible;
+
+    &:before,
+    &:after {
+        display: none;
+    }
 }
 
 .btn.btn--no-paddings {

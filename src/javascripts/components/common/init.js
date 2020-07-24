@@ -2,6 +2,8 @@
 import $ from 'util/jquery';
 import detect from 'util/detect';
 
+import 'util/jquery.returnkey';
+
 // Library to attach jQuery plugins to elements with data-plugin attribute
 import 'jquery-app';
 

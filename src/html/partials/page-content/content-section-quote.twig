@@ -3,13 +3,13 @@
     {% include 'partials/form/label.twig' with ({
         text: 'Quote Text',
         attrs: {
-            for: 'input-564355343'
+            for: 'input-564355343' ~ language
         }
     }) %}
 
     {% include 'partials/form/textarea.twig' with {
-        id: 'input-564355343',
-        name: 'quote-text',
+        id: 'input-564355343-' ~ language,
+        name: 'quote-text[' ~ language ~ ']',
         value: 'Инвесторы, готовые рассматривать больший риск для достижения более высокой прибыли и готовые отложить получение инвестиционного результата на срок 2-3 года, могут инвестировать в более рискованные стили: Value-Added и Opportunistic, которые представляют собой более сложные бизнес-модели, предполагающие потенциал более высокой отдачи.',
         maxlength: 600,
         required: true
@@ -22,13 +22,13 @@
         {% include 'partials/form/label.twig' with ({
             text: 'Author',
             attrs: {
-                for: 'input-564566434'
+                for: 'input-564566434' ~ language
             }
         }) %}
 
         {% include 'partials/form/select.twig' with {
-            id: 'input-564566434',
-            name: 'quote-author',
+            id: 'input-564566434-' ~ language,
+            name: 'quote-author[' ~ language ~ ']',
             value: 'a',
             values: [
                 {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},

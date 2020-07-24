@@ -1,0 +1,11 @@
+/**
+ * Button which has text and icon aligned vertically one under another
+ */
+
+.btn--vertical {
+    flex-direction: column;
+    height: auto;
+
+    > .btn__content {
+    }
+}

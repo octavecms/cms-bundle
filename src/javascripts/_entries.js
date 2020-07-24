@@ -8,6 +8,7 @@ module.exports = {
         './components/dropdown',
         './components/tooltip',
         './components/accordion',
+        './components/tabs',
         './components/form/select2',
         './components/form/input-max-length',
         './components/form/image-list',

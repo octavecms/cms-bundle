@@ -1,0 +1,20 @@
+{% set name = name|default('') %}
+{% set value = value|default('') %}
+{% set required = required|default(false) %}
+{% set disabled = disabled|default(false) %}
+{% set readonly = readonly|default(false) %}
+{% set id = id|default('input-' ~ random()) %}
+
+<div class="form-control form-control--textarea">
+    <textarea
+        id="{{ id }}"
+        name="{{ name }}"
+        {% if required %}required{% endif %}
+        {% if disabled %}disabled{% endif %}
+        {% if readonly %}readonly{% endif %}
+        {% if maxlength %}maxlength="{{ maxlength }}"{% endif %} 
+        data-plugin="richtexteditor"
+    >
+        {{- value -}}
+    </textarea>
+</div>

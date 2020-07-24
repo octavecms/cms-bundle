@@ -2,7 +2,6 @@
 
 {% set name = name|default('') %}
 {% set value = value|default('') %}
-{% set type = type|default('date') %}
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
@@ -15,10 +14,10 @@
         "pickTime":true,
         "pickDate":true,
         "useCurrent":true,
-        "minDate":"1\/1\/1900",
+        "minDate":"1900\/1\/1",
         "maxDate":null,
         "showToday":true,
-        "language":"ru",
+        "language":"{{ locale|default('en') }}",
         "defaultDate":"",
         "disabledDates":[],
         "enabledDates":[],
@@ -40,8 +39,8 @@
             id="{{ id }}"
             type="text"
             name="{{ name }}"
-            value="{{ value|date('j F Y., H:i:s') }}"
-            data-date-format="D MMM YYYY [г]., HH:mm:ss"
+            value="{{ value|date('Y-m-d H:i:s') }}"
+            data-date-format="Y-MM-DD hh:mm:ss"
             {% if readonly %}readonly{% endif %}
         />
     </div>

@@ -1,1 +1,64 @@
 {# "SEO" form section #}
+
+{# Localized title, duplicate for each content, in the real app this won't be a copy #}
+<div class="tabs-contents">
+    {% for languageItem in languages %}
+        <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+            {# Locale tab content #}
+            {% set language = languageItem.id %}
+
+            {# Meta title #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Meta title',
+                    attrs: {
+                        for: 'input-6784675674-' ~ language
+                    }
+                }) %}
+
+                {% include 'partials/form/text.twig' with {
+                    id: 'input-6784675674-' ~ language,
+                    name: 'meta-title[' ~ language ~ ']',
+                    value: 'Виды коммерческой недвижимости: сектора, типы и форматы',
+                    maxlength: 512,
+                    required: true
+                } %}
+            </div>
+
+            {# Meta keywords #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Meta keywords',
+                    attrs: {
+                        for: 'input-86875645323-' ~ language
+                    }
+                }) %}
+
+                {% include 'partials/form/textarea.twig' with {
+                    id: 'input-86875645323-' ~ language,
+                    name: 'meta-keywords[' ~ language ~ ']',
+                    value: '',
+                    required: false
+                } %}
+            </div>
+
+            {# Meta description #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Meta description',
+                    attrs: {
+                        for: 'input-5778756745-' ~ language
+                    }
+                }) %}
+
+                {% include 'partials/form/textarea.twig' with {
+                    id: 'input-5778756745-' ~ language,
+                    name: 'meta-description[' ~ language ~ ']',
+                    value: '',
+                    required: false
+                } %}
+            </div>
+
+        </div>
+    {% endfor %}
+</div>

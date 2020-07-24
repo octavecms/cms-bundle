@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import createPlugin from 'jquery-plugin-generator';
 import map from 'lodash/map';
+import detect from 'util/detect';
 
 import 'util/jquery.returnkey';
 import 'util/animation/jquery.transition';
@@ -45,6 +46,9 @@ export default class Tabs extends ResponsiveComponent {
             // Attribute which is set on inactive tab content
             'hiddenAttribute': 'aria-hidden',
 
+            // Use animations
+            'animate': true,
+
             // Use animation to change tab container height for smoother transition between tabs
             'animateHeight': true,
 
@@ -65,6 +69,10 @@ export default class Tabs extends ResponsiveComponent {
     init () {
         const options    = this.options;
         const $container = this.$container;
+
+        if (detect.isReducedMotion()) {
+            this.options.animate = false;
+        }
 
         this.$input      = options.inputSelector ? $(options.inputSelector) : $();
         this.$contents   = this.getContents();
@@ -87,7 +95,7 @@ export default class Tabs extends ResponsiveComponent {
                 this.$input.on(`change.${ ns }`, this.handleInputChange.bind(this));
 
                 // Make sure UI state matches value
-                const id = this.getIdFromInputValue(this.$input.val());
+                const id = this.getIdFromInput(this.$input);
 
                 if ((id || id === '') && this.activeId != id) {
                     this.open(id);
@@ -171,23 +179,27 @@ export default class Tabs extends ResponsiveComponent {
      * @param {string} active Tab id
      */
     open (active) {
-        const prevActive = this.activeId;
-        if (prevActive !== active) {
-            const promise = $.Deferred();
+        if (this.options.animate) {
+            const prevActive = this.activeId;
+            if (prevActive !== active) {
+                const promise = $.Deferred();
 
-            this.activeId = active;
-            this.updateCounter();
+                this.activeId = active;
+                this.updateCounter();
 
-            this.getContents().add(this.$container).transitionstop(() => {
-                this.animate(active, prevActive).then(() => {
-                    promise.resolve();
+                this.getContents().add(this.$container).transitionstop(() => {
+                    this.animate(active, prevActive).then(() => {
+                        promise.resolve();
+                    });
                 });
-            });
 
-            $.when(promise).then(() => {
-                this.$container.trigger('tabchanged', {'id': active, 'previous': prevActive});
-                this.$container.trigger('appear');
-            });
+                $.when(promise).then(() => {
+                    this.$container.trigger('tabchanged', {'id': active, 'previous': prevActive});
+                    this.$container.trigger('appear');
+                });
+            }
+        } else {
+            this.swap(active);
         }
     }
 
@@ -215,7 +227,6 @@ export default class Tabs extends ResponsiveComponent {
         if (prevActive !== active) {
             this.activeId = active;
 
-
             const $content = this.getContent(active);
             const $prevContent = this.getContent(prevActive);
 
@@ -232,6 +243,7 @@ export default class Tabs extends ResponsiveComponent {
             this.updateInput(active);
 
             this.$container.trigger('tabchange', {'id': active, 'previous': prevActive});
+            this.$container.trigger('tabchanged', {'id': active, 'previous': prevActive});
             this.$container.trigger('appear');
         }
     }
@@ -314,7 +326,7 @@ export default class Tabs extends ResponsiveComponent {
      * @protected
      */
     handleInputChange (event) { // eslint-disable-line
-        const activeId = this.getIdFromInputValue(this.$input.val());
+        const activeId = this.getIdFromInput(this.$input);
 
         if (this.activeId !== activeId) {
             this.open(activeId);
@@ -389,12 +401,19 @@ export default class Tabs extends ResponsiveComponent {
     }
 
     /**
-     * Returns tab id from input value
+     * Returns tab id from input
      *
-     * @param {string} value Input value
+     * @param {object} $input Input
      * @returns {string} Tab id
      */
-    getIdFromInputValue (value) {
+    getIdFromInput ($input) {
+        let value = '';
+
+        if ($input.is(':checkbox,:radio')) {
+            value = $input.filter(':checked').val();
+        } else {
+            value = $input.val();
+        }
         return this.getId(this.getHeading(value)) || this.getId(this.getContent(value));
     }
 
@@ -482,7 +501,13 @@ export default class Tabs extends ResponsiveComponent {
 
         if ($input.length) {
             const id = this.getInputValueFromId(active) || active;
-            $input.val(id).change();
+
+            $input.filter(':checkbox,:radio').each((_, input) => {
+                $(input).prop('checked', input.value == id)
+            });
+
+            $input.not(':checkbox,:radio').val(id);
+            $input.change();
         }
     }
 

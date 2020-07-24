@@ -5,13 +5,13 @@
         {% include 'partials/form/label.twig' with ({
             text: 'Image',
             attrs: {
-                for: 'input-545656332'
+                for: 'input-545656332-' ~ language
             }
         }) %}
 
         {% include 'partials/form/image.twig' with {
-            id: 'input-545656332',
-            name: 'image',
+            id: 'input-545656332-' ~ language,
+            name: 'image[' ~ language ~ ']',
             value: {
                 id: 'qweasdzxc',
                 thumbnail: '/assets/images/temp/image-thumb-3.png',
@@ -35,13 +35,13 @@
         text: 'Description',
         additionalText: 'Optional',
         attrs: {
-            for: 'input-64234253'
+            for: 'input-64234253-' ~ language
         }
     }) %}
 
     {% include 'partials/form/text.twig' with {
-        id: 'input-64234253',
-        name: 'image-description',
+        id: 'input-64234253-' ~ language,
+        name: 'image-description[' ~ language ~ ']',
         value: 'Сектора в портфеле инвестиций в недвижимость (на Июнь 2012, Мир без США)',
         maxlength: 255,
         required: false
@@ -54,13 +54,13 @@
         text: 'Source',
         additionalText: 'Optional',
         attrs: {
-            for: 'input-234235562'
+            for: 'input-234235562-' ~ language
         }
     }) %}
 
     {% include 'partials/form/textarea.twig' with {
-        id: 'input-234235562',
-        name: 'image-source',
+        id: 'input-234235562-' ~ language,
+        name: 'image-source[' ~ language ~ ']',
         value: 'INREV, Accent Capital. Уровни риска измерены качественно. Уровни диапазонов доходностей указаны для России (города Москва и Санкт-Петербург с областями) по данным расчетов Accent Capital за 2019 год, с учетом инвестиционных вознаграждений Accent Capital, до налогов. IRR (Internal Rate of Return) – внутренняя норма доходности (ВНД). Исключительно в качестве иллюстрации принципа соотношения риск/доходность.',
         maxlength: 600,
         required: false
@@ -72,13 +72,13 @@
     {% include 'partials/form/label.twig' with ({
         text: 'Full width',
         attrs: {
-            for: 'input-745734523'
+            for: 'input-745734523-' ~ language
         }
     }) %}
 
     {% include 'partials/form/select-switch.twig' with {
-        id: 'input-745734523',
-        name: 'image-source',
+        id: 'input-745734523-' ~ language,
+        name: 'image-source[' ~ language ~ ']',
         value: '1',
         values: [
             {id: '0', text: 'No'},

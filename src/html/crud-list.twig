@@ -1,0 +1,17 @@
+{% extends 'layouts/base.twig' %}
+
+
+{% block content %}
+
+    <div class="container container-h container-v">
+        <div class="row row--pad">
+            <div class="col col--xs-2">
+                {% include 'partials/crud-list/sidebar.twig' %}
+            </div>
+            <div class="col col--xs-10">
+                {% include 'partials/crud-list/content.twig' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

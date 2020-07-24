@@ -50,3 +50,9 @@
     @include button-sizes ($sizes);
     @include button-square-modifier ($sizes);
 }
+
+
+// Small text size button
+.btn--text-small {
+    @extend %text--size-small;
+}
