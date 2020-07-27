@@ -1,0 +1,58 @@
+/**
+ * Tab button style
+ *
+ * 1. Increase specificity to prevent `.ui-dark a` from overwriting styles
+ *
+ * @demo
+ *     <a class="btn btn--tab"><span class="btn__content">Normal state</span></a>
+ *     <a class="btn btn--tab is-active"><span class="btn__content">Active state</span></a>
+ *     <a class="btn btn--tab is-disabled"><span class="btn__content">Disabled state</span></a>
+ */
+
+ .btn.btn--tab { // 1.
+    $styles: (
+        // Default styles
+        'default': (
+            color:      var(--color-text),
+        ),
+        // Style when button is hovered or pressed down
+        'hover down active': (
+            color:      var(--color-heading),
+        ),
+    );
+
+    @include button-colors ($styles);
+    
+    // Allow extended hover area
+    overflow: visible;
+
+    &:after {
+        pointer-events: all;
+        transform: none;
+        transition: none;
+    }
+
+    // Active item line
+    &:before {
+        border-bottom: 2px solid var(--color-primary);
+        border-radius: 0;
+        transition-property: opacity;
+        opacity: 0;
+        pointer-events: all;
+        transform: none;
+    }
+
+    @include button-active () {
+        &:before {
+            opacity: 1;
+        }
+    }
+}
+
+
+.group--5 > * > .btn--tab {
+    &:after {
+        left: calc(var(--spacer-5) * -0.5);
+        right: calc(var(--spacer-5) * -0.5);
+    }
+}

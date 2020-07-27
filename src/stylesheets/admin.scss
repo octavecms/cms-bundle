@@ -9,7 +9,6 @@
 @import "base/code";
 
 // Utility classnames
-@import "utilities/utilities";
 @import "utilities/container";
 @import "utilities/grid";
 @import "utilities/visibility";
@@ -23,7 +22,6 @@
 @import "components/import-animations";
 @import "components/button-group";
 
-@import "components/table";
 @import "components/icons";
 @import "components/group";
 @import "components/brand";
@@ -36,6 +34,10 @@
 @import "components/status";
 @import "components/accordion";
 @import "components/tabs";
+@import "components/table";
+@import "components/data-table";
+
+@import "utilities/utilities";
 
 @import "admin/form-sidebar";
 @import "admin/layout";

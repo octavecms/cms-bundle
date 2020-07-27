@@ -11,7 +11,7 @@
   .select2-selection__rendered {
     display: block;
     padding-left: $select2-padding;
-    padding-right: $select2-padding;
+    padding-right: $select2-height;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -28,7 +28,7 @@
 &[dir="rtl"] {
   .select2-selection--single {
     .select2-selection__rendered {
-      padding-left: $select2-padding;
+      padding-left: $select2-height;
       padding-right: $select2-padding;
     }
   }

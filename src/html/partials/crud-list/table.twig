@@ -1,0 +1,152 @@
+{% from 'macros/icon.twig' import icon %}
+
+{% set sortable = sortable|default(true) %}
+
+{% set data = [
+    {
+        'id': 34346564633,
+        'image': '/assets/images/temp/table/1.png',
+        'name': 'Александр Самонов',
+        'company': 'Accent Capital',
+        'published': true,
+    },
+    {
+        'id': 57867856745,
+        'image': '/assets/images/temp/table/2.png',
+        'name': 'Дмитрий Хлебников',
+        'company': 'Accent Asset Management',
+        'published': true,
+    },
+    {
+        'id': 36546345634,
+        'image': '/assets/images/temp/table/3.png',
+        'name': 'Илья Хабаров',
+        'company': 'Accent Capital',
+        'published': true,
+    },
+    {
+        'id': 1234523465,
+        'image': '/assets/images/temp/table/4.png',
+        'name': 'Владимир Рыбаков',
+        'company': 'Accent Capital',
+        'published': true,
+    },
+    {
+        'id': 74374236345,
+        'image': '/assets/images/temp/table/5.png',
+        'name': 'Олеся Никитенко',
+        'company': 'Accent Asset Management',
+        'published': false,
+    },
+    {
+        'id': 48567346532,
+        'image': '/assets/images/temp/table/6.png',
+        'name': 'Антон Комаров',
+        'company': 'Accent Asset Management',
+        'published': true,
+    },
+    {
+        'id': 458457643532,
+        'image': '/assets/images/temp/table/7.png',
+        'name': 'Маргарита Ермошкина',
+        'company': 'Accent Capital',
+        'published': true,
+    },
+    {
+        'id': 356757345634,
+        'image': '/assets/images/temp/table/8.png',
+        'name': 'Римма Шилова',
+        'company': 'Accent Capital',
+        'published': true,
+    }
+] %}
+
+<div class="data-table"
+    data-plugin="{% if sortable %}sortableList{% endif %} dataTable"
+    {% if sortable %}
+        data-sortable-list-invert-swap="true"
+    {% endif %}
+>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    {% include 'partials/form/checkbox.twig' with {} %}
+                </th>
+                <th></th>
+                <th>Name</th>
+                <th>Company</th>
+                <th class="text-right">
+                    <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
+                        {{ icon('settings', {width: 16, height: 16}) }}
+                    </span></a>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="js-sortable-list-list">
+            {% for item in data %}
+                <tr class="data-table__row data-table__row--clickable btn-container js-sortable-list-item">
+                    <td class="data-table__row__checkbox">
+                        {# Item link #}
+                        <a class="data-table__link js-data-table-element" href="#"></a>
+
+                        {# Draggable / Sortable handle #}
+                        {% if sortable %}
+                            <a class="data-table__draggable js-sortable-list-item-handle js-data-table-element" role="button" tabindex="0" title="Drag to re-order sections or use arrow up and arrow down keys">
+                                {{ icon('draggable', {width: 6, height: 16}) }}
+                            </a>
+                        {% endif %}
+
+                        {% include 'partials/form/checkbox.twig' with {
+                            'name': 'selected[]',
+                            'value': item.id,
+                            'class': 'data-table__is-hidden-dragging'
+                        } %}
+                    </td>
+                    <td class="data-table__row__image">
+                        <div class="data-table__image">
+                            <img src="{{ item.image }}" alt="{{ item.name }}" />
+                        </div>
+                    </td>
+                    <td class="data-table__row__text">
+                        {{ item.name }}
+                    </td>
+                    <td class="data-table__row__text">
+                        {{ item.company }}
+                    </td>
+                    <td class="{% if sortable %}data-table__is-hidden-dragging{% endif %}">
+                        <div class="group group--5 group--nowrap group--middle group--right">
+                            {% if item.published %}
+                                <span class="status status--primary" aria-label="Published"></span>
+                            {% else %}
+                                <span class="status" aria-label="Draft"></span>
+                            {% endif %}
+                            
+                            <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
+                                <button type="button" class="dropdown__toggle btn btn--tetriary btn--tetriary--table btn--square btn--pill" title="Section options" aria-expanded="false" id="{{ item.id }}Options"><span class="btn__content">
+                                    {{ icon('more', {width: 14, height: 4}) }}
+                                </span></button>
+                                
+                                <div class="dropdown__menu d-none" aria-labelledby="{{ item.id }}Options">
+                                    <ul class="dropdown__menu__content">
+                                        <li>
+                                            <a href="#" class="dropdown__item">
+                                                Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="dropdown__item">
+                                                Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -56,6 +56,10 @@
 // 	@include group (5px);
 // }
 
+.group--horizontal {
+    @include group(0 inherit);
+}
+
 
 /**
  * Group item alignment

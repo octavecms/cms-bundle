@@ -11,8 +11,9 @@ module.exports = {
         './components/tabs',
         './components/form/select2',
         './components/form/input-max-length',
-        './components/form/image-list',
         './components/form/datetimepicker/datetimepicker',
+        './components/sortable-list',
+        './components/data-table',
     ],
     'example-grid': [
         './components/common/init',

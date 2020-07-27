@@ -1,0 +1,38 @@
+{% from 'macros/icon.twig' import icon %}
+
+{# Sitemap dropdown #}
+<div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
+    <button type="button" class="dropdown__toggle btn btn--dropdown btn--dropdown--heading btn--pill" aria-expanded="false" id="crudListFilters">
+        <span class="btn__content">
+            <span>Filter</span>
+            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+        </span>
+    </button>
+    
+    <div class="dropdown__menu dropdown__menu--wide d-none" aria-labelledby="crudListFilters">
+        <div class="dropdown__menu__content">
+            <div class="dropdown__form">
+                <div class="form-group">
+                    {% include 'partials/form/label.twig' with ({
+                        text: 'Company',
+                        attrs: {
+                            for: 'input-6745675467456'
+                        }
+                    }) %}
+
+                    {% include 'partials/form/select.twig' with {
+                        id: 'input-6745675467456',
+                        name: 'company',
+                        value: '',
+                        values: [
+                            {id: '', text: 'All'},
+                            {id: 'a', text: 'Accent Capital'},
+                            {id: 'b', text: 'Accent Asset Management'},
+                        ],
+                        required: true
+                    } %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -89,7 +89,8 @@
 
 @mixin button-active-hover ($parent-selector: '', $container-selector: '.btn-container') {
     .has-hover #{ $parent-selector } &.is-active:hover,
-    .has-hover #{ $parent-selector } #{ $container-selector }.is-active:hover & { // if hover events are supported
+    .has-hover #{ $parent-selector } #{ $container-selector }.is-active:hover &,
+    .has-hover #{ $parent-selector } #{ $container-selector }:hover &.is-active { // if hover events are supported
         // ACTIVE=HOVER
         @content;
     }

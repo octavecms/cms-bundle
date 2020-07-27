@@ -5,6 +5,26 @@
         
         <div class="group group--2">
             {# Tabs #}
+            <div><div class="group group--5">
+                <div>
+                    <a href="#" class="card__header__tab btn btn--tab btn--no-paddings is-active"><span class="btn__content">
+                        <span class="sr-only">Show</span>
+                        All Items
+                    </span></a>
+                </div>
+                <div>
+                    <a href="#" class="card__header__tab btn btn--tab btn--no-paddings"><span class="btn__content">
+                        <span class="sr-only">Show only</span>
+                        Published
+                    </span></a>
+                </div>
+                <div>
+                    <a href="#" class="card__header__tab btn btn--tab btn--no-paddings"><span class="btn__content">
+                        <span class="sr-only">Show only</span>
+                        Draft
+                    </span></a>
+                </div>
+            </div></div>
 
 
             {# Spacer #}
@@ -23,22 +43,27 @@
             } %}
 
             {# Filters #}
+            {% include 'partials/crud-list/filter.twig' %}
 
 
             {# New item #}
-            <a class="btn btn--secondary btn--pill"><span class="btn__content">
+            <a href="#" class="btn btn--secondary btn--pill"><span class="btn__content">
                 {{ icon('add-small', {width: 10, height: 10}) }}
                 <span>New Item</span>
             </span></a>
         </div>
 
     </div>
-    <div class="card__body card__body--short">
+    <div class="card__body card__body--shorter">
         <div class="card__content">
-            CONTENT
+            
+            {% include 'partials/crud-list/table.twig' %}
+
         </div>    
     </div>
     <div class="card__footer card__footer--short">
-        PAGINATION
+        
+        {% include 'partials/crud-list/navigation.twig' %}
+
     </div>
 </div>

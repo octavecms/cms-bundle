@@ -8,9 +8,6 @@
     display: flex;
     align-items: center;
 
-    // padding-top: ...;
-    // padding-bottom: ...;
-
     // Hide input out of view
     input {
         position: absolute;
@@ -20,7 +17,7 @@
     &__icon,
     &__label {
         position: relative;
-        min-height: 20px;
+        min-height: var(--spacer-3);
         cursor: pointer;
 
         // Extended hover area
@@ -31,10 +28,11 @@
     }
 
     &__icon {
-        height: 20px;
-        width: 20px;
+        height: var(--spacer-3);
+        width: var(--spacer-3);
         background: transparent;
-        border: 1px solid $color-primary;
+        border: 1px solid var(--color-outline);
+        border-radius: $border-radius;
         flex-shrink: 0;
 
         @extend %transition;
@@ -45,8 +43,8 @@
             content: "";
             display: block;
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: var(--spacer-3);
+            height: var(--spacer-3);
             left: -1px;
             top: -1px;
 
@@ -63,7 +61,7 @@
         flex-grow: 1;
 
         // Layout
-        padding: 0 0 0 10px;
+        padding: 0 0 0 var(--spacer-3);
 
         // Text styles
         // @extend %text--size-small;
@@ -77,14 +75,16 @@
         pointer-events: none;
     }
 
-    // Active state
-    // .has-hover &:hover .form-control-checkbox__icon,
-    // input:checked ~ &__icon,
-    // input:focus ~ &__icon,
-    // .has-hover &:hover input:checked ~ &__icon {
-    //     border-color: ...;
-    // }
+    // Focused
+    input {
+        @include link-focus-visible () {
+            & ~ .form-control-checkbox__icon {
+                box-shadow: $link-focus-visible-shadow;
+            }
+        }
+    }
 
+    // Checked state
     input:checked ~ &__icon:before {
         opacity: 1;
     }
@@ -112,9 +112,9 @@
  */
 
 .has-error .form-control-checkbox__icon {
-    border-color: $color-error;
+    border-color: var(--color-error);
 }
 
 .has-error .form-control-checkbox__label {
-    color: $color-error;
+    color: var(--color-error);
 }

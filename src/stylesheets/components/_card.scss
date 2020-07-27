@@ -42,6 +42,9 @@
     &__body--short {
         padding: var(--spacer-5) var(--spacer-6);
     }
+    &__body--shorter {
+        padding: var(--spacer-4) var(--spacer-6);
+    }
     &__body--narrow {
         padding-left: var(--spacer-3);
         padding-right: var(--spacer-3);
@@ -154,4 +157,36 @@
     cursor: grab;
 
     @extend %link--style-small;
+}
+
+
+/**
+ * Tabs in card header
+ */
+
+.card__header__tab {
+    // Extended hover area and active item decorative line size
+    &:before,
+    &:after {
+        top: calc(var(--spacer-4) * -1);
+        bottom: calc(var(--spacer-4) * -1 - 2px);
+    }
+}
+
+
+/**
+ * Sortable card ghost
+ */
+
+// Element which is being dragged styles in place
+.card.is-ghost {
+    opacity: 0.5;   
+}
+
+// Styles for dragged element
+.card.is-dragging {
+    .card__content,
+    .card__is-hidden-dragging {
+        display: none;
+    }
 }

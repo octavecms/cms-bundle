@@ -1,6 +1,8 @@
 {% set name = name|default('') %}
 {% set value = value|default('') %}
 {% set type = type|default('text') %}
+{% set min = min|default(null) %}
+{% set max = max|default(null) %}
 {% set className = className|default('') %}
 {% set maxlength = maxlength|default(null) %}
 {% set required = required|default(false) %}
@@ -33,6 +35,8 @@
             name="{{ name }}"
             type="{{ type }}" 
             value="{{ value }}"
+            {% if min != null %}min="{{ min }}"{% endif %}
+            {% if max != null %}max="{{ max }}"{% endif %}
             {% if required %}required{% endif %}
             {% if disabled %}disabled{% endif %}
             {% if readonly %}readonly{% endif %}

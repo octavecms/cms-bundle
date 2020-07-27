@@ -1,0 +1,145 @@
+/**
+ * Data table
+ */
+
+.data-table {
+    position: relative;
+
+    &__image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 64px;
+        height: 64px;
+
+        img {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: $border-radius;
+        }
+    }
+    &__link {
+        position: absolute;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+
+        box-shadow:
+            0 -1px 0 rgba(var(--color-shadow-raw), 0.04),
+            0 1px 0 rgba(var(--color-shadow-raw), 0.04),
+            0 4px 16px rgba(var(--color-shadow-raw), 0.04);
+
+        transition-property: opacity;
+        opacity: 0;
+
+        @include link-focus-visible () {
+            opacity: 1;
+        }
+
+        .card__body & {
+            left: calc(var(--spacer-6) * -1);
+            right: calc(var(--spacer-6) * -1);
+        }
+    }
+
+    &__draggable {
+        position: absolute;
+        left: 0;
+        width: var(--spacer-5);
+        border-right: 1px solid var(--color-line);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0;
+        background: var(--color-background);
+        padding: 0 0 4px;
+
+        transition-property: color, opacity;
+        color: var(--color-text);
+        opacity: 0;
+        cursor: move;
+
+        @include link-focus-visible () {
+            opacity: 1;
+        }
+
+        .card__body & {
+            left: calc(var(--spacer-6) * -1);
+        }
+    }
+
+    &__row {
+        cursor: default;
+
+        &--clickable {
+            cursor: pointer;
+        }
+
+        // Show draggable icon and background on hover
+        @include link-hover () {
+            .data-table__link,
+            .data-table__draggable {
+                opacity: 1;
+            }
+        }
+
+        // Text
+        .data-table__row__text,
+        .data-table__row__checkbox {
+            padding-top: var(--spacer-5);
+            padding-bottom: var(--spacer-5);
+        }
+        .data-table__row__checkbox {
+            width: var(--spacer-3);
+        }
+        .data-table__row__image {
+            width: var(--spacer-7);
+        }
+
+        // Styles for element which is being dragged
+        &.is-ghost {
+            opacity: 0.5;
+
+            .data-table__link,
+            .data-table__draggable {
+                opacity: 0;
+            }
+        }
+
+        // Dragged fake element styles
+        &.is-dragging {
+            background: var(--color-background);
+            border: 1px solid var(--color-line);
+
+            .data-table__link,
+            .data-table__draggable {
+                top: 0;
+                margin-top: 0 !important;
+            }
+            .data-table__link,
+            .data-table__draggable,
+            .data-table__is-hidden-dragging {
+                opacity: 0 !important;
+                transition-duration: 0s;
+                transition-delay: -0.1s;
+            }
+        }
+    }
+
+    &.is-sorting .data-table__row {
+        .data-table__link,
+        .data-table__draggable {
+            opacity: 0;
+        }
+
+        @include link-hover () {
+            .data-table__link,
+            .data-table__draggable {
+                opacity: 0;
+            }
+        }
+    }
+}

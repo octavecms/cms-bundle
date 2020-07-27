@@ -6,7 +6,15 @@
 {% set readonly = readonly|default(false) %}
 
 <div class="image-list {% if readonly or disabled %}image-list--disabled{% endif %}"
-    {% if not readonly and not disabled %}data-plugin="imageList"{% endif %}
+    {% if not readonly and not disabled %}
+        data-plugin="sortableList"
+        data-sortable-list-handle-selector=""
+        data-sortable-list-list-selector=".js-image-list-list"
+        data-sortable-list-force-element-at-the-end-selector=".js-image-list-force-end"
+        data-sortable-list-filter-selector=".js-image-list-not-draggable"
+        data-sortable-list-cancel-selector=".js-image-list-not-draggable"
+        data-sortable-list-draggable-selector=".js-image-list-item"
+    {% endif %}
 >
     <ol class="image-list__list js-image-list-list">
         {% for item in value %}

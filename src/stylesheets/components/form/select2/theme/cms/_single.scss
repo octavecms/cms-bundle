@@ -14,11 +14,14 @@
     }
 
     .select2-selection__clear {
-        cursor: pointer;
-        float: right;
-        height: calc(#{ $select2-height } - 2px);
-        margin-right: 20px;
-        padding-right: 0px;
+        display: none;
+        // position: relative;
+        // z-index: 1;
+        // cursor: pointer;
+        // float: right;
+        // height: calc(#{ $select2-height } - 2px);
+        // margin-right: 20px;
+        // padding-right: 0px;
     }
 
     .select2-selection__placeholder {

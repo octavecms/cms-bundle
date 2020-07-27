@@ -49,15 +49,19 @@
             {# Language tabs, duplicate for each content, in the real app this won't be a copy #}
             <div class="tabs-contents">
                 {% for languageItem in languages %}
-                    <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                    <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}"
+                        {# Add sorting #}
+                        data-plugin="sortableList"
+                        data-sortable-list-invert-swap="true"
+                    >
                         {# Locale tab content #}
                         {% set language = languageItem.id %}
 
 
-                        <div class="card__body card-list card-list--small">
+                        <div class="card__body card-list card-list--small js-sortable-list-list">
                             {# Article content sections #}
 
-                            <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
                                 {% include 'partials/page-content/content-section-header.twig' with {
                                     'title': 'Text',
                                     'id': 'contentSections1' ~ language,
@@ -71,7 +75,7 @@
                                 </div>
                             </div>
 
-                            <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
                                 {% include 'partials/page-content/content-section-header.twig' with {
                                     'title': 'Quote',
                                     'id': 'contentSections2' ~ language,
@@ -85,7 +89,7 @@
                                 </div>
                             </div>
 
-                            <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
                                 {% include 'partials/page-content/content-section-header.twig' with {
                                     'title': 'Image',
                                     'id': 'contentSections3' ~ language,
@@ -99,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
                                 {% include 'partials/page-content/content-section-header.twig' with {
                                     'title': 'Image Gallery',
                                     'expanded': true,
@@ -113,7 +117,7 @@
                                 </div>
                             </div>
 
-                            <div class="card card--draggable accordion accordion--expanded" data-plugin="accordion">
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
                                 {% include 'partials/page-content/content-section-header.twig' with {
                                     'title': 'Table',
                                     'expanded': true,

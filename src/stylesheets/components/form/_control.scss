@@ -15,6 +15,7 @@
     }
 }
 
+
 /**
  * Form control
  *
@@ -29,6 +30,13 @@
 
 .form-control--input input {
     @extend %input;
+
+    // Hide number arrows
+    &[type="number"]::-webkit-outer-spin-button,
+    &[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
 
 // Small control
@@ -88,4 +96,22 @@
 
     width: 100%;
     -webkit-appearance: menulist-button;
+}
+
+
+/**
+ * Narrow width input
+ */
+
+.form-control--narrow {
+    width: var(--spacer-6);
+}
+
+
+/**
+ * Input with centered text
+ */
+
+.form-control--center input {
+    text-align: center;
 }

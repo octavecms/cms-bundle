@@ -35,6 +35,11 @@
         'active+hover active+down': (
             color:      var(--color-background),
         ),
+
+        // Disabled style
+        'disabled': (
+            color:      var(--color-disabled),
+        )
     );
 
     // .is-highlighted state
@@ -61,3 +66,15 @@
     @include button-colors ($styles, $theme);
 }
 */
+
+.btn.btn--tetriary--table {
+    $styles: (
+        // Default styles
+        'default': (
+            background: transparent,
+            hover-background: var(--color-tetriary),
+        ),
+    );
+
+    @include button-colors ($styles);
+}

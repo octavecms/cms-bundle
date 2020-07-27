@@ -107,7 +107,7 @@
  * Selected item for multi drag
  */
 
-.image-item--selected {
+.image-item.is-selected {
     &,
     .has-hover &:hover,
     &:focus-within {
@@ -115,8 +115,8 @@
     }
 }
 
-.image-item--dragging,
-.image-list--sorting .image-item {
+.image-item.is-dragging,
+.image-list.is-sorting .image-item {
     &,
     .has-hover &:hover,
     &:focus-within {
@@ -133,7 +133,7 @@
     }
 }
 
-.image-item--dragging {
+.image-item.is-dragging {
     transition: none;
     opacity: 0.25;
     cursor: move;
@@ -142,11 +142,11 @@
         display: none;
     }
 }
-.image-item--ghost {
+.image-item.is-ghost {
     opacity: 0.25;
 }
 
-.image-list--sorting {
+.image-list.is-sorting {
     cursor: move;
 }
 
