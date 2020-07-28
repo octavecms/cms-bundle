@@ -23,6 +23,8 @@ $color-light-shadow:     60, 62, 78;    // #3C3E4E
 
 $color-light-error:      234, 10, 10;   // #EA0A0A @TODO not defined in design
 
+$color-light-deco:       188, 189, 200; // #BCBDC8
+
 // Gray theme
 // $color-gray-primary:     $color-light-primary;
 // $color-gray-secondary:   $color-light-secondary;
@@ -42,6 +44,9 @@ $color-gray-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 // $color-gray-shadow:      60, 62, 78;    // #3C3E4E
 
 // $color-gray-error:       234, 10, 10;   // #EA0A0A @TODO not defined in design
+
+$color-gray-deco:        131, 133, 143; // #83858F @TODO not defined in design
+
 
 // Dark theme
 // $color-dark-primary:     $color-light-primary;
@@ -63,6 +68,7 @@ $color-dark-outline:     223, 227, 232; // #DFE3E8 @TODO not defined in design
 
 // $color-dark-error:       234, 10, 10;   // #EA0A0A @TODO not defined in design
 
+$color-dark-deco:        131, 133, 143; // #83858F
 
 /**
  * Coniguration for .ui-... themes
@@ -85,6 +91,7 @@ $themes: (
             focus:      $color-light-focus,
             shadow:     $color-light-shadow,
             error:      $color-light-error,
+            deco:       $color-light-deco,
         )
     ),
     gray: (
@@ -103,6 +110,7 @@ $themes: (
             // focus:      $color-gray-focus,
             // shadow:     $color-gray-shadow,
             // error:      $color-gray-error,
+            // deco:       $color-gray-deco,
         )
     ),
     dark: (
@@ -121,6 +129,7 @@ $themes: (
             // focus:      $color-dark-focus,
             // shadow:     $color-dark-shadow,
             // error:      $color-dark-error,
+            deco:       $color-dark-deco,
         )
     ),
 );

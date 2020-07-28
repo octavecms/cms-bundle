@@ -5,11 +5,15 @@
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
-        {% include 'partials/article-edit/content-section-header.twig' with {
+        {% include 'partials/section-header.twig' with {
             'title': 'General',
             'id': 'contentGeneral',
+            
+            'withAccordion': true,
+            'accordionExpandedClassName': 'ui-dark',
             'expanded': false,
         } %}
+        
         <div role="region" aria-labelledby="contentGeneralTitle" id="contentGeneral" aria-hidden="true" class="accordion__content card__content">
             <div class="card__body">
                 {% include 'partials/page-content/content-section-general.twig' %}
@@ -21,10 +25,15 @@
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
-        {% include 'partials/article-edit/content-section-header.twig' with {
+        {% include 'partials/section-header.twig' with {
             'title': 'SEO Settings',
-            'id': 'contentSEO'
+            'id': 'contentSEO',
+            
+            'withAccordion': true,
+            'accordionExpandedClassName': 'ui-dark',
+            'expanded': false,
         } %}
+        
         <div role="region" aria-labelledby="contentSEOTitle" id="contentSEO" aria-hidden="true" class="accordion__content card__content">
             <div class="card__body">
                 {% include 'partials/article-edit/content-section-seo.twig' %}
@@ -36,9 +45,12 @@
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
-        {% include 'partials/article-edit/content-section-header.twig' with {
+        {% include 'partials/section-header.twig' with {
             'title': 'Content',
             'id': 'contentSections',
+            
+            'withAccordion': true,
+            'accordionExpandedClassName': 'ui-dark',
             'expanded': true,
             'withEditor': true
         } %}

@@ -5,10 +5,13 @@
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
-        {% include 'partials/article-edit/content-section-header.twig' with {
+        {% include 'partials/section-header.twig' with {
             'title': 'General',
             'id': 'contentGeneral',
+            
+            'withAccordion': true,
             'expanded': true,
+            'accordionExpandedClassName': 'ui-dark',
         } %}
         <div role="region" aria-labelledby="contentGeneralTitle" id="contentGeneral" aria-hidden="false" class="accordion__content card__content">
             <div class="card__body">
@@ -21,9 +24,13 @@
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
-        {% include 'partials/article-edit/content-section-header.twig' with {
+        {% include 'partials/section-header.twig' with {
             'title': 'SEO Settings',
-            'id': 'contentSEO'
+            'id': 'contentSEO',
+            
+            'withAccordion': true,
+            'expanded': false,
+            'accordionExpandedClassName': 'ui-dark',
         } %}
         <div role="region" aria-labelledby="contentSEOTitle" id="contentSEO" aria-hidden="true" class="accordion__content card__content">
             <div class="card__body">
@@ -37,11 +44,15 @@
         data-plugin="accordion"
         data-accordion-active-heading-parent-class-name="ui-dark"
     >
-        {% include 'partials/article-edit/content-section-header.twig' with {
+        {% include 'partials/section-header.twig' with {
             'title': 'Article Content',
             'id': 'contentSections',
+            
+            'withAccordion': true,
             'expanded': true,
-            'withEditor': true
+            'accordionExpandedClassName': 'ui-dark',
+
+            'withEditor': true,
         } %}
 
         <div role="region" aria-labelledby="contentSectionsTitle" id="contentSections" aria-hidden="false" class="accordion__content card__content"
@@ -62,13 +73,22 @@
                             {# Article content sections #}
 
                             <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
-                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                {% include 'partials/section-header.twig' with {
                                     'title': 'Text',
                                     'id': 'contentSections1' ~ language,
-                                    'expanded': true,
+                                    'size': 'small',
+                                    
+                                    'draggable': true,
+
+                                    'withOptions': true,
+
+                                    'withChangedDot': true,
                                     'changed': true,
-                                    'draggable': true
+
+                                    'withAccordion': true,
+                                    'expanded': true,
                                 } %}
+
                                 <div role="region" aria-labelledby="contentSections1{{ language }}Title" id="contentSections1{{ language }}" aria-hidden="false" class="accordion__content card__content">
                                     <div class="card__body">
                                         {% include 'partials/article-edit/content-section-article-text.twig' with {
@@ -79,13 +99,22 @@
                             </div>
 
                             <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
-                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                {% include 'partials/section-header.twig' with {
                                     'title': 'Quote',
                                     'id': 'contentSections2' ~ language,
-                                    'expanded': true,
+                                    'size': 'small',
+                                    
+                                    'draggable': true,
+
+                                    'withOptions': true,
+
+                                    'withChangedDot': true,
                                     'changed': true,
-                                    'draggable': true
+
+                                    'withAccordion': true,
+                                    'expanded': true,
                                 } %}
+
                                 <div role="region" aria-labelledby="contentSections2{{ language }}Title" id="contentSections2{{ language }}" aria-hidden="false" class="accordion__content card__content">
                                     <div class="card__body">
                                         {% include 'partials/article-edit/content-section-article-quote.twig' with {
@@ -96,12 +125,20 @@
                             </div>
 
                             <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
-                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                {% include 'partials/section-header.twig' with {
                                     'title': 'Image',
                                     'id': 'contentSections3' ~ language,
-                                    'expanded': true,
+                                    'size': 'small',
+                                    
+                                    'draggable': true,
+
+                                    'withOptions': true,
+
+                                    'withChangedDot': true,
                                     'changed': false,
-                                    'draggable': true
+
+                                    'withAccordion': true,
+                                    'expanded': true,
                                 } %}
                                 <div role="region" aria-labelledby="contentSections3{{ language }}Title" id="contentSections3{{ language }}" aria-hidden="false" class="accordion__content card__content">
                                     <div class="card__body">
@@ -113,12 +150,20 @@
                             </div>
 
                             <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
-                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                {% include 'partials/section-header.twig' with {
                                     'title': 'Image Gallery',
-                                    'expanded': true,
                                     'id': 'contentSections4' ~ language,
-                                    'changed': false,
-                                    'draggable': true
+                                    'size': 'small',
+                                    
+                                    'draggable': true,
+
+                                    'withOptions': true,
+
+                                    'withChangedDot': true,
+                                    'changed': true,
+
+                                    'withAccordion': true,
+                                    'expanded': true,
                                 } %}
                                 <div role="region" aria-labelledby="contentSections4{{ language }}Title" id="contentSections4{{ language }}" aria-hidden="false" class="accordion__content card__content">
                                     <div class="card__body">
@@ -130,12 +175,20 @@
                             </div>
 
                             <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
-                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                {% include 'partials/section-header.twig' with {
                                     'title': 'Table',
-                                    'expanded': true,
                                     'id': 'contentSections5' ~ language,
+                                    'size': 'small',
+                                    
+                                    'draggable': true,
+
+                                    'withOptions': true,
+
+                                    'withChangedDot': true,
                                     'changed': true,
-                                    'draggable': true
+
+                                    'withAccordion': true,
+                                    'expanded': true,
                                 } %}
                                 <div role="region" aria-labelledby="contentSections5{{ language }}Title" id="contentSections5{{ language }}" aria-hidden="false" class="accordion__content card__content">
                                     <div class="card__body">

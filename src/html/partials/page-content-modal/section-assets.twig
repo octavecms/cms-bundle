@@ -2,14 +2,23 @@
     data-plugin="accordion"
     data-accordion-active-heading-parent-class-name="ui-dark"
 >
-    {% include 'partials/page-content-modal/section-header.twig' with {
-        'title': 'Article Content',
-        'id': 'contentSections',
+    {% include 'partials/section-header.twig' with {
+        'title': 'Assets',
+        'id': 'modalAssets',
+        
+        'draggable': true,
+
+        'withOptions': true,
+
+        'withChangedDot': true,
+        'changed': false,
+
+        'withAccordion': true,
+        'accordionExpandedClassName': 'ui-dark',
         'expanded': true,
-        'draggable': true
     } %}
 
-    <div role="region" aria-labelledby="contentSectionsTitle" id="contentSections" aria-hidden="false" class="accordion__content card__content"
+    <div role="region" aria-labelledby="modalAssetsTitle" id="modalAssets" aria-hidden="false" class="accordion__content card__content"
         {# Add sorting #}
         data-plugin="sortableList"
         data-sortable-list-invert-swap="true"
@@ -91,12 +100,24 @@
                         {% for i in range(1, 4) %}
                             {% set assetId = 'modalAsset' ~ i %}
 
-                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
-                                {% include 'partials/page-content-modal/section-asset-header.twig' with {
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item"
+                                data-plugin="accordion sectionTitle"
+                            >
+                                {% include 'partials/section-header.twig' with {
                                     'title': 'Asset',
+                                    'subtitle': true,
                                     'id': assetId ~ language,
+
+                                    'size': 'small',
+                                    
+                                    'draggable': true,
+
+                                    'withCardListCounter': true,
+
+                                    'withOptions': true,
+
+                                    'withAccordion': true,
                                     'expanded': true,
-                                    'draggable': true
                                 } %}
                                 <div role="region" aria-labelledby="{{ assetId }}{{ language }}Title" id="{{ assetId }}{{ language }}" aria-hidden="false" class="accordion__content card__content">
                                     <div class="card__body">

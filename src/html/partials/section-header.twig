@@ -1,0 +1,128 @@
+{% from 'macros/icon.twig' import icon %}
+
+{# Id referencing content for which section header is for #}
+{% set id = id|default(null) %}
+
+{# Header size #}
+{% set size = size|default(null) %}
+{% set headerTagName = size == 'small' ? 'h3' : 'h2' %}
+
+{# Title and subtitle #}
+{% set title = title|default('') %}
+{% set subtitle = subtitle|default('') %}
+
+{# Draggable / sortable #}
+{% set draggable = draggable|default(false) %}
+
+{# Dot showing if content has changed #}
+{% set withChangedDot = withChangedDot|default(false) %}
+{% set changed = changed|default(false) %}
+
+{# Accordion #}
+{% set withAccordion = withAccordion|default(false) %}
+{% set accordionExpandedClassName = accordionExpandedClassName|default('') %}
+{% set expanded = expanded|default(false) %}
+
+{# Show options dropdown, eg. Edit, Delete #}
+{% set withOptions = withOptions|default(false) %}
+
+{# A text with "1", "2", ... near the header counting list items #}
+{% set withCardListCounter = withCardListCounter|default(false) %}
+
+{# Show editor button #}
+{% set withEditor = withEditor|default(false) %}
+
+
+<header class="card__header {% if withAccordion %}accordion__header {% if expanded and accordionExpandedClassName %}{{ accordionExpandedClassName }}{% endif %}{% endif %}">
+    
+    {# Draggable icon #}
+    {% if draggable %}
+        <a class="card__header__draggable js-sortable-list-item-handle" title="Drag to re-order sections or use arrow up and arrow down keys" tabindex="0" role="button">
+            {{ icon('draggable', {width: 6, height: 16}) }}
+        </a>
+    {% endif %}
+    
+    <div class="group group--middle group--nowrap group--3">
+        {# Counter #}
+        {% if withCardListCounter %}
+            <div class="btn btn--tetriary btn--square btn--pill is-decorative" aria-hidden="true"><span class="btn__content card__header__counter"></span></div>
+        {% endif %}
+
+        {# Title #}
+        <{{ headerTagName }} class="group__fill text-truncate {% if subtitle %}text-color-small{% endif %}" id="{{ id }}Title">
+            {% if subtitle == false %}
+                {{ title }}
+            {% else %}
+                <span class="text-color-heading">{{ title }}</span>
+                    {% if subtitle == true %}
+                        <span class="text-style-default d-none">&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span class="js-section-title-text"></span></span>
+                    {% else %}
+                        <span class="text-style-default">&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<span class="js-section-title-text">{{ subtitle }}</span></span>
+                    {% endif %}
+                </span></span>
+            {% endif %}
+        </{{ headerTagName }}>
+
+        <div><div class="group group--nowrap group--middle group--5">
+            {# Unsaved change dot / indicator #}
+            {% if withChangedDot %}
+                <span class="{% if draggable %}card__is-hidden-dragging{% endif %} status {% if changed %}status--primary{% endif %}" aria-hidden="true">Unsaved changes</span>
+            {% endif %}
+
+            {# Buttons #}
+            {% if withOptions or withAccordion or withEditor %}
+                <div {% if draggable %}class="card__is-hidden-dragging"{% endif %}><div class="group group--2 group--nowrap">
+
+                    {# WYSIWYG editor button #}
+                    {% if withEditor %}
+                        <button type="button" class="btn btn--primary btn--square btn--pill" title="Preview"><span class="btn__content">
+                            {{ icon('editor', {width: 32, height: 32}) }}
+                        </span></button>
+                    {% endif %}
+                    
+                    {# Options dropdown #}
+                    {% if withOptions %}
+                        <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom" data-dropdown-parent-selector=".modal, body">
+                            <button type="button" class="dropdown__toggle btn btn--tetriary btn--square btn--pill" title="Section options" aria-expanded="false" id="{{ id }}Options"><span class="btn__content">
+                                {{ icon('more', {width: 14, height: 4}) }}
+                            </span></button>
+                            
+                            <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options">
+                                <ul class="dropdown__menu__content">
+                                    <li>
+                                        <a href="#" class="dropdown__item">
+                                            Action 1
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="dropdown__item">
+                                            Action 2
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="dropdown__item">
+                                            Delete
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {# Accordion button #}
+                    {% if withAccordion %}
+                        <button
+                            type="button"
+                            title="Edit section"
+                            class="btn btn--tetriary btn--square btn--pill"
+                            aria-expanded="{% if expanded %}true{% else %}false{% endif %}"
+                            aria-controls="{{ id }}"
+                        ><span class="btn__content">
+                            {{ icon('accordion', {width: 32, height: 32}) }}
+                        </span></button>
+                    {% endif %}
+                </div></div>
+            {% endif %}
+        </div></div>
+    </div>
+</header>

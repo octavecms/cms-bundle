@@ -2,11 +2,22 @@
     data-plugin="accordion"
     data-accordion-active-heading-parent-class-name="ui-dark"
 >
-    {% include 'partials/page-content-modal/section-header.twig' with {
+    {% include 'partials/section-header.twig' with {
         'title': 'Strategy',
         'id': 'modalStrategy',
-        'draggable': true
+        
+        'draggable': true,
+
+        'withOptions': true,
+
+        'withChangedDot': true,
+        'changed': false,
+
+        'withAccordion': true,
+        'accordionExpandedClassName': 'ui-dark',
+        'expanded': false,
     } %}
+
     <div role="region" aria-labelledby="modalStrategyTitle" id="modalStrategy" aria-hidden="true" class="accordion__content card__content">
         <div class="card__body">
             

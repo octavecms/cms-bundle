@@ -40,6 +40,13 @@ $link-styles: (
         hover:              var(--color-heading),
         active:             var(--color-heading),
     ),
+
+    // Decorative element link style
+    'deco': (
+        normal:             var(--color-deco),
+        hover:              var(--color-heading),
+        active:             var(--color-heading),
+    ),
 );
 
 $link-decorations: (

@@ -1,5 +1,6 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
+import namespace from 'util/namespace';
 import createPlugin from 'jquery-plugin-generator';
 import Sortable, { MultiDrag, Swap } from 'sortablejs';
 
@@ -13,11 +14,21 @@ class SortableList {
 
     static get Defaults () {
         return {
+            // CSS selector to find inputs which are used to define order of items
+            // for backend
+            orderCssSelector: 'input[type="hidden"][name*="[position]"], input[type="hidden"][name*="[order]"]',
+
+            // Classname added while element is being sorted
             listSortingClass: 'is-sorting',
 
+            // Classname added to the selected element
             selectedClass: 'is-selected',
             chosenClass: 'is-chosen',
+
+            // Classname added to the element while it's dragged
             ghostClass: 'is-ghost',
+
+            // Classname to style fake element which is being dragged
             dragClass: 'is-dragging',
 
             // Find elements
@@ -52,13 +63,14 @@ class SortableList {
         const options = this.options = $.extend({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$list = $container.find(options.listSelector).eq(0);
+        this.ns = namespace();
 
         if (!options.disabled) {
-            this.createSortable();
+            this.init();
         }
     }
 
-    createSortable () {
+    init () {
         const options = this.options;
         // const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
 
@@ -97,9 +109,27 @@ class SortableList {
         });
 
         if (options.handleSelector && options.keyboardSorting) {
-            this.$list.on('keydown', `${ options.draggableSelector } ${ options.handleSelector }`, this.handleSortKey.bind(this));
+            this.$list.on(`keydown.${ this.ns }`, `${ options.draggableSelector } ${ options.handleSelector }`, this.handleSortKey.bind(this));
         }
     }
+
+    /**
+     * Destructor
+     */
+    destroy () {
+        if (this.sortable) {
+            this.sortable.destroy();
+            this.sortable = null;
+
+            this.$list.off(`keydown.${ this.ns }`);
+        }
+    }
+
+
+    /*
+     * Sortable
+     * ------------------------------------------------------------------------
+     */
 
     /**
      * Add class when starting sorting
@@ -145,6 +175,8 @@ class SortableList {
                 $list.append($element);
             }
         }
+
+        this.updateOrderInputs();
     }
 
     /**
@@ -177,6 +209,12 @@ class SortableList {
         }
     }
 
+
+    /*
+     * Keyboard
+     * ------------------------------------------------------------------------
+     */
+
     /**
      * Handle keyboard up/down arrow keys
      * 
@@ -196,6 +234,8 @@ class SortableList {
 
                     $(event.target).focus();
                     event.preventDefault();
+
+                    this.updateOrderInputs();
                 }
             } else {
                 const $ref = $item.next();
@@ -205,14 +245,38 @@ class SortableList {
 
                     $(event.target).focus();
                     event.preventDefault();
+
+                    this.updateOrderInputs();
                 }
             }
         }
     }
 
-    destroy () {
-        this.sortable.destroy();
-        this.sortable = null;
+
+    /*
+     * List order
+     * ------------------------------------------------------------------------
+     */
+
+    /**
+     * Update order input values to be in ascending order
+     */
+    updateOrderInputs () {
+        const options = this.options;
+
+        // Find order inputs, but ignore sub-list inputs
+        const $inputs = this.$list.find(options.draggableSelector)
+            .map((_, item) => {
+                const $item = $(item);
+                const $input = $item.find(options.orderCssSelector);
+                const $invalid = $item.find(`${ options.draggableSelector } ${ options.orderCssSelector }`);
+
+                return $input.not($invalid).eq(0);
+            });
+
+        $inputs.each(function (index, input) {
+            $(input).val(index);
+        });
     }
 }
 

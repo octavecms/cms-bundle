@@ -22,6 +22,9 @@ class Dropdown {
             // Popper placement
             'placement': 'bottom-start',
 
+            // Parent element selector to which append dropdown menu
+            'parentSelector': null,
+
             // CSS selectors
             'menuToggleSelector': '.dropdown__toggle',
             'menuSelector': '.dropdown__menu',
@@ -621,6 +624,15 @@ class Dropdown {
         if (!this.popper) {
             const $menu = this.$menu;
             const isSubDropdown = !!this.$container.parent().closest('.dropdown').length;
+
+            // Move to the document
+            if (this.options.parentSelector && !isSubDropdown) {
+                const $parent = $menu.closest(this.options.parentSelector);
+
+                if ($parent.length) {
+                    $parent.append($menu);
+                }
+            }
 
             // Show menu for poppoer to be able to read position
             $menu.removeClass('d-none').addClass('is-invisible');
