@@ -1,5 +1,38 @@
 {% extends 'layouts/base.twig' %}
 
+{% set breadcrumbs = [
+    {
+        'icon': 'nav-grid',
+        'text': 'Main page',
+        'url': '/'
+    },
+    {
+        'text': 'Company',
+        'url': '/crud-list.html'
+    },
+    {
+        'text': 'Stuff'
+    }
+] %}
+
+{% set headerCrudList = [
+    {
+        'text': 'Page Content',
+        'url': 'page-content.html',
+        'active': false
+    },
+    {
+        'text': 'Staff',
+        'url': 'crud-list.html',
+        'active': true
+    },
+    {
+        'text': 'Categories',
+        'url': 'crud-list.html',
+        'active': false
+    }
+] %}
+
 
 {% block content %}
 

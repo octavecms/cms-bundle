@@ -136,6 +136,10 @@ figure {
     @extend %text--size-medium;
 }
 
+.text-style-default {
+    @extend %text--style-default;
+}
+
 
 /**
  * Truncate text adding dots at the end of the line if needed

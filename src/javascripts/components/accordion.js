@@ -193,6 +193,7 @@ class Accordion extends ResponsiveComponent {
 
             if (!$ignore.parents($heading).length) {
                 this.toggle(activeId);
+
                 event.preventDefault();
             }
         }

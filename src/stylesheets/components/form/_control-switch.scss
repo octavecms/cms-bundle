@@ -59,6 +59,10 @@ $switch-spacing: 6px;
             will-change: transform;
         }
     }
+
+    &__label ~ .form-control-switch__icon {
+        margin-left: var(--spacer-5);
+    }
     
     // Disabled state
     &__input[disabled] ~ &__label {

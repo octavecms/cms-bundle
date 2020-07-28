@@ -12,24 +12,23 @@
         'url': '/'
     },
     {
-        'text': 'Company',
+        'text': 'Academy',
         'url': '/crud-list.html'
     },
     {
-        'text': 'Page Cotnent'
+        'text': 'Articles',
+        'url': '/crud-list.html'
+    },
+    {
+        'text': 'Виды коммерческой недвижимости: сектора, типы и форматы'
     }
 ] %}
 
 {% set headerCrudList = [
     {
-        'text': 'Page Content',
-        'url': 'page-content.html',
+        'text': 'Articles',
+        'url': 'article-edit.html',
         'active': true
-    },
-    {
-        'text': 'Staff',
-        'url': 'crud-list.html',
-        'active': false
     },
     {
         'text': 'Categories',
@@ -50,7 +49,7 @@
     >
         <div class="row row--pad">
             <div class="col col--xs-9">
-                {% include 'partials/page-content/content.twig' %}
+                {% include 'partials/article-edit/content.twig' %}
             </div>
             <div class="col col--xs-3">
                 {% include 'partials/article-edit/sidebar.twig' %}
@@ -58,10 +57,4 @@
         </div>
     </form>
 
-{% endblock %}
-
-
-{% block modal %}
-    {{ parent() }}
-    {% include 'partials/page-content-modal/modal.twig' %}
 {% endblock %}

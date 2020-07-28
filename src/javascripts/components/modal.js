@@ -34,6 +34,9 @@ export default class Modal {
             // Classname added to the modal
             'className': 'modal',
 
+            // Hidden modal classname
+            'classNameHidden': 'd-none',
+
             // CSS animations used to show / hide modal
             'animationNameIn': 'animation--modal-in',
             'animationNameOut': 'animation--modal-out',
@@ -81,7 +84,7 @@ export default class Modal {
         this.bodyScrollPosition = null;
         this.namespace = namespace();
         this.triggerNamespace = namespace();
-        this.visible = !$container.hasClass('is-hidden');
+        this.visible = !$container.hasClass(this.options.classNameHidden);
         this.$trigger = $();
 
         // // Clean up global events to prevent memory leaks and errors, if pages are dynamically loaded using JS
@@ -241,7 +244,7 @@ export default class Modal {
 
                 // Open new modal
                 this.$container.transition({
-                    'before':     $el => $el.addClass(`${ animationName } ${ animationName }--inactive disable-transitions`).removeClass('is-hidden').attr('aria-hidden', 'false'),
+                    'before':     $el => $el.addClass(`${ animationName } ${ animationName }--inactive disable-transitions`).removeClass(options.classNameHidden).attr('aria-hidden', 'false'),
                     'transition': $el => $el.removeClass(`${ animationName }--inactive disable-transitions`),
                     'after':      $el => $el.removeClass(`${ animationName }`)
                 }, {
@@ -284,7 +287,7 @@ export default class Modal {
                 }, {
                     'before':     $el => $el.addClass(`${ animationName }`),
                     'transition': $el => $el.addClass(`${ animationName }--active`),
-                    'after':      $el => $el.removeClass(`${ animationName } ${ animationName }--active`).addClass('is-hidden').attr('aria-hidden', 'true')
+                    'after':      $el => $el.removeClass(`${ animationName } ${ animationName }--active`).addClass(options.classNameHidden).attr('aria-hidden', 'true')
                 }, {
                     'before':     ()  => {
                         this.resetFixForIOS();

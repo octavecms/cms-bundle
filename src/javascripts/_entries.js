@@ -14,6 +14,7 @@ module.exports = {
         './components/form/datetimepicker/datetimepicker',
         './components/sortable-list',
         './components/data-table',
+        './components/modal',
     ],
     'example-grid': [
         './components/common/init',

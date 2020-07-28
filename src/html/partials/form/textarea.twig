@@ -1,12 +1,13 @@
 {% set name = name|default('') %}
 {% set value = value|default('') %}
+{% set className = className|default('') %}
 {% set maxlength = maxlength|default(null) %}
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
 {% set id = id|default('input-' ~ random()) %}
 
-<div class="form-control form-control--textarea"
+<div class="form-control form-control--textarea {{ className }}"
     {% if maxlength %}data-plugin="inputMaxLength"{% endif %}
 >
     <textarea

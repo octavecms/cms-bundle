@@ -74,6 +74,10 @@
 	resize: vertical;
 }
 
+.form-control--textarea--short textarea {
+    min-height: var(--spacer-8);
+}
+
 
 /**
  * Dropdown form control modifier

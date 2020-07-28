@@ -1,0 +1,75 @@
+<div class="card js-sortable-list-force-start">
+    <header class="card__header">
+        <div class="group group--middle group--5">
+            {# Title #}
+            <h2 class="group__fill" id="modalGeneralTitle">General Settings</h2>
+
+            {# Control #}
+            <div>
+                
+                <div class="form-control-switch">
+                    <input class="form-control-switch__input" type="checkbox" id="formModalOnline" name="active" value="1" checked="checked" />
+                    <label class="form-control-switch__label text-color-heading" for="formModalOnline">Online</label>
+                    <span class="form-control-switch__icon"></span>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <div aria-labelledby="modalGeneralTitle" class="card__content">
+        <div class="card__body">
+            
+            {# Localized title, duplicate for each content, in the real app this won't be a copy #}
+            <div class="tabs-contents">
+                {% for languageItem in languages %}
+                    <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                        {# Locale tab content #}
+                        {% set language = languageItem.id %}
+
+                        {# Title #}
+                        <div class="form-group">
+                            {% include 'partials/form/label.twig' with ({
+                                text: 'Title',
+                                attrs: {
+                                    for: 'input-6756745674-' ~ language
+                                }
+                            }) %}
+
+                            {% include 'partials/form/textarea.twig' with {
+                                id: 'input-6756745674-' ~ language,
+                                name: 'title[' ~ language ~ ']',
+                                value: 'Инвестиционная
+философия',
+                                maxlength: 512,
+                                required: true,
+                                className: 'form-control--textarea--short'
+                            } %}
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+
+            {# URL #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Anchor Link',
+                    attrs: {
+                        for: 'input-86786784657'
+                    }
+                }) %}
+
+                {% include 'partials/form/text.twig' with {
+                    id: 'input-86786784657',
+                    name: 'url',
+                    pattern: '[A-Za-z0-9-_]*',
+                    value: 'philosophy',
+                    prefixText: 'academy/',
+                    required: true
+                } %}
+            </div>
+
+        </div>
+    </div>
+</div>

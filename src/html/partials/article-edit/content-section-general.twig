@@ -1,0 +1,174 @@
+{# "General" form section #}
+
+{# Localized title, duplicate for each content, in the real app this won't be a copy #}
+<div class="tabs-contents">
+    {% for languageItem in languages %}
+        <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+            {# Locale tab content #}
+            {% set language = languageItem.id %}
+
+            {# Title #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Article Title',
+                    attrs: {
+                        for: 'input-45552222-' ~ language
+                    }
+                }) %}
+
+                {% include 'partials/form/text.twig' with {
+                    id: 'input-45552222-' ~ language,
+                    name: 'title[' ~ language ~ ']',
+                    value: 'Виды коммерческой недвижимости: сектора, типы и форматы',
+                    maxlength: 512,
+                    required: true
+                } %}
+            </div>
+
+        </div>
+    {% endfor %}
+</div>
+
+
+{# Category #}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Category',
+            attrs: {
+                for: 'input-221124135345'
+            }
+        }) %}
+
+        {% include 'partials/form/select.twig' with {
+            id: 'input-221124135345',
+            name: 'category',
+            value: 'a',
+            values: [
+                {id: 'a', text: 'Основы'},
+                {id: 'b', text: 'Lorem ipsum'},
+                {id: 'c', text: 'Dolor sit amet'}
+            ],
+            required: true
+        } %}
+    </div></div>
+</div>
+
+{# Author #}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Author',
+            additionalText: 'Optional',
+            attrs: {
+                for: 'input-745241232'
+            }
+        }) %}
+
+        {% include 'partials/form/select.twig' with {
+            id: 'input-745241232',
+            name: 'author',
+            value: 'a',
+            values: [
+                {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
+                {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
+                {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
+            ],
+            required: false
+        } %}
+    </div></div>
+</div>
+
+
+<div class="row row--pad form-group">
+    <div class="col col--xs-12 col--lg-6">
+
+        {# Thumbnail image #}
+        {% include 'partials/form/label.twig' with ({
+            text: 'Thumbnail',
+            attrs: {
+                for: 'input-44231212'
+            }
+        }) %}
+
+        {% include 'partials/form/image.twig' with {
+            id: 'input-44231212',
+            name: 'thumbnail',
+            value: {
+                id: 'a',
+                thumbnail: '/assets/images/temp/image-thumb-1.png',
+                url: '/assets/images/temp/image-thumb-1.png',
+                fileName: 'academy_thumb_01.jpg',
+                width: 620,
+                height: 620
+            },
+            required: true
+        } %}
+
+    </div>
+    <div class="col col--xs-12 col--lg-6 form-group mt-lg-0">
+
+        {# Background image #}
+        {% include 'partials/form/label.twig' with ({
+            text: 'Background Image',
+            required: true,
+            attrs: {
+                for: 'input-56745323'
+            }
+        }) %}
+
+        {% include 'partials/form/image.twig' with {
+            id: 'input-56745323',
+            name: 'background',
+            value: {
+                id: 'a',
+                thumbnail: '/assets/images/temp/image-thumb-2.png',
+                url: '/assets/images/temp/image-thumb-2.png',
+                fileName: 'academy_background_01.jpg',
+                width: 1620,
+                height: 675
+            },
+            required: true
+        } %}
+
+    </div>
+</div>
+
+
+{# URL #}
+<div class="form-group">
+    {% include 'partials/form/label.twig' with ({
+        text: 'URL',
+        tooltip: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
+        attrs: {
+            for: 'input-76556342'
+        }
+    }) %}
+
+    {% include 'partials/form/text.twig' with {
+        id: 'input-76556342',
+        name: 'url',
+        pattern: '[A-Za-z0-9-_]*',
+        value: 'vidy-kommercheskoi-nedvizhimosti-sektora-tipy-i-formaty',
+        prefixText: 'academy/',
+        required: true
+    } %}
+</div>
+
+{# Date #}
+<div class="form-group">
+    <div class="row row--pad"><div class="col col--xs-12 col--md-6">
+        {% include 'partials/form/label.twig' with ({
+            text: 'Publication date',
+            attrs: {
+                for: 'input-22212122'
+            }
+        }) %}
+        {% include 'partials/form/date.twig' with {
+            id: 'input-22212122',
+            name: 'date',
+            value: '2020-07-17 03:24:27',
+            required: true
+        } %}
+    </div></div>
+</div>

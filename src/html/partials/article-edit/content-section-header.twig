@@ -1,3 +1,5 @@
+{% from 'macros/icon.twig' import icon %}
+
 {% set title = title|default('') %}
 {% set withEditor = withEditor|default(false) %}
 {% set expanded = expanded|default(false) %}
@@ -6,7 +8,7 @@
 <header class="card__header accordion__header {% if expanded %}ui-dark{% endif %}">
     <div class="group group--middle group--5">
         {# Title #}
-        <h2 class="group__fill">{{ title }}</h2>
+        <h2 class="group__fill" id="{{ id }}Title">{{ title }}</h2>
 
         {# Buttons #}
         <div><div class="group group--2">

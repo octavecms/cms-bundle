@@ -23,12 +23,13 @@ class SortableList {
             // Find elements
             listSelector: '.js-sortable-list-list',
 
-            // Force elements to be at the end of the list, after all sortable elements
-            forceElementAtTheEndSelector: '.js-sortable-list-force-end',
+            // Force elements to be at the start / end of the list, before / after all sortable elements
+            forceStartSelector: '.js-sortable-list-force-start',
+            forceEndSelector: '.js-sortable-list-force-end',
             
             // Non-draggable elements
             filterSelector: '.js-sortable-list-not-draggable',
-            cancelSelector: '.js-sortable-list-not-draggable',
+            cancelSelector: '.js-sortable-list-cancel',
 
             // CSS selector for elements which are draggable
             draggableSelector: '.js-sortable-list-item',
@@ -125,10 +126,20 @@ class SortableList {
      * @protected
      */
     onChange () {
-        const selector = this.options.forceElementAtTheEndSelector;
-        if (selector) {
+        const endSelector = this.options.forceEndSelector;
+        const startSelector = this.options.forceStartSelector;
+
+        if (startSelector) {
             const $list = this.$list;
-            const $element = $list.find(selector);
+            const $element = $list.find(startSelector);
+
+            if ($element.length && $element.get(0).previousElementSibling && $element.parent().is($list)) {
+                $list.prepend($element);
+            }
+        }
+        if (endSelector) {
+            const $list = this.$list;
+            const $element = $list.find(endSelector);
 
             if ($element.length && $element.get(0).nextElementSibling && $element.parent().is($list)) {
                 $list.append($element);
@@ -179,17 +190,23 @@ class SortableList {
 
             if (event.key === 'ArrowUp') {
                 const $ref = $item.prev();
-                $item.insertBefore($ref);
+
+                if ($ref.length && !$ref.is(options.forceStartSelector)) {
+                    $item.insertBefore($ref);
+
+                    $(event.target).focus();
+                    event.preventDefault();
+                }
             } else {
                 const $ref = $item.next();
 
-                if ($ref.length && !$ref.is(options.forceElementAtTheEndSelector)) {
+                if ($ref.length && !$ref.is(options.forceEndSelector)) {
                     $item.insertAfter($ref);
+
+                    $(event.target).focus();
+                    event.preventDefault();
                 }
             }
-
-            $(event.target).focus();
-            event.preventDefault();
         }
     }
 

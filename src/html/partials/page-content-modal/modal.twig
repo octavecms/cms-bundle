@@ -1,0 +1,53 @@
+<div class="modal modal--overlay modal--side d-none" id="crud-form-modal"
+    role="dialog" aria-label="Philosophy"
+    data-plugin="modal tabs"
+    data-tabs-animate="false"
+    data-tabs-input-selector='input[name="modal-language"]'
+    aria-hidden="true"
+>
+
+    {#
+    Separate element for background to allow more interesting show / hide
+    animations. Background is usually darker overlay over the page content
+    #}
+    <div class="modal__background"></div>
+
+    {# Element to allow scrolling when content exceeds viewport size #}
+    <div class="modal__scroller">
+
+        {#
+        This element is used to position modal content + add paddings between
+        modal content and viewport
+        #}
+        <div class="modal__content-wrapper">
+            <form class="modal__content js-modal-ignore-auto-close ui-gray-background card card--modal">
+
+                {% include 'partials/page-content-modal/header.twig' %}
+
+                <div class="card__content">
+                    <div class="card__body"
+                        {# Sortable list #}
+                        data-plugin="sortableList"
+                        data-sortable-list-invert-swap="true"
+                    >
+                        
+                        <div class="card-list js-sortable-list-list">
+
+                            {% include 'partials/page-content-modal/section-general.twig' %}
+
+                            {% include 'partials/page-content-modal/section-property.twig' %}
+
+                            {% include 'partials/page-content-modal/section-assets.twig' %}
+
+                            {% include 'partials/page-content-modal/section-strategy.twig' %}
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

@@ -30,18 +30,6 @@
 
 
 /**
- * Close icon
- */
-
-.modal__close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    transform: translate(50%, -50%);
-}
-
-
-/**
  * Scrollable content
  */
 
@@ -76,7 +64,7 @@
 
 .modal--overlay .modal__background {
     // @TODO Design specific
-    background: rgba($color-dark-background, 0.85);
+    background: rgba(var(--color-text-raw), 0.6);
 }
 
 
@@ -92,15 +80,16 @@
     position: relative;
 
     width: 100%;
-    min-height: 100vh; // fallback
     min-height: var(--viewport-height-actual);
 
     // Center all content
-    // @TODO Remove if not needed
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    // Spacing
+    padding: var(--spacer-7);
 
     // Reset .container pseudo elements
     &:before,
@@ -115,11 +104,9 @@
  */
 
 .modal__content {
-    // @TODO Project specific styles
     position: relative;
-    max-width: 720px;
+    max-width: 1104px;
     margin: 0 auto;
-    background: $color-light-background;
     border-radius: var(--border-radius);
 }
 
@@ -187,4 +174,25 @@
     .modal__scroller {
         transform: translateX(-100%);
     }
+}
+
+
+
+/**
+ * Modal positioned on the right side
+ */
+
+.modal--side .modal__content-wrapper {
+    justify-content: flex-end;
+    align-items: stretch;
+
+    // Spacing
+    padding: 0;
+}
+
+.modal--side .modal__content {
+    width: 100%;
+    min-height: var(--viewport-height-actual);
+    margin: 0 0 0 auto;
+    border-radius: 0;
 }

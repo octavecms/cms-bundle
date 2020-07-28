@@ -1,0 +1,61 @@
+{% from 'macros/icon.twig' import icon %}
+
+{% set title = title|default('') %}
+{% set changed = changed|default(false) %}
+{% set expanded = expanded|default(false) %}
+{% set draggable = draggable|default(false) %}
+{% set id = id|default(null) %}
+
+<header class="card__header accordion__header {% if expanded %}ui-dark{% endif %}">
+    
+    {# Draggable icon #}
+    {% if draggable %}
+        <a class="card__header__draggable js-sortable-list-item-handle" title="Drag to re-order sections or use arrow up and arrow down keys" tabindex="0" role="button">
+            {{ icon('draggable', {width: 6, height: 16}) }}
+        </a>
+    {% endif %}
+    
+    <div class="group group--middle group--5 group--nowrap">
+        {# Title #}
+        <h3 class="group__fill text-truncate" id="{{ id }}Title">{{ title }}</h3>
+
+        {# Unsaved change dot / indicator #}
+        <span class="card__is-hidden-dragging status {% if changed %}status--primary{% endif %}" aria-hidden="true">Unsaved changes</span>
+
+        {# Buttons #}
+        <div class="card__is-hidden-dragging"><div class="group group--2 group--nowrap">
+
+            <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom">
+                <button type="button" class="dropdown__toggle btn btn--tetriary btn--square btn--pill" title="Section options" aria-expanded="false" id="{{ id }}Options"><span class="btn__content">
+                    {{ icon('more', {width: 14, height: 4}) }}
+                </span></button>
+                
+                <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options">
+                    <ul class="dropdown__menu__content">
+                        <li>
+                            <a href="#" class="dropdown__item">
+                                Action 1
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown__item">
+                                Action 2
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {# Accordion button #}
+            <button
+                type="button"
+                title="Edit section"
+                class="btn btn--tetriary btn--square btn--pill"
+                aria-expanded="{% if expanded %}true{% else %}false{% endif %}"
+                aria-controls="{{ id }}"
+            ><span class="btn__content">
+                {{ icon('accordion', {width: 32, height: 32}) }}
+            </span></button>
+        </div></div>
+    </div>
+</header>

@@ -12,6 +12,7 @@
 {% set id = id|default('input-' ~ random()) %}
 {% set prefixText = prefixText|default('') %}
 {% set prefixIcon = prefixIcon|default('') %}
+{% set pattern = pattern|default('') %}
 
 {% if prefixText or prefixIcon or maxlength %}
 <div class="input-group {{ className }}"
@@ -42,6 +43,7 @@
             {% if readonly %}readonly{% endif %}
             {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
             {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+            {% if pattern %}pattern="{{ pattern }}"{% endif %}
             />
     </div>
 

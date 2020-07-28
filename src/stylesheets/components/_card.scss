@@ -84,8 +84,18 @@
  * Card list
  */
 
+.card-list {
+    counter-reset: card-list;
+}
 .card-list > .card {
     margin-top: var(--spacer-5);
+    counter-increment: card-list;
+
+    > .card__header .card__header__counter {
+        &:before {
+            content: counter(card-list);
+        }
+    }
 
     &:first-child {
         margin-top: 0;
@@ -188,5 +198,22 @@
     .card__content,
     .card__is-hidden-dragging {
         display: none;
+    }
+}
+
+
+/**
+ * Modal card
+ */
+
+.card--modal {
+    > .card__header {
+        padding: calc(var(--spacer-4) - var(--spacer-1)) var(--spacer-7);
+    }
+    > .card__content > .card__body {
+        background: none;
+        border-radius: 0;
+        border: 0;
+        padding: var(--spacer-7);
     }
 }

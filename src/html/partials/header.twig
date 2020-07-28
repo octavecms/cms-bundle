@@ -42,7 +42,9 @@
 
                 {# Breacrumbs #}
                 <div class="group__fill">
-                    {% include 'partials/header/breadcrumbs.twig' %}
+                    {% include 'partials/header/breadcrumbs.twig' with {
+                        breadcrumbs: breadcrumbs|default([])
+                    } %}
                 </div>
                 
                 {# Language navigation #}

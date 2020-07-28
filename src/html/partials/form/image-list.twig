@@ -10,7 +10,8 @@
         data-plugin="sortableList"
         data-sortable-list-handle-selector=""
         data-sortable-list-list-selector=".js-image-list-list"
-        data-sortable-list-force-element-at-the-end-selector=".js-image-list-force-end"
+        data-sortable-list-force-start-selector=".js-image-list-force-start"
+        data-sortable-list-force-end-selector=".js-image-list-force-end"
         data-sortable-list-filter-selector=".js-image-list-not-draggable"
         data-sortable-list-cancel-selector=".js-image-list-not-draggable"
         data-sortable-list-draggable-selector=".js-image-list-item"
@@ -68,7 +69,7 @@
         {% endfor %}
 
         {% if not readonly and not disabled %}
-            <li class="image-list-control-item js-image-list-not-draggable js-image-list-force-end">
+            <li class="image-list-control-item js-image-list-force-end">
                 <div class="image-list-control-item__sizer"></div>
                 <a role="button" tabindex="0" class="image-list-control-item__content btn-container">
                     <span class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">

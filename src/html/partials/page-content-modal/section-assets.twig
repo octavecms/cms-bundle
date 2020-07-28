@@ -1,0 +1,122 @@
+<div class="card accordion accordion--expanded js-sortable-list-item"
+    data-plugin="accordion"
+    data-accordion-active-heading-parent-class-name="ui-dark"
+>
+    {% include 'partials/page-content-modal/section-header.twig' with {
+        'title': 'Article Content',
+        'id': 'contentSections',
+        'expanded': true,
+        'draggable': true
+    } %}
+
+    <div role="region" aria-labelledby="contentSectionsTitle" id="contentSections" aria-hidden="false" class="accordion__content card__content"
+        {# Add sorting #}
+        data-plugin="sortableList"
+        data-sortable-list-invert-swap="true"
+    >
+
+        {# Content for Article Content #}
+        <div class="card__body">
+
+            {# Title #}
+            <div class="row row--pad form-group">
+                <div class="col col--xs-12 col--lg-6">
+
+                    {% include 'partials/form/label.twig' with ({
+                        text: 'List Title',
+                        attrs: {
+                            for: 'input-67865745643-' ~ language
+                        }
+                    }) %}
+
+                    {% include 'partials/form/text.twig' with {
+                        id: 'input-67865745643-' ~ language,
+                        name: 'assets-list-title[' ~ language ~ ']',
+                        value: 'Требования к активам',
+                        required: true
+                    } %}
+                    
+                </div>
+            </div>
+
+            {# Main title #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Main Title',
+                    attrs: {
+                        for: 'input-6634563453-' ~ language
+                    }
+                }) %}
+
+                {% include 'partials/form/textarea.twig' with {
+                    id: 'input-6634563453-' ~ language,
+                    name: 'assets-list-main-title[' ~ language ~ ']',
+                    value: 'Целевые требования
+к активам',
+                    required: true,
+                    maxlength: 512,
+                    className: 'form-control--textarea--short'
+                } %}
+            </div>
+
+            {# Text #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Text',
+                    attrs: {
+                        for: 'input-7563462352345-' ~ language
+                    }
+                }) %}
+
+                {% include 'partials/form/textarea.twig' with {
+                    id: 'input-7563462352345-' ~ language,
+                    name: 'assets-list-main-title[' ~ language ~ ']',
+                    value: 'Accent Capital фокусирует свое внимание на 3 ключевых сектора рынка: офисная, торговая и складская недвижимость. Мы рассматриваем широкий круг характеристик, определяющих инвестиционное качество инвестиции, имея в приоритете экономически развитые географии (метрополии и «миллионники»), лучшие локации (с производственной, транспортной и пешеходной доступностью), пулы долгосрочных арендаторов с низкими кредитными рисками (международных и федеральных).',
+                    required: true
+                } %}
+            </div>
+
+        </div>
+
+        {# Language tabs, duplicate for each content, in the real app this won't be a copy #}
+        <div class="tabs-contents">
+            {% for languageItem in languages %}
+                <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                    {# Locale tab content #}
+                    {% set language = languageItem.id %}
+
+                    <div class="card__body card-list card-list--small js-sortable-list-list">
+                        {# Asset content sections #}
+
+                        {% for i in range(1, 4) %}
+                            {% set assetId = 'modalAsset' ~ i %}
+
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
+                                {% include 'partials/page-content-modal/section-asset-header.twig' with {
+                                    'title': 'Asset',
+                                    'id': assetId ~ language,
+                                    'expanded': true,
+                                    'draggable': true
+                                } %}
+                                <div role="region" aria-labelledby="{{ assetId }}{{ language }}Title" id="{{ assetId }}{{ language }}" aria-hidden="false" class="accordion__content card__content">
+                                    <div class="card__body">
+                                        {% include 'partials/page-content-modal/section-asset-content.twig' with {
+                                            'language': language,
+                                            'id': assetId ~ language
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    
+                    </div>
+                    <footer class="card__footer card__footer--short">
+                        {% include 'partials/page-content-modal/add-section.twig' %}
+                    </footer>
+
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,160 @@
+{% from 'macros/icon.twig' import icon %}
+
+<div class="card-list">
+    <div class="card accordion accordion--expanded"
+        data-plugin="accordion"
+        data-accordion-active-heading-parent-class-name="ui-dark"
+    >
+        {% include 'partials/article-edit/content-section-header.twig' with {
+            'title': 'General',
+            'id': 'contentGeneral',
+            'expanded': true,
+        } %}
+        <div role="region" aria-labelledby="contentGeneralTitle" id="contentGeneral" aria-hidden="false" class="accordion__content card__content">
+            <div class="card__body">
+                {% include 'partials/article-edit/content-section-general.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card accordion accordion--collapsed"
+        data-plugin="accordion"
+        data-accordion-active-heading-parent-class-name="ui-dark"
+    >
+        {% include 'partials/article-edit/content-section-header.twig' with {
+            'title': 'SEO Settings',
+            'id': 'contentSEO'
+        } %}
+        <div role="region" aria-labelledby="contentSEOTitle" id="contentSEO" aria-hidden="true" class="accordion__content card__content">
+            <div class="card__body">
+                {% include 'partials/article-edit/content-section-seo.twig' %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card accordion accordion--expanded"
+        data-plugin="accordion"
+        data-accordion-active-heading-parent-class-name="ui-dark"
+    >
+        {% include 'partials/article-edit/content-section-header.twig' with {
+            'title': 'Article Content',
+            'id': 'contentSections',
+            'expanded': true,
+            'withEditor': true
+        } %}
+
+        <div role="region" aria-labelledby="contentSectionsTitle" id="contentSections" aria-hidden="false" class="accordion__content card__content"
+            {# Add sorting #}
+            data-plugin="sortableList"
+            data-sortable-list-invert-swap="true"
+        >
+
+            {# Language tabs, duplicate for each content, in the real app this won't be a copy #}
+            <div class="tabs-contents">
+                {% for languageItem in languages %}
+                    <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                        {# Locale tab content #}
+                        {% set language = languageItem.id %}
+
+
+                        <div class="card__body card-list card-list--small js-sortable-list-list">
+                            {# Article content sections #}
+
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
+                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                    'title': 'Text',
+                                    'id': 'contentSections1' ~ language,
+                                    'expanded': true,
+                                    'changed': true,
+                                    'draggable': true
+                                } %}
+                                <div role="region" aria-labelledby="contentSections1{{ language }}Title" id="contentSections1{{ language }}" aria-hidden="false" class="accordion__content card__content">
+                                    <div class="card__body">
+                                        {% include 'partials/article-edit/content-section-article-text.twig' with {
+                                            'language': language
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
+                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                    'title': 'Quote',
+                                    'id': 'contentSections2' ~ language,
+                                    'expanded': true,
+                                    'changed': true,
+                                    'draggable': true
+                                } %}
+                                <div role="region" aria-labelledby="contentSections2{{ language }}Title" id="contentSections2{{ language }}" aria-hidden="false" class="accordion__content card__content">
+                                    <div class="card__body">
+                                        {% include 'partials/article-edit/content-section-article-quote.twig' with {
+                                            'language': language
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
+                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                    'title': 'Image',
+                                    'id': 'contentSections3' ~ language,
+                                    'expanded': true,
+                                    'changed': false,
+                                    'draggable': true
+                                } %}
+                                <div role="region" aria-labelledby="contentSections3{{ language }}Title" id="contentSections3{{ language }}" aria-hidden="false" class="accordion__content card__content">
+                                    <div class="card__body">
+                                        {% include 'partials/article-edit/content-section-article-image.twig' with {
+                                            'language': language
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
+                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                    'title': 'Image Gallery',
+                                    'expanded': true,
+                                    'id': 'contentSections4' ~ language,
+                                    'changed': false,
+                                    'draggable': true
+                                } %}
+                                <div role="region" aria-labelledby="contentSections4{{ language }}Title" id="contentSections4{{ language }}" aria-hidden="false" class="accordion__content card__content">
+                                    <div class="card__body">
+                                        {% include 'partials/article-edit/content-section-article-gallery.twig' with {
+                                            'language': language
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item" data-plugin="accordion">
+                                {% include 'partials/article-edit/content-section-article-header.twig' with {
+                                    'title': 'Table',
+                                    'expanded': true,
+                                    'id': 'contentSections5' ~ language,
+                                    'changed': true,
+                                    'draggable': true
+                                } %}
+                                <div role="region" aria-labelledby="contentSections5{{ language }}Title" id="contentSections5{{ language }}" aria-hidden="false" class="accordion__content card__content">
+                                    <div class="card__body">
+                                        {% include 'partials/article-edit/content-section-article-table.twig' with {
+                                            'language': language
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <footer class="card__footer card__footer--short">
+                            {% include 'partials/article-edit/add-section.twig' %}
+                        </footer>
+
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>

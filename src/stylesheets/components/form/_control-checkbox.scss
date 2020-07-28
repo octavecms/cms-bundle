@@ -48,8 +48,7 @@
             left: -1px;
             top: -1px;
 
-            background: url(#{ $path-images }/common/checkbox.svg); // @TODO
-            background-size: cover;
+            background: url(#{ $path-images }/common/checkbox.svg) 50% 50% no-repeat;
 
             @extend %transition;
             transition-property: opacity;
@@ -73,6 +72,13 @@
     input[disabled] ~ &__label {
         opacity: 0.5;
         pointer-events: none;
+    }
+
+    // Hovered
+    @include link-hover () {
+        .form-control-checkbox__icon {
+            border-color: var(--color-small);
+        }
     }
 
     // Focused
