@@ -97,12 +97,15 @@
                     <div class="card__body card-list card-list--small js-sortable-list-list">
                         {# Asset content sections #}
 
-                        {% for i in range(1, 4) %}
+                        {% for i in range(0, 3) %}
                             {% set assetId = 'modalAsset' ~ i %}
 
                             <div class="card card--draggable accordion accordion--expanded js-sortable-list-item"
                                 data-plugin="accordion sectionTitle"
                             >
+                                {# Order, for backend #}
+                                <input type="hidden" name="assets[{{ i }}][order]" value="{{ i }}" />
+
                                 {% include 'partials/section-header.twig' with {
                                     'title': 'Asset',
                                     'subtitle': true,
@@ -123,7 +126,7 @@
                                     <div class="card__body">
                                         {% include 'partials/page-content-modal/section-asset-content.twig' with {
                                             'language': language,
-                                            'id': assetId ~ language
+                                            'name': 'assets[' ~ i ~ ']',
                                         } %}
                                     </div>
                                 </div>

@@ -265,11 +265,15 @@ class SortableList {
         const options = this.options;
 
         // Find order inputs, but ignore sub-list inputs
-        const $inputs = this.$list.find(options.draggableSelector)
+        const $items = this.$list
+            .find(options.draggableSelector)
+            .not(this.$list.find(options.draggableSelector).find(options.draggableSelector));
+
+        const $inputs = $items
             .map((_, item) => {
                 const $item = $(item);
                 const $input = $item.find(options.orderCssSelector);
-                const $invalid = $item.find(`${ options.draggableSelector } ${ options.orderCssSelector }`);
+                const $invalid = $item.find(options.draggableSelector).find(options.orderCssSelector);
 
                 return $input.not($invalid).eq(0);
             });

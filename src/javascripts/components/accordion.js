@@ -93,9 +93,6 @@ class Accordion extends ResponsiveComponent {
     }
 
     init () {
-        const $container = this.$container;
-        const options    = this.options;
-
         this.hashReady   = false;
 
         // When opening / closing elements save height changes for autoScroll
@@ -183,14 +180,14 @@ class Accordion extends ResponsiveComponent {
     handleHeadingClick (event) {
         if (event.isDefaultPrevented()) return;
 
-        const $heading = $(event.target).closest(this.options.headingSelector).not(this.options.contentSelector);
+        const $heading = $(event.target).closest(this.options.headingSelector);
         const activeId = this.getId($heading);
         const $content = this.getContent(activeId);
 
         if ($content.length) {
             // Make sure we are not clicking on elements which shouldn't toggle accordion
             const $ignore  = $(event.target).closest(this.options.ignoreSelector);
-
+            
             if (!$ignore.parents($heading).length) {
                 this.toggle(activeId);
 
@@ -439,7 +436,7 @@ class Accordion extends ResponsiveComponent {
      */
     getContents () {
         const $container = this.$container;
-        const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }="accordion"]`);
+        const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }~="accordion"]`);
         return $container.find(this.options.contentSelector).not($subaccordions.find(this.options.contentSelector));
     }
 
@@ -450,7 +447,7 @@ class Accordion extends ResponsiveComponent {
      */
     getHeadings () {
         const $container = this.$container;
-        const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }="accordion"]`);
+        const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }~="accordion"]`);
         return $container.find(this.options.headingSelector).not($subaccordions.find(this.options.headingSelector));
     }
 

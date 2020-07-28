@@ -1,21 +1,23 @@
 {% set language = language|default('en') %}
 {% set id = id|default('section-' ~ random()) %}
+{% set name = name|default('') %}
 
 
 {# Title #}
 <div class="row row--pad form-group">
     <div class="col col--xs-12 col--lg-6">
+        {% set uniqueId = 'input-' ~ random() %}
 
         {% include 'partials/form/label.twig' with ({
             text: 'Title',
             attrs: {
-                for: 'input-' ~ id ~ '5746747456-' ~ language
+                for: uniqueId,
             }
         }) %}
 
         {% include 'partials/form/text.twig' with {
-            id: 'input-' ~ id ~ '-5746747456-' ~ language,
-            name: 'title[][' ~ language ~ ']',
+            id: uniqueId,
+            name: name ~ '[title]',
             value: 'Офисная недвижимость',
             required: true
         } %}
@@ -26,16 +28,18 @@
 
 {# Description #}
 <div class="form-group">
+    {% set uniqueId = 'input-' ~ random() %}
+
     {% include 'partials/form/label.twig' with ({
         text: 'Description',
         attrs: {
-            for: 'input-' ~ id ~ '-78567563443-' ~ language
+            for: uniqueId,
         }
     }) %}
 
     {% include 'partials/form/text.twig' with {
-        id: 'input-' ~ id ~ '-78567563443-' ~ language,
-        name: 'description[][' ~ language ~ ']',
+        id: uniqueId,
+        name: name ~ '[description]',
         value: 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
         required: true,
         maxlength: 512
@@ -46,17 +50,18 @@
 {# Image #}
 <div class="row row--pad form-group">
     <div class="col col--xs-12 col--lg-6">
+        {% set uniqueId = 'input-' ~ random() %}
 
         {% include 'partials/form/label.twig' with ({
             text: 'Thumbnail',
             attrs: {
-                for: 'input-' ~ id ~ '-678675634643-' ~ language
+                for: uniqueId,
             }
         }) %}
 
         {% include 'partials/form/image.twig' with {
-            id: 'input-' ~ id ~ '-678675634643-' ~ language,
-            name: 'image[][' ~ language ~ ']',
+            id: uniqueId,
+            name: name ~ '[image]',
             value: {
                 id: 'qweasdzxc',
                 thumbnail: '/assets/images/temp/image-thumb-3.png',
