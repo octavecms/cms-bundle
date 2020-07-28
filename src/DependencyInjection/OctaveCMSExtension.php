@@ -5,12 +5,13 @@ namespace Octave\CMSBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class OctaveCMSExtension extends Extension
+class OctaveCMSExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @param array $configs
@@ -51,5 +52,17 @@ class OctaveCMSExtension extends Extension
         if (isset($config['file_types'])) {
             $container->setParameter('octave.cms.media.file_types', $config['file_types']);
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $container->loadFromExtension('twig', array(
+            'paths' => array(
+                '%kernel.project_dir%/vendor/octave/cms-bundle/src/Resources/views/SonataAdminBundle' => 'SonataAdmin', // You use the namespace you found earlier here. Discard the `@` symbol.
+            ),
+        ));
     }
 }
