@@ -1,0 +1,46 @@
+{
+    "status": true,
+    "data": [
+        {
+            "id": 15,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "\/uploads\/3\/agrba.jpg",
+            "filename": "agrba.jpg",
+            "parent": 3,
+            "width": 160,
+            "height": 160,
+            "size": 3407
+        }, {
+            "id": 11,
+            "isImage": true,
+            "icon": "png",
+            "image": "\/uploads\/3\/kohtacheva-160.png",
+            "filename": "kohtacheva-160.png",
+            "parent": 3,
+            "width": 160,
+            "height": 160,
+            "size": 28775
+        }, {
+            "id": 13,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "\/uploads\/3\/photo.jpg",
+            "filename": "photo.jpg",
+            "parent": 3,
+            "width": 160,
+            "height": 160,
+            "size": 4267
+        }, {
+            "id": 14,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "\/uploads\/3\/photo2.jpg",
+            "filename": "photo2.jpg",
+            "parent": 3,
+            "width": 160,
+            "height": 160,
+            "size": 2757
+        }
+    ]
+}

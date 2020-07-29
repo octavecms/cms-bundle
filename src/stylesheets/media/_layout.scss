@@ -1,0 +1,32 @@
+@import "mixins/components/grid";
+
+.media-layout {
+    align-items: stretch;
+
+    &__folders {
+        @include grid-column-fixed(225px);
+        border-right: 1px solid var(--color-line);
+        padding: var(--spacer-5) 0;
+        border-radius: 0 0 0 $border-radius;
+        border-top: 1px solid var(--color-line);
+
+        &.ui-gray {
+            border-right: 0;
+        }
+    }
+    &__content {
+        padding: var(--spacer-5);
+        border-radius: 0;
+
+        &:last-child {
+            border-radius: 0 0 $border-radius;
+        }
+    }
+    &__info {
+        @include grid-column-fixed(240px);
+        border-left: 1px solid var(--color-line);
+        padding: var(--spacer-5);
+        border-radius: 0 0 $border-radius;
+        border-top: 1px solid var(--color-line);
+    }
+}

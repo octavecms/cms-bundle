@@ -21,5 +21,11 @@ module.exports = {
     'example-grid': [
         './components/common/init',
         './example-grid',
+    ],
+
+    // Media gallery
+    'media': [
+        './components/common/init',
+        './media/media',
     ]
 };
