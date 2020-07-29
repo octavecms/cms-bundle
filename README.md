@@ -1,14 +1,17 @@
-# Simple project template
+# CMS front-end redesign, HTML/CSS/JS only
 
-To use this template run
-```
-npx builder init default
-```
+## Requirements
 
-## Template features
+Node 10+
 
-- Using TWIG and SASS plugins.
-- Two example JS files with common / shared file
-- Example icon with TWIG macro to insert icons into the HTML
-- Manifest files
-- Adds normalize.scss
+## Install
+
+```npm install```
+
+## Run development server
+
+```npm run watch```
+
+## Production build
+
+```npm run production```

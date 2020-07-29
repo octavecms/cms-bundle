@@ -157,3 +157,29 @@ figure {
     overflow:      hidden   !important;
     text-overflow: ellipsis !important;
 }
+
+
+/**
+ * Trunace text adding a fade-out at the end of the line if needed
+ *
+ * @demo
+ *     <p class="text--truncate-fade">
+ *         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+ *         pharetra sed erat convallis suscipit. Vestibulum at interdum neque.
+ *     </p>
+ */
+
+.text-truncate-fade {
+    position: relative;
+    overflow: hidden !important;
+
+    &:after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: var(--spacer-3);
+        background: linear-gradient(90deg, rgba(var(--color-background-raw),0) 0%, rgba(var(--color-background-raw),1) 100%);
+    }
+}
