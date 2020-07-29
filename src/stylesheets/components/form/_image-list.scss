@@ -87,7 +87,8 @@
         .btn {
             opacity: 0;
 
-            &.is-highlighted {
+            &.is-highlighted,
+            &.is-open {
                 opacity: 1;
             }
         }

@@ -15,6 +15,15 @@
     {% include 'partials/form/image-list.twig' with {
         id: 'input-75674567456' ~ language,
         name: 'gallery',
+        editable: [
+            {
+                'name': 'description',
+                'type': 'textarea',
+                'label': 'Description',
+                'className': 'form-control--textarea--short',
+                'maxlength': 255
+            }
+        ],
         value: [
             {
                 id: 'qweasdzxc',

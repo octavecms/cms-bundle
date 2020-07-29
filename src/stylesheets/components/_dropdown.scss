@@ -66,9 +66,11 @@
     }
 
     // Menu text
-    &__text,
-    &__form {
+    &__text {
         padding: 0 var(--spacer-3);
+    }
+    &__form {
+        padding: var(--spacer-1) var(--spacer-3) var(--spacer-2);
     }
 
     // Arrow
@@ -313,4 +315,19 @@
 
 .dropdown__menu--wide {
     width: 420px;
+}
+
+
+/**
+ * Dropdown page overlay element
+ */
+
+.dropdown-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: $z-index-dropdown;
+    background: color($color-gray-background, 0.4);
 }

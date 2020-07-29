@@ -1,0 +1,40 @@
+{% from 'macros/icon.twig' import icon %}
+
+{% set form = form|default([]) %}
+{% set id = id|default('') %}
+
+<div class="editable dropdown__menu dropdown__menu--wide d-none" id="{{ id }}">
+    <ul class="dropdown__menu__content">
+        <li class="dropdown__form">
+
+            {% for input in form %}
+                <div class="form-group">
+                    {% set editableAttributes = {
+                        'id': 'input-' ~ random(),
+                        'value': null
+                    }|merge(input) %}
+
+                    {% if input.label %}
+                        {% include 'partials/form/label.twig' with {text: input.label, attrs: {for: editableAttributes.id}} %}
+                    {% endif %}
+
+                    {% include 'partials/form/' ~ input.type ~ '.twig' with editableAttributes %}
+                </div>
+            {% endfor %}
+
+            {# Footer #}
+            <div class="form-footer">
+                <div class="group group--right group--2">
+                    <button type="button" class="btn btn--tetriary btn--pill js-editable-close"><span class="btn__content">
+                        Cancel
+                    </span></button>
+                    <button type="button" class="btn btn--primary btn--pill js-editable-save"><span class="btn__content">
+                        {{ icon('valid', {width: 8, height: 8}) }}
+                        <span>Save</span>
+                    </span></button>
+                </div>
+            </div>
+
+        </li>
+    </ul>
+</div>

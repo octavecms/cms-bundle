@@ -16,6 +16,7 @@ module.exports = {
         './components/data-table',
         './components/modal',
         './components/section-title',
+        './components/editable',
     ],
     'example-grid': [
         './components/common/init',

@@ -1,9 +1,12 @@
 {% from 'macros/icon.twig' import icon %}
 
+{% set id = id|default('input-' ~ random()) %}
+{% set imageListId = id %}
 {% set name = name|default('') %}
 {% set value = value|default([]) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
+{% set editable = editable|default(false) %}
 
 <div class="image-list {% if readonly or disabled %}image-list--disabled{% endif %}"
     {% if not readonly and not disabled %}
@@ -19,6 +22,7 @@
 >
     <ol class="image-list__list js-image-list-list">
         {% for item in value %}
+            {% set index = loop.index0 %}
             {% set id = item.id|default('') %}
             {% set fileName = item.fileName|default('') %}
             {% set thumbnail = item.thumbnail|default('') %}
@@ -36,7 +40,8 @@
             {% endfor %}
 
             <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ fileName }}">
-                <input type="hidden" name="{{ name }}[]" value="{{ id }}" {% if disabled %}disabled{% endif %} />
+                <input type="hidden" name="{{ name }}[{{ index }}][id]" value="{{ id }}" {% if disabled %}disabled{% endif %} />
+                <input type="hidden" name="{{ name }}[{{ index }}][order]" value="{{ index }}" {% if disabled %}disabled{% endif %} />
 
                 <div class="image-item__sizer"></div>
                 <div class="image-item__image">
@@ -50,9 +55,22 @@
                     <div class="group group--2">
                         {# Meta button shown on readonly #}
                         {% if hasMeta and not disabled and (not readonly or hasMetaValues) %}
-                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable {% if hasMetaValues %}is-highlighted{% endif %}" aria-label="Change image information"><span class="btn__content">
+                            <a
+                                role="button"
+                                tabindex="0"
+                                class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable {% if hasMetaValues %}is-highlighted{% endif %}"
+                                aria-label="Change image information"
+
+                                data-plugin="editable"
+                                href="#{{ imageListId }}-editable"
+                            ><span class="btn__content">
                                 {{ icon('note', {width: 32, height: 32}) }}
                             </span></a>
+
+                            {# Meta hidden inputs which hold meta values #}
+                            {% for key, value in meta %}
+                                <input type="hidden" name="{{ name }}[{{ index }}][{{ key }}]" value="{{ value }}" {% if disabled %}disabled{% endif %} />
+                            {% endfor %}
                         {% endif %}
 
                         {% if not readonly and not disabled %}
@@ -81,3 +99,11 @@
         {% endif %}
     </ol>
 </div>
+
+{# Editable popup (dropdown) form content #}
+{% if editable %}
+    {% include 'partials/editable.twig' with {
+        id: imageListId ~ '-editable',
+        form: editable
+    } %}
+{% endif %}

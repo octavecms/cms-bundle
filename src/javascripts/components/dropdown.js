@@ -22,8 +22,20 @@ class Dropdown {
             // Popper placement
             'placement': 'bottom-start',
 
-            // Parent element selector to which append dropdown menu
-            'parentSelector': null,
+            // Popper offset
+            'offset': null,
+
+            // Parent element selector to which add dropdown menu
+            'container': null,
+
+            // Toggle element, optional, will use menuToggleSelector selector if blank
+            'toggle': null,
+
+            // Menu element, optional, will use menuSelector selector if blank
+            'menu': null,
+
+            // Use overlay over the page, only if 'container' is used
+            'withOverlay': false,
 
             // CSS selectors
             'menuToggleSelector': '.dropdown__toggle',
@@ -31,9 +43,13 @@ class Dropdown {
             'menuContentSelector': '.dropdown__menu__content',
             'arrowSelector': '.dropdown__menu__arrow',
             'itemSelector': '.dropdown__item',
+            'closeSelector': '.js-dropdown-close',
 
             // Trigger events, either 'click' or 'hover'
             'trigger': 'click',
+
+            // Auto close on click outside
+            'autoClose': true,
 
             // Event names
             'eventShow': 'show.dropdown',
@@ -71,10 +87,11 @@ class Dropdown {
         }
 
         this.$container = $container;
-        this.$toggle = $container.children(options.menuToggleSelector);
-        this.$menu = $container.children(options.menuSelector);
+        this.$toggle = options.toggle || $container.children(options.menuToggleSelector);
+        this.$menu = options.menu || $container.children(options.menuSelector);
         this.$menuContent = this.$menu.children(options.menuContentSelector);
         this.$arrow = this.$menuContent.children(options.arrowSelector);
+        this.$overlay = null;
         this.$indicator = $(`<div class="${ options.classNameIndicator }"></div>`).prependTo(this.$menuContent);
         this.indicatorPositioned = false;
 
@@ -132,7 +149,7 @@ class Dropdown {
      */
     show (event) {
         if (!this.isDisabled() && !this.open) {
-            const { eventShow, itemSelector, classNameOpen, classNameToggleActive } = this.options;
+            const { eventShow, itemSelector, closeSelector, classNameOpen, classNameToggleActive } = this.options;
             const namespace = this.ns;
 
             // Trigger event and show dropdown only if event wasn't prevented
@@ -145,8 +162,17 @@ class Dropdown {
                 this.$container.addClass(classNameOpen);
                 this.$toggle.addClass(classNameToggleActive).attr('aria-expanded', true);
 
+                this.createOverlay();
                 this.createPopper();
-    
+
+                // Show overlay
+                if (this.$overlay) {
+                    this.$overlay.transitionstop(() => {
+                        this.$overlay.transition('fade-in');
+                    });
+                }
+                
+                // Show dropdown menu
                 this.$menu.transitionstop(() => {
                     this.$menu.transition(this.options.animationIn, {
                         'before': this.onShow.bind(this, event),
@@ -161,7 +187,8 @@ class Dropdown {
 
                 this.$menu
                     .on(`focus.${ namespace } mouseenter.${ namespace }`, itemSelector, this.handleItemMouseEnter.bind(this))
-                    .on(`keydown.${ namespace }`, itemSelector, this.handleKey.bind(this));
+                    .on(`keydown.${ namespace }`, itemSelector, this.handleKey.bind(this))
+                    .on(`click.${ namespace } returnkey.${ namespace }`, closeSelector, this.hide.bind(this));
 
                 // Prevent clicking on a button from submitting a form or link navigation
                 if (event && event.type === 'click') {
@@ -220,6 +247,14 @@ class Dropdown {
                 this.$container.removeClass(classNameOpen);
                 this.$toggle.removeClass(classNameToggleActive).attr('aria-expanded', false);
 
+                // Hide overlay
+                if (this.$overlay) {
+                    this.$overlay.transitionstop(() => {
+                        this.$overlay.transition('fade-out');
+                    });
+                }
+
+                // Hide dropdown menu
                 this.$menu.transitionstop(() => {
                     this.$menu.transition(this.options.animationOut, {
                         'after': this.onHidden.bind(this, event),
@@ -253,6 +288,9 @@ class Dropdown {
         const { eventHidden } = this.options;
 
         this.$container.trigger(eventHidden);
+
+        // Destroy popper
+        this.destroyPopper();
 
         // Reset indicator
         this.positionIndicator(null);
@@ -521,9 +559,15 @@ class Dropdown {
                 (this.position === 'left' && event.key === 'ArrowLeft') ||
                 (this.position === 'right' && event.key === 'ArrowRight') ||
                 (event.key === 'Enter')
-             ) {
-                this.show(event);      
-                event.preventDefault();          
+            ) {
+                this.show(event);
+                event.preventDefault();
+            }
+        } else {
+            // Toggle is focused, dropdown is open, tab key should focus first item
+            if (event.key === 'Tab') {
+                this.focusFirstItem();
+                event.preventDefault();
             }
         }
     }
@@ -559,8 +603,11 @@ class Dropdown {
      */
     handleDocumentClick (event) {
         const $target = $(event.target);
+        const $container = this.$container;
+        const $menu = this.$menu;
+        const autoClose = this.options.autoClose;
         
-        if (!$target.closest(this.$container).length) {
+        if (autoClose && !$target.closest($container).length && !$target.closest($menu).length) {
             this.hide();
         }
     }
@@ -626,8 +673,8 @@ class Dropdown {
             const isSubDropdown = !!this.$container.parent().closest('.dropdown').length;
 
             // Move to the document
-            if (this.options.parentSelector && !isSubDropdown) {
-                const $parent = $menu.closest(this.options.parentSelector);
+            if (this.options.container && !isSubDropdown) {
+                const $parent = $menu.closest(this.options.container);
 
                 if ($parent.length) {
                     $parent.append($menu);
@@ -644,22 +691,14 @@ class Dropdown {
                         name: 'offset',
                         options: {
                             offset: ({ placement }) => {
-                                if (isSubDropdown) {
-                                    if (placement.indexOf('start') !== -1) {
-                                        return [-24, 24];
-                                    } else if (placement.indexOf('end') !== -1) {
-                                        return [24, 24];
-                                    } else {
-                                        return [0, 24];
-                                    }
+                                const offset = this.options.offset || (isSubDropdown ? 24 : 16);
+
+                                if (placement.indexOf('start') !== -1) {
+                                    return [-offset, offset];
+                                } else if (placement.indexOf('end') !== -1) {
+                                    return [offset, offset];
                                 } else {
-                                    if (placement.indexOf('start') !== -1) {
-                                        return [-16, 16];
-                                    } else if (placement.indexOf('end') !== -1) {
-                                        return [16, 16];
-                                    } else {
-                                        return [0, 16];
-                                    }
+                                    return [0, offset];
                                 }
                             },
                         },
@@ -670,6 +709,30 @@ class Dropdown {
             requestAnimationFrame(() => {
                 $menu.addClass('d-none').removeClass('is-invisible');
             });
+        }
+    }
+
+    /**
+     * Destroy popper
+     * 
+     * @protected
+     */
+    destroyPopper () {
+        if (this.popper) {
+            this.popper.destroy();
+            this.popper = null;
+        }
+    }
+
+    /**
+     * Create overlay element
+     * 
+     * @protected
+     */
+    createOverlay () {
+        if (!this.$overlay && this.options.withOverlay && this.options.container) {
+            const $parent = this.$menu.closest(this.options.container);
+            this.$overlay = $('<div class="dropdown-overlay d-none"></div>').appendTo($parent);
         }
     }
 
