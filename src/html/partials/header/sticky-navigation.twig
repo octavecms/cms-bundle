@@ -1,0 +1,11 @@
+{% set headerStickyNavigation = headerStickyNavigation|default([]) %}
+
+<div class="group group--center" data-plugin="scrollspy">
+    {% for item in headerStickyNavigation %}
+        <a href="{{ item.url }}" class="btn btn--pill btn--tetriary--nav {{ loop.first ? 'is-active' : '' }}">
+            <span class="btn__content">
+                {{ item.text }}
+            </span>
+        </a>
+    {% endfor %}
+</div>

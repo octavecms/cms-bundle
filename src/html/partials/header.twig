@@ -1,5 +1,19 @@
+{% set breadcrumbs = breadcrumbs|default([]) %}
+{% set headerStickyNavigation = headerStickyNavigation|default([]) %}
+{% set languages = languages|default([]) %}
+
+{% set withStickyHeader = false %}
+{% if languages|length or headerStickyNavigation|length %}
+    {% set withStickyHeader = true %}
+{% endif %}
+
+{% set withSubHeader = false %}
+{% if languages|length or headerStickyNavigation|length or breadcrumbs|length %}
+    {% set withSubHeader = true %}
+{% endif %}
+
 <header class="main-header">
-    <div class="container container-h mt-4">
+    <div class="container container-h mt-4 mb-4">
         <div class="group group--middle group--6">
             {# Logo #}
             <div>
@@ -31,28 +45,39 @@
     </div>
 
     {# CRUD selector #}
-    <div class="container container-h mt-6">
-        {% include 'partials/header/crud-list.twig' %}
-    </div>
+    {% include 'partials/header/crud-list.twig' %}
+</header>
 
-    {# Breadcrumbs and language switch #}
-    <div class="main-header__sub-header mt-4">
-        <div class="container container-h">
+{% if withSubHeader %}
+    <header class="main-header main-header--sub-header {% if withStickyHeader %}main-header--sticky{% endif %}" data-plugin="stickyHeader">
+        {# Breadcrumbs and language switch #}
+        <div class="container container-h main-header__sticky-content">
             <div class="group group--5 group--middle">
 
                 {# Breacrumbs #}
-                <div class="group__fill">
+                <div class="group__fill main-header__invisible-sticky">
                     {% include 'partials/header/breadcrumbs.twig' with {
-                        breadcrumbs: breadcrumbs|default([])
+                        breadcrumbs: breadcrumbs
                     } %}
+                </div>
+
+                {# Navigation #}
+                <div>
+                    <div class="main-header__overlay-navigation main-header__visible-sticky">
+                        {% include 'partials/header/sticky-navigation.twig' with {
+                            headerStickyNavigation: headerStickyNavigation
+                        } %}
+                    </div>
                 </div>
                 
                 {# Language navigation #}
                 <div>
-                    {% include 'partials/header/language-switch.twig' %}
+                    {% include 'partials/header/language-switch.twig' with {
+                        languages: languages
+                    } %}
                 </div>
 
             </div>
         </div>
-    </div>
-</header>
+    </header>
+{% endif %}

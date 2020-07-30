@@ -1,11 +1,13 @@
-<div class="group group--center">
-    <a href="page-content.html" class="btn btn--primary btn--pill"><span class="btn__content">
-        Page Content
-    </span></a>
-    <a href="crud-list.html" class="btn btn--link btn--pill"><span class="btn__content">
-        Staff
-    </span></a>
-    <a href="crud-list.html" class="btn btn--link btn--pill"><span class="btn__content">
-        Categories
-    </span></a>
-</div>
+{% set headerCrudList = headerCrudList|default([]) %}
+
+{% if headerCrudList|length %}
+    <div class="container container-h mt-6 mb-4">
+        <div class="group group--center">
+            {% for item in headerCrudList %}
+                <a href="{{ item.url }}" class="btn {{ item.active ? 'btn--primary' : 'btn--link' }} btn--pill"><span class="btn__content">
+                    {{ item.text }}
+                </span></a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

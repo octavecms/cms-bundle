@@ -54,18 +54,40 @@
 
 
 /*
- * Dark theme tetriary button style
+ * Tetriary button in navigation, without background until button is active
  */
 
-/*
-.btn.btn--tetriary { // 1.
-    $theme: '.ui-dark'; // 2.
+.btn.btn--tetriary--nav {
     $styles: (
+        // Default styles
+        'default': (
+            background: transparent,
+            hover-background: transparent,
+        ),
+        // Style when button is hovered or pressed down
+        'hover down': (
+            color:      var(--color-heading),
+        ),
+
+        // Active style
+        'active': (
+            color:      var(--color-heading),
+            background: var(--color-tetriary),
+            hover-background: var(--color-tetriary),
+        ),
+        // Style when button is hovered or pressed down
+        'active+hover active+down': (
+            color:      var(--color-heading),
+        ),
     );
 
-    @include button-colors ($styles, $theme);
+    @include button-colors ($styles);
 }
-*/
+
+
+/*
+ * Tetriary button in table, without background until table row is hovered
+ */
 
 .btn.btn--tetriary--table {
     $styles: (

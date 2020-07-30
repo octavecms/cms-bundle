@@ -1,7 +1,83 @@
 .main-header {
-    &__sub-header {
-        padding-top: calc(var(--spacer-3) + 4px);
-        padding-bottom: calc(var(--spacer-3) + 4px);
-        border-top: 1px solid var(--color-line);
+    z-index: $z-index-header;
+    position: relative;
+}
+
+.main-header--sub-header {
+    padding-top: calc(var(--spacer-3) + 4px);
+    padding-bottom: calc(var(--spacer-3) + 4px);
+    border-top: 1px solid var(--color-line);
+}
+
+.main-header__overlay-navigation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -4px;
+}
+
+
+/**
+ * Sticky
+ */
+
+.main-header--sticky {
+    z-index: $z-index-header;
+    position: sticky;
+    top: -1px; // sticky observer trick
+
+    &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(var(--spacer));
+        bottom: calc(var(--spacer) * -1);
+        background: var(--color-background);
+        border-bottom: 1px solid color($color-gray-background);
+        pointer-events: none;
+        
+        @extend %transition;
+        --main-header-sticky-position: calc(var(--spacer) * -1);
+        --main-header-sticky-scale: 1;
+        transition-property: transform;
+        transform-origin: 50% 100%;
+        transform: translateY(var(--main-header-sticky-position)) scaleY(var(--main-header-sticky-scale));
+    }
+
+    .main-header__sticky-content {
+        @extend %transition;
+        transition-property: transform;
+    }
+}
+
+.main-header__visible-sticky,
+.main-header__visible-sticky {
+    @extend %transition;
+    transition-property: opacity;
+}
+
+.main-header__visible-sticky {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.main-header--sticky.is-sticky {
+    &:before {
+        --main-header-sticky-position: 0px;
+        --main-header-sticky-scale: 2;
+    }
+
+    .main-header__sticky-content {
+        transform: translateY(8px);
+    }
+
+    .main-header__visible-sticky {
+        opacity: 1;
+        pointer-events: all;
+    }
+    .main-header__invisible-sticky {
+        opacity: 0;
+        pointer-events: none;
     }
 }

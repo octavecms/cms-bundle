@@ -5,8 +5,7 @@
 @import "imports";
 
 // Components
-@import "base/reset";
-@import "base/code";
+@import "admin/reset";
 
 // Utility classnames
 @import "utilities/container";
@@ -37,10 +36,12 @@
 @import "components/table";
 @import "components/data-table";
 @import "components/modal";
+@import "components/scrollspy";
 
 @import "utilities/utilities";
 
 @import "admin/form-sidebar";
+@import "admin/sticky-sidebar";
 @import "admin/layout";
 @import "admin/main-header";
 @import "admin/main-footer";

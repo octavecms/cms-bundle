@@ -38,8 +38,8 @@ export default class Modal {
             'classNameHidden': 'd-none',
 
             // CSS animations used to show / hide modal
-            'animationNameIn': 'animation--modal-in',
-            'animationNameOut': 'animation--modal-out',
+            'animationNameIn': 'modal-in',
+            'animationNameOut': 'modal-out',
 
             // Classname added to the <html> elemenet when modal is open
             'htmlScrollClassName': 'with-modal',
@@ -86,6 +86,7 @@ export default class Modal {
         this.triggerNamespace = namespace();
         this.visible = !$container.hasClass(this.options.classNameHidden);
         this.$trigger = $();
+        this.$focused = $();
 
         // // Clean up global events to prevent memory leaks and errors, if pages are dynamically loaded using JS
         // // Requires util/jquery.destroyed.js */
@@ -170,6 +171,10 @@ export default class Modal {
      * @protected
      */
     beforeModalHide () {
+        // Restore focus to element which was visible before modal was opened
+        if (this.$focused.length) {
+            this.$focused.focus();
+        }
     }
 
     /**
@@ -224,6 +229,7 @@ export default class Modal {
             const options = this.options;
             const animationName = options.animationNameIn;
 
+            this.$focused = $(document.activeElement);
             this.$trigger = $trigger || this.$trigger;
             this.visible = true;
 
@@ -243,10 +249,8 @@ export default class Modal {
                 this.bodyScrollPosition = $(window).scrollTop();
 
                 // Open new modal
-                this.$container.transition({
-                    'before':     $el => $el.addClass(`${ animationName } ${ animationName }--inactive disable-transitions`).removeClass(options.classNameHidden).attr('aria-hidden', 'false'),
-                    'transition': $el => $el.removeClass(`${ animationName }--inactive disable-transitions`),
-                    'after':      $el => $el.removeClass(`${ animationName }`)
+                this.$container.transition(animationName, {
+                    'before':     $el => $el.attr('aria-hidden', 'false'),
                 }, {
                     'before':      () => this.beforeModalShow(),
                     'after':       () => this.afterModalShow()
@@ -281,18 +285,15 @@ export default class Modal {
             this.visible = false;
 
             this.$container.transitionstop(() => {
-                this.$container.transition({
+                this.$container.transition(animationName, {
                     'before':     () => this.beforeModalHide(),
                     'after':      ()  => this.afterModalHide()
-                }, {
-                    'before':     $el => $el.addClass(`${ animationName }`),
-                    'transition': $el => $el.addClass(`${ animationName }--active`),
-                    'after':      $el => $el.removeClass(`${ animationName } ${ animationName }--active`).addClass(options.classNameHidden).attr('aria-hidden', 'true')
                 }, {
                     'before':     ()  => {
                         this.resetFixForIOS();
                         this.resetFixForAndroid();
-                    }
+                    },
+                    'after':      $el => $el.attr('aria-hidden', 'true')
                 });
 
                 if (options.triggerActiveClassName) {

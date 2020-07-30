@@ -34,13 +34,13 @@ small,
 }
 
 .ui-background {
-    background: var(--color-background);
+    background: var(--color-background) !important;
 }
 .ui-gray-background {
-    background: color($color-gray-background);
+    background: color($color-gray-background) !important;
 }
 .ui-dark-background {
-    background: color($color-dark-background);
+    background: color($color-dark-background) !important;
 }
 
 

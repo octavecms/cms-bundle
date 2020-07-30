@@ -15,7 +15,7 @@
  */
 html {
     height: 100%;
-    overflow-x: hidden;
+    // overflow-x: hidden;
 
     // iOS bug where with ajax page loading smooth scroll stops for unknown reason
     -webkit-overflow-scrolling: touch;
@@ -26,13 +26,13 @@ html {
     // Print styles
     @include media-breakpoint(print) {
         height: auto;
-        overflow: visible;
+        // overflow: visible;
     }
 }
 body {
     // Prevent scrollbars appearing
     // CAUTION!!! Enabled this will break `position: sticky` elements
-    overflow-x: hidden;
+    // overflow-x: hidden;
 
     // Make sure grid doesn't get broken when there is a scrollbar
     width: 100vw;
@@ -40,7 +40,7 @@ body {
 
     // Print styles
     @include media-breakpoint(print) {
-        overflow: visible;
+        // overflow: visible;
         min-height: 0;
         width: 100%;
     }

@@ -1,0 +1,61 @@
+<div class="modal modal--overlay modal--cover d-none" id="media-library"
+    role="dialog" aria-label="Media Library"
+    data-plugin="modal"
+    data-modal-auto-close="false"
+    aria-hidden="true"
+>
+
+    {#
+    Separate element for background to allow more interesting show / hide
+    animations. Background is usually darker overlay over the page content
+    #}
+    <div class="modal__background"></div>
+
+    {# Element to allow scrolling when content exceeds viewport size #}
+    <div class="modal__scroller">
+
+        {#
+        This element is used to position modal content + add paddings between
+        modal content and viewport
+        #}
+        <div class="modal__content-wrapper">
+            <div class="modal__content js-modal-ignore-auto-close ui-gray-background card card--modal">
+
+                {% include 'partials/media/header.twig' %}
+                {% include 'partials/media/content.twig' %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var API_ENDPOINTS = {
+        // 'folderAdd':    '/admin/media/category/create',
+        // 'folderRemove': '/admin/media/category/remove',
+        // 'folderMove':   '/admin/media/category/move',
+        // 'filesList':    '/admin/media/item/list',
+        // 'filesReplace': '/admin/media/item/replace',
+        // 'filesUpload':  '/admin/media/item/upload',
+        // 'filesRemove':  '/admin/media/item/remove',
+        // 'filesMove':    '/admin/media/item/move',
+        'folderAdd':    '/assets/json/media/folders-create.json',
+        'folderRemove': '/assets/json/media/folders-remove.json',
+        'folderMove':   '/assets/json/media/folders-move.json',
+        'filesList':    '/assets/json/media/files-list.json',
+        'filesReplace': '/assets/json/media/files-replace.json',
+        'filesUpload':  '/assets/json/media/files-upload.json',
+        'filesRemove':  '/assets/json/media/files-remove.json',
+        'filesMove':    '/assets/json/media/files-move.json',
+    };
+
+    var MEDIA_INITIAL_STATE = {
+        'folder': {
+            'root': {'id':'root','parent':null,'name':'Default Category','children':[{'id':8,'name':'About','parent':'root','children':[]},{'id':2,'name':'Academy','parent':'root','children':[{'id':7,'name':'About','parent':2,'children':[]}]},{'id':3,'name':'Employee','parent':'root','children':[]},{'id':6,'name':'Landing','parent':'root','children':[]},{'id':1,'name':'Portfolio','parent':'root','children':[]},{'id':4,'name':'Press','parent':'root','children':[{'id':9,'name':'2020','parent':4,'children':[]}]},{'id':5,'name':'Services','parent':'root','children':[]}]},
+            'selected': 'root'
+        },
+    };
+</script>
+<script src="/assets/javascripts/media.js"></script>
+
+<link rel="stylesheet" href="/assets/stylesheets/media.css" />

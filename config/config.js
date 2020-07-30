@@ -13,10 +13,27 @@ exports.data = {};
 exports.fonts = {};
 exports.icons = {};
 exports.images = {};
-exports.javascripts = {};
 exports.stylesheets = {};
 exports.browserSync = {};
 exports.sizereport = {};
+
+exports.javascripts = {
+    webpack: {
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    vendor: {
+                        name: 'vendor',
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -10,
+                        enforce: true,
+                        chunks: 'all',
+                    }
+                }
+            }
+        }
+    }
+};
 
 exports.plugins = [
     // Enables SASS engine and .sass and .scss file compilation

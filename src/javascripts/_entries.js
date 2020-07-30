@@ -15,8 +15,11 @@ module.exports = {
         './components/sortable-list',
         './components/data-table',
         './components/modal',
+        './components/ajax-modal-trigger',
         './components/section-title',
         './components/editable',
+        './components/sticky-header',
+        './components/scrollspy',
     ],
     'example-grid': [
         './components/common/init',

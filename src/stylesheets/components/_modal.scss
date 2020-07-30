@@ -182,17 +182,40 @@
  * Modal positioned on the right side
  */
 
-.modal--side .modal__content-wrapper {
-    justify-content: flex-end;
-    align-items: stretch;
+.modal--side {
+    .modal__content-wrapper {
+        justify-content: flex-end;
+        align-items: stretch;
 
-    // Spacing
-    padding: 0;
+        // Spacing
+        padding: 0;
+    }
+
+    .modal__content {
+        width: 100%;
+        min-height: var(--viewport-height-actual);
+        margin: 0 0 0 auto;
+        border-radius: 0;
+    }
 }
 
-.modal--side .modal__content {
-    width: 100%;
-    min-height: var(--viewport-height-actual);
-    margin: 0 0 0 auto;
-    border-radius: 0;
+
+
+/**
+ * Modal positioned to cover whole screen
+ */
+
+.modal--cover {
+    .modal__content-wrapper {
+        justify-content: stretch;
+        align-items: stretch;
+    
+        // Spacing
+        padding: var(--spacer-7);
+    }
+    .modal__content {
+        max-width: none;
+        margin: 0;
+        flex-grow: 1;
+    }
 }
