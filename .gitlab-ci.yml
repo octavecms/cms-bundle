@@ -1,0 +1,13 @@
+stages:
+  - deploy_ab
+
+deploy_ab:
+  stage: deploy_ab
+  only:
+    - redesign-frontend
+  tags:
+    - ab
+  script:
+  - docker run --rm -v /home/gitlab-runner/.config.10:/home/gitlab-runner/.config -v /home/gitlab-runner/.npm.10:/home/gitlab-runner/.npm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(pwd) node:10 runuser gitlab-runner -c "npm --prefix=$(pwd)/ install"
+  - docker run --rm -v /home/gitlab-runner/.config.10:/home/gitlab-runner/.config -v /home/gitlab-runner/.npm.10:/home/gitlab-runner/.npm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(pwd) node:10 runuser gitlab-runner -c "npm --prefix=$(pwd)/ run production"
+  - rsync -r --delete --force --links --safe-links --exclude .vscode --exclude phpunit.xml.dist --exclude README.md --exclude .gitlab-ci.yml --exclude .git --exclude public/uploads --exclude .gitignore --exclude .gitmodules $(pwd)/ /var/www/vhosts/ab/redesign-frontend.ab.videinfra.net
