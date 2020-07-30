@@ -1,6 +1,5 @@
 stages:
   - deploy_ab
-
 deploy_ab:
   stage: deploy_ab
   only:
