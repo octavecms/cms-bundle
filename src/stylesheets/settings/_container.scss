@@ -36,11 +36,7 @@ $containers: (
     // which has size of 1 column
     'h': (
         'max-widths': (
-            // sm: 480px,
-            // md: 720px,
-            // lg: 960px,
-            // xl: 1140px,
-            // xxl: 1440px,
+            xs: 1440px,
         ),
         'paddings': (
             xs: inherit var(--spacer-3),
