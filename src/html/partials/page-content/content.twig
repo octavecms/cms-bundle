@@ -67,42 +67,87 @@
                 {# Page content sections, opens external editor #}
 
                 <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/page-content/content-section-content-header.twig' with {
+                    {% include 'partials/section-header.twig' with {
+                        'id': 'section-' ~ random(),
                         'title': 'Intro',
+                        'size': 'small',
+                        'draggable': true,
+
+                        'withChangedDot': true,
                         'changed': true,
-                        'draggable': true
+                        
+                        'withOptions': true,
+
+                        'withEdit': true,
+                        'editTarget': '#crud-form-modal',
                     } %}
                 </div>
 
                 <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/page-content/content-section-content-header.twig' with {
+                    {% include 'partials/section-header.twig' with {
+                        'id': 'section-' ~ random(),
                         'title': 'About Us',
+                        'size': 'small',
+                        'draggable': true,
+
+                        'withChangedDot': true,
                         'changed': true,
-                        'draggable': true
+                        
+                        'withOptions': true,
+
+                        'withEdit': true,
+                        'editTarget': '#crud-form-modal',
                     } %}
                 </div>
 
                 <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/page-content/content-section-content-header.twig' with {
+                    {% include 'partials/section-header.twig' with {
+                        'id': 'section-' ~ random(),
                         'title': 'Mission',
+                        'size': 'small',
+                        'draggable': true,
+
+                        'withChangedDot': true,
                         'changed': true,
-                        'draggable': true
+                        
+                        'withOptions': true,
+
+                        'withEdit': true,
+                        'editTarget': '#crud-form-modal',
                     } %}
                 </div>
 
                 <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/page-content/content-section-content-header.twig' with {
+                    {% include 'partials/section-header.twig' with {
+                        'id': 'section-' ~ random(),
                         'title': 'Values',
+                        'size': 'small',
+                        'draggable': true,
+
+                        'withChangedDot': true,
                         'changed': true,
-                        'draggable': true
+                        
+                        'withOptions': true,
+
+                        'withEdit': true,
+                        'editTarget': '#crud-form-modal',
                     } %}
                 </div>
 
                 <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/page-content/content-section-content-header.twig' with {
+                    {% include 'partials/section-header.twig' with {
+                        'id': 'section-' ~ random(),
                         'title': 'Philosophy',
+                        'size': 'small',
+                        'draggable': true,
+
+                        'withChangedDot': true,
                         'changed': true,
-                        'draggable': true
+                        
+                        'withOptions': true,
+
+                        'withEdit': true,
+                        'editTarget': '#crud-form-modal',
                     } %}
                 </div>
 

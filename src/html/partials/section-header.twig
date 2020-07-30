@@ -32,6 +32,9 @@
 {# Show editor button #}
 {% set withEditor = withEditor|default(false) %}
 
+{# Show Edit button which opens modal #}
+{% set withEdit = withEdit|default(false) %}
+{% set editTarget = editTarget|default(false) %}
 
 <header class="card__header {% if withAccordion %}accordion__header {% if expanded and accordionExpandedClassName %}{{ accordionExpandedClassName }}{% endif %}{% endif %}">
     
@@ -70,7 +73,7 @@
             {% endif %}
 
             {# Buttons #}
-            {% if withOptions or withAccordion or withEditor %}
+            {% if withOptions or withAccordion or withEditor or withEdit %}
                 <div {% if draggable %}class="card__is-hidden-dragging"{% endif %}><div class="group group--2 group--nowrap">
 
                     {# WYSIWYG editor button #}
@@ -107,6 +110,19 @@
                                 </ul>
                             </div>
                         </div>
+                    {% endif %}
+
+                    {# Edit button #}
+                    {% if withEdit %}
+                        <a
+                            title="Edit section"
+                            class="btn btn--tetriary btn--square btn--pill"
+                            tabindex="0"
+                            role="button"
+                            href="{{ editTarget }}"
+                        ><span class="btn__content">
+                            {{ icon('edit', {width: 32, height: 32}) }}
+                        </span></a>
                     {% endif %}
                     
                     {# Accordion button #}

@@ -3,8 +3,9 @@
         folders
     </div>
     <div class="col col--xs-fill media-layout__content card__body ui-light ui-background">
-
         <div class="image-list">
+
+            {# Item template #}
             <script type="text/template" data-template-variable="file">
                 <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- file.filename %>">
                     <div class="image-item__sizer"></div>
@@ -20,13 +21,28 @@
                     </div>
                 </li>
             </script>
-        </div>
 
+        </div>
     </div>
     <div class="col media-layout__info ui-light ui-background">
         
-        <script type="text/template" data-template-variable="">
-            
+        {# Folder is selected view #}
+        <script type="text/template" data-template-variable="info" class="js-media-info-folder">
+            @TODO
+        </script>
+
+        {# List of files are selected view #}
+        <script type="text/template" data-template-variable="info" class="js-media-info-files">
+            <div class="media-layout__info__image">
+                @TODO
+            </div>
+        </script>
+
+        {# Single files is selected view #}
+        <script type="text/template" data-template-variable="info" class="js-media-info-file">
+            <div class="media-layout__info__image">
+                @TODO
+            </div>
         </script>
 
     </div>
