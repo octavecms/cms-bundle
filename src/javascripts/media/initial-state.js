@@ -24,9 +24,11 @@ module.exports = {
         'selected': [],
 
         // Files list is loading
-        'loading': true
-    },
+        'loading': true,
 
+        // Search filter
+        'searchFilter': '',
+    },
 
     // Allow selecting multiple files
     'multiselect': true,
