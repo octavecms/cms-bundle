@@ -1,114 +1,132 @@
-import remove from 'lodash/remove';
-import namespace from 'utils/namespace';
+import without from 'lodash/without';
+import namespace from 'util/namespace';
 
-import { setErrorMessage } from './actions-error';
-import { setFiles } from './actions-files';
+import { loadFiles } from './actions-files';
+import { fetchData } from './actions-fetch';
 
 
 /**
  * Create folder
  * 
- * @param {object} state State
+ * @param {object} store State store
  * @param {string} name Folder name
  * @param {number} parent Parent folder id
  */
-export function createFolder (state, name, parent) {
+export function createFolder (store, name, parent) {
     // Add tempoary folder
-    const folder = {'id': namespace() , 'name': name, 'parent': parent, 'children':[], 'temporary': true};
-    addFolderToTheList(state, folder);
+    const folder = {'id': namespace() , 'name': name, 'parent': parent, 'children':[], 'disabled': true, 'loading': true, 'expanded': false};
+    addFolderToTheList(store, folder);
 
     // Save folder on server
-    fetch(API_ENDPOINTS.folderAdd, {
+    fetchData(API_ENDPOINTS.folderAdd, {
         'method': 'POST',
-        'credentials': 'same-origin',
-        'headers': {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        'body': decodeURIComponent($.param({
+        'data': {
             'name': name,
             'parent': parent
-        }))
+        }
     })
-        .then(response => response.json())
-        .then(json => {
-            if (json && json.status) {
-                // Replace temporary folder with actual folder
-                removeFolderFromTheList(state, folder.id);
-                addFolderToTheList(state, json.data);
-            } else if (json && json.message) {
-                setErrorMessage(state, json.message);
-            }
+        .then((response) => {
+            // Replace temporary folder with actual folder
+            removeFolderFromTheList(store, folder.id);
+            addFolderToTheList(store, response);
+        })
+        .catch((err) => {
+            // Error occured, remove temporary folder
+            removeFolderFromTheList(store, folder.id);
         })
 }
 
 /**
  * Add folder
  * 
- * @param {object} state State
+ * @param {object} store State store
  * @param {object} folder Folder data
  */
-export function addFolderToTheList (state, folder) {
+export function addFolderToTheList (store, folder) {
     // Set folder data
-    state.list.folders[folder.id].set(folder);
+    store.folders.list[folder.id].set(folder);
     
     // Update parent
-    let parentChildren = state.folders.list[folder.parent].children.get([]);
-    parentChildren = [].concat(parentChildren, action.folder.id);
-
+    let parentChildren = store.folders.list[folder.parent].children.get([]);
+    parentChildren = [].concat(parentChildren, folder.id);
+    
     // Sort by name
-    parentChildren.sort((aId, bId) => {
-        const aName = state.list.folders[aId].name;
-        const bName = state.list.folders[bId].name;
+    parentChildren = parentChildren.sort((aId, bId) => {
+        const aName = store.folders.list[aId].name.get('');
+        const bName = store.folders.list[bId].name.get('');
         return aName.localeCompare(bName);
     });
 
-    state.list.folders[folder.parent].children.set(parentChildren);
+    store.folders.list[folder.parent].children.set(parentChildren);
 }
 
 
 /**
  * Remove folder from the list
  * 
- * @param {object} state State
+ * @param {object} store State store
  * @param {object} id Folder ID
  */
-export function removeFolderFromTheList (state, id) {
-    const folder = state.list.folders[id].get();
+export function removeFolderFromTheList (store, id) {
+    const folder = store.folders.list[id].get();
 
     // Remove folder from parent
-    if (state.list.folders[folder.parent].has()) {
-        const parent = state.list.folders[folder.parent];
-        const children = remove([].concat(parent.children.get()), {'id': id});
+    if (store.folders.list[folder.parent].has()) {
+        const parent = store.folders.list[folder.parent];
+        const children = without(parent.children.get(), id);
 
         parent.children.set(children);
     }
 
     // Remove folder from the list
-    state.list.folders[id].remove();
+    store.folders.list[id].remove();
 }
 
 
 /**
  * Set selected folder
  * 
- * @param {object} state State
+ * @param {object} store State store
  * @param {number} folderId Folder ID
  */
-export function setSelectedFolder (state, folderId) {
-    state.folder.selected.set(folderId);
-    state.files.loading.set(true);
+export function setSelectedFolder (store, folderId) {
+    const isDisabled = store.folders.list[folderId].disabled.get(false);
 
-    fetch(`${ API_ENDPOINTS.filesList }?category=${ encodeURIComponent(folderId) }`, {
-        'credentials': 'same-origin'
-    })
-        .then(response => response.json())
-        .then(json => {
-            state.files.loading.set(false);
-            
-            if (json && json.status) {
-                setFiles(state, json.data);
-            } else if (json && json.message) {
-                setErrorMessage(state, json.message);
-            }
-        });
+    if (!isDisabled) {
+        store.folders.selected.set(folderId);
+        loadFiles(store, folderId);
+    }
+}
+
+
+/**
+ * Toggle folder
+ * 
+ * @param {object} store State store
+ * @param {number} folderId Folder ID
+ */
+
+export function toggleFolder (store, folderId) {
+    const folder = store.folders.list[folderId];
+    const isExpanded = folder.expanded.get(0);
+
+    if (folder) {
+        folder.expanded.set(!isExpanded);
+    }
+}
+
+export function expandFolder (store, folderId) {
+    const folder = store.folders.list[folderId];
+
+    if (folder) {
+        folder.expanded.set(true);
+    }
+}
+
+export function collapseFolder (store, folderId) {
+    const folder = store.folders.list[folderId];
+
+    if (folder) {
+        folder.expanded.set(false);
+    }
 }

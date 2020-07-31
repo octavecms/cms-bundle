@@ -1,0 +1,31 @@
+{% from 'macros/icon.twig' import icon %}
+
+<div class="dropdown dropdown--narrow js-tree-view-add-folder" data-plugin="dropdown" data-dropdown-placement="right-end">
+    <button type="button" class="dropdown__toggle btn btn--tetriary btn--square" title="Add folder" aria-expanded="false" id="mediaAddFolderDropdown">
+        <span class="btn__content">
+            {{ icon('add', {width: 32, height: 32}) }}
+        </span>
+    </button>
+    
+    <div class="dropdown__menu d-none" aria-labelledby="mediaAddFolderDropdown">
+        <ul class="dropdown__menu__content">
+            <li class="dropdown__form">
+
+                <form class="input-group input-group--nofocus">
+                    {% include 'partials/form/text.twig' with {
+                        name: 'name',
+                        className: 'input-group__input input-group__merge',
+                        placeholder: 'Folder name',
+                        value: '',
+                        required: true,
+                        pattern: '[A-Za-z0-9-_ ]+'
+                    } %}
+                    <button type="submit" class="btn btn--secondary btn--lg"><span class="btn__content">
+                        Add folder
+                    </span></button>
+                </form>
+
+            </li>
+        </ul>
+    </div>
+</div>

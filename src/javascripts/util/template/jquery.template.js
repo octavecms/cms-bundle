@@ -4,15 +4,15 @@ import createPlugin from 'jquery-plugin-generator';
 
 // Helpers / variables in templates
 import each from 'lodash/each';
-import numberFormat from 'util/template/number-format';
-import transchoice from 'util/template/transchoice';  // enable if needed
+// import numberFormat from 'util/template/number-format';
+// import transchoice from 'util/template/transchoice';  // enable if needed
 
 
 // Global variables available in templates
 const GLOBAL_TEMPLATE_VARIABLES = {
     each,
-    numberFormat,
-    transchoice
+    // numberFormat,
+    // transchoice
 };
 
 
@@ -123,8 +123,9 @@ class Template {
                         'index': i + 1,
                         'index0': i,
                         'first': i === 0,
-                        'last': i == ii - 1
-                    }
+                        'last': i == ii - 1,
+                    },
+                    'template': this.compile.bind(this),
                 }, $.fn.template.vars);
 
                 if (dataVariableName) {
@@ -225,7 +226,7 @@ class Template {
 
         if (updated) {
             this.replaceHTMLCache = html;
-            $parent.plugins();
+            $parent.app();
         }
     }
 

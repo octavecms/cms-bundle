@@ -1,28 +1,23 @@
+{% from 'macros/icon.twig' import icon %}
+
 <div class="row media-layout card__content">
     <div class="col ui-background media-layout__folders ui-gray ui-background js-media-treeview">
-        folders
-    </div>
-    <div class="col col--xs-fill media-layout__content card__body ui-light ui-background">
-        <div class="image-list">
-
-            {# Item template #}
-            <script type="text/template" data-template-variable="file">
-                <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- file.filename %>">
-                    <div class="image-item__sizer"></div>
-                    <figure class="image-item__image">
-                        <% if (file.image) { %>
-                            <img src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" />
-                        <% } else { %>
-                            @TODO Icon
-                        <% } %>
-                    </figure>
-                    <div class="image-item__text">
-                        <p class="text-truncate-fade"><%- file.filename %></p>
-                    </div>
-                </li>
-            </script>
-
+        
+        <div class="media-layout__folders__content">
+            {% include 'partials/media/tree.twig' %}
         </div>
+
+
+        {# Add folder #}
+        <div class="media-layout__folders__footer">
+            {% include 'partials/media/tree-add-folder.twig' %}
+        </div>
+
+    </div>
+    <div class="col col--xs-fill media-layout__content card__body ui-light ui-background js-media-filelist">
+
+        {% include 'partials/media/file-list.twig' %}
+        
     </div>
     <div class="col media-layout__info ui-light ui-background">
         

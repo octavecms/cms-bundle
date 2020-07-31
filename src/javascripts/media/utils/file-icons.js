@@ -1,4 +1,4 @@
-export default FILE_ICONS = [
+export default [
     {'icon': 'word', 'extensions': ['doc', 'docm', 'docx', 'dot', 'dotm', 'dotx']},
     {'icon': 'excel', 'extensions': ['xls', 'xlsb', 'xlsm', 'xlsx']},
     {'icon': 'powerpoint', 'extensions': ['pptx', 'pptm', 'ppt', 'potx', 'potm', 'pot', 'ppsx', 'pps']},

@@ -476,6 +476,20 @@ class Dropdown {
     }
 
     /**
+     * Focus first input in the menu
+     */
+    focusFirstInput () {
+        const $inputs = this.$menu.find('input:not([type="hidden"]),textarea,select').not(':disabled');
+
+        if ($inputs.length) {
+            $inputs.eq(0).focus();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Returns true if dropdown is disabled
      * 
      * @returns {boolean} True if disabled, otherwise false
@@ -565,9 +579,12 @@ class Dropdown {
             }
         } else {
             // Toggle is focused, dropdown is open, tab key should focus first item
-            if (event.key === 'Tab') {
-                this.focusFirstItem();
-                event.preventDefault();
+            if (event.key === 'Tab' && !event.shiftKey) {
+                if (this.focusFirstItem()) {
+                    event.preventDefault();
+                } else if (this.focusFirstInput()) {
+                    event.preventDefault();
+                }
             }
         }
     }

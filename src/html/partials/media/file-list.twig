@@ -1,0 +1,31 @@
+<div class="image-list image-list--small">
+    <ol class="image-list__list">
+
+        {# Item template #}
+        <script type="text/template">
+            <% if (loading) { %>
+                <li class="loader"></li>
+            <% } else { %>
+                <% each(items, (id) => { %>
+                    <% var file = store.files.list[id].get(); %>
+
+                    <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- file.filename %>">
+                        <div class="image-item__sizer">
+                            <figure class="image-item__image">
+                                <% if (file.image) { %>
+                                    <img src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                <% } else { %>
+                                    <img src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
+                                <% } %>
+                            </figure>
+                        </div>
+                        <div class="image-item__text">
+                            <p class="text-truncate-fade"><%- file.filename %></p>
+                        </div>
+                    </li>
+                <% }) %>
+            <% } %>
+        </script>
+
+    </ol>
+</div>

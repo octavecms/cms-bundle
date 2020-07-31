@@ -8,7 +8,7 @@ export default function getInitialState (state) {
             'root': null,
     
             // Opened folder id
-            'selected': null,
+            'selected': 'root',
     
             // List of all folders
             'list': {},
@@ -36,6 +36,9 @@ export default function getInitialState (state) {
     
         // Allow selecting multiple files
         'multiselect': true,
+
+        // Show root folder in the tree
+        'showroot': true,
     
         // Error message
         'error': {
@@ -49,6 +52,32 @@ export default function getInitialState (state) {
     const staticSelectedFolder = staticState && staticState.folders && staticState.folders.selected;
     if (staticSelectedFolder && !(initialState.folders && initialState.folders.selected) && (staticSelectedFolder in initialState.folders.list)) {
         initialState.folders.selected = staticSelectedFolder;
+    }
+
+    // Convert root from object into an id and move folders into a list
+    if (initialState.folders.root && typeof initialState.folders.root === 'object') {
+        const traverseTree = (node) => {
+            node.disabled = node.disabled || false;
+            node.loading = node.loading || false;
+            node.expanded = node.expanded || false;
+            
+            initialState.folders.list[node.id] = node;
+
+            if (node.children) {
+                for (let i = 0; i < node.children.length; i++) {
+                    traverseTree(node.children[i]);
+                    node.children[i] = node.children[i].id;
+                }
+            }
+        }
+
+        traverseTree(initialState.folders.root);
+        initialState.folders.root = initialState.folders.root.id;
+    }
+
+    // Auto-expand root
+    if (initialState.folders.list.root) {
+        initialState.folders.list.root.expanded = true;
     }
 
     return initialState;

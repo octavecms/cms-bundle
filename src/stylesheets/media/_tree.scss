@@ -1,0 +1,109 @@
+/**
+ * Tree
+ */
+
+.tree {
+}
+
+// Hide sub-tree if item is not expanded
+.tree__item:not(.tree__item--expanded) > .tree__list {
+    display: none;
+}
+
+/**
+ * Tree item
+ */
+
+.tree-item {
+    --tree-item-offset: calc(var(--spacer-3) * 2);
+    padding-left: var(--tree-item-offset);
+    outline: none;
+    cursor: pointer;
+
+    &__content {
+        position: relative;
+        height: var(--spacer-5);
+        line-height: var(--spacer-5);
+    }
+    &__toggler {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: calc(var(--spacer-3) * -1);
+        width: var(--spacer-5);
+        height: var(--spacer-5);
+        
+        @extend %transition;
+        transition-duration: $duration-fast;
+        transition-property: transform;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        transform-origin: center;
+
+        &__arrow {
+            display: block;
+        }
+    }
+    &__loader {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: var(--spacer-5);
+        height: var(--spacer-5);
+        transform: translate(0%, -50%);
+    }
+
+    @include link-focus-visible () {
+        box-shadow: $link-focus-visible-shadow;
+    }
+
+    &--with-children {
+        .tree-item__toggler {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    &--active {
+        background: var(--color-primary);
+        color: var(--color-base);
+    }
+}
+
+.tree__item--expanded > .tree-item {
+    .tree-item__toggler {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+.tree__item--disabled > .tree-item {
+    cursor: default;
+    color: var(--color-small);
+}
+
+.tree__list {
+    & .tree-item {
+        --tree-item-offset: calc(var(--spacer-3) * 3);
+    }
+    & & .tree-item {
+        --tree-item-offset: calc(var(--spacer-3) * 4);
+    }
+    & & & .tree-item {
+        --tree-item-offset: calc(var(--spacer-3) * 5);
+    }
+    & & & & .tree-item {
+        --tree-item-offset: calc(var(--spacer-3) * 6);
+    }
+}
+
+
+/**
+ * Loader 
+ */
+
+.tree-loader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}

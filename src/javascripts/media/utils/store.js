@@ -2,6 +2,8 @@ import get from 'lodash/get';
 import difference from 'lodash/difference';
 import setImmutable from '../utils/set-immutable';
 import removeImmutable from '../utils/remove-immutable';
+import debounce from '../utils/debounce-raf';
+import each from 'lodash/each';
 
 const EVENT_CHANGE = 'change';
 const EVENT_ADD = 'add';
@@ -11,12 +13,25 @@ const EVENT_REMOVE = 'remove';
 class Store {
     constructor (state) {
         this.state = state || {};
+        this.prevState = this.state;
         this.proxies = {};
         this.listeners = {};
+        this.triggerQueue = [];
+        this.triggerCallQueue = debounce(this.triggerCallQueue.bind(this));
+    }
+
+    destroy () {
+        this.state = null;
+        this.proxies = null;
+        this.listeners = null;
     }
 
     get (path, defaultValue) {
-        return get(this.state, path, defaultValue);
+        if (path) {
+            return get(this.state, path, defaultValue);
+        } else {
+            return this.state;
+        }
     }
 
     has (path) {
@@ -24,15 +39,15 @@ class Store {
     }
 
     set (path, value) {
-        const prevState = this.state;
         this.state = setImmutable(this.state, path, value);
-        this.trigger(path, prevState, this.state);
+        this.trigger(path);
+        return this;
     }
 
     remove (path) {
-        const prevState = this.state;
         this.state = removeImmutable(this.state, path);
-        this.trigger(path, prevState, this.state);
+        this.trigger(path);
+        return this;
     }
 
     on (path, event, listener) {
@@ -41,12 +56,24 @@ class Store {
         const eventName = eventParts[0];
         const eventNS = eventParts.slice(1);
 
-        listeners[path] = listeners[path] || {};
+        if (!listeners[path]) {
+            // Create regular expression from path
+            const regex = '^' + path
+                .split('.').join('\\.')
+                .split('*').join('[^.]*');
+    
+            listeners[path] = listeners[path] || {
+                regex: new RegExp(regex),
+            };
+        }
+
         listeners[path][eventName] = listeners[path][eventName] || [];
         listeners[path][eventName].push({
             fn: listener,
             ns: eventNS,
         });
+
+        return this.off.bind(this, path, event, listener);
     }
 
     off (path, event, listener) {
@@ -68,6 +95,7 @@ class Store {
                 eventListeners.splice(i, 1);
             }
         }
+        return this;
     }
 
     triggerListeners (listeners, prevValue, newValue) {
@@ -78,26 +106,44 @@ class Store {
         }
     }
 
-    trigger (path, prevState, newState) {
-        const listeners = this.listeners;
+    triggerCallQueue () {
+        const queue = this.triggerQueue;
+        const prevState = this.prevState;
+        const newState = this.state;
 
-        for (let listenerPath in listeners) {
-            if (listenerPath === path || (path + '.').indexOf(listenerPath) === 0) {
-                const prevValue = get(prevState, listenerPath);
-                const newValue = get(newState, listenerPath);
+        this.triggerQueue = [];
+        this.prevState = newState;
 
-                if (prevValue !== newValue) {
-                    this.triggerListeners(listeners[listenerPath][EVENT_CHANGE], prevValue, newValue);
+        each(queue, (path) => {
+            const listeners = this.listeners;
 
-                    if (typeof prevValue === 'undefined') {
-                        this.triggerListeners(listeners[listenerPath][EVENT_ADD], prevValue, newValue);
+            for (let id in listeners) {
+                const listener = listeners[id];
+                const pathMatch = (path + '.').match(listener.regex);
+                
+                if (pathMatch) {
+                    const statePath = pathMatch[0];
+                    const prevValue = get(prevState, statePath);
+                    const newValue = get(newState, statePath);
+
+                    if (prevValue !== newValue) {
+                        this.triggerListeners(listener[EVENT_CHANGE], prevValue, newValue);
+
+                        if (typeof prevValue === 'undefined') {
+                            this.triggerListeners(listener[EVENT_ADD], prevValue, newValue);
+                        }
+                        if (typeof newValue === 'undefined') {
+                            this.triggerListeners(listener[EVENT_REMOVE], prevValue, newValue);
+                        }
                     }
-                    if (typeof newValue === 'undefined') {
-                        this.triggerListeners(listeners[listenerPath][EVENT_REMOVE], prevValue, newValue);
-                    }
-                }
-            } 
-        }
+                } 
+            }
+        });
+    }
+
+    trigger (path) {
+        this.triggerQueue.push(path);
+        this.triggerCallQueue();
     }
 }
 
@@ -128,5 +174,6 @@ export default function createStore (state) {
     });
 
     proxy.store = store;
+    proxy.destroy = store.destroy.bind(store);
     return proxy;
 }

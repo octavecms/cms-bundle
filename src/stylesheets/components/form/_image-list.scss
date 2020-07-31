@@ -11,6 +11,12 @@
     }
 }
 
+.image-list--small {
+    .image-list__list {
+        grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+    }
+}
+
 /**
  * Image item
  */
@@ -26,6 +32,7 @@
 
     &__sizer {
         padding-top: 100%;
+        position: relative;
     }
 
     // Animation
@@ -92,6 +99,15 @@
                 opacity: 1;
             }
         }
+    }
+
+    &__text {
+        @extend %text--size-small;
+        @extend %transition;
+        transition-property: color;
+        padding: 0 var(--spacer-3) calc(var(--spacer) * 0.625);
+        position: relative;
+        margin-top: calc(var(--spacer-1) * -1);
     }
 
     // On hover / focus show buttons

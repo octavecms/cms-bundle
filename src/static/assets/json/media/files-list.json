@@ -2,45 +2,82 @@
     "status": true,
     "data": [
         {
-            "id": 15,
+            "id": 1,
             "isImage": true,
             "icon": "jpeg",
-            "image": "\/uploads\/3\/agrba.jpg",
-            "filename": "agrba.jpg",
+            "image": "/assets/images/temp/gallery-thumb-1.png",
+            "filename": "gallery-thumb-1.png",
             "parent": 3,
-            "width": 160,
-            "height": 160,
-            "size": 3407
+            "width": 352,
+            "height": 224,
+            "size": 81920
         }, {
-            "id": 11,
-            "isImage": true,
-            "icon": "png",
-            "image": "\/uploads\/3\/kohtacheva-160.png",
-            "filename": "kohtacheva-160.png",
-            "parent": 3,
-            "width": 160,
-            "height": 160,
-            "size": 28775
-        }, {
-            "id": 13,
+            "id": 2,
             "isImage": true,
             "icon": "jpeg",
-            "image": "\/uploads\/3\/photo.jpg",
-            "filename": "photo.jpg",
+            "image": "/assets/images/temp/gallery-thumb-2.png",
+            "filename": "gallery-thumb-2.png",
             "parent": 3,
-            "width": 160,
-            "height": 160,
-            "size": 4267
+            "width": 352,
+            "height": 224,
+            "size": 84422
         }, {
-            "id": 14,
+            "id": 3,
             "isImage": true,
             "icon": "jpeg",
-            "image": "\/uploads\/3\/photo2.jpg",
-            "filename": "photo2.jpg",
+            "image": "/assets/images/temp/gallery-thumb-3.png",
+            "filename": "gallery-thumb-3.png",
             "parent": 3,
-            "width": 160,
-            "height": 160,
-            "size": 2757
+            "width": 352,
+            "height": 224,
+            "size": 84422
+        }, {
+            "id": 4,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "/assets/images/temp/gallery-thumb-4.png",
+            "filename": "gallery-thumb-4.png",
+            "parent": 3,
+            "width": 352,
+            "height": 256,
+            "size": 84422
+        }, {
+            "id": 5,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "/assets/images/temp/gallery-thumb-5.png",
+            "filename": "gallery-thumb-5.png",
+            "parent": 3,
+            "width": 256,
+            "height": 352,
+            "size": 84422
+        }, {
+            "id": 6,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "/assets/images/temp/image-thumb-3.png",
+            "filename": "image-thumb-3.png",
+            "parent": 3,
+            "width": 192,
+            "height": 116,
+            "size": 84422
+        }, {
+            "id": 7,
+            "isImage": true,
+            "icon": "jpeg",
+            "image": "/assets/images/temp/non-existing-image.png",
+            "filename": "non-existing-image.png",
+            "parent": 3,
+            "width": 352,
+            "height": 224,
+            "size": 84422
+        }, {
+            "id": 8,
+            "isImage": false,
+            "icon": "doc",
+            "filename": "document.doc",
+            "parent": 3,
+            "size": 84422
         }
     ]
 }

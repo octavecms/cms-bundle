@@ -319,6 +319,17 @@
 
 
 /**
+ * Dropdown with small size padding
+ */
+
+.dropdown--narrow {
+    .dropdown__menu__content {
+        padding: var(--spacer-2) 0;
+    }
+}
+
+
+/**
  * Dropdown page overlay element
  */
 

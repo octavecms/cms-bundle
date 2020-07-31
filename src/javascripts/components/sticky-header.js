@@ -21,7 +21,8 @@ class StickyHeader {
 
         // Observe when element becomes sticky
         this.observer = new IntersectionObserver(this.handleStickyStateChange.bind(this), {
-            threshold: 1
+            threshold: 1,
+            rootMargin: '0px 50px 0px 50px',
         });
 
         this.observer.observe($container.get(0))

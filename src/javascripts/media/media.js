@@ -1,3 +1,1 @@
-import createStore from './modules/store';
-
-window.createStore = createStore;
+import './components/media';

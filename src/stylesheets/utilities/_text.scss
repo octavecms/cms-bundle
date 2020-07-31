@@ -172,6 +172,7 @@ figure {
 .text-truncate-fade {
     position: relative;
     overflow: hidden !important;
+    white-space: nowrap !important;
 
     &:after {
         content: "";

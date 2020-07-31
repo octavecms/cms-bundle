@@ -1,0 +1,77 @@
+/**
+ * Loader / spinner icon
+ */
+
+.loader {
+    --loader-color-accent: var(--color-heading);
+    --loader-color-border: var(--color-line);
+    --loader-speed: 1.1s;
+    --loader-size: var(--spacer-7);
+    --loader-border-size: var(--spacer-1);
+
+    border-radius: 50%;
+    width: var(--loader-size);
+    height: var(--loader-size);
+    margin: calc(var(--loader-size) * -0.5) 0 0 calc(var(--loader-size) * -0.5);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    border: var(--loader-border-size) solid var(--loader-color-border);
+    border-left-color: var(--loader-color-accent);
+    animation: loader var(--loader-speed) infinite linear;
+    will-change: transform;
+}
+
+
+/**
+ * Faded color theme
+ */
+.loader--faded {
+    --loader-color-accent: rgba(var(--color-heading-raw), 0.25);
+}
+
+/**
+ * Extra small loader
+ */
+
+ .loader--xs {
+    --loader-speed: 0.55s;
+    --loader-size: var(--spacer-3);
+    --loader-border-size: calc(var(--spacer-1) * 0.5);
+}
+
+/**
+ * Small loader
+ */
+
+.loader--sm {
+    --loader-speed: 0.55s;
+    --loader-size: var(--spacer-4);
+    --loader-border-size: calc(var(--spacer-1) * 0.5);
+}
+
+
+/**
+ * Medium loader
+ */
+
+.loader-md {
+    --loader-speed: 0.825s;
+    --loader-size: var(--spacer-6);
+    --loader-border-size: calc(var(--spacer-1) * 0.75);
+}
+
+
+/**
+ * Loader animation
+ */
+
+ @keyframes loader {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
