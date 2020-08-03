@@ -54,6 +54,21 @@ class BlockManager
     }
 
     /**
+     * @param $names
+     * @return array
+     */
+    public function getBlocksByName($names)
+    {
+        $blocks = [];
+
+        foreach ($names as $name) {
+            $blocks[$name] = $this->getBlock($name);
+        }
+
+        return $blocks;
+    }
+
+    /**
      * @param Blockable $page
      * @return string
      * @throws \Exception

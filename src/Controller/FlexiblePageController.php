@@ -56,9 +56,14 @@ class FlexiblePageController extends Controller
             }
         }
 
+        $routeOptions = $this->get('octave.cms.page.manager')->getRouteOptions($page->getName());
+        $blocks = isset($routeOptions['block_types']) && $routeOptions['block_types']
+            ? $blockManager->getBlocksByName($routeOptions['block_types'])
+            : $blockManager->getBlocks();
+
         $form = $this->createForm(FlexiblePageForm::class, $page, [
             'method' => 'post',
-            'block_types' => $blockManager->getBlocks(),
+            'block_types' => $blocks,
             'locales' => $this->getParameter('locales'),
             'is_admin' => $isAdmin
         ]);

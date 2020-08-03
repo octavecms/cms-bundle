@@ -131,6 +131,7 @@ services:
             - '@octave.cms.page.repository'
             - '@request_stack'
             - '@security.authorization_checker'
+            - '%octave.cms.route_options%'
 
     octave.cms.page.version.manager:
         class: Octave\CMSBundle\Service\PageVersionManager
@@ -301,9 +302,11 @@ services:
             - name: sonata.admin
               manager_type: orm
               group: "CMS"
-              label: "Sitemap"
-              label_catalogue: "admin"
+              label: "label.admin.sitemap"
+              label_catalogue: "OctaveCMSBundle"
         arguments: [~, ~, 'OctaveCMSBundle:Sitemap']
+        calls:
+            - [ 'setTranslationDomain', ['OctaveCMSBundle']]
 
     octave.cms.media.admin:
         class: Octave\CMSBundle\Admin\MediaAdmin
@@ -311,6 +314,8 @@ services:
             - name: sonata.admin
               manager_type: orm
               group: "CMS"
-              label: "Media"
-              label_catalogue: "admin"
+              label: "label.admin.media"
+              label_catalogue: "SonataAdminBundle"
         arguments: [~, ~, Octave\CMSBundle\Controller\Media\MediaController]
+        calls:
+            - [ 'setTranslationDomain', ['OctaveCMSBundle']]

@@ -52,6 +52,8 @@ class OctaveCMSExtension extends Extension implements PrependExtensionInterface
         if (isset($config['file_types'])) {
             $container->setParameter('octave.cms.media.file_types', $config['file_types']);
         }
+
+        $container->setParameter('octave.cms.route_options', $config['route_options'] ?? []);
     }
 
     /**

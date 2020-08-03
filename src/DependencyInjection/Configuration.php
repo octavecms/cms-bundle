@@ -48,6 +48,14 @@ class Configuration implements ConfigurationInterface
                     ->scalarPrototype()->end()
                     ->defaultValue(['gif', 'jpeg', 'jpg', 'png', 'svg', 'xml', 'html'])
                 ->end()
+                ->arrayNode('route_options')
+                    ->arrayPrototype()
+                        ->children()
+                            ->arrayNode('admin_codes')->scalarPrototype()->end()->end()
+                            ->arrayNode('block_types')->scalarPrototype()->end()->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
 

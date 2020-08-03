@@ -33,18 +33,23 @@ class PageManager
     /** @var array */
     private $deniedRoutes = [];
 
+    /** @var array */
+    private $routeOptions = [];
+
     /**
      * PageManager constructor.
      * @param PageRepository $repository
      * @param RequestStack $requestStack
      * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param $routeOptions
      */
     public function __construct(PageRepository $repository, RequestStack $requestStack,
-                                AuthorizationCheckerInterface $authorizationChecker)
+                                AuthorizationCheckerInterface $authorizationChecker, $routeOptions)
     {
         $this->repository = $repository;
         $this->requestStack = $requestStack;
         $this->authorizationChecker = $authorizationChecker;
+        $this->routeOptions = $routeOptions;
     }
 
     /**
@@ -179,5 +184,14 @@ class PageManager
     public function getDeniedRoutes()
     {
         return $this->deniedRoutes;
+    }
+
+    /**
+     * @param $name
+     * @return array
+     */
+    public function getRouteOptions($name)
+    {
+        return $this->routeOptions[$name] ?? [];
     }
 }

@@ -40,3 +40,5 @@ page_cancel: Cancel
 add_collection_item: Add item
 publish: Publish
 simple_text_content_translations: Text editor
+label.admin.sitemap: Sitemap
+label.admin.media: Media library
