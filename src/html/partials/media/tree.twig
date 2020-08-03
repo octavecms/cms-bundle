@@ -1,6 +1,6 @@
 {% from 'macros/icon.twig' import icon %}
 
-<ol class="tree">
+<ol class="tree js-tree-view-list">
     <li class="tree-loader">
         <div class="loader"></div>
     </li>
@@ -12,7 +12,7 @@
 
             <li class="
                     tree__item
-                    js-tree-view-item
+                    <%- item.root || item.disabled ? '' : 'js-tree-view-item' %>
                     <%- item.expanded ? 'tree__item--expanded' : '' %>
                     <%- item.disabled ? 'tree__item--disabled' : '' %>
                 "
@@ -22,6 +22,7 @@
                 <div class="
                         tree-item
                         <%- item.id === selected ? 'tree-item--active' : '' %>
+                        <%- item.loading ? 'tree-item--loading' : '' %>
                         <%- item.children && item.children.length ? 'tree-item--with-children' : '' %>
                         js-tree-view-item-element
                     "
@@ -30,9 +31,8 @@
                     <% } %>
                 >
                     <div class="tree-item__content">
-                        <% if (item.loading) { %>
-                            <span class="tree-item__loader"><span class="loader loader--faded loader--xs"></span></span>
-                        <% } %>
+                        <span class="tree-item__loader"><span class="loader loader--faded loader--xs"></span></span>
+                        
                         <span class="tree-item__toggler js-tree-view-item-toggler" role="button">
                             {{ icon('tree-arrow', {width: 10, height: 10, class: 'tree-item__toggler__arrow'}) }}
                         </span>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <ol class="tree__list">
+                <ol class="tree__list js-tree-view-list">
                     <%= template({store: store, items: item.children, selected: selected, root: false, depth: depth + 1}) %>
                 </ol>
             </li>

@@ -3,8 +3,50 @@ import each from 'lodash/each';
 import filter from 'lodash/filter';
 import reduce from 'lodash/reduce';
 import FILE_ICONS from 'media/utils/file-icons';
+import namespace from 'util/namespace';
 
 import { fetchData } from './actions-fetch';
+
+
+/**
+ * Delete files
+ * 
+ * @param {object} store State store
+ * @param {array} ids List of file ids
+ */
+export function deleteFiles (store, ids) {
+    removeFilesFromTheGrid(store, ids);
+
+    // Change parent folder for files
+    const prevFolderIds = [];
+    const tempFolderId = namespace();
+    each(ids, (fileId) => {
+        prevFolderIds.push(store.files.list[fileId].parent.get());
+        store.files.list[fileId].parent.set(tempFolderId);
+    });
+
+    // Get file list
+    fetchData(API_ENDPOINTS.filesRemove, {
+        'method': 'GET',
+        'data': {
+            'files': ids
+        }
+    })
+        .then((response) => {
+            // Permanently delete
+            each(ids, (fileId) => {
+                store.files.list[fileId].remove();
+            });
+        })
+        .catch((err) => {
+            // Revert            
+            each(ids, (fileId, index) => {
+                store.files.list[fileId].parent.set(prevFolderIds[index]);
+            });
+
+            addFilesToTheGrid(store, ids);
+        });
+}
 
 
 /**
@@ -25,14 +67,17 @@ export function setSelectedFiles (store, ids) {
  * @param {array} files List of files
  */
 export function setFiles (store, files) {    
-    // Add icons to the files
     each(files, (file) => {
+        // Add icons to the files
         if (!file.image && !file.icon) {
             const extension = file.filename.replace(/^.*\./, '');
             const icon = filter(FILE_ICONS, (icon) => icon.extensions.indexOf(extension) !== -1);
 
             file.icon = icon ? icon.icon : 'unknown';
         }
+
+        // Loading state
+        file.loading = file.loading || false;
     });
 
     // List of file ids
@@ -57,6 +102,7 @@ export function setFiles (store, files) {
  */
 export function loadFiles (store, folderId) {
     store.files.loading.set(true);
+    store.files.selected.set([]);
 
     // Get file list
     fetchData(API_ENDPOINTS.filesList, {
@@ -72,4 +118,83 @@ export function loadFiles (store, folderId) {
         .catch((err) => {
             store.files.loading.set(false);
         });
+}
+
+
+/**
+ * Move files
+ * 
+ * @param {object} store State store
+ * @param {array} fileIds File ids
+ * @param {number} folderId Folder id
+ */
+export function moveFiles (store, fileIds, folderId) {
+    removeFilesFromTheGrid(store, fileIds);
+
+    // Show folder loading icon
+    store.folders.list[folderId].loading.set(true);
+    store.folders.list[folderId].disabled.set(true);
+    
+    // Change parent folder for files
+    const prevFolderIds = [];
+    each(fileIds, (fileId) => {
+        prevFolderIds.push(store.files.list[fileId].parent.get());
+        store.files.list[fileId].parent.set(folderId);
+    });
+
+    // Get file list
+    fetchData(API_ENDPOINTS.filesMove, {
+        'method': 'GET',
+        'data': {
+            'category': folderId
+        }
+    })
+        .catch((err) => {
+            // Revert            
+            each(fileIds, (fileId, index) => {
+                store.files.list[fileId].parent.set(prevFolderIds[index]);
+            });
+
+            addFilesToTheGrid(store, fileIds);
+        })
+        .finally(() => {
+            // Hide folder loading icon
+            store.folders.list[folderId].loading.set(false);
+            store.folders.list[folderId].disabled.set(false);
+        });
+}
+
+
+/**
+ * Remove files from the grid
+ * 
+ * @param {object} store State store
+ * @param {array} fileIds File ids
+ */
+export function removeFilesFromTheGrid (store, fileIds) {
+    let grid = store.files.grid.get();
+    grid = filter(grid, id => fileIds.indexOf(id) === -1);
+    store.files.grid.set(grid);
+}
+
+
+/**
+ * Remove files from the grid
+ * 
+ * @param {object} store State store
+ * @param {array} fileIds File ids
+ */
+export function addFilesToTheGrid (store, fileIds) {
+    let grid = store.files.grid.get();
+    grid = filter(grid, id => fileIds.indexOf(id) === -1);
+    grid = [].concat(grid, fileIds);
+
+    // Sort by filename
+    grid = grid.sort((aId, bId) => {
+        const aName = store.files.list[aId].filename.get('');
+        const bName = store.files.list[bId].filename.get('');
+        return aName.localeCompare(bName);
+    });
+
+    store.files.grid.set(grid);
 }

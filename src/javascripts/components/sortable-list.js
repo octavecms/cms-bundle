@@ -2,7 +2,7 @@
 import $ from 'util/jquery';
 import namespace from 'util/namespace';
 import createPlugin from 'jquery-plugin-generator';
-import Sortable, { MultiDrag, Swap } from 'sortablejs';
+import Sortable, { MultiDrag } from 'sortablejs';
 
 Sortable.mount(new MultiDrag());
 

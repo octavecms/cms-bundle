@@ -1,12 +1,18 @@
 import $ from 'util/jquery';
 import 'util/template/jquery.template';
+import without from 'lodash/without';
+import each from 'lodash/each';
 import namespace from 'util/namespace';
 import debounce from 'media/utils/debounce-raf';
+import Sortable from 'sortablejs';
 
 import { loadFiles } from 'media/modules/actions-files';
 
 // import 'util/jquery.destroyed';
 // import namespace from 'util/namespace';
+
+
+const IMAGE_ITEM_SELECTOR = '.js-image-list-item';
 
 
 /**
@@ -53,25 +59,28 @@ export default class MediaFileList {
             }
         });
 
-        // store.folders.selected.on(`change.${ ns }`, this.reload.bind(this));
+        store.files.list['*'].on(`change.${ ns }`, (newValue, prevValue) => {
+            if (newValue && prevValue) {
+                if (prevValue.loading !== newValue.loading) {
+                    this.getElement(newValue.id).toggleClass('is-loading', newValue.loading);
+                }
+                if (prevValue.disabled !== newValue.disabled) {
+                    this.getElement(newValue.id).toggleClass('is-disabled', newValue.disabled);
+                }
+            }
+        });
 
-        // store.files.list['*'].on(`change.${ ns }`, (newValue, prevValue) => {
-        //     if (newValue && prevValue) {
-        //         if (prevValue.expanded !== newValue.expanded) {
-        //             this.getElement(newValue.id).toggleClass('tree__item--expanded', newValue.expanded);
-        //         }
-        //         if (prevValue.name !== newValue.name) {
-        //             this.getElement(newValue.id, SELECTOR_TITLE).text(newValue.name);
-        //         }
-        //         if (prevValue.disabled !== newValue.disabled) {
-        //             this.getElement(newValue.id).toggleClass('tree__item--disabled', newValue.disabled);
-        //         }
-        //     }
-        // });
-        // store.files.selected.on(`change.${ ns }`, (newValue, prevValue) => {
-        //     this.getElement(prevValue, SELECTOR_ELEMENT).removeClass('tree-item--active');
-        //     this.getElement(newValue, SELECTOR_ELEMENT).addClass('tree-item--active');
-        // });
+        store.files.selected.on(`change.${ ns }`, (newValue, prevValue) => {
+            each(prevValue, (id) => {
+                this.getElement(id).removeClass('is-selected');
+            });
+            each(newValue, (id) => {
+                this.getElement(id).addClass('is-selected');
+            });
+        });
+
+        $container.on('click', IMAGE_ITEM_SELECTOR, this.handleClickSelect.bind(this));
+        $container.on('dragstart', IMAGE_ITEM_SELECTOR, this.handleDragSelect.bind(this));
     }
 
     reload () {
@@ -88,6 +97,9 @@ export default class MediaFileList {
             'selected': store.files.selected.get(),
             'loading': store.files.loading.get(),
         });
+
+        this.destroySortable();
+        this.sortable();
     }
 
     /**
@@ -97,7 +109,7 @@ export default class MediaFileList {
      * @returns {string} Element id
      */
     getId ($element) {
-        return $($element).closest('.js-tree-view-item').data('id');
+        return $($element).closest(IMAGE_ITEM_SELECTOR).data('id');
     }
 
     /**
@@ -107,7 +119,134 @@ export default class MediaFileList {
      * @returns {object} Element
      */
     getElement (id, selector) {
-        const $element = this.$container.find(`.js-tree-view-item[data-id="${ id }"]`);
+        const $element = this.$container.find(`${ IMAGE_ITEM_SELECTOR }[data-id="${ id }"]`);
         return selector ? $element.find(selector).eq(0) : $element;
+    }
+
+
+    /**
+     * File selection / deselection
+     * ------------------------------------------------------------------------
+     */
+
+
+    handleClickSelect (e) {
+        const multiselect = this.isMultiSelectEvent(e);
+        const id = this.getId(e.target);
+        const isDisabled = this.store.files.list[id].disabled.get();
+        
+        if (!isDisabled) {
+            if (multiselect) {
+                let selected = [].concat(this.store.files.selected.get());
+    
+                if (selected.indexOf(id) !== -1) {
+                    selected = without(selected, id);
+                } else {
+                    selected.push(id);
+                }
+    
+                this.store.files.selected.set(selected);
+            } else {
+                this.store.files.selected.set([id]);
+            }
+        }
+    }
+
+    handleDragSelect (e) {
+        const multiselect = this.isMultiSelectEvent(e);
+        const id = this.getId(e.target);
+        const selected = this.store.files.selected.get();
+        const isDisabled = this.store.files.list[id].disabled.get();
+        
+        if (!isDisabled) {
+            if (multiselect) {
+                if (selected.indexOf(id) === -1) {
+                    const selected = this.store.files.selected.get();
+                    this.store.files.selected.set([id].concat(selected));
+                }
+            } else if (selected.indexOf(id) === -1) {
+                this.store.files.selected.set([id]);
+            }
+        }
+    }
+
+    isMultiSelectEvent (e) {
+        if (this.store.multiselect.get()) {
+            const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
+            if ((isOSX && e.metaKey) || (!isOSX && e.ctrlKey)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Drag and drop sortable
+     * ------------------------------------------------------------------------
+     */
+
+    setSortableMultiSelectIds (elements) {
+        const ids = [];
+
+        $(elements).each((_, el) => {
+            ids.push($(el).data('id'));
+        });
+
+        store.files.selected.set(ids);
+        // $(elements).data('multiselectIds', ids);
+    }
+
+    sortable () {
+        const $list = this.$container.find('.js-image-list-list');
+        const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
+        const multiselect = this.store.multiselect.get();
+
+        this.sortableInstance = new Sortable($list.get(0), {
+            dragClass: 'is-dragging',
+            ghostClass: 'is-ghost',
+            selectedClass: 'is-selected',
+
+            // multiDrag: multiselect,
+            // multiDragKey: isOSX ? 'Meta' : 'Ctrl',            
+
+            // CSS selector for elements which are draggable
+            draggable: IMAGE_ITEM_SELECTOR,
+
+            // Animation duration
+            animation: 150,
+
+            // Allow dropping inside the element
+            dropInside: false,
+
+            group: {
+                name: 'tree',
+                put: false
+            },
+            
+            // Items are sorted in alphabetic order
+            sort: false,
+
+            onSelect: (e) => {
+                this.setSortableMultiSelectIds(e.items);
+            },
+            onDeselect: (e) => {
+                // $(e.item).removeData('multiselectIds');
+                this.setSortableMultiSelectIds(e.items);
+            },
+        });
+    }
+
+    destroySortable () {
+        if (this.sortableInstance) {
+            this.sortableInstance.destroy();
+        }
+    }
+
+    destroy () {
+        this.destroySortable();
+        this.store.off(`.${ this.ns }`);
+        this.store = null;
     }
 }

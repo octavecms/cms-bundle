@@ -52,7 +52,19 @@ class Template {
         const $parent    = $template.parent();
 
         // Process template
-        const tmpl       = template($template.remove().html());
+        const tmplString = $template.remove().html();
+        let tmpl = null;
+
+        try {
+            tmpl = template(tmplString);
+        } catch (err) {
+            // Create a script so that we can see error in the DevTools and check the source
+            setTimeout(() => {
+                const debugScript = document.createElement('script');
+                debugScript.innerHTML = 'var templateDebugFn = ' + err.source;
+                document.body.appendChild(debugScript);
+            });
+        }
 
         this.dataVariableName = $template.data('templateVariable') || null;
 
@@ -106,6 +118,8 @@ class Template {
      * @returns {string} HTML string
      */
     compile (_data) {
+        if (!this.template) return '';
+
         const tmpl = this.template;
         const postFilter = this.options.postFilter;
         const insertMode = this.options.insertMode;

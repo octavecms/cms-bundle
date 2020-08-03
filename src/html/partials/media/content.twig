@@ -19,26 +19,9 @@
         {% include 'partials/media/file-list.twig' %}
         
     </div>
-    <div class="col media-layout__info ui-light ui-background">
-        
-        {# Folder is selected view #}
-        <script type="text/template" data-template-variable="info" class="js-media-info-folder">
-            @TODO
-        </script>
+    <div class="col media-layout__info ui-light ui-background js-media-info">
 
-        {# List of files are selected view #}
-        <script type="text/template" data-template-variable="info" class="js-media-info-files">
-            <div class="media-layout__info__image">
-                @TODO
-            </div>
-        </script>
-
-        {# Single files is selected view #}
-        <script type="text/template" data-template-variable="info" class="js-media-info-file">
-            <div class="media-layout__info__image">
-                @TODO
-            </div>
-        </script>
+        {% include 'partials/media/info.twig' %}
 
     </div>
 </div>

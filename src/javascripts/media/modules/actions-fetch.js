@@ -64,10 +64,12 @@ export function fetchData (url, options) {
                 return json.data;
             } else if (json && json.message) {
                 setErrorMessage(store, json.message);
-                throw Error(json.message);
+                return Promise.reject(json.message);
+            } else {
+                return Promise.reject();
             }
-        })
-        .catch((err) => {
-            console.error('Error occured', err);
         });
+        // .catch((err) => {
+        //     console.error('Error occured', err);
+        // });
 }

@@ -6,13 +6,15 @@ import getInitialState from 'media/modules/get-initial-state';
 
 import TreeView from 'media/components/treeview';
 import FileListView from 'media/components/filelist';
+import Info from 'media/components/info';
 
-// import 'util/jquery.destroyed';
+import 'util/jquery.destroyed';
 // import namespace from 'util/namespace';
 
 
 const SELECTOR_TREEVIEW = '.js-media-treeview';
 const SELECTOR_FILELIST = '.js-media-filelist';
+const SELECTOR_INFO = '.js-media-info';
 
 
 /**
@@ -21,9 +23,7 @@ const SELECTOR_FILELIST = '.js-media-filelist';
 class MediaLibrary {
 
     static get Defaults () {
-        return {
-            'treeViewSelector': '.js-media-treeview',
-        };
+        return {};
     }
 
     constructor ($container, opts) {
@@ -54,6 +54,10 @@ class MediaLibrary {
         // File list
         const $filelist = this.$container.find(SELECTOR_FILELIST);
         this.filelist = new FileListView($filelist, {store: store});
+
+        // Info
+        const $info = this.$container.find(SELECTOR_INFO);
+        this.info = new Info($info, {store: store});
 
         // @TODO Remove, this is for debug only
         window.store = store;

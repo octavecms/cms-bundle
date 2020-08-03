@@ -244,3 +244,16 @@
         flex-grow: 1;
     }
 }
+
+
+/**
+ * Media modal card
+ */
+
+.card--media {
+> .card__content > .card__body {
+        border-radius: 0;
+        border: 0;
+        padding: var(--spacer-5);
+    }
+}

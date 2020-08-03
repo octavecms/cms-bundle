@@ -6,6 +6,37 @@ import { fetchData } from './actions-fetch';
 
 
 /**
+ * Delete folder
+ * 
+ * @param {object} store State store
+ * @param {number} id Folder id
+ */
+export function deleteFolder (store, id) {
+    const folder = store.folders.list[id].get();
+    
+    // If deleting selected folder, then open parent
+    if (store.folders.selected.get() === id) {
+        setSelectedFolder(store, folder.parent);
+    }
+
+    // Remove folder
+    removeFolderFromTheList(store, id);
+
+    // Save folder on server
+    fetchData(API_ENDPOINTS.folderRemove, {
+        'method': 'POST',
+        'data': {
+            'folder': id
+        }
+    })
+        .catch((err) => {
+            // Error occured, add folder back
+            addFolderToTheList(store, folder);
+        })
+}
+
+
+/**
  * Create folder
  * 
  * @param {object} store State store
@@ -129,4 +160,50 @@ export function collapseFolder (store, folderId) {
     if (folder) {
         folder.expanded.set(false);
     }
+}
+
+
+/**
+ * Move folder
+ * 
+ * @param {number} folderId Folder ID which to move
+ * @param {number} parentId Parent folder ID into which to move
+ */
+
+export function moveFolder (store, folderId, parentId) {
+    const folder = store.folders.list[folderId].get(0);
+    const parentPrevId = folder.parent;
+
+    // Parent didn't changed, ignoring
+    if (parentId === parentPrevId) return;
+
+    // Move folder instantly
+    removeFolderFromTheList(store, folderId);
+
+    folder.parent = parentId;
+    folder.loading = true;
+
+    addFolderToTheList(store, folder);
+
+    // Expand new parent folder
+    expandFolder(store, parentId);
+
+    fetchData(API_ENDPOINTS.folderMove, {
+        'method': 'POST',
+        'data': {
+            'id': folderId,
+            'parent': parentId
+        }
+    })
+        .then((response) => {
+            store.folders.list[folderId].loading.set(false);
+        })
+        .catch((err) => {
+            store.folders.list[folderId].loading.set(false);
+            
+            // Revert
+            removeFolderFromTheList(store, folderId);
+            folder.parent = parentPrevId;
+            addFolderToTheList(store, folder);
+        })
 }

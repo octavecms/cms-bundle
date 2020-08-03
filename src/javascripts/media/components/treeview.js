@@ -1,9 +1,16 @@
 import $ from 'util/jquery';
 import 'util/template/jquery.template';
+import 'util/jquery.destroyed';
 import namespace from 'util/namespace';
 import debounce from 'media/utils/debounce-raf';
+import Sortable from 'sortablejs';
+import DropInside from 'components/sortable/drop-inside';
 
-import { createFolder, setSelectedFolder, toggleFolder, expandFolder, collapseFolder } from 'media/modules/actions-folders';
+import { createFolder, setSelectedFolder, toggleFolder, expandFolder, collapseFolder, moveFolder } from 'media/modules/actions-folders';
+import { moveFiles } from 'media/modules/actions-files';
+
+
+Sortable.mount(new DropInside());
 
 
 const SELECTOR_ELEMENT = '.js-tree-view-item-element';
@@ -31,6 +38,7 @@ export default class TreeView {
         this.$container = $container;
         this.store = options.store;
         this.ns = namespace();
+        this.sortables = [];
 
         // Initialize template
         $container.template({'removeSiblings': true});
@@ -42,6 +50,9 @@ export default class TreeView {
         this.render = debounce(this.render.bind(this));
 
         this.events();
+
+        // Clean up
+        $container.on('destroyed', this.destroy.bind(this));
     }
 
     events () {
@@ -69,6 +80,9 @@ export default class TreeView {
                 if (prevValue.disabled !== newValue.disabled) {
                     this.getElement(newValue.id).toggleClass('tree__item--disabled', newValue.disabled);
                 }
+                if (prevValue.loading !== newValue.loading) {
+                    this.getElement(newValue.id, SELECTOR_ELEMENT).toggleClass('tree-item--loading', newValue.loading);
+                }
             }
         });
         store.folders.selected.on(`change.${ ns }`, (newValue, prevValue) => {
@@ -80,7 +94,10 @@ export default class TreeView {
     render () {
         const store = this.store;
         const rootId = store.folders.root.get();
-        const folders = store.showroot.get() ? [rootId] : store.folders.list[rootId].children.get();
+        const showroot = store.showroot.get(false);
+        const folders = showroot ? [rootId] : store.folders.list[rootId].children.get();
+
+        this.$container.find(SELECTOR_LIST).eq(0).toggleClass('tree--with-root', showroot);
 
         this.$container.template('replace', {
             'store': store,
@@ -89,6 +106,9 @@ export default class TreeView {
             'root': true,
             'depth': 0
         });
+
+        this.destroySortable();
+        this.sortable();
     }
 
     /**
@@ -99,6 +119,24 @@ export default class TreeView {
      */
     getId ($element) {
         return $($element).closest('.js-tree-view-item').data('id');
+    }
+
+    /**
+     * Returns ids from image elements
+     * 
+     * @param {object} $element Image element
+     * @returns {array} Image element ids
+     */
+    getImageIds ($element) {
+        const $elements = $($element).closest('.js-image-list-item');
+
+        if ($elements.length) {
+            return store.files.selected.get();
+            // Take ids from the data previously set by filelist
+            // return $elements.data('multiselectIds') || [$elements.data('id')];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -215,4 +253,82 @@ export default class TreeView {
         createFolder(this.store, name, parent);
     }
 
+
+    /**
+     * Drag and drop sortable
+     * ------------------------------------------------------------------------
+     */
+
+     
+    sortable () {
+        const $lists = this.$container.find('.js-tree-view-list');
+        const sortables = this.sortables = [];
+
+        for (let i = 0; i < $lists.length; i++) {
+            const $list = $lists.eq(i);
+            const isRoot = i === 0;
+            const sortable = new Sortable($list.get(0), {
+                dragClass: 'is-dragging',
+                ghostClass: 'is-ghost',
+                dropInsideClass: 'is-tree-target',
+                
+                // CSS selector for elements which are draggable
+                draggable: '.js-tree-view-item',
+    
+                // Animation duration
+                animation: 150,
+    
+                // Allow dropping inside the element
+                dropInside: true,
+                holdTimeout: 500,
+                dropBubble: true,
+
+                group: {
+                    name: 'tree',
+                    put: false
+                },
+                fallbackOnBody: true,
+                
+                // Items are sorted in alphabetic order
+                sort: false,
+
+                onDropInside: isRoot ? (e) => {
+                    const dragFolderId = this.getId(e.dragEl);
+                    const dragImageIds = this.getImageIds(e.dragEl);
+                    const targetFolderId = this.getId(e.dropInsideEl);
+                    
+                    if (dragFolderId && targetFolderId) {
+                        // Move folder
+                        moveFolder(this.store, dragFolderId, targetFolderId);
+                    } else if (dragImageIds && targetFolderId) {
+                        // Move files, but only if it has changed
+                        if (store.folders.selected.get() !== targetFolderId) {
+                            moveFiles(this.store, dragImageIds, targetFolderId);
+                        }
+                    }
+                } : null,
+
+                onDropHold: (e) => {
+                    const targetFolderId = this.getId(e.dropInsideEl);
+                    expandFolder(this.store, targetFolderId);
+                },
+            });
+
+            sortables.push(sortable);
+        }
+    }
+
+    destroySortable () {
+        const sortables = this.sortables;
+
+        for (let i = sortables.length - 1; i >= 0; i--) {
+            sortables[i].destroy();
+        }
+    }
+
+    destroy () {
+        this.destroySortable();
+        this.store.off(`.${ this.ns }`);
+        this.store = null;
+    }
 }

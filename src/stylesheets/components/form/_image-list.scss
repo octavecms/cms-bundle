@@ -101,6 +101,17 @@
         }
     }
 
+    &__loader {
+        position: absolute;
+        z-index: 3;
+        left: -1px;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        background: color(var(--color-base-raw), 0.5);
+        display: none;
+    }
+
     &__text {
         @extend %text--size-small;
         @extend %transition;
@@ -165,6 +176,12 @@
 
 .image-list.is-sorting {
     cursor: move;
+}
+
+.image-item.is-loading {
+    .image-item__loader {
+        display: block;
+    }
 }
 
 

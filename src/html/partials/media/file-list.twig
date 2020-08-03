@@ -1,5 +1,5 @@
 <div class="image-list image-list--small">
-    <ol class="image-list__list">
+    <ol class="image-list__list js-image-list-list">
 
         {# Item template #}
         <script type="text/template">
@@ -9,7 +9,9 @@
                 <% each(items, (id) => { %>
                     <% var file = store.files.list[id].get(); %>
 
-                    <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- file.filename %>">
+                    <li class="image-list__list__item image-item js-image-list-item <%- file.loading ? 'is-loading' : '' %> <%- selected.indexOf(id) !== -1 ? 'is-selected' : '' %>" aria-label="Image <%- file.filename %>" data-id="<%- id %>">
+                        <span class="image-item__loader"><span class="loader loader--faded loader--sm"></span></span>
+
                         <div class="image-item__sizer">
                             <figure class="image-item__image">
                                 <% if (file.image) { %>

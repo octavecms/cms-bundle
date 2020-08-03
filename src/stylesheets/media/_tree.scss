@@ -3,6 +3,7 @@
  */
 
 .tree {
+    flex-grow: 1;
 }
 
 // Hide sub-tree if item is not expanded
@@ -44,6 +45,7 @@
         }
     }
     &__loader {
+        display: none;
         position: absolute;
         top: 50%;
         right: 0;
@@ -66,6 +68,12 @@
     &--active {
         background: var(--color-primary);
         color: var(--color-base);
+    }
+
+    &--loading {
+        .tree-item__loader {
+            display: block;
+        }
     }
 }
 
@@ -106,4 +114,26 @@
     top: 0;
     width: 100%;
     height: 100%;
+}
+
+
+/**
+ * 
+ */
+
+.is-tree-target > .tree-item {
+    box-shadow: 0 0 0 2px var(--color-heading) inset;
+}
+
+.is-dragging > .tree-item {
+    color: var(--color-text);
+    background: var(--color-background);
+}
+.is-dragging > .tree__list {
+    display: none;
+}
+
+.is-ghost > .tree-item,
+.is-ghost > .tree__list {
+    opacity: 0.5;
 }

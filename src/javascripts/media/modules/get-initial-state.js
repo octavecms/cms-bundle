@@ -33,8 +33,11 @@ export default function getInitialState (state) {
             // Search filter
             'searchFilter': '',
         },
+
+        // Allow selecting files
+        'select': true,
     
-        // Allow selecting multiple files
+        // Allow selecting multiple files (including folders)
         'multiselect': true,
 
         // Show root folder in the tree
