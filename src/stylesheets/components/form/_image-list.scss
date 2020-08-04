@@ -121,6 +121,16 @@
         margin-top: calc(var(--spacer-1) * -1);
     }
 
+    &__overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: var(--border-radius);
+        z-index: 2;
+    }
+
     // On hover / focus show buttons
     .has-hover &:hover,
     &:focus-within {

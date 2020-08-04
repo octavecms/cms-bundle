@@ -95,7 +95,7 @@ export default class Info {
         const folder = store.folders.selected.get();
         const files = store.files.selected.get();
         
-        let   type = 'emtpy'
+        let   type = 'empty'
         let   data = null;
         let   fileList = null;
         let   allFilesAreImages = true;

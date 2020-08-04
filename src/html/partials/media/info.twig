@@ -2,127 +2,135 @@
 
 <script type="text/template">
     
-    <div class="media-info media-info--<%- type %>">
-        <div class="media-info__content">
-            
-            <% if (type == 'file') { %>
-                {# Single file view #}
+    <% if (!loading) { %>
+        <div class="media-info media-info--<%- type %>">
+            <div class="media-info__content">
+                
+                <% if (type == 'file') { %>
+                    {# Single file view #}
 
-                <figure class="media-info__image">
-                    <div class="media-info__image__sizer"></div>
-                    <div class="media-info__image__item">
-                        <% if (data.image) { %>
-                            <img src="<%- data.image %>" alt="<%- data.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
-                        <% } else { %>
-                            <img src="/assets/images/file-icons/<%- data.icon %>.png" alt="<%- data.icon %>" draggable="false" />
+                    <figure class="media-info__image">
+                        <div class="media-info__image__sizer"></div>
+                        <div class="media-info__image__item">
+                            <% if (data.image) { %>
+                                <img loading="lazy" src="<%- data.image %>" alt="<%- data.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                            <% } else { %>
+                                <img loading="lazy" src="/assets/images/file-icons/<%- data.icon %>.png" alt="<%- data.icon %>" draggable="false" />
+                            <% } %>
+                        </div>
+                    </figure>
+
+                    <p class="media-info__title text-truncate-fade">
+                        <%- data.filename %>
+                    </p>
+                    <p class="media-info__meta">
+                        <% if (data.isImage) { %>
+                            <%- data.width %> x <%- data.height %> &nbsp; <small>/ &nbsp; <%- Math.round(data.size / 1024) %> KB</small>
                         <% } %>
-                    </div>
-                </figure>
+                    </p>
 
-                <p class="media-info__title text-truncate-fade">
-                    <%- data.filename %>
-                </p>
-                <p class="media-info__meta">
-                    <% if (data.isImage) { %>
-                        <%- data.width %> x <%- data.height %> &nbsp; <small>/ &nbsp; <%- Math.round(data.size / 1024) %> KB</small>
-                    <% } %>
-                </p>
+                    <div class="media-info__controls"><div class="group group--2">
+                        <a href="<%- data.url || data.image %>" download class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
+                            {{ icon('download', {width: 32, height: 32}) }}
+                        </span></a>
+                        <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-replace"><span class="btn__content">
+                            {{ icon('replace', {width: 32, height: 32}) }}
+                        </span></a>
+                        <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-delete"><span class="btn__content">
+                            {{ icon('delete', {width: 32, height: 32}) }}
+                        </span></a>
+                    </div></div>
 
-                <div class="media-info__controls"><div class="group group--2">
-                    <a href="<%- data.url || data.image %>" download class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
-                        {{ icon('download', {width: 32, height: 32}) }}
-                    </span></a>
-                    <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-replace"><span class="btn__content">
-                        {{ icon('replace', {width: 32, height: 32}) }}
-                    </span></a>
-                    <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-delete"><span class="btn__content">
-                        {{ icon('delete', {width: 32, height: 32}) }}
-                    </span></a>
-                </div>
+                <% } else if (type == 'files') { %>
+                    {# List of files are selected view #}
 
-            <% } else if (type == 'files') { %>
-                {# List of files are selected view #}
+                    <figure class="media-info__image">
+                        <div class="media-info__image__sizer"></div>
 
-                <figure class="media-info__image">
-                    <div class="media-info__image__sizer"></div>
+                        <% each(data.slice(0, 3), function (file) { %>
+                            <div class="media-info__image__item">
+                                <% if (file.image) { %>
+                                    <img loading="lazy" src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                <% } else { %>
+                                    <img loading="lazy" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
+                                <% } %>
+                            </div>
+                        <% }) %>
+                    </figure>
 
-                    <% each(data.slice(0, 3), function (file) { %>
-                        <div class="media-info__image__item">
-                            <% if (file.image) { %>
-                                <img src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
-                            <% } else { %>
-                                <img src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
-                            <% } %>
-                        </div>
-                    <% }) %>
-                </figure>
+                    <p class="media-info__title text-truncate-fade">
+                        <%- data.length %> files selected
+                    </p>
 
-                <p class="media-info__title text-truncate-fade">
-                    <%- data.length %> files selected
-                </p>
-
-                <div class="media-info__controls"><div class="group group--2">
-                    <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-delete"><span class="btn__content">
-                        {{ icon('delete', {width: 32, height: 32}) }}
-                    </span></a>
-                </div></div>
-
-            <% } else if (type == 'folder') { %>
-                {# Single folder is selected view #}
-
-                <figure class="media-info__image">
-                    <div class="media-info__image__sizer"></div>
-
-                    <% each(files.slice(0, 3), (file) => { %>
-                        <div class="media-info__image__item">
-                            <% if (file.image) { %>
-                                <img src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
-                            <% } else { %>
-                                <img src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
-                            <% } %>
-                        </div>
-                    <% }) %>
-                </figure>
-
-                <p class="media-info__title text-truncate-fade">
-                    Folder with <%- files.length %> files
-                </p>
-
-                <% if (allowDelete) { %>
                     <div class="media-info__controls"><div class="group group--2">
                         <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-delete"><span class="btn__content">
                             {{ icon('delete', {width: 32, height: 32}) }}
                         </span></a>
                     </div></div>
+
+                <% } else if (type == 'folder') { %>
+                    {# Single folder is selected view #}
+
+                    <figure class="media-info__image">
+                        <div class="media-info__image__sizer"></div>
+
+                        <% if (files.length) { %>
+                            <% each(files.slice(0, 3), (file) => { %>
+                                <div class="media-info__image__item">
+                                    <% if (file.image) { %>
+                                        <img loading="lazy" src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                    <% } else { %>
+                                        <img loading="lazy" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
+                                    <% } %>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="media-info__image__item">
+                                <img loading="lazy" src="/assets/images/file-icons/folder.png" alt="" draggable="false" />
+                            </div>
+                        <% } %>
+                    </figure>
+
+                    <p class="media-info__title text-truncate-fade">
+                        Folder with <%- files.length %> files
+                    </p>
+
+                    <% if (allowDelete) { %>
+                        <div class="media-info__controls"><div class="group group--2">
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-delete"><span class="btn__content">
+                                {{ icon('delete', {width: 32, height: 32}) }}
+                            </span></a>
+                        </div></div>
+                    <% } %>
+
+                <% } else { %>
+                    {# No files or folders are selected #}
                 <% } %>
 
-            <% } else { %>
-                {# No files or folders are selected #}
-            <% } %>
-
+            </div>
         </div>
-    </div>
 
-    <% if (type !== 'empty' && select && (multiselect || type === 'file')) { %>
-        <div class="media-info-footer">
-            <a role="button" tabindex="0" class="btn btn--primary btn--md btn--full"><span class="btn__content">
-                <% if (type === 'file') { %>
-                    <% if (allFilesAreImages) { %>
-                        Select image
-                    <% } else { %>
-                        Select file
+        <% if (type !== 'empty' && select && (multiselect || type === 'file')) { %>
+            <div class="media-info-footer">
+                <a role="button" tabindex="0" class="btn btn--primary btn--md btn--full"><span class="btn__content">
+                    <% if (type === 'file') { %>
+                        <% if (allFilesAreImages) { %>
+                            Select image
+                        <% } else { %>
+                            Select file
+                        <% } %>
+                    <% } else if (type === 'files') { %>
+                        <% if (allFilesAreImages) { %>
+                            Select images
+                        <% } else { %>
+                            Select files
+                        <% } %>
+                    <% } else if (type === 'folder') { %> 
+                        Select folder
                     <% } %>
-                <% } else if (type === 'files') { %>
-                    <% if (allFilesAreImages) { %>
-                        Select images
-                    <% } else { %>
-                        Select files
-                    <% } %>
-                <% } else if (type === 'folder') { %> 
-                    Select folder
-                <% } %>
-            </span></a>
-        </div>
+                </span></a>
+            </div>
+        <% } %>
     <% } %>
 
 </script>

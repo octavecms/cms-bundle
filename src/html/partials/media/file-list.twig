@@ -15,15 +15,17 @@
                         <div class="image-item__sizer">
                             <figure class="image-item__image">
                                 <% if (file.image) { %>
-                                    <img src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                    <img loading="lazy" data-full-image-url="<%- file.url %>" src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                 <% } else { %>
-                                    <img src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
+                                    <img loading="lazy" data-full-image-url="<%- file.url %>" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                 <% } %>
                             </figure>
                         </div>
                         <div class="image-item__text">
                             <p class="text-truncate-fade"><%- file.filename %></p>
                         </div>
+
+                        <a class="image-item__overlay" href="<%- file.url || file.image %>"></a>
                     </li>
                 <% }) %>
 

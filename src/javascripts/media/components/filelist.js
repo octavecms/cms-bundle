@@ -1,16 +1,12 @@
 import $ from 'util/jquery';
 import 'util/template/jquery.template';
-import without from 'lodash/without';
 import each from 'lodash/each';
 import namespace from 'util/namespace';
 import debounce from 'media/util/debounce-raf';
 import Sortable from 'sortablejs';
 
 import { loadFiles } from 'media/modules/actions-files';
-
-
-// import 'util/jquery.destroyed';
-// import namespace from 'util/namespace';
+import { addSelectedFile, setSelectedFile, toggleSelectedFile, expandSelectedFileList } from 'media/modules/actions-selection';
 
 
 const IMAGE_ITEM_SELECTOR = '.js-image-list-item';
@@ -51,20 +47,20 @@ export default class MediaFileList {
         const $container = this.$container;
         const ns = this.ns;
 
-        // On file list change re-render
-        store.files.grid.on(`add.${ ns }`, this.render.bind(this));
+        // Re-render when loading state changes
         store.files.loading.on(`change.${ ns }`, this.render.bind(this));
 
+        // On file list change re-render
         store.files.grid.on(`change.${ ns }`, (newValue, prevValue) => {
-            // Check for add
+            // Check for add, re-render if new items are added
             for (let i = 0; i < newValue.length; i++) {
                 if (prevValue.indexOf(newValue[i]) === -1) {
                     this.render();
                     return;
                 }
             }
-            
-            // Check for delete
+
+            // Check for delete, remove items which were removed
             for (let i = 0; i < prevValue.length; i++) {
                 if (newValue.indexOf(prevValue[i]) === -1) {
                     this.getElement(prevValue[i]).remove();
@@ -72,6 +68,7 @@ export default class MediaFileList {
             }
         });
 
+        // File info change
         store.files.list['*'].on(`change.${ ns }`, (newValue, prevValue) => {
             if (newValue && prevValue) {
                 if (prevValue.loading !== newValue.loading) {
@@ -86,6 +83,7 @@ export default class MediaFileList {
             }
         });
 
+        // Selected file change
         store.files.selected.on(`change.${ ns }`, (newValue, prevValue) => {
             each(prevValue, (id) => {
                 this.getElement(id).removeClass('is-selected');
@@ -95,16 +93,19 @@ export default class MediaFileList {
             });
         });
 
+        // Empty file list message
         store.files.grid.on(`change.${ ns }`, (newValue) => {
-            $container.find('.js-image-list-empty').toggleClass('d-none', newValue.length);
+            $container.find('.js-image-list-empty').toggleClass('d-none', !!newValue.length);
         });
 
+        // Empty search results message
         store.files.hasSearchResults.on(`change.${ ns }`, (hasSearchResults) => {
             $container.find('.js-image-list-empty-search').toggleClass('d-none', hasSearchResults);
         });
 
-        $container.on('click', IMAGE_ITEM_SELECTOR, this.handleClickSelect.bind(this));
         $container.on('dragstart', IMAGE_ITEM_SELECTOR, this.handleDragSelect.bind(this));
+        $container.on('click', IMAGE_ITEM_SELECTOR, this.handleClickSelect.bind(this));
+        $container.on('click', this.handleClickDeselect.bind(this));
     }
 
     reload () {
@@ -154,55 +155,120 @@ export default class MediaFileList {
      */
 
 
+    /**
+     * Clicking on file should select it
+     * Holding control or shift keys allows to select multiple files
+     * 
+     * @param {object} e Event
+     * @protected
+     */
     handleClickSelect (e) {
         const multiselect = this.isMultiSelectEvent(e);
         const id = this.getId(e.target);
-        const isDisabled = this.store.files.list[id].disabled.get();
         
-        if (!isDisabled) {
-            if (multiselect) {
-                let selected = [].concat(this.store.files.selected.get());
-    
-                if (selected.indexOf(id) !== -1) {
-                    selected = without(selected, id);
-                } else {
-                    selected.push(id);
-                }
-    
-                this.store.files.selected.set(selected);
-            } else {
-                this.store.files.selected.set([id]);
+        if (multiselect == 'item') {
+            // Selecting single item
+            toggleSelectedFile(this.store, id);
+        } else if (multiselect == 'list') {
+            // Selecting list of items using shift key
+            expandSelectedFileList(this.store, id);
+        } else {
+            setSelectedFile(this.store, id);
+        }
+
+        e.preventDefault();
+    }
+
+    /**
+     * Clicking outside any item deselect files
+     * 
+     * @param {object} e Event
+     * @protected
+     */
+    handleClickDeselect (e) {
+        if ($(e.target).closest(IMAGE_ITEM_SELECTOR).length === 0) {
+            const multiselect = this.isMultiSelectEvent(e);
+
+            if (!multiselect) {
+                this.store.files.selected.set([]);
             }
         }
     }
 
+    /**
+     * When starting to drag select the file
+     * 
+     * @param {object} e Event
+     * @protected
+     */
     handleDragSelect (e) {
         const multiselect = this.isMultiSelectEvent(e);
         const id = this.getId(e.target);
         const selected = this.store.files.selected.get();
-        const isDisabled = this.store.files.list[id].disabled.get();
-        
-        if (!isDisabled) {
-            if (multiselect) {
-                if (selected.indexOf(id) === -1) {
-                    const selected = this.store.files.selected.get();
-                    this.store.files.selected.set([id].concat(selected));
-                }
-            } else if (selected.indexOf(id) === -1) {
-                this.store.files.selected.set([id]);
+
+        // Don't deselect
+        if (selected.indexOf(id) === -1) {
+            if (multiselect == 'item') {
+                // Selecting single item
+                addSelectedFile(this.store, id);
+            } else if (multiselect == 'list') {
+                // Selecting list of items using shift key
+                expandSelectedFileList(this.store, id);
+            } else {
+                setSelectedFile(this.store, id);
             }
         }
     }
 
+    /**
+     * Retursn true if event if for multiple file selection
+     * 
+     * @param {object} e Event
+     * @returns {boolean} True if event is for file multi-select, otherwise false
+     * @protected
+     */
     isMultiSelectEvent (e) {
         if (this.store.multiselect.get()) {
             const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
             if ((isOSX && e.metaKey) || (!isOSX && e.ctrlKey)) {
-                return true;
+                return 'item';
+            } else if (e.shiftKey) {
+                return 'list';
             }
         }
 
         return false;
+    }
+
+    /**
+     * Set transferable data, this for example allow to drag item from the
+     * list into the browser url and full size image will be opened in the browser
+     * 
+     * @protected
+     */
+    setDataTransferData (dataTransfer, dragEl) {
+        const $link = $(dragEl).find('a[href]');
+        const $image = $(dragEl).find('img');
+        const $header = $(dragEl).find('h1, h2, h3, h4, p');
+        let url = null;
+
+        if ($image.length) {
+            const $image = $(dragEl).find('img');
+            url = $image.attr('data-full-image-url') || $image.attr('src');
+        } else if ($link.length) {
+            url = $link.attr('href');
+        }
+
+        if (url && url.indexOf('://') === -1 && url.indexOf('//') === -1) {
+            url = document.location.origin + url;
+        }
+        
+        if (url) {
+            dataTransfer.setData('text/uri-list', url);
+            dataTransfer.setData('text/plain', url);
+        } else {
+            dataTransfer.setData('text/plain', $header.eq(0).text());
+        }
     }
 
 
@@ -251,6 +317,8 @@ export default class MediaFileList {
             
             // Items are sorted in alphabetic order
             sort: false,
+
+            setData: this.setDataTransferData.bind(this),
 
             onSelect: (e) => {
                 this.setSortableMultiSelectIds(e.items);
