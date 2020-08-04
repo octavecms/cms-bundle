@@ -1,3 +1,5 @@
+import without from 'lodash/without';
+
 export function addSelectedFile (store, id) {
     const isDisabled = store.files.list[id].disabled.get();
     let selected = [].concat(store.files.selected.get());

@@ -149,7 +149,8 @@
     &,
     .has-hover &:hover,
     &:focus-within {
-        box-shadow: $link-focus-visible-shadow;
+        box-shadow: 0 0 0 1px var(--color-primary);
+        // box-shadow: $link-focus-visible-shadow;
     }
 }
 

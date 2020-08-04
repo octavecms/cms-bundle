@@ -298,9 +298,6 @@ export default class MediaFileList {
             ghostClass: 'is-ghost',
             selectedClass: 'is-selected',
 
-            // multiDrag: multiselect,
-            // multiDragKey: isOSX ? 'Meta' : 'Ctrl',            
-
             // CSS selector for elements which are draggable
             draggable: IMAGE_ITEM_SELECTOR,
 
