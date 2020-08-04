@@ -14,24 +14,21 @@ class DataTable {
     static get Defaults () {
         return {
             elementSelector: '.js-data-table-element',
+            selectAllSelector: null,
         };
     }
 
     constructor ($container, opts) {
         const options = this.options = $.extend({}, this.constructor.Defaults, opts);
         this.$container = $container;
-        // this.ns = namespace();
+        this.$selectall = null;
 
-        // ...
-
-        // // Clean up global events to prevent memory leaks and errors, if pages are dynamically loaded using JS
-        // // Needed only if attaching listeners to document, window, body or element outside the #ajax-page-loader-wrapper
-        // // Requires util/jquery.destroyed.js */
-        // $container.on('destroyed', this.destroy.bind(this));
-
-        // // Global events
-        // $(window).on(`resize.${ this.ns }`, this.handleResize.bind(this));
-
+        if (options.selectAllSelector) {
+            this.$selectall = $container.find(options.selectAllSelector);
+            this.$selectall.on('click change', this.toggleAll.bind(this));
+            this.$container.on('click change', 'input:checkbox', this.updateToggle.bind(this));
+        }
+        
         this.update();
     }
 
@@ -63,10 +60,26 @@ class DataTable {
         }
     }
 
-    // destroy () {
-    //     // Cleanup global events
-    //     $(window).add(document).off(`.${ this.ns }`);
-    // }
+    toggleAll () {
+        const $selectall = this.$selectall;
+        const $inputs = this.$container.find('input[type="checkbox"]').not($selectall);
+
+        if ($selectall.is(':checked')) {
+            $inputs.not(':checked').prop('checked', true).change();
+        } else {
+            $inputs.filter(':checked').prop('checked', false).change();
+        }
+    }
+
+    updateToggle () {
+        const $selectall = this.$selectall;
+        const isChecked = !!this.$container.find('input[type="checkbox"]:checked').not($selectall).length;
+        const wasChecked = $selectall.prop('checked');
+
+        if (isChecked !== wasChecked) {
+            $selectall.prop('checked', isChecked);
+        }
+    }
 }
 
 $.fn.dataTable = createPlugin(DataTable);

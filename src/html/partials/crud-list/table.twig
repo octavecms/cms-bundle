@@ -63,13 +63,16 @@
 
 <div class="data-table"
     data-plugin="{% if sortable %}sortableList{% endif %} dataTable"
+    data-data-table-select-all-selector='[name="selectall"]'
 >
 
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    {% include 'partials/form/checkbox.twig' with {} %}
+                    {% include 'partials/form/checkbox.twig' with {
+                        'name': 'selectall'
+                    } %}
                 </th>
                 <th></th>
                 <th>Name</th>
