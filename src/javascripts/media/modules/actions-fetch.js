@@ -1,6 +1,7 @@
 import { setErrorMessage } from './actions-error';
 
-const IS_DEV_MODE = (document.location.hostname === 'localhost' || document.location.hostname === '127.0.0.1') && document.location.port === '3000';
+// const IS_DEV_MODE = (document.location.hostname === 'localhost' || document.location.hostname === '127.0.0.1') && document.location.port === '3000';
+const IS_DEV_MODE = true;
 
 function devModeDelay (url, request, response) {
     if (IS_DEV_MODE) {
@@ -12,7 +13,7 @@ function devModeDelay (url, request, response) {
             }, delay);
         });
     } else {
-        return promise;
+        return response;
     }
 }
 
@@ -53,6 +54,8 @@ export function fetchData (url, options) {
     // Get url, it may have been overwritten by dev mode
     url = params.url;
     delete(params.url);
+
+    console.log('load', url, 'with', params);
 
     return fetch(url, params)
         .then((response) => {
