@@ -1,0 +1,6 @@
+POST
+id=sdfg4564356235jh23g45hj234
+published=true
+language=ru
+
+Request to update section info

@@ -44,7 +44,7 @@ export function deleteFiles (store, ids) {
     }
 
     // Get file list
-    fetchData(API_ENDPOINTS.filesRemove, {
+    fetchData(MEDIA_API_ENDPOINTS.filesRemove, {
         'method': 'GET',
         'data': {
             'files': ids
@@ -129,7 +129,7 @@ export function loadFiles (store, folderId) {
     store.files.selected.set([]);
 
     // Get file list
-    fetchData(API_ENDPOINTS.filesList, {
+    fetchData(MEDIA_API_ENDPOINTS.filesList, {
         'method': 'GET',
         'data': {
             'category': folderId
@@ -167,7 +167,7 @@ export function moveFiles (store, fileIds, folderId) {
     });
 
     // Get file list
-    fetchData(API_ENDPOINTS.filesMove, {
+    fetchData(MEDIA_API_ENDPOINTS.filesMove, {
         'method': 'GET',
         'data': {
             'category': folderId

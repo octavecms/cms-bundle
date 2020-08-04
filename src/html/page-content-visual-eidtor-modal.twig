@@ -1,0 +1,62 @@
+{% set locale = 'ru' %}
+
+{% set languages = [
+    {'id': 'ru', 'text': 'Ru'},
+    {'id': 'en', 'text': 'En'}
+] %}
+
+{# Section types #}
+{% set sections = [
+    { 'id': 'text', 'text': 'Text'},
+    { 'id': 'quote', 'text': 'Quote'},
+    { 'id': 'gallery', 'text': 'Gallery'},
+] %}
+
+
+<div class="modal modal--fullscreen d-none" id="page-content-visual-modal"
+    role="dialog" aria-label="Visual Editor"
+    data-plugin="modal"
+    data-modal-auto-close="false"
+    aria-hidden="true"
+>
+
+    {#
+    Separate element for background to allow more interesting show / hide
+    animations. Background is usually darker overlay over the page content
+    #}
+    <div class="modal__background"></div>
+
+    {# Element to allow scrolling when content exceeds viewport size #}
+    <div class="modal__scroller">
+
+        {#
+        This element is used to position modal content + add paddings between
+        modal content and viewport
+        #}
+        <div class="modal__content-wrapper">
+            <div class="modal__content js-modal-ignore-auto-close ui-gray-background card card--modal" data-plugin="visualEditor">
+
+                {% include 'partials/visual-editor-modal/header.twig' %}
+                {% include 'partials/visual-editor-modal/content.twig' %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/assets/stylesheets/visual-editor.css" />
+
+<script>
+    var VISUAL_EDITOR_API_ENDPOINTS = {
+        'getPage':       '/assets/json/visual-editor/page.json',
+        'addSection':    '/assets/json/visual-editor/section-add.json',
+        'removeSection': '/assets/json/visual-editor/section-remove.json',
+        'updateSecton':  '/assets/json/visual-editor/section-update.json',
+        'moveSection':   '/assets/json/visual-editor/section-move.json',
+    };
+
+    var VISUAL_EDITOR_INITIAL_STATE = {
+        'id': 'my-page-id'
+    };
+</script>
+<script src="/assets/javascripts/visual-editor.js"></script>

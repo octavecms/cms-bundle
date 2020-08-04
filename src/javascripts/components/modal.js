@@ -58,7 +58,7 @@ export default class Modal {
 
             // Prevent multiple modals from being open at the same time
             // If one modal will open another one will close
-            'onePerPage': true,
+            'onePerPage': false,
 
             // If in modal content is a form, then reset form values after modal
             // has been hidden

@@ -34,10 +34,19 @@
         {# Controls #}
         <div>
             <div class="group group--2">
-                <a class="btn btn--primary btn--square btn--pill" role="button" tabindex="0"><span class="btn__content">
+                <a class="btn btn--primary btn--square btn--pill"
+                    href="/assets/json/visual-editor/page.html" target="_blank"
+                    title="Open preview"
+                ><span class="btn__content">
                     {{ icon('preview', {width: 32, height: 32}) }}
                 </span></a>
-                <a class="btn btn--primary btn--square btn--pill" role="button" tabindex="0"><span class="btn__content">
+
+                <a class="btn btn--primary btn--square btn--pill"
+                    role="button" tabindex="0"
+                    title="Open visual editor"
+                    href="page-content-visual-eidtor-modal.html"
+                    data-plugin="ajaxModalTrigger"
+                ><span class="btn__content">
                     {{ icon('editor', {width: 32, height: 32}) }}
                 </span></a>
             </div>
@@ -47,7 +56,7 @@
         <div>
             <div class="btn-group">
                 <button type="submit" class="btn-group__fill btn btn--secondary btn--md"><span class="btn__content">
-                    Update
+                    Save
                 </span></button>
 
                 <div class="dropdown">

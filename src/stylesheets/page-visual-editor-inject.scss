@@ -1,0 +1,14 @@
+/**
+ * This stylesheet is injected into the iframe
+ */
+
+.cms-section-list,
+.cms-section-item {
+    position: relative;
+    overflow: hidden;
+    contain: layout paint;
+    contain: layout paint style; // style is at-risk property and may not be supported
+}
+.cms-section-item + .cms-section-item {
+    border-top: 1px dashed #D3D7DC;
+}

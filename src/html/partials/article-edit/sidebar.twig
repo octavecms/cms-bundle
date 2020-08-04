@@ -21,7 +21,10 @@
         <div class="form-sidebar__content card__body card__body--narrow">
             <div class="row row--pad form-sidebar__buttons">
                 <div class="col col--xs-6">
-                    <a class="btn btn--no-paddings btn--text-small btn--vertical btn--link btn-container" role="button" tabindex="0">
+                    <a class="btn btn--no-paddings btn--text-small btn--vertical btn--link btn-container"
+                        href="/assets/json/visual-editor/page.html" target="_blank"
+                        title="Open preview"
+                    >
                         <span class="btn btn--primary btn--square btn--pill icon"><span class="btn__content">
                             {{ icon('preview', {width: 32, height: 32}) }}
                         </span></span>
@@ -29,7 +32,11 @@
                     </a>
                 </div>
                 <div class="col col--xs-6">
-                    <a class="btn btn--no-paddings btn--text-small btn--vertical btn--link btn-container" role="button" tabindex="0">
+                    <a class="btn btn--no-paddings btn--text-small btn--vertical btn--link btn-container"
+                        role="button" tabindex="0"
+                        href="page-content-visual-eidtor-modal.html"
+                        data-plugin="ajaxModalTrigger"
+                    >
                         <span class="btn btn--primary btn--square btn--pill icon"><span class="btn__content">
                             {{ icon('editor', {width: 32, height: 32}) }}
                         </span></span>

@@ -1,0 +1,16 @@
+POST
+type=quote
+insert=before
+reference=lk2h34l5kj345h6l3456453l
+parent=3g26jkh4562gj234523k4j523
+language=ru
+
+
+type is section type "id" defined in src/html/page-content-visual-eidtor-modal.twig "section" variable
+
+insert will always be "before" in current implementation
+
+reference is id of the section before which to add this new section
+if section is added at the end of the list, then reference will be empty
+
+parent is the list of the list to which section is added to

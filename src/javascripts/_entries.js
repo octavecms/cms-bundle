@@ -29,6 +29,12 @@ module.exports = {
     // Media gallery
     'media': [
         './components/common/init',
-        './media/media',
-    ]
+        './media/components/media',
+    ],
+
+    // Visual editor gallery
+    'visual-editor': [
+        './components/common/init',
+        './visual-editor/components/visual-editor',
+    ],
 };

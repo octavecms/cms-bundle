@@ -90,3 +90,13 @@ input[type="submit"] {
 [disabled] {
     pointer-events: none;
 }
+
+
+
+/*
+ * Link style classnames
+ */
+
+.link-heading {
+    @extend %link--style-heading;
+}

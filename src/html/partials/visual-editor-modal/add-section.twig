@@ -1,0 +1,23 @@
+{% from 'macros/icon.twig' import icon %}
+
+{# Add section dropdown #}
+<div class="dropdown" data-plugin="dropdown" data-dropdown-placement="top-start" data-dropdown-trigger="hover">
+    <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="addSectionDropdown{{ language }}">
+        <span class="btn__content">
+            <span>Add Section</span>
+            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+        </span>
+    </button>
+    
+    <div class="dropdown__menu d-none" aria-labelledby="addSectionDropdown{{ language }}">
+        <ul class="dropdown__menu__content">
+            {% for section in sections %}
+                <li>
+                    <a role="button" tabindex="0" class="dropdown__item" data-id="{{ section.id }}">
+                        {{ section.text }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

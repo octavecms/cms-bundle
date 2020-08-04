@@ -1,0 +1,5 @@
+GET
+id=my-page-id
+language=ru
+
+Request to get page HTML + list of all sections

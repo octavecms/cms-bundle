@@ -78,7 +78,10 @@
 
                     {# WYSIWYG editor button #}
                     {% if withEditor %}
-                        <button type="button" class="btn btn--primary btn--square btn--pill" title="Preview"><span class="btn__content">
+                        <button type="button" class="btn btn--primary btn--square btn--pill" title="Open visual editor"
+                            href="page-content-visual-eidtor-modal.html"
+                            data-plugin="ajaxModalTrigger"
+                        ><span class="btn__content">
                             {{ icon('editor', {width: 32, height: 32}) }}
                         </span></button>
                     {% endif %}

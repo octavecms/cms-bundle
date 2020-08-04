@@ -1,0 +1,93 @@
+{% from 'macros/icon.twig' import icon %}
+
+<header class="card__header">
+    <div class="group group--5 group--middle">
+        
+        {# Close button #}
+        <a class="btn btn--md btn--tetriary btn--square js-modal-close" tabindex="0" role="button" aria-label="Close">
+            <span class="btn__content">{{ icon('close', {width: 12, height: 12}) }}</span>
+        </a>
+
+        {# Breadcrumbs #}
+        {% include 'partials/header/breadcrumbs.twig' with {
+            breadcrumbs: [
+                {
+                    'text': 'Page Content',
+                    'modalClose': true
+                },
+                {
+                    'text': 'Philosophy',
+                }
+            ]
+        } %}
+
+        {# Language switch #}
+        <div class="group__right">
+            {% include 'partials/header/language-switch.twig' with {
+                'id': 'visual-editor-language_',
+                'name': 'visual-editor-language'
+            } %}
+        </div>
+
+        <div class="group__divider"></div>
+
+        {# Controls #}
+        <div>
+            <div class="group group--2">
+                <a class="btn btn--primary btn--square btn--pill"
+                    href="/assets/json/visual-editor/page.html" target="_blank"
+                    title="Open preview"
+                ><span class="btn__content">
+                    {{ icon('preview', {width: 32, height: 32}) }}
+                </span></a>
+
+                {#
+                <a class="btn btn--primary btn--square btn--pill"
+                    role="button" tabindex="0"
+                    title="Open visual editor"
+                    href="page-content-visual-eidtor-modal.html"
+                    data-plugin="ajaxModalTrigger"
+                ><span class="btn__content">
+                    {{ icon('editor', {width: 32, height: 32}) }}
+                </span></a>
+                #}
+            </div>
+        </div>
+
+        {# Save #}
+        <div>
+            <div class="btn-group">
+                <button type="submit" class="btn-group__fill btn btn--secondary btn--md"><span class="btn__content">
+                    Save
+                </span></button>
+
+                <div class="dropdown">
+
+                {# More options dropdown #}
+                <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
+                    <button type="button" class="dropdown__toggle btn btn--secondary btn--md btn--square" title="More options" aria-expanded="false" id="modalMoreOptionsDropdown">
+                        <span class="btn__content">
+                            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+                        </span>
+                    </button>
+                    
+                    <div class="dropdown__menu d-none" aria-labelledby="modalMoreOptionsDropdown">
+                        <ul class="dropdown__menu__content">
+                            <li>
+                                <a href="#" class="dropdown__item">
+                                    Schedule
+                                </a>
+                            </li>
+                            <li class="dropdown__divider"></li>
+                            <li class="dropdown__form">
+                                Or maybe here should be a form???
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</header>

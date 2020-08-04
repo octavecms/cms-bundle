@@ -1,0 +1,160 @@
+// Style normalize
+@import "normalize-scss/sass/normalize/import-now";
+
+html {
+    font: 62.5% "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body {
+    margin: 0;
+    font-size: 1.6rem;
+    line-height: 1.5em;
+}
+
+h2 {
+    font-size: 3rem;
+    margin: 0 0 4rem;
+}
+
+*, *:before, *:after {
+    box-sizing: content-box;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+.container {
+    padding: 40px;
+}
+.container-large {
+    padding: 15%;
+}
+
+.accordion-component {
+    background: #fff;
+
+    ol {
+        list-style: none;
+        position: relative;
+        margin: 0 -40px;
+        padding: 0;
+        counter-reset: list;
+
+    }
+    li {
+        display: flex;
+        list-style: none;
+        border-top: 1px solid #000;
+        margin: 0;
+        padding: 40px;
+        counter-increment: list;
+
+        &:before {
+            content: counter(list);
+            flex: 0 0 45%;
+            font-size: 3rem;
+        }
+    }
+}
+
+.quote-component {
+    background: #000;
+    color: #fff;
+    position: relative;
+    display: flex;
+    align-items: stretch;
+
+    figure {
+        background: #333;
+        flex: 0 0 60%;
+        width: 60%;
+        padding-top: 30%;
+        margin: 0;
+    }
+
+    &__text {
+        font-size: 2.0rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 40%;
+        
+        span {
+            display: block;
+            width: 100%;
+            min-width: 100%;
+            margin-right: 40%;
+            padding: 200px 0;
+        }
+    }
+    &__title {
+        position: absolute;
+        right: 40px;
+        bottom: 40px;
+        font-size: 1.2rem;
+        line-height: 1.4em;
+        text-align: right;
+
+        small {
+            color: #999;
+            font-size: 1.2rem;
+            line-height: 1.4em;
+        }
+    }
+}
+
+.gallery-component {
+    background: #E62F43;
+    color: #fff;
+
+    h2 {
+        font-size: 4.8rem;
+        border-bottom: 1px solid #fff;
+        padding-bottom: 100px;
+        margin: 0 0 100px;
+    }
+
+    ul {
+        display: flex;
+        align-items: flex-start;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        > li {
+            flex: 0 0 40%;
+            margin: 0;
+            padding: 0 100px 0 0;
+        }
+        > li + li {
+            flex: 1 1 auto;
+            padding: 0;
+        }
+    }
+    ol {
+        list-style: none;
+        margin: 0 0 40px;
+        padding: 0;
+        counter-reset: text-list;
+
+        li {
+            display: flex;
+            margin: 0;
+            padding: 0 0 20px;
+            counter-increment: text-list;
+
+            &:before {
+                content: counter(text-list);
+                width: 60px;
+            }
+        }
+        li + li {
+            padding-top: 20px;
+            border-top: 1px solid #fff;
+        }
+    }
+    p {
+        font-size: 2rem;
+        margin: 0;
+    }
+}

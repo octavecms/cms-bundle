@@ -1,0 +1,11 @@
+POST
+id=sdfg4564356235jh23g45hj234
+insert=before
+reference=lk2h34l5kj345h6l3456453l
+language=ru
+
+
+insert will always be "before" in current implementation
+
+reference is id of the section before which to insert this section
+if section is moved to the end of the list, then reference will be empty

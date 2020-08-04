@@ -23,7 +23,7 @@ export function deleteFolder (store, id) {
     removeFolderFromTheList(store, id);
 
     // Save folder on server
-    fetchData(API_ENDPOINTS.folderRemove, {
+    fetchData(MEDIA_API_ENDPOINTS.folderRemove, {
         'method': 'POST',
         'data': {
             'folder': id
@@ -49,7 +49,7 @@ export function createFolder (store, name, parent) {
     addFolderToTheList(store, folder);
 
     // Save folder on server
-    fetchData(API_ENDPOINTS.folderAdd, {
+    fetchData(MEDIA_API_ENDPOINTS.folderAdd, {
         'method': 'POST',
         'data': {
             'name': name,
@@ -188,7 +188,7 @@ export function moveFolder (store, folderId, parentId) {
     // Expand new parent folder
     expandFolder(store, parentId);
 
-    fetchData(API_ENDPOINTS.folderMove, {
+    fetchData(MEDIA_API_ENDPOINTS.folderMove, {
         'method': 'POST',
         'data': {
             'id': folderId,

@@ -167,7 +167,29 @@
 
 
 /**
- * Modal positioned to cover whole screen
+ * Full screen modal
+ */
+
+.modal--fullscreen {
+    .modal__content-wrapper {
+        justify-content: stretch;
+        align-items: stretch;
+
+        // Spacing
+        padding: 0;
+    }
+    .modal__content {
+        max-width: none;
+        margin: 0;
+        flex-grow: 1;
+        border-radius: 0;
+    }
+}
+
+
+/**
+ * Modal positioned to cover whole screen with spacings between
+ * modal and window
  */
 
 .modal--cover {
@@ -228,5 +250,12 @@
 .modal--side.animation--modal-out--active {
     .modal__scroller {
         transform: translateX(20%);
+    }
+}
+
+.modal--fullscreen.animation--modal-in--inactive,
+.modal--fullscreen.animation--modal-out--active {
+    .modal__scroller {
+        transform: none;
     }
 }
