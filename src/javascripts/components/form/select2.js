@@ -38,5 +38,8 @@ $.fn.select2 = function (options = {}) {
         theme: 'cms',
         templateResult: formatResult,
         templateSelection: formatSelection,
+
+        // Hide search box
+        minimumResultsForSearch: Infinity,
     }, options));
 };

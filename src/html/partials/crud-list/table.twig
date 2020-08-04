@@ -86,7 +86,9 @@
                 <tr class="data-table__row data-table__row--clickable btn-container js-sortable-list-item">
                     <td class="data-table__row__checkbox">
                         {# Item link #}
-                        <a class="data-table__link js-data-table-element" href="#"></a>
+                        <a class="data-table__link js-data-table-element"
+                            role="button" tabindex="0" href="crud-list-modal.html" data-plugin="ajaxModalTrigger"
+                        ></a>
 
                         {# Draggable / Sortable handle #}
                         {% if sortable %}

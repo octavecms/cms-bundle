@@ -12,8 +12,8 @@
                     <figure class="media-info__image">
                         <div class="media-info__image__sizer"></div>
                         <div class="media-info__image__item">
-                            <% if (data.image) { %>
-                                <img loading="lazy" src="<%- data.image %>" alt="<%- data.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                            <% if (data.thumbnail) { %>
+                                <img loading="lazy" src="<%- data.thumbnail %>" alt="<%- data.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                             <% } else { %>
                                 <img loading="lazy" src="/assets/images/file-icons/<%- data.icon %>.png" alt="<%- data.icon %>" draggable="false" />
                             <% } %>
@@ -21,7 +21,7 @@
                     </figure>
 
                     <p class="media-info__title text-truncate-fade">
-                        <%- data.filename %>
+                        <%- data.fileName %>
                     </p>
                     <p class="media-info__meta">
                         <% if (data.isImage) { %>
@@ -30,7 +30,7 @@
                     </p>
 
                     <div class="media-info__controls"><div class="group group--2">
-                        <a href="<%- data.url || data.image %>" download class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
+                        <a href="<%- data.url || data.thumbnail %>" download class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
                             {{ icon('download', {width: 32, height: 32}) }}
                         </span></a>
                         <a role="button" tabindex="0" class="btn btn--tetriary btn--square btn--pill js-media-info-replace"><span class="btn__content">
@@ -49,8 +49,8 @@
 
                         <% each(data.slice(0, 3), function (file) { %>
                             <div class="media-info__image__item">
-                                <% if (file.image) { %>
-                                    <img loading="lazy" src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                <% if (file.thumbnail) { %>
+                                    <img loading="lazy" src="<%- file.thumbnail %>" alt="<%- file.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                 <% } else { %>
                                     <img loading="lazy" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                 <% } %>
@@ -77,8 +77,8 @@
                         <% if (files.length) { %>
                             <% each(files.slice(0, 3), (file) => { %>
                                 <div class="media-info__image__item">
-                                    <% if (file.image) { %>
-                                        <img loading="lazy" src="<%- file.image %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                    <% if (file.thumbnail) { %>
+                                        <img loading="lazy" src="<%- file.thumbnail %>" alt="<%- file.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                     <% } else { %>
                                         <img loading="lazy" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                     <% } %>
