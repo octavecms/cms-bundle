@@ -15,7 +15,7 @@
 {% set pattern = pattern|default('') %}
 
 {% if prefixText or prefixIcon or maxlength %}
-<div class="input-group {{ className }}"
+<div class="input-group input-group--focusable {{ className }}"
     {% if maxlength %}data-plugin="inputMaxLength"{% endif %}
 >
     {% if prefixText %}

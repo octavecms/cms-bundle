@@ -3,6 +3,7 @@ import difference from 'lodash/difference';
 import setImmutable from 'media/util/set-immutable';
 import removeImmutable from 'media/util/remove-immutable';
 import debounce from 'media/util/debounce-raf';
+import compare from 'media/util/compare';
 import each from 'lodash/each';
 
 const EVENT_CHANGE = 'change';
@@ -125,8 +126,8 @@ class Store {
                     const statePath = pathMatch[0];
                     const prevValue = get(prevState, statePath);
                     const newValue = get(newState, statePath);
-
-                    if (prevValue !== newValue) {
+                    
+                    if (!compare(prevValue, newValue)) {
                         this.triggerListeners(listener[EVENT_CHANGE], prevValue, newValue);
 
                         if (typeof prevValue === 'undefined') {

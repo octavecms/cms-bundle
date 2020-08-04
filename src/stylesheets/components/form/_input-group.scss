@@ -40,7 +40,8 @@
         flex-grow: 1;
     }
 
-    &:not(.input-group--nofocus).focus-within {
+    &.input-group--focusable:focus-within,
+    &.input-group--focusable.focus-within {
         box-shadow: $link-focus-visible-shadow;
 
         input,
