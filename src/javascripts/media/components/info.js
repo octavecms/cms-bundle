@@ -2,7 +2,7 @@ import $ from 'util/jquery';
 import 'util/template/jquery.template';
 import map from 'lodash/map';
 import namespace from 'util/namespace';
-import debounce from 'media/utils/debounce-raf';
+import debounce from 'media/util/debounce-raf';
 
 import { deleteFiles } from 'media/modules/actions-files';
 import { deleteFolder, setSelectedFolder } from 'media/modules/actions-folders';

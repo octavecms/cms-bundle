@@ -1,8 +1,8 @@
 import get from 'lodash/get';
 import difference from 'lodash/difference';
-import setImmutable from '../utils/set-immutable';
-import removeImmutable from '../utils/remove-immutable';
-import debounce from '../utils/debounce-raf';
+import setImmutable from 'media/util/set-immutable';
+import removeImmutable from 'media/util/remove-immutable';
+import debounce from 'media/util/debounce-raf';
 import each from 'lodash/each';
 
 const EVENT_CHANGE = 'change';

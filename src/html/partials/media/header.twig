@@ -13,16 +13,18 @@
 
         <div><div class="group group--2 group--middle group--nowrap">
             {# Search #}
-            {% include 'partials/form/text.twig' with {
-                name: 'search',
-                className: 'form-control--small form-control--pill input-group--small input-group--pill',
-                placeholder: 'Search',
-                prefixIcon: {
-                    id: 'search',
-                    width: 15,
-                    height: 16
-                }
-            } %}
+            <form class="js-media-file-search">
+                {% include 'partials/form/text.twig' with {
+                    name: 'search',
+                    className: 'form-control--small form-control--pill input-group--small input-group--pill',
+                    placeholder: 'Search',
+                    prefixIcon: {
+                        id: 'search',
+                        width: 15,
+                        height: 16
+                    }
+                } %}
+            </form>
 
             {# Upload button #}
             <a role="button" tabindex="0" class="btn btn--secondary btn--pill"><span class="btn__content">

@@ -3,10 +3,11 @@ import 'util/template/jquery.template';
 import without from 'lodash/without';
 import each from 'lodash/each';
 import namespace from 'util/namespace';
-import debounce from 'media/utils/debounce-raf';
+import debounce from 'media/util/debounce-raf';
 import Sortable from 'sortablejs';
 
 import { loadFiles } from 'media/modules/actions-files';
+
 
 // import 'util/jquery.destroyed';
 // import namespace from 'util/namespace';
@@ -51,11 +52,23 @@ export default class MediaFileList {
         const ns = this.ns;
 
         // On file list change re-render
-        store.files.grid.on(`change.${ ns }`, this.render.bind(this));
-        
-        store.files.loading.on(`change.${ ns }`, (loading) => {
-            if (loading) {
-                this.render();
+        store.files.grid.on(`add.${ ns }`, this.render.bind(this));
+        store.files.loading.on(`change.${ ns }`, this.render.bind(this));
+
+        store.files.grid.on(`change.${ ns }`, (newValue, prevValue) => {
+            // Check for add
+            for (let i = 0; i < newValue.length; i++) {
+                if (prevValue.indexOf(newValue[i]) === -1) {
+                    this.render();
+                    return;
+                }
+            }
+            
+            // Check for delete
+            for (let i = 0; i < prevValue.length; i++) {
+                if (newValue.indexOf(prevValue[i]) === -1) {
+                    this.getElement(prevValue[i]).remove();
+                }
             }
         });
 
@@ -67,6 +80,9 @@ export default class MediaFileList {
                 if (prevValue.disabled !== newValue.disabled) {
                     this.getElement(newValue.id).toggleClass('is-disabled', newValue.disabled);
                 }
+                if (prevValue.searchMatch !== newValue.searchMatch) {
+                    this.getElement(newValue.id).toggleClass('d-none', !newValue.searchMatch);
+                }
             }
         });
 
@@ -77,6 +93,14 @@ export default class MediaFileList {
             each(newValue, (id) => {
                 this.getElement(id).addClass('is-selected');
             });
+        });
+
+        store.files.grid.on(`change.${ ns }`, (newValue) => {
+            $container.find('.js-image-list-empty').toggleClass('d-none', newValue.length);
+        });
+
+        store.files.hasSearchResults.on(`change.${ ns }`, (hasSearchResults) => {
+            $container.find('.js-image-list-empty-search').toggleClass('d-none', hasSearchResults);
         });
 
         $container.on('click', IMAGE_ITEM_SELECTOR, this.handleClickSelect.bind(this));

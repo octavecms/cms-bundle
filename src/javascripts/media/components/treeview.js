@@ -2,7 +2,7 @@ import $ from 'util/jquery';
 import 'util/template/jquery.template';
 import 'util/jquery.destroyed';
 import namespace from 'util/namespace';
-import debounce from 'media/utils/debounce-raf';
+import debounce from 'media/util/debounce-raf';
 import Sortable from 'sortablejs';
 import DropInside from 'components/sortable/drop-inside';
 

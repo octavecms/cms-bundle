@@ -9,7 +9,7 @@
                 <% each(items, (id) => { %>
                     <% var file = store.files.list[id].get(); %>
 
-                    <li class="image-list__list__item image-item js-image-list-item <%- file.loading ? 'is-loading' : '' %> <%- selected.indexOf(id) !== -1 ? 'is-selected' : '' %>" aria-label="Image <%- file.filename %>" data-id="<%- id %>">
+                    <li class="image-list__list__item image-item js-image-list-item <%- !file.searchMatch ? 'd-none' : '' %> <%- file.loading ? 'is-loading' : '' %> <%- selected.indexOf(id) !== -1 ? 'is-selected' : '' %>" aria-label="Image <%- file.filename %>" data-id="<%- id %>">
                         <span class="image-item__loader"><span class="loader loader--faded loader--sm"></span></span>
 
                         <div class="image-item__sizer">
@@ -26,6 +26,13 @@
                         </div>
                     </li>
                 <% }) %>
+
+                <li class="js-image-list-empty-search media-filelist-search-empty d-none">
+                    There are no files matching search query
+                </li>
+                <li class="js-image-list-empty media-filelist-empty d-none">
+                    There are no files in the folder
+                </li>
             <% } %>
         </script>
 

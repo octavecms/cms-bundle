@@ -2,10 +2,12 @@ import map from 'lodash/map';
 import each from 'lodash/each';
 import filter from 'lodash/filter';
 import reduce from 'lodash/reduce';
-import FILE_ICONS from 'media/utils/file-icons';
+import without from 'lodash/without';
+import FILE_ICONS from 'media/util/file-icons';
 import namespace from 'util/namespace';
 
 import { fetchData } from './actions-fetch';
+import { setSearchQuery } from './actions-search';
 
 
 /**
@@ -24,6 +26,22 @@ export function deleteFiles (store, ids) {
         prevFolderIds.push(store.files.list[fileId].parent.get());
         store.files.list[fileId].parent.set(tempFolderId);
     });
+
+    // Remove from selected
+    let selected = [].concat(store.files.selected.get());
+    let selectedChanged = false;
+
+    each(ids, (fileId) => {
+        const index = selected.indexOf(fileId);
+        if (index !== -1) {
+            selectedChanged = true;
+            selected.splice(index, 1);
+        }
+    });
+
+    if (selectedChanged) {
+        store.files.selected.set(selected);
+    }
 
     // Get file list
     fetchData(API_ENDPOINTS.filesRemove, {
@@ -78,6 +96,9 @@ export function setFiles (store, files) {
 
         // Loading state
         file.loading = file.loading || false;
+
+        // Search match
+        file.searchMatch = file.searchMatch || true;
     });
 
     // List of file ids
@@ -91,6 +112,9 @@ export function setFiles (store, files) {
 
     store.files.list.set({...store.files.list.get(), ...list});
     store.files.grid.set(grid);
+
+    // Update file list filter
+    setSearchQuery(store, store.files.searchFilter.get());
 }
 
 
