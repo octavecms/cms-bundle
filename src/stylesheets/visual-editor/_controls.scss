@@ -7,7 +7,15 @@
 
     pointer-events: none;
 
-    &__controls {
+    @extend %transition;
+    transition-property: opacity;
+    opacity: 0;
+}
+
+.visual-editor-controls--hovered {
+    opacity: 1;
+
+    .visual-editor-controls__controls {
         > .btn:not(.is-disabled),
         > .dropdown:not(.is-disabled) {
             pointer-events: initial;

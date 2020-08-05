@@ -3,7 +3,7 @@ import difference from 'lodash/difference';
 
 import { removeSection, moveSectionUp, moveSectionDown, updateSection } from 'visual-editor/modules/actions';
 
-const CLASS_LIST_ITEM = 'cms-section-item';
+const CLASS_CONTROLS_HOVERED = 'visual-editor-controls--hovered';
 
 const SELECTOR_CONTROL_TEMPLATE = '.js-visual-editor-controls-template';
 const SELECTOR_CONTROL_ITEM = '.js-visual-editor-controls-item';
@@ -62,6 +62,16 @@ export default class VisualEditorControls {
             if (newValue[newValue.length - 1] !== prevValue[prevValue.length - 1]) {
                 this.getControlsItem(prevValue[prevValue.length - 1], SELECTOR_MOVE_DOWN).removeClass('is-disabled');
                 this.getControlsItem(newValue[newValue.length - 1], SELECTOR_MOVE_DOWN).addClass('is-disabled');
+            }
+        });
+
+        // 
+        store.iframe.hovered.on('change', (newValue, prevValue) => {
+            if (prevValue) {
+                this.getControlsItem(prevValue).removeClass(CLASS_CONTROLS_HOVERED);
+            }
+            if (newValue) {
+                this.getControlsItem(newValue).addClass(CLASS_CONTROLS_HOVERED);
             }
         });
 

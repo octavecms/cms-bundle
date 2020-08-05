@@ -48,8 +48,9 @@ export default class VisualEditorIframe {
         store.sections.list['*'].on('remove', (newValue, prevValue) => {
             this.getItem(prevValue.id).remove();
             this.updateOffsetElements();
-
         });
+
+        store.iframe.mouse.on('change', this.updateHoveredItem.bind(this));
 
         // Insert new section
         store.insert['*'].on('add', this.insertSection.bind(this));
@@ -105,6 +106,9 @@ export default class VisualEditorIframe {
         }
     }
 
+    /**
+     * Initialize iframe content
+     */
     initIframeContent () {
         // On scroll save scroll position
         $(this.$container.get(0).contentWindow).on('scroll', () => {
@@ -112,8 +116,13 @@ export default class VisualEditorIframe {
         });
 
         // Save hovered position
-        $(this.$container.get(0).contentWindow).on('mousemove', () => {
-            this.store.iframe.scroll.set($(this.$container.get(0).contentWindow).scrollTop());
+        $(this.$container.get(0).contentWindow).on('mousemove', (event) => {
+            this.store.iframe.mouse.set({
+                'x': event.pageX,
+                'y': event.pageY
+            });
+
+            const offsets = [];
         });
 
         this.updateOffsetElements();
@@ -141,12 +150,6 @@ export default class VisualEditorIframe {
             order.push(item.id);
         }
 
-        // Animate element into view
-        animateElement($item, {
-            'height': 0,
-            'duration': SHOW_ANIMATION_DURATION
-        });
-
         delete(item.html);
 
         // Initialize $.fn.app
@@ -160,14 +163,31 @@ export default class VisualEditorIframe {
         store.insert[item.id].remove();
 
         this.updateOffsetElements();
+
+        // Animate element into view
+        animateElement($item, {
+            'height': 0,
+            'duration': SHOW_ANIMATION_DURATION
+        });
     }
 
+    /**
+     * Update list of offset elements
+     */
     updateOffsetElements () {
         this.offsetElements = this.getItems().add(this.getLists()).toArray();
-        this.updateOffsets();
-        this.checkTimer.burst();
+
+        if (this.checkOffsets()) {
+            this.updateHoveredItem();
+            this.checkTimer.burst();
+        }
     }
 
+    /**
+     * Update section element order
+     * 
+     * @param {array} order List of section ids
+     */
     updateSectionOrder (order) {
         const prevOffsets = this.store.iframe.offsets.get();
 
@@ -198,6 +218,27 @@ export default class VisualEditorIframe {
         }
 
         this.checkTimer.burst();
+    }
+
+    updateHoveredItem () {
+        const store = this.store;
+        const offsets = store.iframe.offsets.get();
+        const heights = store.iframe.heights.get();
+        const mouse = store.iframe.mouse.get();
+        let   hovered = null;
+
+        for (let id in offsets) {
+            if (store.sections.list[id].has()) {
+                if (mouse.y > offsets[id] && mouse.y < offsets[id] + heights[id]) {
+                    hovered = id;
+                    break;
+                }
+            }
+        }
+
+        if (store.iframe.hovered.get() !== hovered) {
+            store.iframe.hovered.set(hovered);
+        }
     }
 
     getItems () {

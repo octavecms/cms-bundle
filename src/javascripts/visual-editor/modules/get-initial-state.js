@@ -20,6 +20,15 @@ export default function getInitialState (state) {
             // Iframe scroll position
             'scroll': 0,
 
+            // Mouse position
+            'mouse': {
+                'x': 0,
+                'y': 0
+            },
+
+            // Hovered item
+            'hovered': null,
+
             // Iframe section offsets and height
             'offsets': {},
             'heights': {},
