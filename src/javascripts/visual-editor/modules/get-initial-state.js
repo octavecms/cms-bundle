@@ -26,15 +26,12 @@ export default function getInitialState (state) {
                 'y': 0
             },
 
-            // Hovered item
+            // Hovered section id
             'hovered': null,
 
             // Iframe section offsets and height
             'offsets': {},
             'heights': {},
-
-            // Selected section id
-            'selected': null
         },
 
         // List of items which needs to be inserted into DOM

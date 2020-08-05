@@ -26,22 +26,31 @@ export function setLanguage (store, language) {
  */
 export function loadPage (store, id, language) {
     store.loading.set(true);
+    store.iframe.html.set('');
+
+    // Remove all items
+    const items = store.sections.list.get();
+    for (let id in items) {
+        store.sections.list[id].remove();
+    }
+
+    store.sections.order.set([]);
+    
+    // Reset cache
+    store.iframe.offsets.set([]);
+    store.iframe.heights.set([]);
+    store.iframe.hovered.set(null);
 
     fetchData(VISUAL_EDITOR_API_ENDPOINTS.getPage, {
         'id': id,
         'language': language,
     })
         .then((response) => {
-            setIframeHTML(store, response.html);
+            store.iframe.html.set(response.html);
             setSections(store, response.sections);
         })
-        .finally(() => {
-            store.loading.set(false);
+        .catch(() => {
         });
-}
-
-function setIframeHTML (store, html) {
-    store.iframe.html.set(html);
 }
 
 function setSections (store, sections) {

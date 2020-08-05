@@ -2,7 +2,7 @@
 
 {# Add section dropdown #}
 <script type="text/template" class="js-visual-editor-add-template">
-    <div class="visual-editor-add js-visual-editor-add-item" data-id="<%- id %>">
+    <div class="visual-editor-add js-visual-editor-add-item <%- loading ? 'd-none' : '' %>" data-id="<%- id %>">
         <div class="dropdown dropdown--shadow" data-plugin="dropdown" data-dropdown-placement="bottom-start">
             <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill ui-gray" aria-expanded="false" id="visualEditorSectionDropdown<%- id %>">
                 <span class="btn__content">

@@ -100,8 +100,6 @@ export default class VisualEditorControls {
     }
 
     addControls (id) {
-        // console.log('Add controls', id, this.store.sections.list[id].get());
-
         const order = this.store.sections.order.get();
         const index = order.indexOf(id);
         const item = this.store.sections.list[id].get();
@@ -138,10 +136,12 @@ export default class VisualEditorControls {
         const controls = this.controls;
 
         each(ids, (id) => {
-            const control = controls[id];
-            const offset = offsets[id] - scroll;
-
-            control.css('transform', `translateY(${ offset }px)`);
+            if (id in controls) {
+                const control = controls[id];
+                const offset = offsets[id] - scroll;
+    
+                control.css('transform', `translateY(${ offset }px)`);
+            }
         });
     }
 

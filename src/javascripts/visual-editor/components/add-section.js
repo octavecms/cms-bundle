@@ -69,6 +69,15 @@ export default class VisualEditorAddSection {
             }
         });
 
+        // While loading page hide controls
+        store.loading.on('change', (isLoading) => {
+            const controls = this.controls;
+
+            for (let key in controls) {
+                controls[key].element.toggleClass('d-none', isLoading);
+            }
+        });
+
         store.iframe.offsets.on('change', this.updateControlsPositions.bind(this));
         store.iframe.heights.on('change', this.updateControlsPositions.bind(this));
         store.iframe.scroll.on('change', this.updateControlsPositions.bind(this));
@@ -77,7 +86,7 @@ export default class VisualEditorAddSection {
     }
 
     addControls (item) {
-        const html = this.$template.template('compile', item);
+        const html = this.$template.template('compile', {'loading': store.loading.get(), ...item});
         const $control = $(html).appendTo(this.$container).app();
 
         this.controls[item.id] = {

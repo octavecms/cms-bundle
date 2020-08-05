@@ -5,4 +5,9 @@
     top: 1px;
     width: 100%;
     height: calc(100% - 1px);
+
+    &.is-invisible {
+        opacity: 0;
+        pointer-events: none;
+    }
 }

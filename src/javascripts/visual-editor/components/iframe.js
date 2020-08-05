@@ -26,13 +26,10 @@ export default class VisualEditorIframe {
         const store = this.store;
 
         store.loading.on('change', (isLoading) => {
-            this.$container.toggleClass('d-none', isLoading);
+            this.$container.toggleClass('is-invisible', isLoading);
         });
 
-        store.iframe.html.on('change', (html) => {
-            this.$container.get(0).contentDocument.write(html);
-            this.initIframeContent();
-        });
+        store.iframe.html.on('change', this.initIframeContent.bind(this));
 
         store.sections.order.on('change', this.updateSectionOrder.bind(this));
 
@@ -108,30 +105,66 @@ export default class VisualEditorIframe {
 
     /**
      * Initialize iframe content
+     * 
+     * @param {string} html Iframe HTML
      */
-    initIframeContent () {
-        // On scroll save scroll position
-        $(this.$container.get(0).contentWindow).on('scroll', () => {
-            this.store.iframe.scroll.set($(this.$container.get(0).contentWindow).scrollTop());
+    initIframeContent (html) {
+        if (!html) return;
+        
+        this.offsetElements = [];
+
+        // Set HTML
+        this.$container.get(0).src = 'about:blank';
+
+        const doc = this.$container.get(0).contentDocument;
+        doc.open();
+        doc.write(html);
+        doc.close();
+
+        // Wait till it's loaded
+        this.$container.on('load', () => {
+            const win = this.$container.get(0).contentWindow;
+            const doc = this.$container.get(0).contentDocument;
+
+            win.addEventListener('scroll', this.handleIframeScroll.bind(this), false);
+            win.addEventListener('mousemove', this.handleIframeMouseMove.bind(this), false);
+            doc.addEventListener('click', this.handleIframeClick.bind(this), false);
+    
+            this.updateOffsetElements();
+
+            // Show iframe
+            this.store.loading.set(false);
         });
+    }
 
-        // Save hovered position
-        $(this.$container.get(0).contentWindow).on('mousemove', (event) => {
-            this.store.iframe.mouse.set({
-                'x': event.pageX,
-                'y': event.pageY
-            });
+    /**
+     * Save scroll position
+     * 
+     * @param {object} event Event
+     */
+    handleIframeScroll () {
+        this.store.iframe.scroll.set($(this.$container.get(0).contentWindow).scrollTop());
+    }
 
-            const offsets = [];
+    /**
+     * Save mouse position to allow detect hovered element
+     * 
+     * @param {object} event Event
+     */
+    handleIframeMouseMove (event) {
+        this.store.iframe.mouse.set({
+            'x': event.pageX,
+            'y': event.pageY
         });
+    }
 
-        // Propagate click event outside the iframe for dropdown and other elements to be able
-        // to listen for them
-        $(this.$container.get(0).contentDocument).on('click', (event) => {
-            this.$container.trigger(event);
-        });
-
-        this.updateOffsetElements();
+    /**
+     * Propagate click event outside the iframe for dropdown and other elements to be able to listen for them
+     * 
+     * @param {object} event Event
+     */
+    handleIframeClick (event) {
+        this.$container.trigger(jQuery.Event('click', event));
     }
 
     /**
