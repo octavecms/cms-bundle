@@ -62,7 +62,7 @@ class Store {
             const regex = '^' + path
                 .split('.').join('\\.')
                 .split('*').join('[^.]*');
-    
+            
             listeners[path] = listeners[path] || {
                 regex: new RegExp(regex),
             };
@@ -150,15 +150,15 @@ class Store {
 
 
 function traverserGet (store, path, target, name, receiver) {
-    if (Reflect.has(target, name)) {
-        return Reflect.get(target, name, receiver);
+    const fullPath = path ? path + '.' + name : name;
+
+    if (store.proxies[fullPath]) {
+        return store.proxies[fullPath];
     } else {
         if (name === 'get' || name === 'set' || name === 'has' || name === 'remove' || name === 'on' || name === 'off') {
             return store[name].bind(store, path);
         } else {
             // Create a new proxy
-            const fullPath = path ? path + '.' + name : name;
-    
             store.proxies[fullPath] = new Proxy(store.proxies, {
                 get: traverserGet.bind(null, store, fullPath)
             });

@@ -9,6 +9,20 @@
     contain: layout paint;
     contain: layout paint style; // style is at-risk property and may not be supported
 }
-.cms-section-item + .cms-section-item {
+
+.cms-section-item {
     border-top: 1px dashed #D3D7DC;
+    border-bottom: 1px dashed #D3D7DC;
+}
+.cms-section-item + .cms-section-item {
+    border-top: 0;
+}
+
+// .cms-section-list {
+//     padding-top: 32px;
+//     padding-bottom: 32px;
+// }
+
+.cms-section-item--hidden {
+    display: none !important;
 }

@@ -1,8 +1,8 @@
 POST
 type=quote
 insert=before
-reference=lk2h34l5kj345h6l3456453l
-parent=3g26jkh4562gj234523k4j523
+reference=page-section-5
+parent=page-section-list
 language=ru
 
 

@@ -21,11 +21,17 @@ export default function getInitialState (state) {
             'scroll': 0,
 
             // Iframe section offsets and height
-            'offsets': [],
-            'heights': [],
+            'offsets': {},
+            'heights': {},
 
             // Selected section id
             'selected': null
+        },
+
+        // List of items which needs to be inserted into DOM
+        // Insertion is done by VisualEditorIframe, so we set them here
+        'insert': {
+
         },
 
         // Language

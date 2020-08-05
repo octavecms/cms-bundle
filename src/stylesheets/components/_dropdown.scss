@@ -342,3 +342,14 @@
     z-index: $z-index-dropdown;
     background: color($color-gray-background, 0.4);
 }
+
+
+/**
+ * Dropdown toggle with shadow
+ */
+
+.dropdown--shadow {
+    .dropdown__toggle {
+        box-shadow: $button-shadow;
+    }
+}

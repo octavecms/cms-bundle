@@ -1,0 +1,16 @@
+/**
+ * Add section controls
+ */
+
+.visual-editor-add {
+    position: absolute;
+    left: 0;
+    top: calc(var(--spacer-3) * -1);
+    right: 0;
+    text-align: center;
+    pointer-events: none;
+
+    > .dropdown:not(.is-disabled) {
+        pointer-events: initial;
+    }
+}

@@ -24,6 +24,20 @@
 }
 
 
+// Button with input inside of it
+.btn--control {
+    --btn-control-padding: calc(var(--spacer) * 0.75);
+
+    $sizes: (
+        xs: (
+            'padding':         0 var(--btn-control-padding),
+        ),
+    );
+
+    @include button-sizes ($sizes);
+}
+
+
 // Small button size modifier
 .btn--sm {
     $sizes: (

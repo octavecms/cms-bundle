@@ -1,0 +1,16 @@
+.visual-editor-controls {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    padding: var(--spacer-7);
+
+    pointer-events: none;
+
+    &__controls {
+        > .btn:not(.is-disabled),
+        > .dropdown:not(.is-disabled) {
+            pointer-events: initial;
+        }
+    }
+}

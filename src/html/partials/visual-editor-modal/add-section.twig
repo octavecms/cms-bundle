@@ -1,23 +1,27 @@
 {% from 'macros/icon.twig' import icon %}
 
 {# Add section dropdown #}
-<div class="dropdown" data-plugin="dropdown" data-dropdown-placement="top-start" data-dropdown-trigger="hover">
-    <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="addSectionDropdown{{ language }}">
-        <span class="btn__content">
-            <span>Add Section</span>
-            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
-        </span>
-    </button>
-    
-    <div class="dropdown__menu d-none" aria-labelledby="addSectionDropdown{{ language }}">
-        <ul class="dropdown__menu__content">
-            {% for section in sections %}
-                <li>
-                    <a role="button" tabindex="0" class="dropdown__item" data-id="{{ section.id }}">
-                        {{ section.text }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+<script type="text/template" class="js-visual-editor-add-template">
+    <div class="visual-editor-add js-visual-editor-add-item" data-id="<%- id %>">
+        <div class="dropdown dropdown--shadow" data-plugin="dropdown" data-dropdown-placement="bottom-start">
+            <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill ui-gray" aria-expanded="false" id="visualEditorSectionDropdown<%- id %>">
+                <span class="btn__content">
+                    <span>Add Section</span>
+                    {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+                </span>
+            </button>
+            
+            <div class="dropdown__menu d-none" aria-labelledby="visualEditorSectionDropdown<%- id %>">
+                <ul class="dropdown__menu__content">
+                    {% for section in sections %}
+                        <li>
+                            <a role="button" tabindex="0" class="dropdown__item js-visual-editor-add-item-control" data-type="{{ section.id }}" data-reference="<%- reference %>" data-parent="<%- parent %>">
+                                {{ section.text }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
+</script>

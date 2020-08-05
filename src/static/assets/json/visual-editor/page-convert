@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+/*
+ * This script embeds page.html into the page.json
+ */
+const fs = require('fs');
+const path = require('path');
+
+function embedHTMLIntoJSON (name) {
+    const htmlFilePath = path.resolve(__dirname, `${ name }.html`);
+    const jsonFilePath = path.resolve(__dirname, `${ name }.json`);
+
+    const html = fs.readFileSync(htmlFilePath, {encoding: 'utf8'});
+    const outputHTML = html
+        .replace(/\t/g, '')
+        .replace(/[\r\n]/g, ' ')
+        .replace(/(\s){2,}/g, '$1')
+        .replace(/<!--.*?-->/g, '');
+    
+    const json = require(jsonFilePath);
+    
+    json.data.html = outputHTML;
+    
+    const output = JSON.stringify(json, null, '\t');
+    fs.writeFileSync(jsonFilePath, output);
+}
+
+embedHTMLIntoJSON('page');
+embedHTMLIntoJSON('section-add');

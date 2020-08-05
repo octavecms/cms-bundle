@@ -50,36 +50,38 @@ function encodeData (params) {
 }
 
 export function fetchData (url, options) {
-    let params = {
-        'method': 'GET',
-        'url': url,
-        'credentials': 'same-origin',
-        ...options
-    };
-
-    params = devModeFetchOverwrites(params);
-    params = encodeData(params);
-
-    // Get url, it may have been overwritten by dev mode
-    url = params.url;
-    delete(params.url);
-
-    return fetch(url, params)
-        .then((response) => {
-            return response.json();
-        })
-        .then(devModeFetchDelay.bind(null, url, params))
-        .then((json) => {
-            if (json && json.status) {
-                return json.data;
-            } else if (json && json.message) {
-                setErrorMessage(store, json.message);
-                return Promise.reject(json.message);
-            } else {
-                return Promise.reject();
-            }
-        });
-        // .catch((err) => {
-        //     console.error('Error occured', err);
-        // });
+    if (url) {
+        let params = {
+            'method': 'GET',
+            'url': url,
+            'credentials': 'same-origin',
+            ...options
+        };
+    
+        params = devModeFetchOverwrites(params);
+        params = encodeData(params);
+    
+        // Get url, it may have been overwritten by dev mode
+        url = params.url;
+        delete(params.url);
+    
+        return fetch(url, params)
+            .then((response) => {
+                return response.json();
+            })
+            .then(devModeFetchDelay.bind(null, url, params))
+            .then((json) => {
+                if (json && json.status) {
+                    return json.data;
+                } else if (json && json.message) {
+                    setErrorMessage(store, json.message);
+                    return Promise.reject(json.message);
+                } else {
+                    return Promise.reject();
+                }
+            });
+    } else {
+        // Resolve immediatelly
+        return Promise.resolve(null);
+    }
 }

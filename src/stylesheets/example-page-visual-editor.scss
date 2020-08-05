@@ -19,12 +19,24 @@ h2 {
     box-sizing: content-box;
 }
 
+a {
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 .is-hidden {
     display: none !important;
 }
 
 .container {
     padding: 40px;
+}
+.container-v {
+    padding: 40px 0;
 }
 .container-large {
     padding: 15%;

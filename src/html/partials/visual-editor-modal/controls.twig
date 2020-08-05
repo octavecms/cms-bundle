@@ -1,0 +1,51 @@
+{% from 'macros/icon.twig' import icon %}
+
+{# Section controls #}
+<script type="text/template" class="js-visual-editor-controls-template">
+    <div class="visual-editor-controls js-visual-editor-controls-item" data-id="<%- id %>">
+        <div class="group group--2 visual-editor-controls__controls">
+            <a class="btn btn--tetriary ui-gray btn--square btn--pill btn--shadow js-visual-editor-controls-edit" role="button" tabindex="0" aria-label="Edit section"><span class="btn__content">
+                {{ icon('edit', {width: 32, height: 32}) }}
+            </span></a>
+
+            <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-start">
+                <button type="button" class="dropdown__toggle btn btn--tetriary ui-gray btn--square btn--pill btn--shadow" aria-expanded="false" title="Section options" id="visualEditorOptions<%- id %>"><span class="btn__content">
+                    {{ icon('more', {width: 14, height: 4}) }}
+                </span></button>
+                
+                <div class="dropdown__menu d-none" aria-labelledby="visualEditorOptions<%- id %>">
+                    <ul class="dropdown__menu__content">
+                        <li>
+                            <a role="button" tabindex="0" class="dropdown__item js-visual-editor-controls-edit">
+                                Edit
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button" tabindex="0" class="dropdown__item js-visual-editor-controls-delete">
+                                Delete
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {# Published toggle #}
+            <label class="btn btn--tetriary ui-gray btn--pill btn--shadow btn--control"><span class="btn__content">
+                <span class="sr-only">Published</span>
+                <span class="form-control-switch form-control-switch--xs">
+                    <input class="form-control-switch__input js-visual-editor-controls-published" type="checkbox" name="active" value="1" <% if (published) { %>checked="checked"<% } %> />
+                    <span class="form-control-switch__icon"></span>
+                </span>
+            </span></label>
+
+            <div class="group__fill"></div>
+
+            <a class="btn btn--tetriary ui-gray btn--square btn--pill btn--shadow js-visual-editor-controls-up <%- first ? 'is-disabled' : '' %>" role="button" tabindex="0" aria-label="Move section up"><span class="btn__content">
+                {{ icon('sort-up', {width: 32, height: 32}) }}
+            </span></a>
+            <a class="btn btn--tetriary ui-gray btn--square btn--pill btn--shadow js-visual-editor-controls-down <%- last ? 'is-disabled' : '' %>" role="button" tabindex="0" aria-label="Move section down"><span class="btn__content">
+                {{ icon('sort-down', {width: 32, height: 32}) }}
+            </span></a>
+        </div>
+    </div>
+</script>

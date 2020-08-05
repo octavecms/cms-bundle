@@ -3,6 +3,7 @@
  */
 
 $switch-spacing: 6px;
+$switch-spacing-xs: 3px;
 
 .form-control-switch {
     position: relative;
@@ -87,5 +88,27 @@ $switch-spacing: 6px;
     }
     &__input:checked ~ &__icon:before {
         transform: translateX(16px);
+    }
+}
+
+
+/**
+ * Tiny sized switch
+ */
+
+.form-control-switch--xs {
+    .form-control-switch__icon {
+        width: var(--spacer-4);
+        height: var(--spacer-3);
+
+        &:before {
+            width: calc(var(--spacer-3) - #{ $switch-spacing-xs * 2 });
+            height: calc(var(--spacer-3) - #{ $switch-spacing-xs * 2 });
+            left: $switch-spacing-xs;
+            top: $switch-spacing-xs;
+        }
+    }
+    .form-control-switch__input:checked ~ .form-control-switch__icon:before {
+        transform: translateX(8px);
     }
 }
