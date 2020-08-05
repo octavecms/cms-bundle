@@ -1,3 +1,6 @@
+const DEFAULT_DURATION = 200;
+const DEFAULT_EASING = 'cubic-bezier(.25,  .74, .22, .99)';
+
 /**
  * Animate element from some state, used for iframe elements where there may not be
  * CSS classnames needed for $.fn.transition
@@ -6,8 +9,8 @@
  * @param {object} styles Styles from which to animate
  */
 export function animateElement ($element, styles) {
-    const duration = styles.duration || 200;
-    const easing = styles.ease || 'ease';
+    const duration = styles.duration || DEFAULT_DURATION;
+    const easing = styles.ease || DEFAULT_EASING;
 
     const cssFrom = {};
     const cssTo = {};

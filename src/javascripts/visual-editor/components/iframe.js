@@ -40,6 +40,7 @@ export default class VisualEditorIframe {
             if (newValue && prevValue) {
                 if (newValue.visible !== prevValue.visible) {
                     this.getItem(newValue.id).toggleClass(CLASS_LIST_ITEM_HIDDEN, !newValue.visible);
+                    this.checkTimer.burst();
                 }
             }
         });
@@ -47,6 +48,7 @@ export default class VisualEditorIframe {
         store.sections.list['*'].on('remove', (newValue, prevValue) => {
             this.getItem(prevValue.id).remove();
             this.updateOffsetElements();
+
         });
 
         // Insert new section
@@ -59,6 +61,9 @@ export default class VisualEditorIframe {
         this.checkTimer = pollTimer(250, this.checkOffsets.bind(this));
     }
 
+    /**
+     * Udpate offsets and returns true if any of the offsets changed, otherwise false
+     */
     checkOffsets () {
         const offsets = this.updateOffsets();
 
@@ -159,7 +164,8 @@ export default class VisualEditorIframe {
 
     updateOffsetElements () {
         this.offsetElements = this.getItems().add(this.getLists()).toArray();
-        this.checkOffsets();
+        this.updateOffsets();
+        this.checkTimer.burst();
     }
 
     updateSectionOrder (order) {
@@ -190,6 +196,8 @@ export default class VisualEditorIframe {
                 });
             }
         }
+
+        this.checkTimer.burst();
     }
 
     getItems () {

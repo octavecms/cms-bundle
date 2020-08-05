@@ -1,5 +1,4 @@
 export default function pollTimer (pollInterval, fn) {
-    let timerInterval = pollInterval;
     let timeout = null;
     let timeoutReset = null;
 
@@ -13,44 +12,39 @@ export default function pollTimer (pollInterval, fn) {
         }
 
         if (fn() === true) {
-            setFastPollMode();
+            burst();
         }
-        timeout = setTimeout(update, timerInterval);
+
+        clearTimeout(timeout);
+        timeout = setTimeout(update, pollInterval);
     };
 
-    const setFastPollMode = () => {
+    const burst = () => {
         if (!fastPollMode) {
             fastPollMode = true;
             rafHandle = requestAnimationFrame(update);
         }
 
-        // if (timerInterval !== 16) {
-        //     timerInterval = 16;
-        //     clearTimeout(timeout);
-        //     timeout = setTimeout(update, timerInterval);
-        // }
-
         clearTimeout(timeoutReset);
-        // timeoutReset = setTimeout(() => { timerInterval = pollInterval; }, 1000);
-        timeoutReset = setTimeout(resetFastPollMode, 1000);
+        timeoutReset = setTimeout(resetBurst, 1000);
     };
 
-    const resetFastPollMode = () => {
+    const resetBurst = () => {
         cancelAnimationFrame(rafHandle);
+        clearTimeout(timeoutReset);
         rafHandle = null;
         fastPollMode = false;
         timeoutReset = null;
     };
 
     // Start timer
-    timeout = setTimeout(update, timerInterval);
+    timeout = setTimeout(update, pollInterval);
 
     return {
-        setFastPollMode,
+        burst,
         destroy () {
             clearTimeout(timeout);
-            resetFastPollMode();
-            // clearTimeout(timeoutReset);
+            resetBurst();
         }
     };
 }
