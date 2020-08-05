@@ -125,6 +125,12 @@ export default class VisualEditorIframe {
             const offsets = [];
         });
 
+        // Propagate click event outside the iframe for dropdown and other elements to be able
+        // to listen for them
+        $(this.$container.get(0).contentDocument).on('click', (event) => {
+            this.$container.trigger(event);
+        });
+
         this.updateOffsetElements();
     }
 
