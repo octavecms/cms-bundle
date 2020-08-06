@@ -1,0 +1,95 @@
+.tox .tox-pop {
+    display: inline-block;
+    position: relative;
+}
+
+.tox .tox-pop--resizing {
+    transition: width 0.1s ease;
+
+    .tox-toolbar {
+       flex-wrap: nowrap;
+    }
+}
+
+.tox .tox-pop__dialog {
+    background: var(--color-background);
+    border-radius: var(--border-radius);
+    box-shadow: $tooltip-shadow;
+    border: 0;
+    min-width: 0;
+    overflow: hidden;
+
+    > *:not(.tox-toolbar) {
+        margin: 4px 4px 4px 8px;
+    }
+    .tox-toolbar {
+        background-color: transparent;
+        margin-bottom: -1px;
+    }
+}
+
+/*
+ * Arrows
+ */
+
+.tox .tox-pop::before {
+    display: none;
+}
+
+.tox .tox-pop::after {
+    border-style: solid;
+    content: '';
+    display: block;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+// Bottom positioned
+.tox .tox-pop.tox-pop--bottom::after {
+    left: 50%;
+    top: 100%;
+    border-color: var(--color-background) transparent transparent transparent;
+    border-width: var(--spacer-2);
+    margin-left: -8px;
+    margin-top: -1px;
+}
+
+// Top positioned
+.tox .tox-pop.tox-pop--top::after {
+    left: 50%;
+    top: 0;
+    transform: translateY(-100%);
+    border-color: transparent transparent var(--color-background) transparent;
+    border-width: var(--spacer-2);
+    margin-left: -8px;
+    margin-top: 1px;
+}
+
+// Left positioned
+.tox .tox-pop.tox-pop--left::after {
+    left: 0;
+    top: calc(50% - 1px);
+    transform: translateY(-50%);
+    border-color: transparent var(--color-background) transparent transparent;
+    border-width: var(--spacer-2);
+    margin-left: -15px;
+}
+
+// Right positioned
+.tox .tox-pop.tox-pop--right::after {
+    left: 100%;
+    top: calc(50% + 1px);
+    transform: translateY(-50%);
+    border-color: transparent transparent transparent var(--color-background);
+    border-width: var(--spacer-2);
+    margin-left: -1px;
+}
+
+// Arrow alignment
+.tox .tox-pop.tox-pop--align-left::after {
+    left: 20px;
+}
+.tox .tox-pop.tox-pop--align-right::after {
+    left: calc(100% - 20px);
+}

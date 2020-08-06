@@ -15,6 +15,7 @@ module.exports = {
         './components/form/image',
         './components/form/image-list',
         './components/form/number',
+        './components/form/richtexteditor',
         './components/sortable-list',
         './components/data-table',
         './components/modal',

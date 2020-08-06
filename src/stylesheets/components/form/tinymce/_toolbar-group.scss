@@ -1,0 +1,37 @@
+.tox .tox-toolbar__group {
+    position: relative;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0;
+    padding: 0 4px 0 4px;
+}
+.tox .tox-toolbar__group--pull-right {
+    margin-left: auto;
+}
+.tox .tox-toolbar--scrolling .tox-toolbar__group {
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+}
+
+// Group border
+.tox:not([dir=rtl]) .tox-toolbar__group:not(:last-of-type),
+.tox[dir=rtl] .tox-toolbar__group:not(:last-of-type) {
+    border-right: 0;
+
+    &:not(:first-of-type):before {
+        position: absolute;
+        content: "";
+        right: 0;
+        top: 50%;
+        height: var(--spacer-4);
+        margin-top: calc(var(--spacer-4) * -0.5);
+        border-left: 1px solid var(--color-outline);
+    }
+}
+.tox[dir=rtl] .tox-toolbar__group:not(:last-of-type) {
+    &:not(:first-of-type):before {
+        left: 0;
+        right: auto;
+    }
+}

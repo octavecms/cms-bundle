@@ -104,7 +104,7 @@ $dropdown-menu-min-width: 304px;
 
 $tooltip-padding-x: var(--spacer-4);
 $tooltip-padding-y: var(--spacer-3);
-$tooltip-shadow: 0 1px 0 rgba(var(--color-shadow-raw), 0.04), 0 4px 16px rgba(var(--color-shadow-raw), 0.04);
+$tooltip-shadow: 0 1px 0 rgba(var(--color-shadow-raw), 0.04), 0 -1px 0 rgba(var(--color-shadow-raw), 0.04), 0 4px 16px rgba(var(--color-shadow-raw), 0.04);
 $tooltip-max-width: 450px;
 
 

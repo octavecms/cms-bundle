@@ -1,5 +1,6 @@
 // Style normalize
 @import "normalize-scss/sass/normalize/import-now";
+// @import "tinymce/skins/ui/oxide/skin";
 
 html {
     font: 62.5% "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -27,6 +28,10 @@ a {
     &:hover {
         text-decoration: none;
     }
+}
+
+table {
+    width: 100%;
 }
 
 .is-hidden {
@@ -170,4 +175,25 @@ a {
         font-size: 2rem;
         margin: 0;
     }
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+.mce-content-body:not([dir=rtl]) blockquote {
+    border-left: 2px solid #ccc;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+.mce-content-body[dir=rtl] blockquote {
+    border-right: 2px solid #ccc;
+    margin-right: 1.5rem;
+    padding-right: 1rem;
+}
+
+
+.tablerow1 {
+    background: #eee;
 }
