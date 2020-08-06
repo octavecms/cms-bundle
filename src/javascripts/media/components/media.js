@@ -60,19 +60,21 @@ class MediaLibrary {
     }
 
     destroy () {
-        this.store.destroy();
-        this.store = null;
+        if (this.store) {
+            this.store.destroy();
+            this.store = null;
+        }
 
-        if (this.tree.destroy) {
+        if (this.tree && this.tree.destroy) {
             this.tree.destroy();
         }
-        if (this.filelist.destroy) {
+        if (this.filelist && this.filelist.destroy) {
             this.filelist.destroy();
         }
-        if (this.info.destroy) {
+        if (this.info && this.info.destroy) {
             this.info.destroy();
         }
-        if (this.search.destroy) {
+        if (this.search && this.search.destroy) {
             this.search.destroy();
         }
 

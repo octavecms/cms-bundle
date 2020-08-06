@@ -330,12 +330,18 @@ export default class MediaFileList {
     destroySortable () {
         if (this.sortableInstance) {
             this.sortableInstance.destroy();
+            this.sortableInstance = null;
         }
     }
 
     destroy () {
         this.destroySortable();
-        this.store.off(`.${ this.ns }`);
-        this.store = null;
+        
+        if (this.store) {
+            if (this.store.off) {
+                this.store.off(`.${ this.ns }`);
+            }
+            this.store = null;
+        }
     }
 }

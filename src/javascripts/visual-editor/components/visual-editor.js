@@ -71,11 +71,14 @@ class VisualEditor {
     }
 
     destroy () {
-        this.store.destroy();
-        this.store = null;
-
-        this.iframe.destroy();
-        this.iframe = null;
+        if (this.store) {
+            this.store.destroy();
+            this.store = null;
+        }
+        if (this.iframe) {
+            this.iframe.destroy();
+            this.iframe = null;
+        }
     }
 
     getItems () {

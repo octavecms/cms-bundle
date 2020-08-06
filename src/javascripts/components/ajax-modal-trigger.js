@@ -9,6 +9,9 @@ import 'components/modal';
 // Modal object cache
 const ajaxModalCache = {};
 
+// Preload cache
+const preloadCache = {};
+
 
 /**
  * AjaxModal loader, one for each url
@@ -31,6 +34,15 @@ class AjaxModalLoader {
      */
     destroy () {
         AjaxModalLoader.remove(this.url);
+        this.modalArgs = null;
+    }
+
+    /**
+     * Remove modal from the DOM, that will trigger destroy
+     */
+    remove () {
+        this.$modal.remove();
+        this.$modal = null;
     }
 
     /**
@@ -78,14 +90,19 @@ class AjaxModalLoader {
                         // Preload CSS
                         html.replace(/<link[^>]+(rel="stylesheet"|rel='stylesheet')[^>]*>/g, (stylesheet) => {
                             const href = stylesheet.match(/href=(?:"([^"]+)"|'([^']+)')/);
-                            if (href) {
+                            if (href && !preloadCache[href]) {
+                                preloadCache[href] = true;
                                 $(`<link rel="preload" as="style" href="${ href[1] || href[2] }" />`).appendTo('head');
                             }
                         });
 
                         // Preload JS
                         html.replace(/<script[^>]+src=(?:"([^"]+)"|'([^']+)')[^>]*>/g, (stylesheet, srcA, srcB) => {
-                            $(`<link rel="preload" as="script" href="${ srcA || srcB }" />`).appendTo('head');
+                            const href = srcA || srcB;
+                            if (href && !preloadCache[href]) {
+                                preloadCache[href] = true;
+                                $(`<link rel="preload" as="script" href="${ href }" />`).appendTo('head');
+                            }
                         });
                     }
                 });
@@ -109,6 +126,9 @@ class AjaxModalLoader {
             this.$modal = $elements.filter((_, element) => {
                 return $.app.hasPlugin(element, 'modal');
             });
+
+            // When modal is hidden, remove it from the DOM
+            this.$modal.on('modal-hidden', this.remove.bind(this));
             
             // When modal element is removed from DOM clean up cache
             this.$modal.on('destroyed', this.destroy.bind(this));

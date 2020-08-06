@@ -148,7 +148,11 @@ export default class Info {
     }
 
     destroy () {
-        this.store.off(`.${ this.ns }`);
-        this.store = null;
+        if (this.store) {
+            if (this.store.off) {
+                this.store.off(`.${ this.ns }`);
+            }
+            this.store = null;
+        }
     }
 }

@@ -56,6 +56,9 @@ export default class Modal {
             // jQuery event name which is triggered when modal is about to be hidden
             'eventHideName': 'modal-hide',
 
+            // jQuery event name which is triggered when modal is hidden
+            'eventHiddenName': 'modal-hidden',
+
             // Prevent multiple modals from being open at the same time
             // If one modal will open another one will close
             'onePerPage': false,
@@ -293,7 +296,10 @@ export default class Modal {
                         this.resetFixForIOS();
                         this.resetFixForAndroid();
                     },
-                    'after':      $el => $el.attr('aria-hidden', 'true')
+                    'after':      ($el) => {
+                        $el.attr('aria-hidden', 'true');
+                        this.$container.trigger(options.eventHiddenName, {'instance': this});
+                    }
                 });
 
                 if (options.triggerActiveClassName) {

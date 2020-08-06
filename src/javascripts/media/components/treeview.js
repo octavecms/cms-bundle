@@ -320,6 +320,7 @@ export default class TreeView {
 
     destroySortable () {
         const sortables = this.sortables;
+        this.sortables = [];
 
         for (let i = sortables.length - 1; i >= 0; i--) {
             sortables[i].destroy();
@@ -328,7 +329,12 @@ export default class TreeView {
 
     destroy () {
         this.destroySortable();
-        this.store.off(`.${ this.ns }`);
-        this.store = null;
+        
+        if (this.store) {
+            if (this.store.off) {
+                this.store.off(`.${ this.ns }`);
+            }
+            this.store = null;
+        }
     }
 }

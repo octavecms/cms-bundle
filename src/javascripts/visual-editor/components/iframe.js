@@ -165,6 +165,7 @@ export default class VisualEditorIframe {
      */
     handleIframeClick (event) {
         this.$container.trigger(jQuery.Event('click', event));
+        this.checkTimer.burst();
     }
 
     /**

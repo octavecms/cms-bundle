@@ -152,19 +152,24 @@ class Store {
 function traverserGet (store, path, target, name, receiver) {
     const fullPath = path ? path + '.' + name : name;
 
-    if (store.proxies[fullPath]) {
-        return store.proxies[fullPath];
-    } else {
-        if (name === 'get' || name === 'set' || name === 'has' || name === 'remove' || name === 'on' || name === 'off') {
-            return store[name].bind(store, path);
-        } else {
-            // Create a new proxy
-            store.proxies[fullPath] = new Proxy(store.proxies, {
-                get: traverserGet.bind(null, store, fullPath)
-            });
-        
+    if (store.proxies) {
+        if (store.proxies[fullPath]) {
             return store.proxies[fullPath];
+        } else {
+            if (name === 'get' || name === 'set' || name === 'has' || name === 'remove' || name === 'on' || name === 'off') {
+                return store[name].bind(store, path);
+            } else {
+                // Create a new proxy
+                store.proxies[fullPath] = new Proxy(store.proxies, {
+                    get: traverserGet.bind(null, store, fullPath)
+                });
+            
+                return store.proxies[fullPath];
+            }
         }
+    } else {
+        // Store has been destroyed
+        return;
     }
 }
 
