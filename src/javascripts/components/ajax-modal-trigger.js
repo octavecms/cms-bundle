@@ -2,6 +2,9 @@
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
 
+import filter from 'lodash/filter';
+import isPlainObject from 'lodash/isPlainObject';
+
 import 'util/jquery.destroyed';
 import 'components/modal';
 
@@ -19,6 +22,7 @@ const preloadCache = {};
 class AjaxModalLoader {
 
     constructor (url) {
+        console.log('new AjaxModalLoader');
         this.url = url;
         this.loading = false;
         this.loaded = false;
@@ -50,6 +54,10 @@ class AjaxModalLoader {
      */
     open (...args) {
         this.modalArgs = args;
+        console.log('modal args:', this.modalArgs);
+        console.log('loading:', this.loading);
+        console.log('loaded:', !!this.loaded);
+        console.log('inserted:', this.inserted);
 
         if (this.loading) {
             this.openOnLoad = true;
@@ -67,7 +75,24 @@ class AjaxModalLoader {
             const modalArgs = this.modalArgs;
             this.modalArgs = [];
 
-            this.$modal.modal('show', ...modalArgs);
+            const $modal = this.$modal;
+            const plugins = $.app.getPlugins($modal);
+
+            // Call modal
+            console.log('Call show');
+            console.trace();
+            $modal.modal('show', ...modalArgs);
+
+            // Set plugin options
+            const pluginOptions = filter(modalArgs, isPlainObject)[0] || {};
+
+            for (let i = 0; i < plugins.length; i++) {
+                // We already called modal 'show' method, modal doesn't have setOptions anyway
+                if (plugins[i] !== 'modal') {
+                    // Calling plugin again will call 'setOptions' method on a plugin if it exists
+                    $modal[plugins[i]](pluginOptions);
+                }
+            }
         }
     }
 
@@ -137,7 +162,7 @@ class AjaxModalLoader {
                 this.openOnLoad = false;
 
                 requestAnimationFrame(() => {
-                    this.open(this.modalArgs);
+                    this.open.apply(this, this.modalArgs);
                 });
             }
         }
@@ -186,6 +211,10 @@ class AjaxModalTrigger {
             .on('click returnkey', this.open.bind(this));
     }
 
+    setOptions (options) {
+        $.extend(this.options, options);
+    }
+
     /**
      * Open modal
      * 
@@ -196,7 +225,7 @@ class AjaxModalTrigger {
             event.preventDefault();
         }
 
-        AjaxModalLoader.open(this.ajaxUrl, this.$container);
+        AjaxModalLoader.open(this.ajaxUrl, this.$container, this.options);
     }
 
     /**

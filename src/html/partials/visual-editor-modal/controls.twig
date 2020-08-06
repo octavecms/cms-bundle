@@ -4,7 +4,11 @@
 <script type="text/template" class="js-visual-editor-controls-template">
     <div class="visual-editor-controls js-visual-editor-controls-item" data-id="<%- id %>">
         <div class="group group--2 visual-editor-controls__controls">
-            <a class="btn btn--tetriary ui-gray btn--square btn--pill btn--shadow js-visual-editor-controls-edit" role="button" tabindex="0" aria-label="Edit section"><span class="btn__content">
+            <a class="btn btn--tetriary ui-gray btn--square btn--pill btn--shadow"
+                aria-label="Edit section"
+                role="button" tabindex="0"
+                href="crud-list-modal.html" data-plugin="ajaxModalTrigger"
+            ><span class="btn__content">
                 {{ icon('edit', {width: 32, height: 32}) }}
             </span></a>
 
@@ -16,7 +20,8 @@
                 <div class="dropdown__menu d-none" aria-labelledby="visualEditorOptions<%- id %>">
                     <ul class="dropdown__menu__content">
                         <li>
-                            <a role="button" tabindex="0" class="dropdown__item js-visual-editor-controls-edit"
+                            <a class="dropdown__item"
+                                role="button" tabindex="0"
                                 href="crud-list-modal.html" data-plugin="ajaxModalTrigger"
                             >
                                 Edit

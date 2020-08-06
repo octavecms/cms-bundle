@@ -8,6 +8,7 @@ import TreeView from 'media/components/treeview';
 import FileListView from 'media/components/filelist';
 import Info from 'media/components/info';
 import Search from 'media/components/search';
+import getSelectedFiles from 'media/modules/get-selected-files';
 
 import 'util/jquery.destroyed';
 
@@ -16,7 +17,7 @@ const SELECTOR_TREEVIEW = '.js-media-treeview';
 const SELECTOR_FILELIST = '.js-media-filelist';
 const SELECTOR_INFO = '.js-media-info';
 const SELECTOR_SEARCH = '.js-media-file-search';
-
+const SELECTOR_SELECT = '.js-media-select';
 
 /**
  * Media library
@@ -24,7 +25,19 @@ const SELECTOR_SEARCH = '.js-media-file-search';
 class MediaLibrary {
 
     static get Defaults () {
-        return {};
+        return {
+            // Callback when 
+            'onselect': null,
+
+            // Allow file selection
+            'select': false,
+
+            // Allow multi-select
+            'multiselect': true,
+
+            // Load only files by type, eg. 'images'
+            'filter': null
+        };
     }
 
     constructor ($container, opts) {
@@ -34,6 +47,25 @@ class MediaLibrary {
         $container.on('destroyed', this.destroy.bind(this));
 
         this.create();
+    }
+
+    /**
+     * Magic function from `createPlugin`, it's called if plugin
+     * is called again after it has already been initialized
+     * 
+     * @param {object} options Media library options
+     */
+    setOptions (options) {
+        console.log('setOptions:', options);
+        $.extend(this.options, options);
+
+        if (this.store) {
+            for (let key in options) {
+                if (this.store[key].has()) {
+                    this.store[key].set(options[key]);
+                }
+            }
+        }
     }
 
     create () {
@@ -54,6 +86,9 @@ class MediaLibrary {
         // Search
         const $search = this.$container.find(SELECTOR_SEARCH);
         this.search = new Search($search, {store: store});
+
+        // Select file
+        this.$container.on('click', SELECTOR_SELECT, this.handleSelect.bind(this));
 
         // @TODO Remove, this is for debug only
         window.store = store;
@@ -82,6 +117,15 @@ class MediaLibrary {
         this.filelist = null;
         this.info = null;
         this.search = null;
+    }
+
+    handleSelect () {
+        if (this.options.onselect) {
+            let selected = getSelectedFiles(this.store);
+            this.options.onselect(selected);
+
+            this.$container.modal('hide');
+        }
     }
 }
 

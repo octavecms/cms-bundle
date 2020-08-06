@@ -3,11 +3,11 @@
 {% set name = name|default('') %}
 {% set value = value|default({}) %}
 {% set valueId = value.id|default(null) %}
-{% set valueThumbnail = value.thumbnail|default(null) %}
-{% set valueUrl = value.url|default(null) %}
-{% set valueFileName = value.fileName|default(null) %}
-{% set valueWidth = value.width|default(null) %}
-{% set valueHeight = value.height|default(null) %}
+{% set valueThumbnail = value.thumbnail|default('') %}
+{% set valueUrl = value.url|default('') %}
+{% set valueFileName = value.fileName|default('') %}
+{% set valueWidth = value.width|default(0) %}
+{% set valueHeight = value.height|default(0) %}
 
 {% set required = required|default(false) %}
 {% set imageMinWidth = imageMinWidth|default(0) %}
@@ -24,18 +24,21 @@
     {% if not valueId %}form-control-image--empty{% endif %}
     {% if disabled %}form-control-image--disabled{% endif %}
     {% if readonly %}form-control-image--readonly{% endif %}
-">
+    "
+    data-plugin="image"
+>
     <input
         type="hidden"
         name="{{ name }}"
         id="{{ id }}"
         value="{{ value }}"
         {% if disabled %}disabled{% endif %}
+        class="js-image-id"
         />
     
-    <a class="form-control-image__preview ui-gray btn-container" role="button" aria-label="Replace image" tabindex="0">
+    <a class="form-control-image__preview ui-gray btn-container js-image-edit" role="button" aria-label="Replace image" tabindex="0" href="media-modal.html">
 
-        <img class="form-control-image__preview__image" src="{{ valueThumbnail }}" alt="" />
+        <img class="form-control-image__preview__image js-image-thumbnail" src="{% if valueThumbnail %}{{ valueThumbnail }}{% else %}/assets/images/px.gif{% endif %}" alt="" onerror="this.src='/assets/images/file-icons/unknown.png'" />
 
         {# Edit icon #}
         <span class="form-control-image__preview__icon btn btn--square btn--pill btn--shadow btn--tetriary"><span class="btn__content">
@@ -43,18 +46,16 @@
         </span></span>
     </a>
     <div class="form-control-image__content">
-        <span class="form-control-image__content__title js-section-title-source">
+        <span class="form-control-image__content__title js-section-title-source js-image-title">
             {{ valueFileName }}
         </span>
         
-        {% if valueUrl %}
-            <a class="form-control-image__content__link" href="{{ valueUrl }}" target="_blank">
-                Preview
-            </a>
-        {% endif %}
+        <a class="form-control-image__content__link js-image-preview-link {% if not valueUrl %}d-none{% endif %}" href="{{ valueUrl }}" target="_blank">
+            Preview
+        </a>
 
         <span class="form-control-image__content__spacer"></span>
-        <span class="form-control-image__content__meta">
+        <span class="form-control-image__content__meta {% if not imageMinWidth and not imageMinHeight %}js-image-size{% endif %} {% if not valueWidth and not valueHeight %}d-none{% endif %}">
             {% if imageMinWidth and imageMinHeight %}
                 {{ imageMinWidth }}×{{ imageMinHeight }} min
             {% elseif imageMinWidth %}
@@ -68,7 +69,7 @@
 
 
         <div class="form-control-image__content__action">
-            <a class="btn btn--square btn--pill btn--tetriary" role="button" tabindex="0" aria-label="Remove image"><span class="btn__content">
+            <a class="btn btn--square btn--pill btn--tetriary js-image-delete {% if not valueId %}d-none{% endif %}" role="button" tabindex="0" aria-label="Remove image"><span class="btn__content">
                 {{ icon('delete', {width: 32, height: 32}) }}
             </span></a>
         </div>

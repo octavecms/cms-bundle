@@ -35,13 +35,16 @@ export default function getInitialState (state) {
         },
 
         // Allow selecting files
-        'select': true,
+        'select': false,
     
         // Allow selecting multiple files (including folders)
         'multiselect': true,
 
         // Show root folder in the tree
         'showroot': true,
+
+        // File filter, eg. 'images' to load only images
+        'filter': null,
     
         // Error message
         'error': {
@@ -82,6 +85,8 @@ export default function getInitialState (state) {
     if (initialState.folders.list.root) {
         initialState.folders.list.root.expanded = true;
     }
+
+    console.log(initialState);
 
     return initialState;
 }

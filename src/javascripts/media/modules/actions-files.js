@@ -132,7 +132,8 @@ export function loadFiles (store, folderId) {
     fetchData(MEDIA_API_ENDPOINTS.filesList, {
         'method': 'GET',
         'data': {
-            'category': folderId
+            'category': folderId,
+            'filter': store.filter.get()
         }
     })
         .then((response) => {
@@ -165,6 +166,10 @@ export function moveFiles (store, fileIds, folderId) {
         prevFolderIds.push(store.files.list[fileId].parent.get());
         store.files.list[fileId].parent.set(folderId);
     });
+
+    // Remove files from selected file list
+    const selected = [].concat(store.files.selected.get());
+    store.files.selected.set(without(selected, ...fileIds));
 
     // Get file list
     fetchData(MEDIA_API_ENDPOINTS.filesMove, {

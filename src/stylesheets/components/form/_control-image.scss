@@ -114,6 +114,11 @@
  * Empty input style
  */
 
-.form-control-image--emtpy {
-    // @TODO
+.form-control-image--empty {
+    .form-control-image__preview {
+        &:before,
+        &__icon {
+            opacity: 1;
+        }
+    }
 }
