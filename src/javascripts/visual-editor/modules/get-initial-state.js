@@ -1,5 +1,7 @@
+import extend from 'lodash/extend';
+
 export default function getInitialState (state) {
-    const initialState = $.extend(true, {
+    const initialState = extend({
         // Page id
         'id': null,
 

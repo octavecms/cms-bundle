@@ -3,6 +3,7 @@
  */
 
 import $ from 'util/jquery';
+import assign from 'lodash/assign';
 import debounce from 'lodash/debounce';
 import createPlugin from 'jquery-plugin-generator';
 import 'util/template/jquery.template';
@@ -58,7 +59,7 @@ export default class AjaxList {
     }
 
     constructor (container, opts) {
-        const options     = this.options     = $.extend({}, this.constructor.Defaults, opts);
+        const options     = this.options     = assign({}, this.constructor.Defaults, opts);
 
         const $container  = this.$container  = $(container);
         const $list       = this.$list       = this.findElement($container, options.listSelector)                || $container;

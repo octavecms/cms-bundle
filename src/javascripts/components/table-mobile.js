@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 
 /**
@@ -35,7 +36,7 @@ class MobileTable {
     }
 
     constructor ($table, opts) {
-        this.options = $.extend({}, this.constructor.Defaults, opts);
+        this.options = assign({}, this.constructor.Defaults, opts);
         this.$table = $table;
 
         this.create();

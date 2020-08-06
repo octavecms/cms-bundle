@@ -1,6 +1,7 @@
 import $ from 'util/jquery';
-import template from 'lodash/template';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
+import template from 'lodash/template';
 
 // Helpers / variables in templates
 import each from 'lodash/each';
@@ -40,7 +41,7 @@ class Template {
     }
 
     constructor ($element, opts) {
-        const options    = $.extend({}, this.constructor.Defaults, opts);
+        const options    = assign({}, this.constructor.Defaults, opts);
 
         const $container = $element;
         const $template  = $container.find(options.selector).addBack(options.selector); // template <script> tag
@@ -132,7 +133,7 @@ class Template {
 
         for (; i < ii; i++) {
             try {
-                let itemData = $.extend({
+                let itemData = assign({
                     'loop': {
                         'index': i + 1,
                         'index0': i,
@@ -145,10 +146,10 @@ class Template {
                 if (dataVariableName) {
                     itemData[dataVariableName] = data[i];
                 } else {
-                    itemData = $.extend(itemData, data[i]);
+                    itemData = assign(itemData, data[i]);
                 }
 
-                let htmlItem = tmpl($.extend({}, $.fn.template.vars, itemData));
+                let htmlItem = tmpl(assign({}, $.fn.template.vars, itemData));
 
                 if (insertMode === 'append') {
                     html += htmlItem;

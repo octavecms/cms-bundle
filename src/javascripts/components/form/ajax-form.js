@@ -8,6 +8,7 @@
  */
 
 import $ from 'util/jquery';
+import assign from 'lodash/assign';
 
 import each from 'lodash/each';
 import reduce from 'lodash/reduce';
@@ -26,7 +27,7 @@ import 'components/form/jquery-validation';
  * IMPORTANT, DO NOT USE FOR LOCALIZATION!!!
  * For localization define window.LOCALES.errors in .html
  */
-$.extend($.validator.messages, {
+assign($.validator.messages, {
     'tel': 'Please enter a valid phone number.',
 
     // Error message when connection is down
@@ -63,7 +64,7 @@ export default class AjaxForm {
 
 
     constructor ($form, opts = {}) {
-        this.options       = $.extend({}, this.constructor.Defaults, opts);
+        this.options       = assign({}, this.constructor.Defaults, opts);
 
         this.$form         = $form;
         this.$errorMessage = $form.find('.js-form-error-message');
@@ -80,7 +81,7 @@ export default class AjaxForm {
         }
 
         if ($.fn.validate) {
-            this.validator = $form.validate($.extend({
+            this.validator = $form.validate(assign({
                 submitHandler: this.onsuccess.bind(this),
                 invalidHandler: this.onerror.bind(this),
                 errorPlacement: this.errorPlacement.bind(this),
@@ -205,7 +206,7 @@ export default class AjaxForm {
                 this.submit();
             })
             .catch((...errors) => {
-                const errorMessages = reduce(errors, (acc, val) => $.extend(acc, val), {});
+                const errorMessages = reduce(errors, (acc, val) => assign(acc, val), {});
 
                 if (!$.isEmptyObject(errorMessages)) {
                     this.setErrors(errorMessages);

@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import filter from 'lodash/filter';
 import isPlainObject from 'lodash/isPlainObject';
@@ -195,7 +196,7 @@ class AjaxModalTrigger {
     }
 
     constructor ($container, opts) {
-        this.options = $.extend({}, this.constructor.Defaults, opts);
+        this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.ajaxUrl = $container.attr('href');
         
@@ -205,7 +206,7 @@ class AjaxModalTrigger {
     }
 
     setOptions (options) {
-        $.extend(this.options, options);
+        assign(this.options, options);
     }
 
     /**

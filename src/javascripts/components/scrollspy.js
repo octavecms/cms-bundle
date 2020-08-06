@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import 'util/jquery.passive';
 import 'util/jquery.destroyed';
@@ -33,7 +34,7 @@ class ScrollSpy {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$links = $container.find('a[href^="#"]').addBack('a[href^="#"]');
         this.$root = $(`<div class="${ options.rootClassName }" />`).appendTo(document.body);

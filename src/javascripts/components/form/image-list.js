@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 
 const SELECTOR_INPUT_ID = 'input[type="hidden"][name*="[id]"]';
@@ -22,7 +23,7 @@ class ImageList {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$add = $container.find(SELECTOR_ADD);
         this.$remove = $container.find(SELECTOR_REMOVE);
@@ -36,8 +37,8 @@ class ImageList {
             'filter': 'images'
         });
 
-        $container.on('click', SELECTOR_EDIT, this.handleReplaceClick.bind(this));
-        $container.on('click', SELECTOR_REMOVE, this.handleRemoveClick.bind(this));
+        $container.on('click returnkey', SELECTOR_EDIT, this.handleReplaceClick.bind(this));
+        $container.on('click returnkey', SELECTOR_REMOVE, this.handleRemoveClick.bind(this));
     }
 
     /**

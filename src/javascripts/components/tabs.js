@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 import map from 'lodash/map';
 import detect from 'util/detect';
 
@@ -16,7 +17,7 @@ import ResponsiveComponent from 'components/responsive-component';
 export default class Tabs extends ResponsiveComponent {
 
     static get Defaults () {
-        return $.extend({}, ResponsiveComponent.Defaults, {
+        return assign({}, ResponsiveComponent.Defaults, {
             // CSS selector to find an tabs headings
             // Complex selector to prevent matching accordion heading
             'headingSelector': '[aria-controls]:not([data-accordion-heading-id]), [data-tabs-heading-id]',

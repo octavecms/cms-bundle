@@ -1,7 +1,8 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
-import 'util/jquery.inview';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
+import 'util/jquery.inview';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
@@ -33,7 +34,7 @@ class DateTimePicker {
         this.$container = $container;
         this.$input = $container.find('input').addBack('input');
 
-        this.options = this.transformOptions($.extend({
+        this.options = this.transformOptions(assign({
             'dateFormat': this.$input.data('dateFormat')
         }, this.constructor.Defaults, opts));
 

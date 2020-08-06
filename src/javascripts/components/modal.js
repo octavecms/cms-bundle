@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 import debounce from 'lodash/debounce';
 import detect from 'util/detect';
 import namespace from 'util/namespace';
@@ -73,7 +74,7 @@ export default class Modal {
     }
 
     constructor ($container, opts) {
-        this.options     = $.extend({}, this.constructor.Defaults, opts);
+        this.options     = assign({}, this.constructor.Defaults, opts);
         this.$container  = $container;
         this.$ignoreClick = $container.find(this.options.autoCloseIgnoreSelector);
 
@@ -524,7 +525,7 @@ $.fn.modal = createPlugin(Modal, {
 
 $.fn.modalTrigger = createPlugin(function ($element, opts) {
     const href = $element.attr('href');
-    const options = $.extend({
+    const options = assign({
         // Modal CSS selector, can be used instead of 'href'
         'target': href && href.match(/^#[a-z0-9][a-z0-9-_]*$/) ? href : '',
 

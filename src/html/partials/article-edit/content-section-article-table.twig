@@ -36,6 +36,7 @@
             {% include 'partials/form/number.twig' with {
                 id: 'input-54645674567-' ~ language,
                 name: 'table-header-columns[' ~ language ~ ']',
+                min: 1,
                 value: 2,
                 required: true
             } %}
@@ -56,6 +57,7 @@
             {% include 'partials/form/number.twig' with {
                 id: 'input-675678568-' ~ language,
                 name: 'table-header-rows[' ~ language ~ ']',
+                min: 1,
                 value: 2,
                 required: true
             } %}

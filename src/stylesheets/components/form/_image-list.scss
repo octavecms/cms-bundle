@@ -40,8 +40,7 @@
     transition-property: border-color, box-shadow;
 
     // Hovered / focused style
-    .has-hover &:hover,
-    &:focus-within {
+    .has-hover &:hover {
         border-color: var(--color-background);
         box-shadow:
             0 -1px 0 rgba(var(--color-shadow-raw), 0.04),
@@ -50,8 +49,7 @@
     }
 
     .image-list--disabled & {
-        .has-hover &:hover,
-        &:focus-within {
+        .has-hover &:hover {
             border-color: var(--color-outline);
             box-shadow: none;
         }

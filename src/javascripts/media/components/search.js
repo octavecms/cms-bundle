@@ -1,4 +1,5 @@
 import $ from 'util/jquery';
+import assign from 'lodash/assign';
 import 'util/template/jquery.template';
 
 import { setSearchQuery } from 'media/modules/actions-search';
@@ -16,7 +17,7 @@ export default class Search {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$input = $container.find('input');
         this.store = options.store;

@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import createStore from 'media/util/store';
 import getInitialState from 'visual-editor/modules/get-initial-state';
@@ -31,7 +32,7 @@ class VisualEditor {
     }
 
     constructor ($container, opts) {
-        this.options = $.extend({}, this.constructor.Defaults, opts);
+        this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$iframe = $container.find(SELECTOR_IFRAME);
         this.$loader = $container.find(SELECTOR_LOADER);

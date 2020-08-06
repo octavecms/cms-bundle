@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import each from 'lodash/each';
 import 'util/jquery.destroyed';
@@ -32,7 +33,7 @@ export default class InView {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.isIntersecting = false;
         this.ns = namespace();

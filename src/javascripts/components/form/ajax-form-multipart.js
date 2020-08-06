@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import map from 'lodash/map';
 import AjaxForm from 'components/form/ajax-form';
@@ -12,7 +13,7 @@ import AjaxForm from 'components/form/ajax-form';
 class AjaxFormMultipart extends AjaxForm {
 
     static get Defaults () {
-        return $.extend({}, AjaxForm.Defaults, {
+        return assign({}, AjaxForm.Defaults, {
             'toggleButtonSelector': '.js-form-section-toggle',
             'backButtonSelector': '.js-form-section-back',
             'controller': 'accordion'

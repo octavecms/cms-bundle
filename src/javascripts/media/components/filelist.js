@@ -1,4 +1,5 @@
 import $ from 'util/jquery';
+import assign from 'lodash/assign';
 import 'util/template/jquery.template';
 import each from 'lodash/each';
 import namespace from 'util/namespace';
@@ -25,7 +26,7 @@ export default class MediaFileList {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.store = options.store;
         this.ns = namespace();

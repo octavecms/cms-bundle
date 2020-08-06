@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 import 'components/dropdown';
 import 'util/jquery.serializeobject';
 
@@ -27,7 +28,7 @@ class Editable {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$popup = options.target ? $(options.target) : $($container.attr('href'))
         this.$inputContainer = options.inputContainer ? $container.closest(options.inputContainer) : $container.parent();

@@ -3,7 +3,8 @@
     border-radius: var(--border-radius);
 
     &__icon,
-    &__text {
+    &__text,
+    &__inside-button {
         white-space: nowrap;
     
         display: flex;
@@ -38,6 +39,10 @@
     }
     &__input {
         flex-grow: 1;
+    }
+    &__inside-button {
+        padding-left: calc(var(--spacer-3) * 0.75);
+        padding-right: calc(var(--spacer-3) * 0.75);
     }
 
     &.input-group--focusable:focus-within,
@@ -79,7 +84,8 @@
 }
 
 .input-group--small {
-    .input-group__text {
+    .input-group__text,
+    .input-group__inside-button {
         height: var(--spacer-5);
         padding: 0 calc(var(--spacer-3) * 0.75);
     }

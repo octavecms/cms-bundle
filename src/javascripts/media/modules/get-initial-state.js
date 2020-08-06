@@ -1,3 +1,4 @@
+import get from 'lodash/get';
 import { getStaticState } from './actions-static-state';
 
 
@@ -53,13 +54,6 @@ export default function getInitialState (state) {
         }
     }, window.MEDIA_INITIAL_STATE, state);
 
-    // Validate and set selected folder id
-    const staticState = getStaticState();
-    const staticSelectedFolder = staticState && staticState.folders && staticState.folders.selected;
-    if (staticSelectedFolder && !(initialState.folders && initialState.folders.selected) && (staticSelectedFolder in initialState.folders.list)) {
-        initialState.folders.selected = staticSelectedFolder;
-    }
-
     // Convert root from object into an id and move folders into a list
     if (initialState.folders.root && typeof initialState.folders.root === 'object') {
         const traverseTree = (node) => {
@@ -79,6 +73,13 @@ export default function getInitialState (state) {
 
         traverseTree(initialState.folders.root);
         initialState.folders.root = initialState.folders.root.id;
+    }
+
+    // Validate and set selected folder id
+    const staticSelectedFolder = get(getStaticState, ['folders', 'selected']);
+
+    if (staticSelectedFolder && staticSelectedFolder in initialState.folders.list) {
+        initialState.folders.selected = staticSelectedFolder;
     }
 
     // Auto-expand root

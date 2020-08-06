@@ -1,5 +1,6 @@
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import createStore from 'media/util/store';
 import getInitialState from 'media/modules/get-initial-state';
@@ -41,7 +42,7 @@ class MediaLibrary {
     }
 
     constructor ($container, opts) {
-        this.options = $.extend({}, this.constructor.Defaults, opts);
+        this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
 
         $container.on('destroyed', this.destroy.bind(this));
@@ -56,7 +57,7 @@ class MediaLibrary {
      * @param {object} options Media library options
      */
     setOptions (options) {
-        $.extend(this.options, options);
+        assign(this.options, options);
 
         if (this.store) {
             for (let key in options) {

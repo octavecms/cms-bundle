@@ -1,5 +1,6 @@
 import each from 'lodash/each';
 import difference from 'lodash/difference';
+import assign from 'lodash/assign';
 
 import { removeSection, moveSectionUp, moveSectionDown, updateSection } from 'visual-editor/modules/actions';
 
@@ -103,7 +104,7 @@ export default class VisualEditorControls {
         const order = this.store.sections.order.get();
         const index = order.indexOf(id);
         const item = this.store.sections.list[id].get();
-        const html = this.$template.template('compile', $.extend({
+        const html = this.$template.template('compile', assign({
             'first': index === 0,
             'last': index === order.length - 1
         }, item));

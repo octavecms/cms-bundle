@@ -1,4 +1,5 @@
 import 'select2';
+import assign from 'lodash/assign';
 
 function formatSelection (state) {
     const image = $(state.element).data('image');
@@ -34,7 +35,7 @@ function formatResult (state) {
 const originalSelect2Plugin = $.fn.select2;
 
 $.fn.select2 = function (options = {}) {
-    return originalSelect2Plugin.call($(this), $.extend({
+    return originalSelect2Plugin.call($(this), assign({
         theme: 'cms',
         templateResult: formatResult,
         templateSelection: formatSelection,

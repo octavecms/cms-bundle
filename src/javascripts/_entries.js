@@ -14,6 +14,7 @@ module.exports = {
         './components/form/datetimepicker/datetimepicker',
         './components/form/image',
         './components/form/image-list',
+        './components/form/number',
         './components/sortable-list',
         './components/data-table',
         './components/modal',

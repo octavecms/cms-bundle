@@ -1,28 +1,30 @@
+{% from 'macros/icon.twig' import icon %}
+
 {% set name = name|default('') %}
 {% set value = value|default('') %}
 {% set min = min|default(null) %}
 {% set max = max|default(null) %}
+{% set step = step|default(null) %}
 {% set required = required|default(false) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
 {% set id = id|default('input-' ~ random()) %}
 {% set prefixText = prefixText|default('') %}
 
-{% if prefixText %}
-<div class="input-group">
+<div class="input-group input-group--focusable" data-plugin="number">
     {% if prefixText %}
         <label class="form-label input-group__text input-group__merge text-medium" for="{{ id }}">
             {{ prefixText }}
         </label>
     {% endif %}
-{% endif %}
 
-    <div class="{% if prefixText %}input-group__input input-group__merge{% endif %} form-control form-control--input">
+    <div class="input-group__input input-group__merge form-control form-control--input">
         <input
             id="{{ id }}"
             name="{{ name }}"
             type="number" 
             value="{{ value }}"
+            {% if step != null %}step="{{ step }}"{% endif %}
             {% if min != null %}min="{{ min }}"{% endif %}
             {% if max != null %}max="{{ max }}"{% endif %}
             {% if required %}required{% endif %}
@@ -31,6 +33,15 @@
             />
     </div>
 
-{% if prefixText %}
+    <div class="input-group__inside-button input-group__merge" for="{{ id }}">
+        <div class="group group--1 group--nowrap">
+            <a class="btn btn--sm btn--square btn--pill btn--tetriary js-number-subtract" role="button" tabindex="0" aria-label="Subtract"><span class="btn__content">
+                {{ icon('number-subtract', {width: 24, height: 24}) }}
+            </span></a>
+            <a class="btn btn--sm btn--square btn--pill btn--tetriary js-number-add" role="button" tabindex="0" aria-label="Add"><span class="btn__content">
+                {{ icon('number-add', {width: 24, height: 24}) }}
+            </span></a>
+        </div>
+    </div>
+
 </div>
-{% endif %}

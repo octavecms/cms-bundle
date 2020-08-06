@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 import ResponsiveComponent from 'components/responsive-component';
 
@@ -13,7 +14,7 @@ import ResponsiveComponent from 'components/responsive-component';
 class Sample extends ResponsiveComponent {
 
     static get Defaults () {
-        return $.extend({}, ResponsiveComponent.Defaults, {
+        return assign({}, ResponsiveComponent.Defaults, {
             // Overwrite responsive component default options and add other
             // default options...
 

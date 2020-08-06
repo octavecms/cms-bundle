@@ -1,5 +1,6 @@
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 
 /**
@@ -14,7 +15,7 @@ class SectionTitle {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$title = $container.find(options.titleSelector);
         this.title = this.$title.text();

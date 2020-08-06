@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
 
 
 const SELECTOR_ID = '.js-image-id';
@@ -22,7 +23,7 @@ class ImageInput {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$edit = $container.find(SELECTOR_EDIT);
         this.$remove = $container.find(SELECTOR_REMOVE);
@@ -38,20 +39,39 @@ class ImageInput {
         this.$remove.on('click returnkey', this.remove.bind(this));
     }
 
+    /**
+     * Handle media library image selection
+     * 
+     * @param {array} images List of images
+     * @protected
+     */
     handleImageSelect (images) {
         // If not an image, then remove the image
         const image = images[0].isImage === false ? {} : images[0];
         this.setImage(image);
     }
 
+    /**
+     * Remove image
+     * 
+     * @param {object} [event] Event
+     */
     remove (event) {
-        if (event && !event.isDefaultPrevented()) {
-            event.preventDefault();
-        }
+        if (!event || event && !event.isDefaultPrevented()) {
+            if (event) {
+                event.preventDefault();
+            }
 
-        this.setImage({});
+            this.setImage({});
+        }
     }
 
+    /**
+     * Set image
+     * 
+     * @param {object} image Image data
+     * @protected
+     */
     setImage (image) {
         const $container = this.$container;
         const data = {

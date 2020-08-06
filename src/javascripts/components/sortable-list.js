@@ -1,7 +1,8 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
-import namespace from 'util/namespace';
 import createPlugin from 'jquery-plugin-generator';
+import assign from 'lodash/assign';
+import namespace from 'util/namespace';
 import Sortable, { MultiDrag } from 'sortablejs';
 
 Sortable.mount(new MultiDrag());
@@ -60,7 +61,7 @@ class SortableList {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.$list = $container.find(options.listSelector).eq(0);
         this.ns = namespace();

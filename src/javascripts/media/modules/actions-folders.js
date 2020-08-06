@@ -3,7 +3,7 @@ import namespace from 'util/namespace';
 
 import { loadFiles } from './actions-files';
 import { fetchData } from './actions-fetch';
-
+import { setStaticState } from './actions-static-state';
 
 /**
  * Delete folder
@@ -125,6 +125,7 @@ export function setSelectedFolder (store, folderId) {
 
     if (!isDisabled) {
         store.folders.selected.set(folderId);
+        setStaticState({'folders': {'selected': folderId}});
         loadFiles(store, folderId);
     }
 }

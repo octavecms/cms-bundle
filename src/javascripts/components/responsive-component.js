@@ -1,5 +1,6 @@
 /* eslint no-unused-vars: ["off"] */
 import $ from 'util/jquery';
+import assign from 'lodash/assign';
 
 import each from 'lodash/each';
 import responsive from 'util/responsive';
@@ -22,7 +23,7 @@ export default class ResponsiveComponent {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.mediaListeners = [];
         this.enabled = false;
