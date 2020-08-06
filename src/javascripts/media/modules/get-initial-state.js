@@ -86,7 +86,5 @@ export default function getInitialState (state) {
         initialState.folders.list.root.expanded = true;
     }
 
-    console.log(initialState);
-
     return initialState;
 }

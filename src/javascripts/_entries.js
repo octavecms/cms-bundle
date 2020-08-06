@@ -13,6 +13,7 @@ module.exports = {
         './components/form/input-max-length',
         './components/form/datetimepicker/datetimepicker',
         './components/form/image',
+        './components/form/image-list',
         './components/sortable-list',
         './components/data-table',
         './components/modal',

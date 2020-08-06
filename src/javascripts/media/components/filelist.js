@@ -19,7 +19,8 @@ export default class MediaFileList {
 
     static get Defaults () {
         return {
-            store: null
+            store: null,
+            onselect: null,
         };
     }
 
@@ -105,6 +106,7 @@ export default class MediaFileList {
 
         $container.on('dragstart', IMAGE_ITEM_SELECTOR, this.handleDragSelect.bind(this));
         $container.on('click', IMAGE_ITEM_SELECTOR, this.handleClickSelect.bind(this));
+        $container.on('dblclick', IMAGE_ITEM_SELECTOR, this.handleDoubleClickSelect.bind(this));
         $container.on('click', this.handleClickDeselect.bind(this));
     }
 
@@ -176,6 +178,20 @@ export default class MediaFileList {
             setSelectedFile(this.store, id);
         }
 
+        e.preventDefault();
+    }
+
+    /**
+     * Doublce clicking on file should select it and close media library
+     * 
+     * @param {object} e Event
+     * @protected
+     */
+    handleDoubleClickSelect (e) {
+        if (this.options.onselect) {
+            this.options.onselect();
+        }
+        
         e.preventDefault();
     }
 

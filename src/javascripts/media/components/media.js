@@ -17,7 +17,7 @@ const SELECTOR_TREEVIEW = '.js-media-treeview';
 const SELECTOR_FILELIST = '.js-media-filelist';
 const SELECTOR_INFO = '.js-media-info';
 const SELECTOR_SEARCH = '.js-media-file-search';
-const SELECTOR_SELECT = '.js-media-select';
+
 
 /**
  * Media library
@@ -41,7 +41,7 @@ class MediaLibrary {
     }
 
     constructor ($container, opts) {
-        const options = this.options = $.extend({}, this.constructor.Defaults, opts);
+        this.options = $.extend({}, this.constructor.Defaults, opts);
         this.$container = $container;
 
         $container.on('destroyed', this.destroy.bind(this));
@@ -56,7 +56,6 @@ class MediaLibrary {
      * @param {object} options Media library options
      */
     setOptions (options) {
-        console.log('setOptions:', options);
         $.extend(this.options, options);
 
         if (this.store) {
@@ -77,18 +76,15 @@ class MediaLibrary {
 
         // File list
         const $filelist = this.$container.find(SELECTOR_FILELIST);
-        this.filelist = new FileListView($filelist, {store: store});
+        this.filelist = new FileListView($filelist, {store: store, onselect: this.handleSelect.bind(this) });
 
         // Info
         const $info = this.$container.find(SELECTOR_INFO);
-        this.info = new Info($info, {store: store});
+        this.info = new Info($info, {store: store, onselect: this.handleSelect.bind(this)});
 
         // Search
         const $search = this.$container.find(SELECTOR_SEARCH);
         this.search = new Search($search, {store: store});
-
-        // Select file
-        this.$container.on('click', SELECTOR_SELECT, this.handleSelect.bind(this));
 
         // @TODO Remove, this is for debug only
         window.store = store;

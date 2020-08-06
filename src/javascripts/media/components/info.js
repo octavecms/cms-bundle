@@ -12,6 +12,7 @@ import { deleteFolder, setSelectedFolder } from 'media/modules/actions-folders';
 
 
 const SELECTOR_DELETE = '.js-media-info-delete';
+const SELECTOR_SELECT = '.js-media-select';
 
 
 /**
@@ -21,7 +22,8 @@ export default class Info {
 
     static get Defaults () {
         return {
-            store: null
+            store: null,
+            onselect: null
         };
     }
 
@@ -48,43 +50,35 @@ export default class Info {
         const $container = this.$container;
         const ns = this.ns;
 
-        // On file list change re-render
-        // store.files.grid.on(`change.${ ns }`, this.render.bind(this));
-        
-        // store.files.loading.on(`change.${ ns }`, (loading) => {
-        //     if (loading) {
-        //         this.render();
-        //     }
-        // });
-
-        // store.files.list['*'].on(`change.${ ns }`, (newValue, prevValue) => {
-        //     if (newValue && prevValue) {
-        //         if (prevValue.expanded !== newValue.expanded) {
-        //             this.getElement(newValue.id).toggleClass('tree__item--expanded', newValue.expanded);
-        //         }
-        //         if (prevValue.name !== newValue.name) {
-        //             this.getElement(newValue.id, SELECTOR_TITLE).text(newValue.name);
-        //         }
-        //         if (prevValue.disabled !== newValue.disabled) {
-        //             this.getElement(newValue.id).toggleClass('tree__item--disabled', newValue.disabled);
-        //         }
-        //     }
-        // });
-
-        $container.on('click returnkey', SELECTOR_DELETE, () => {
-            const files = store.files.selected.get();
-            const folder = store.folders.selected.get();
-
-            if (files.length) {
-                deleteFiles(store, files);
-            } else {
-                deleteFolder(store, folder);
-            }
-        });
+        $container.on('click returnkey', SELECTOR_DELETE, this.handleDelete.bind(this));
+        $container.on('click returnkey', SELECTOR_SELECT, this.handleSelect.bind(this));
 
         store.folders.selected.on(`change.${ ns }`, this.render);
         store.files.selected.on(`change.${ ns }`, this.render);
         store.files.loading.on(`change.${ ns }`, this.render);
+    }
+
+    handleDelete (event) {
+        if (event.isDefaultPrevented()) return;
+        event.preventDefault();
+
+        const files = store.files.selected.get();
+        const folder = store.folders.selected.get();
+
+        if (files.length) {
+            deleteFiles(store, files);
+        } else {
+            deleteFolder(store, folder);
+        }
+    }
+
+    handleSelect (event) {
+        if (event.isDefaultPrevented()) return;
+        event.preventDefault();
+
+        if (this.options.onselect) {
+            this.options.onselect();
+        }
     }
 
     render () {

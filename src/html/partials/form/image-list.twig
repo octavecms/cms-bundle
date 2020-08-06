@@ -4,6 +4,8 @@
 {% set imageListId = id %}
 {% set name = name|default('') %}
 {% set value = value|default([]) %}
+{% set min = min|default(0) %}
+{% set max = max|default(0) %}
 {% set disabled = disabled|default(false) %}
 {% set readonly = readonly|default(false) %}
 {% set editable = editable|default(false) %}
@@ -11,7 +13,9 @@
 
 <div class="image-list {% if readonly or disabled %}image-list--disabled{% endif %}"
     {% if not readonly and not disabled %}
-        data-plugin="sortableList"
+        data-plugin="sortableList imageList"
+
+        {# Sortable options #}
         data-sortable-list-handle-selector=""
         data-sortable-list-list-selector=".js-image-list-list"
         data-sortable-list-force-start-selector=".js-image-list-force-start"
@@ -19,6 +23,10 @@
         data-sortable-list-filter-selector=".js-image-list-not-draggable"
         data-sortable-list-cancel-selector=".js-image-list-not-draggable"
         data-sortable-list-draggable-selector=".js-image-list-item"
+
+        {# Image list options #}
+        {% if min %}data-image-list-min="{{ min }}"{% endif %}
+        {% if max %}data-image-list-max="{{ max }}"{% endif %}
     {% endif %}
 >
     <ol class="image-list__list js-image-list-list">
@@ -37,19 +45,14 @@
                 {% endif %}
             {% endfor %}
 
-            <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ fileName }}">
+            {# Server-side template #}
+            <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ fileName }}" data-id="{{ id }}">
                 <input type="hidden" name="{{ name }}[{{ index }}][id]" value="{{ id }}" {% if disabled %}disabled{% endif %} />
                 <input type="hidden" name="{{ name }}[{{ index }}][order]" value="{{ index }}" {% if disabled %}disabled{% endif %} />
 
                 <div class="image-item__sizer"></div>
                 <div class="image-item__image">
-                    {% if thumbnail %}
-                        {# Thumbnail image #}
-                        <img src="{{ thumbnail }}" alt="{{ fileName }}" draggable="false" {% if url %}data-full-image-url="{{ url }}"{% endif %} />
-                    {% elseif url %}
-                        {# Full image, this is not optimal due to possibly large image sizes #}
-                        <img src="{{ url }}" alt="{{ fileName }}" draggable="false" />
-                    {% endif %}
+                    <img class="js-image-list-thumbnail" src="{{ thumbnail|default(url) }}" alt="{{ fileName }}" draggable="false" {% if thumbnail and url %}data-full-image-url="{{ url }}"{% endif %} onerror="this.src='/assets/images/file-icons/unknown.png'" />
                 </div>
                 <div class="image-item__controls ui-gray">
                     <div class="group group--2">
@@ -70,15 +73,15 @@
                             {# Editable hidden inputs which hold values #}
                             {% for editableItem in editable %}
                                 {% set value = meta[editableItem.name]|default('') %}
-                                <input type="hidden" name="{{ name }}[<%- index %>][{{ editableItem.name }}]" value="{{ value }}" />
+                                <input type="hidden" name="{{ name }}[{{ index }}][{{ editableItem.name }}]" value="{{ value }}" />
                             {% endfor %}
                         {% endif %}
 
                         {% if not readonly and not disabled %}
-                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable group__right" aria-label="Change image"><span class="btn__content">
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable js-image-list-edit group__right" aria-label="Change image" href="media-modal.html"><span class="btn__content">
                                 {{ icon('edit', {width: 32, height: 32}) }}
                             </span></a>
-                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable" aria-label="Remove image"><span class="btn__content">
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable js-image-list-delete" aria-label="Remove image"><span class="btn__content">
                                 {{ icon('delete', {width: 32, height: 32}) }}
                             </span></a>
                         {% endif %}
@@ -89,19 +92,19 @@
 
         {# Client-side template #}
         {% if not readonly and not disabled %}
-            <script type="text/template">
-                <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- fileName %>">
-                    <input type="hidden" name="{{ name }}[<%- index %>][id]" value="<%- id %>" />
-                    <input type="hidden" name="{{ name }}[<%- index %>][order]" value="<%- index %>" />
+            <script type="text/template" data-template-variable="image">
+                <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- image.fileName %>" data-id="<%- image.id %>">
+                    <input type="hidden" name="{{ name }}[<%- image.index %>][id]" value="<%- image.id %>" />
+                    <input type="hidden" name="{{ name }}[<%- image.index %>][order]" value="<%- image.index %>" />
 
                     <div class="image-item__sizer"></div>
                     <div class="image-item__image">
-                        <% if (thumbnail) { %>
+                        <% if (image.thumbnail) { %>
                             {# Thumbnail image #}
-                            <img src="<%- thumbnail %>" alt="<%- fileName %>" draggable="false" <% if (url) { %>data-full-image-url="<%- url %>"<% } %> onerror="this.src='/assets/images/file-icons/unknown.png'" />
-                        <% } else if (url) { %>
+                            <img src="<%- image.thumbnail %>" alt="<%- image.fileName %>" draggable="false" <% if (image.url) { %>data-full-image-url="<%- image.url %>"<% } %> onerror="this.src='/assets/images/file-icons/unknown.png'" />
+                        <% } else if (image.url) { %>
                             {# Full image, this is not optimal due to possibly large image sizes #}
-                            <img src="<%- url %>" alt="<%- fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'" />
+                            <img src="<%- image.url %>" alt="<%- image.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'" />
                         <% } %>
                     </div>
                     <div class="image-item__controls ui-gray">
@@ -121,14 +124,14 @@
 
                                 {# Editable hidden inputs which hold values #}
                                 {% for editableItem in editable %}
-                                    <input type="hidden" name="{{ name }}[<%- index %>][{{ editableItem.name }}]" value="" />
+                                    <input type="hidden" name="{{ name }}[<%- image.index %>][{{ editableItem.name }}]" value="" />
                                 {% endfor %}
                             {% endif %}
 
-                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable group__right" aria-label="Change image"><span class="btn__content">
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill group__right js-image-list-not-draggable js-image-list-edit" aria-label="Change image" href="media-modal.html"><span class="btn__content">
                                 {{ icon('edit', {width: 32, height: 32}) }}
                             </span></a>
-                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable" aria-label="Remove image"><span class="btn__content">
+                            <a role="button" tabindex="0" class="btn btn--tetriary btn--shadow btn--square btn--pill js-image-list-not-draggable js-image-list-delete" aria-label="Remove image"><span class="btn__content">
                                 {{ icon('delete', {width: 32, height: 32}) }}
                             </span></a>
                         <div>
@@ -141,7 +144,7 @@
         {% if not readonly and not disabled %}
             <li class="image-list-control-item js-image-list-force-end">
                 <div class="image-list-control-item__sizer"></div>
-                <a role="button" tabindex="0" class="image-list-control-item__content btn-container">
+                <a role="button" tabindex="0" href="media-modal.html" class="image-list-control-item__content btn-container js-image-list-add">
                     <span class="btn btn--tetriary btn--square btn--pill"><span class="btn__content">
                         {{ icon('add', {width: 32, height: 32}) }}
                     </span></span>

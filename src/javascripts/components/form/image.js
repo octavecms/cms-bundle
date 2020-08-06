@@ -39,7 +39,9 @@ class ImageInput {
     }
 
     handleImageSelect (images) {
-        this.setImage(images[0]);
+        // If not an image, then remove the image
+        const image = images[0].isImage === false ? {} : images[0];
+        this.setImage(image);
     }
 
     remove (event) {
@@ -59,6 +61,7 @@ class ImageInput {
             url: null,
             width: 0,
             height: 0,
+            isImage: true,
             ...image
         };
 

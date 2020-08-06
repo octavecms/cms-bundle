@@ -22,7 +22,6 @@ const preloadCache = {};
 class AjaxModalLoader {
 
     constructor (url) {
-        console.log('new AjaxModalLoader');
         this.url = url;
         this.loading = false;
         this.loaded = false;
@@ -54,10 +53,6 @@ class AjaxModalLoader {
      */
     open (...args) {
         this.modalArgs = args;
-        console.log('modal args:', this.modalArgs);
-        console.log('loading:', this.loading);
-        console.log('loaded:', !!this.loaded);
-        console.log('inserted:', this.inserted);
 
         if (this.loading) {
             this.openOnLoad = true;
@@ -79,8 +74,6 @@ class AjaxModalLoader {
             const plugins = $.app.getPlugins($modal);
 
             // Call modal
-            console.log('Call show');
-            console.trace();
             $modal.modal('show', ...modalArgs);
 
             // Set plugin options
@@ -221,6 +214,9 @@ class AjaxModalTrigger {
      * @param {object} [event] Event
      */
     open (event) {
+        if (event && event.isDefaultPrevented()) {
+            return;
+        }
         if (event) {
             event.preventDefault();
         }
