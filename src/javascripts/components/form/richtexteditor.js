@@ -9,7 +9,7 @@ import namespace from 'util/namespace';
 
 import tinymce from 'tinymce';
 import 'tinymce/themes/silver/index';
-import 'tinymce/icons/default/index';
+import 'components/form/tinycme/icons';
 import 'tinymce/plugins/code/index';
 import 'tinymce/plugins/link/index';
 import 'tinymce/plugins/lists/index'
@@ -55,7 +55,9 @@ class RichTextEditor {
         tinymce.init({
             selector: `#${ this.$container.attr('id') }`,
             min_height: 400,
-            statusbar: false,
+            // statusbar: false,
+            branding: false,
+            elementpath: false,
             skin: false,
             skin_url: null,
 
@@ -66,17 +68,12 @@ class RichTextEditor {
             content_css: contentCSS.concat(','),
             // content_style: this.options.contentStyles,
 
-            formats: {
-                // customformat: { inline: 'span', styles: { color: '#00ff00', fontSize: '20px' }, attributes: { title: 'My custom format'} , classes: 'example1'}
-            },
             style_formats: [
+                { title: 'Paragraph', format: 'p' },
                 { title: 'Heading 1', format: 'h1' },
                 { title: 'Heading 2', format: 'h2' },
                 { title: 'Heading 3', format: 'h3' },
                 { title: 'Heading 4', format: 'h4' },
-                { title: 'Paragraph', format: 'p' },
-                { title: 'Ordered list', format: 'ol' },
-                { title: 'Unordered list', format: 'ul' },
 
                 // { title: 'Custom format', format: 'customformat' },
                 { title: 'Custom format', inline: 'span', styles: { color: '#00ff00', fontSize: '20px' }, attributes: { title: 'My custom format'} , classes: 'example1' },
@@ -87,15 +84,21 @@ class RichTextEditor {
             ],
 
             // Quick toolbar
-            quickbars_selection_toolbar: 'bold italic | styleselect | formatselect | quicklink image',
+            quickbars_selection_toolbar: 'bold | italic | styleselect | quicklink',
+            quickbars_insert_toolbar: 'quickimage quicktable numlist bullist',
+            quickbars_image_toolbar: 'alignleft aligncenter alignright',
 
             // Toolbar
+            toolbar: '',
             // toolbar: 'styleselect bold italic',
             // toolbar_mode: 'floating',
             // toolbar: 'styleselect bold italic link lists code',
 
             // Menu:
-            // menubar: '',
+            menubar: '',
+
+            // Vertical resize
+            resize: true,
 
             // Content filtering
             invalid_elements: 'script,style,link',
@@ -104,6 +107,21 @@ class RichTextEditor {
                 // Disable all inline CSS
                 // see https://www.tiny.cloud/docs/configure/content-filtering/#valid_styles
                 '*': ''
+            },
+
+            setup: (editor) => {
+                window.editor = editor;
+
+                // editor.ui.registry.addContextToolbar('lists', {
+                //     predicate: function (node) {
+                //         console.log(node);
+                //         return false;
+                //         // return node.nodeName.toLowerCase() === 'p'
+                //     },
+                //     items: 'alignleft aligncenter alignright',
+                //     position: 'node',
+                //     scope: 'node'
+                // });
             }
 
         });

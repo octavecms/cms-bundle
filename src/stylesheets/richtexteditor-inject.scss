@@ -1,1 +1,7 @@
 @import "tinymce/skins/ui/oxide/content";
+
+.mce-content-body {
+    overflow-x: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+}

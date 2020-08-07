@@ -1,0 +1,51 @@
+.tox .tox-toolbar-overlord {
+    background-color: var(--color-background);
+}
+.tox .tox-toolbar,
+.tox .tox-toolbar__primary,
+.tox .tox-toolbar__overflow {
+    background: var(--color-background);
+    display: flex;
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    padding: 0 0;
+}
+.tox .tox-toolbar__overflow.tox-toolbar__overflow--closed {
+    height: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    visibility: hidden;
+}
+.tox .tox-toolbar__overflow--growing {
+    transition: height 0.3s ease, opacity 0.2s linear 0.1s;
+}
+.tox .tox-toolbar__overflow--shrinking {
+    transition: opacity 0.3s ease, height 0.2s linear 0.1s, visibility 0s linear 0.3s;
+}
+.tox .tox-menubar + .tox-toolbar,
+.tox .tox-menubar + .tox-toolbar-overlord .tox-toolbar__primary {
+    border-top: 1px solid #cccccc;
+    margin-top: -1px;
+}
+.tox .tox-toolbar--scrolling {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+.tox .tox-pop .tox-toolbar {
+    border-width: 0;
+}
+.tox .tox-toolbar--no-divider {
+    background-image: none;
+}
+.tox-tinymce:not(.tox-tinymce-inline) .tox-editor-header:not(:first-child) .tox-toolbar:first-child,
+.tox-tinymce:not(.tox-tinymce-inline) .tox-editor-header:not(:first-child) .tox-toolbar-overlord:first-child .tox-toolbar__primary {
+    border-top: 1px solid #cccccc;
+}
+.tox.tox-tinymce-aux .tox-toolbar__overflow {
+    background-color: #fff;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}

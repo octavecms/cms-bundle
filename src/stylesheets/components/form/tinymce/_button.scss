@@ -1,0 +1,200 @@
+.tox .tox-tbtn {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: $border-radius;
+    box-shadow: none;
+    color: var(--color-text);
+    display: flex;
+    flex: 0 0 auto;
+    font-style: normal;
+    font-weight: normal;
+    height: var(--spacer-6);
+    justify-content: center;
+    margin: 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0;
+    text-transform: none;
+    width: var(--spacer-6);
+    cursor: pointer;
+
+    svg {
+        display: block;
+        fill: currentColor;
+    }
+
+    &.tox-tbtn-more {
+        padding-left: 5px;
+        padding-right: 5px;
+        width: inherit;
+    }
+    &:focus {
+        background: var(--color-background);
+        border: 0;
+        box-shadow: none;
+
+        svg {
+            fill: currentColor;
+        }
+    }
+    &:hover {
+        background: var(--color-background);
+        border: 0;
+        box-shadow: none;
+        color: var(--color-heading);
+
+        svg {
+            fill: currentColor;
+        }
+    }
+    &:active {
+        background: var(--color-background);
+        border: 0;
+        box-shadow: none;
+        color: var(--color-heading);
+
+        svg {
+            fill: currentColor;
+        }
+    }
+    &--disabled,
+    &--disabled:hover,
+    &:disabled,
+    &:disabled:hover {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        color: var(--color-disabled);
+        cursor: not-allowed;
+    
+        svg {
+            fill: currentColor;
+        }
+    }
+    &--enabled,
+    &--enabled:hover {
+        background: var(--color-background);
+        border: 0;
+        box-shadow: none;
+        color: var(--color-primary);
+
+        > * {
+            transform: none;
+        }
+        svg,
+        &:hover svg {
+            fill: currentColor;
+        }
+    }
+    &:focus:not(.tox-tbtn--disabled) {
+        color: #222f3e;
+    
+        svg {
+            fill: currentColor;
+        }
+    }
+
+    &:active > * {
+        transform: none;
+    }
+
+}
+
+/*
+ * Button sizes
+ */
+
+.tox .tox-tbtn--md {
+    height: var(--spacer-6);
+    width: var(--spacer-6);
+}
+.tox .tox-tbtn--lg {
+    flex-direction: column;
+    height: var(--spacer-7);
+    width: var(--spacer-7);
+}
+.tox .tox-tbtn--return {
+    align-self: stretch;
+    height: unset;
+    width: var(--spacer-3);
+}
+.tox .tox-tbtn--labeled {
+    padding: 0 4px;
+    width: unset;
+}
+.tox .tox-tbtn__vlabel {
+    display: block;
+    font-size: 10px;
+    font-weight: normal;
+    letter-spacing: -0.025em;
+    margin-bottom: 4px;
+    white-space: nowrap;
+}
+.tox .tox-tbtn--select {
+    margin: 2px 0 3px 0;
+    padding: 0 4px;
+    width: auto;
+}
+.tox .tox-tbtn__select-label {
+    cursor: default;
+    font-weight: normal;
+    margin: 0 4px;
+}
+.tox .tox-tbtn__select-chevron {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 16px;
+}
+.tox .tox-tbtn__select-chevron svg {
+    fill: rgba(34, 47, 62, 0.5);
+}
+.tox .tox-tbtn--bespoke .tox-tbtn__select-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 7em;
+}
+.tox .tox-split-button {
+    border: 0;
+    border-radius: 3px;
+    box-sizing: border-box;
+    display: flex;
+    margin: 2px 0 3px 0;
+    overflow: hidden;
+}
+.tox .tox-split-button:hover {
+    box-shadow: 0 0 0 1px #dee0e2 inset;
+}
+.tox .tox-split-button:focus {
+    background: #dee0e2;
+    box-shadow: none;
+    color: #222f3e;
+}
+.tox .tox-split-button > * {
+    border-radius: 0;
+}
+.tox .tox-split-button__chevron {
+    width: 16px;
+}
+.tox .tox-split-button__chevron svg {
+    fill: rgba(34, 47, 62, 0.5);
+}
+.tox .tox-split-button .tox-tbtn {
+    margin: 0;
+}
+.tox.tox-platform-touch .tox-split-button .tox-tbtn:first-child {
+    width: 30px;
+}
+.tox.tox-platform-touch .tox-split-button__chevron {
+    width: 20px;
+}
+.tox .tox-split-button.tox-tbtn--disabled:hover,
+.tox .tox-split-button.tox-tbtn--disabled:focus,
+.tox .tox-split-button.tox-tbtn--disabled .tox-tbtn:hover,
+.tox .tox-split-button.tox-tbtn--disabled .tox-tbtn:focus {
+    background: transparent;
+    box-shadow: none;
+    color: rgba(34, 47, 62, 0.5);
+}

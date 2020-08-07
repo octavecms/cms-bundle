@@ -1,6 +1,10 @@
 @import "tinymce/skins/ui/oxide/skin";
+@import "components/form/tinymce/tinymce";
 @import "components/form/tinymce/pop";
+@import "components/form/tinymce/toolbar";
 @import "components/form/tinymce/toolbar-group";
+@import "components/form/tinymce/button";
+@import "components/form/tinymce/statusbar";
 
 .form-control--richtexteditor {
     textarea {
