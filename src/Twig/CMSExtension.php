@@ -1,13 +1,18 @@
 <?php
 
 namespace Octave\CMSBundle\Twig;
+
+use Octave\CMSBundle\Form\DataTransformer\SimpleFieldDataTransformer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class CMSExtension extends \Twig_Extension
+class CMSExtension extends AbstractExtension
 {
     /** @var RouterInterface */
     private $router;
@@ -35,10 +40,11 @@ class CMSExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('octave_route_exists', [$this, 'routeExists']),
-            new \Twig_SimpleFunction('octave_cms_menu', [$this, 'getMenu']),
-            new \Twig_SimpleFunction('octave_current_page', [$this, 'getCurrentPage']),
-            new \Twig_SimpleFunction('octave_get_page', [$this, 'getPage']),
+            new TwigFunction('octave_route_exists', [$this, 'routeExists']),
+            new TwigFunction('octave_cms_menu', [$this, 'getMenu']),
+            new TwigFunction('octave_current_page', [$this, 'getCurrentPage']),
+            new TwigFunction('octave_get_page', [$this, 'getPage']),
+            new TwigFunction('octave_render_blocks', [$this, 'renderBlocks']),
         ];
     }
 
@@ -48,7 +54,7 @@ class CMSExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('octave_resize', [$this, 'resize'])
+            new TwigFilter('octave_resize', [$this, 'resize'])
         ];
     }
 
@@ -117,9 +123,27 @@ class CMSExtension extends \Twig_Extension
      * @param $width
      * @param $height
      * @return string
+     * @throws \Exception
      */
     public function resize($path, $width, $height)
     {
         return $this->container->get('octave.cms.image.processor')->resize($path, $width, $height);
+    }
+
+    /**
+     * @param $blocks
+     * @param bool $transform
+     * @return string
+     * @throws \Twig\Error\Error
+     */
+    public function renderBlocks($blocks, $transform = false)
+    {
+        if ($transform) {
+
+            $transformer = new SimpleFieldDataTransformer();
+            $blocks = $transformer->transform($blocks);
+        }
+
+        return $this->container->get('octave.cms.block.manager')->renderBlocks($blocks);
     }
 }

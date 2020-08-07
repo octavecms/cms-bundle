@@ -11,7 +11,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  * @ORM\Entity()
  * @ORM\Table(name="octave_page_block_translations")
  */
-class BlockTranslation
+class BlockTranslation implements BlockTranslateEntityInterface
 {
     use ORMBehaviors\Translatable\Translation;
     use BlockTranslationTrait;

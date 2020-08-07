@@ -79,10 +79,21 @@ class BlockManager
             throw new \LogicException(sprintf('Invalid type: %s', $page->getType()));
         }
 
+        return $this->renderBlocks($page->getBlocks());
+    }
+
+    /**
+     * @param $blocks
+     * @return string
+     * @throws \Twig\Error\Error
+     * @throws \Exception
+     */
+    public function renderBlocks($blocks)
+    {
         $content = '';
 
         /** @var BlockTrait $blockEntity */
-        foreach ($page->getBlocks() as $blockEntity) {
+        foreach ($blocks as $blockEntity) {
 
             /** @var BlockInterface $blockType */
             $blockType = $this->blocks[$blockEntity->getType()] ?? null;

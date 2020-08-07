@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Form\Type;
 
 use Octave\CMSBundle\Entity\BlockEntityInterface;
+use Octave\CMSBundle\Form\DataTransformer\SimpleFieldDataTransformer;
 use Octave\CMSBundle\Page\Block\BlockInterface;
 use Octave\CMSBundle\Service\BlockManager;
 use Symfony\Component\Form\AbstractType;
@@ -103,6 +104,11 @@ class BlocksType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, $prepareFormFunction);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, $prepareFormFunction);
+
+        if ($options['serializing']) {
+            $builder->addModelTransformer(new SimpleFieldDataTransformer());
+        }
+
     }
 
     /**
@@ -131,7 +137,8 @@ class BlocksType extends AbstractType
     {
         $resolver->setDefaults(array(
             'block_types' => [],
-            'locales' => $this->locales
+            'locales' => $this->locales,
+            'serializing' => false
         ));
     }
 
