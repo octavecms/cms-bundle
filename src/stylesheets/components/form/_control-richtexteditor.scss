@@ -4,7 +4,9 @@
 @import "components/form/tinymce/toolbar";
 @import "components/form/tinymce/toolbar-group";
 @import "components/form/tinymce/button";
+@import "components/form/tinymce/collection";
 @import "components/form/tinymce/statusbar";
+@import "components/form/tinymce/menu";
 
 .form-control--richtexteditor {
     textarea {

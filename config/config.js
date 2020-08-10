@@ -1,3 +1,5 @@
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 /*
  * Task configuration
  * All options will be merged with defaults, but not replaces whole configuration object
@@ -24,14 +26,17 @@ exports.javascripts = {
                 cacheGroups: {
                     vendor: {
                         name: 'vendor',
-                        test: /[\\/]node_modules[\\/]/,
-                        priority: -10,
+                        test: /([\\/]node_modules[\\/]|components[\\/]form[\\/]tinycme)/,
+                        priority: 10,
                         enforce: true,
                         chunks: 'all',
                     }
                 }
             }
-        }
+        },
+        plugins: [
+            // new BundleAnalyzerPlugin()
+        ]
     }
 };
 

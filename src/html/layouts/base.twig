@@ -78,7 +78,8 @@
 
     {% if locale != 'en' %}
         {# En locale is built-in #}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/locale/{{ locale }}.min.js"></script>
+        {# <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/locale/{{ locale }}.min.js"></script> #}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.32/locale/{{ locale }}.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.3/l10n/{{ locale }}.js"></script>
     {% endif %}
 

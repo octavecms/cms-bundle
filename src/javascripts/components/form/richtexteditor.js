@@ -9,7 +9,7 @@ import namespace from 'util/namespace';
 
 import tinymce from 'tinymce';
 import 'tinymce/themes/silver/index';
-import 'components/form/tinycme/icons';
+import 'components/form/tinymce/icons';
 import 'tinymce/plugins/code/index';
 import 'tinymce/plugins/link/index';
 import 'tinymce/plugins/lists/index'
@@ -17,6 +17,9 @@ import 'tinymce/plugins/paste/index';
 import 'tinymce/plugins/table/index';
 import 'tinymce/plugins/quickbars/index';
 import 'tinymce/plugins/image/index';
+
+import setupQuickLinkMediaLibraryLink from 'components/form/tinymce/quicklink-media-library';
+import setupQuickBarsMediaLibraryImage from 'components/form/tinymce/quickbars-media-library';
 
 
 /**
@@ -75,18 +78,18 @@ class RichTextEditor {
                 { title: 'Heading 3', format: 'h3' },
                 { title: 'Heading 4', format: 'h4' },
 
-                // { title: 'Custom format', format: 'customformat' },
                 { title: 'Custom format', inline: 'span', styles: { color: '#00ff00', fontSize: '20px' }, attributes: { title: 'My custom format'} , classes: 'example1' },
                 { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' },
-                { title: 'Image formats' },
-                { title: 'Image Left', selector: 'img', styles: { 'float': 'left', 'margin': '0 10px 0 10px' } },
-                { title: 'Image Right', selector: 'img', styles: { 'float': 'right', 'margin': '0 0 10px 10px' } },
+                
+                // { title: 'Image formats' },
+                // { title: 'Image Left', selector: 'img', styles: { 'float': 'left', 'margin': '0 10px 0 10px' } },
+                // { title: 'Image Right', selector: 'img', styles: { 'float': 'right', 'margin': '0 0 10px 10px' } },
             ],
 
             // Quick toolbar
-            quickbars_selection_toolbar: 'bold | italic | styleselect | quicklink',
-            quickbars_insert_toolbar: 'quickimage quicktable numlist bullist',
-            quickbars_image_toolbar: 'alignleft aligncenter alignright',
+            quickbars_selection_toolbar: 'bold | italic | quicklink | styleselect',
+            quickbars_insert_toolbar: 'quickimage-ml-insert quicktable numlist bullist',
+            quickbars_image_toolbar: 'quickimage-ml-replace quicklink',
 
             // Toolbar
             toolbar: '',
@@ -111,17 +114,11 @@ class RichTextEditor {
 
             setup: (editor) => {
                 window.editor = editor;
-
-                // editor.ui.registry.addContextToolbar('lists', {
-                //     predicate: function (node) {
-                //         console.log(node);
-                //         return false;
-                //         // return node.nodeName.toLowerCase() === 'p'
-                //     },
-                //     items: 'alignleft aligncenter alignright',
-                //     position: 'node',
-                //     scope: 'node'
-                // });
+                
+                setTimeout(() => {
+                    setupQuickLinkMediaLibraryLink(editor);
+                    setupQuickBarsMediaLibraryImage(editor);
+                });
             }
 
         });

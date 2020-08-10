@@ -6,7 +6,6 @@ import assign from 'lodash/assign';
 import 'util/jquery.passive';
 import 'util/jquery.destroyed';
 import namespace from 'util/namespace';
-import { eq } from 'lodash';
 
 
 function buildThresholdList(numSteps) {

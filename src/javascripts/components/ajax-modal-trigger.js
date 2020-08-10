@@ -236,3 +236,11 @@ class AjaxModalTrigger {
 }
 
 $.fn.ajaxModalTrigger = createPlugin(AjaxModalTrigger);
+
+
+$.ajaxmodal = {
+    get: AjaxModalLoader.get,
+    load: AjaxModalLoader.load,
+    open: AjaxModalLoader.open,
+    remove: AjaxModalLoader.remove,
+};

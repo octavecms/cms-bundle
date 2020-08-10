@@ -6,8 +6,8 @@ $z-index-content: unset;
 $z-index-under-header: 9;
 $z-index-header: 10;
 $z-index-dropdown: 11;
-$z-index-modal: 12;
-$z-index-tooltip: 13;
+$z-index-modal: 1400;
+$z-index-tooltip: 1500; // Above tinymce
 
 /**
  * Border radius

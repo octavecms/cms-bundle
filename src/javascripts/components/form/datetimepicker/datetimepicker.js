@@ -4,12 +4,17 @@ import createPlugin from 'jquery-plugin-generator';
 import assign from 'lodash/assign';
 import 'util/jquery.inview';
 import flatpickr from 'flatpickr';
-import moment from 'moment';
+
+// Using dayjs instead of moment
+import dayjs from 'dayjs';
 
 // Expose globally to allow loading locales
-window.moment = moment;
+window.dayjs = dayjs;
 
-// import convertMomentToFlatPickrFormat from './format-converter';
+import 'dayjs/locale/en';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
+
 
 /**
  * DateTime picker
@@ -101,13 +106,13 @@ class DateTimePicker {
         
         // Add moment.js
         transformed.parseDate = (datestr, format) => {
-            return moment(datestr, format, options.useStrict).toDate();
+            return dayjs(datestr, format).toDate();
         },
         transformed.formatDate = (date, format, locale) => {
             if (options.language) {
-                moment.locale(options.language);
+                dayjs.locale(options.language);
             }
-            return moment(date).format(format);
+            return dayjs(date).format(format);
         }
 
         return transformed;

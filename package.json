@@ -20,11 +20,11 @@
   "dependencies": {
     "@popperjs/core": "^2.4.4",
     "@videinfra/static-website-builder": "^1.2.1",
+    "dayjs": "^1.8.33",
     "flatpickr": "^4.6.3",
     "focus-visible": "^5.1.0",
     "jquery-app": "^1.4.0",
     "jquery-plugin-generator": "^1.4.0",
-    "moment": "^2.27.0",
     "normalize-scss": "^7.0.0",
     "select2": "^4.0.13",
     "sortablejs": "^1.10.2",
@@ -37,6 +37,7 @@
   ],
   "devDependencies": {
     "jquery": "^3.5.1",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "webpack-bundle-analyzer": "^3.8.0"
   }
 }
