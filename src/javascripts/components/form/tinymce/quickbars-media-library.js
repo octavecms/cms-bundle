@@ -21,7 +21,6 @@ export default function setupQuickBarsMediaLibraryImage (editor) {
             'onselect': (files) => {
                 if (files.length) {
                     const image = files[0];
-                    console.log(image);
 
                     editor.execCommand('mceUpdateImage', null, {
                         'src': image.url,
@@ -41,7 +40,7 @@ export default function setupQuickBarsMediaLibraryImage (editor) {
 
     editor.ui.registry.addButton('quickimage-ml-replace', {
         icon: 'image',
-        tooltip: 'Replace image',
+        tooltip: 'Edit image',
         onAction: imageAction
     });
 

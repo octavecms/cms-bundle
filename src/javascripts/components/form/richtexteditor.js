@@ -29,13 +29,39 @@ class RichTextEditor {
 
     static get Defaults () {
         return {
-            contentCSS: '/assets/stylesheets/example-page-visual-editor.css',
-            contentStyles: {},
+            body_class: '',
+            content_css: [],
+            content_style: '',
+
+            style_formats: [],
+
+            // Content filtering
+            // https://www.tiny.cloud/docs/configure/content-filtering/#invalid_elements
+            invalid_elements: 'script,style,link',
+
+            // https://www.tiny.cloud/docs/configure/content-filtering/#invalid_styles
+            // invalid_styles: {},
+            
+            // https://www.tiny.cloud/docs/configure/content-filtering/#valid_elements
+            // valid_elements: '',
+
+            // https://www.tiny.cloud/docs/configure/content-filtering/#extended_valid_elements
+            // extended_valid_elements: '',
+
+            // https://www.tiny.cloud/docs/configure/content-filtering/#valid_classes
+            // valid_classes: {},
+
+            // Disable all inline CSS, see https://www.tiny.cloud/docs/configure/content-filtering/#valid_styles
+            valid_styles: {
+                '*': ''
+            },
         };
     }
 
     constructor ($container, opts) {
-        const options = this.options = assign({}, this.constructor.Defaults, opts);
+        console.log($container, opts);
+
+        this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.ns = namespace();
 
@@ -49,16 +75,37 @@ class RichTextEditor {
     }
 
     createEditor () {
-        const contentCSS = ['/assets/stylesheets/richtexteditor-inject.css'];
+        const options = {...this.options};
+        let id = this.$container.attr('id');
 
-        if (this.options.contentCSS) {
-            contentCSS.push(this.options.contentCSS);
+        if (!id) {
+            id = namespace();
+            this.$container.attr('id', id)
         }
 
+        // Content CSS
+        const contentCSS = [
+            '/assets/stylesheets/richtexteditor-inject.css'
+        ].concat(options.content_css).join(',');
+        delete(options.content_css);
+
+        // Style formats
+        const formats = {...options.formats};
+        delete(options.formats);
+
+        const styleFormats = [
+            { title: 'Paragraph', format: 'p' },
+            { title: 'Heading 1', format: 'h1' },
+            { title: 'Heading 2', format: 'h2' },
+            { title: 'Heading 3', format: 'h3' },
+            { title: 'Heading 4', format: 'h4' },
+            { title: 'Heading 5', format: 'h5' },
+        ].concat(options.style_formats)
+        delete(options.style_formats);
+
         tinymce.init({
-            selector: `#${ this.$container.attr('id') }`,
-            min_height: 400,
-            // statusbar: false,
+            selector: `#${ id }`,
+            min_height: 460,
             branding: false,
             elementpath: false,
             skin: false,
@@ -66,51 +113,32 @@ class RichTextEditor {
 
             // Plugins
             plugins: 'code link lists paste table quickbars image lists',
-            
-            // Styles{ title: 'Heading 4', format: 'h4' },
-            content_css: contentCSS.concat(','),
-            // content_style: this.options.contentStyles,
 
-            style_formats: [
-                { title: 'Paragraph', format: 'p' },
-                { title: 'Heading 1', format: 'h1' },
-                { title: 'Heading 2', format: 'h2' },
-                { title: 'Heading 3', format: 'h3' },
-                { title: 'Heading 4', format: 'h4' },
+            // Styles
+            body_class: '',
+            content_css: contentCSS,
+            content_style: '',
 
-                { title: 'Custom format', inline: 'span', styles: { color: '#00ff00', fontSize: '20px' }, attributes: { title: 'My custom format'} , classes: 'example1' },
-                { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' },
-                
-                // { title: 'Image formats' },
-                // { title: 'Image Left', selector: 'img', styles: { 'float': 'left', 'margin': '0 10px 0 10px' } },
-                // { title: 'Image Right', selector: 'img', styles: { 'float': 'right', 'margin': '0 0 10px 10px' } },
-            ],
+            formats: formats,
+            style_formats: styleFormats,
+            style_formats_autohide: true,
 
             // Quick toolbar
             quickbars_selection_toolbar: 'bold | italic | quicklink | styleselect',
-            quickbars_insert_toolbar: 'quickimage-ml-insert quicktable numlist bullist',
-            quickbars_image_toolbar: 'quickimage-ml-replace quicklink',
+            quickbars_insert_toolbar: 'quickimage-ml-insert | quicktable | numlist | bullist',
+            quickbars_image_toolbar: 'quickimage-ml-replace | quicklink',
 
-            // Toolbar
+            // Hide toolbar, we use quickbar
             toolbar: '',
             // toolbar: 'styleselect bold italic',
             // toolbar_mode: 'floating',
             // toolbar: 'styleselect bold italic link lists code',
 
-            // Menu:
+            // Hide menu, we use quickbar
             menubar: '',
 
             // Vertical resize
             resize: true,
-
-            // Content filtering
-            invalid_elements: 'script,style,link',
-
-            valid_styles: {
-                // Disable all inline CSS
-                // see https://www.tiny.cloud/docs/configure/content-filtering/#valid_styles
-                '*': ''
-            },
 
             setup: (editor) => {
                 window.editor = editor;
@@ -119,8 +147,10 @@ class RichTextEditor {
                     setupQuickLinkMediaLibraryLink(editor);
                     setupQuickBarsMediaLibraryImage(editor);
                 });
-            }
-
+            },
+            
+            // Merge with options
+            ...options
         });
     }
 
