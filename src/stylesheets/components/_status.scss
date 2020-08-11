@@ -5,14 +5,39 @@
 .status {
     @extend %transition;
     transition-property: background, opacity;
-    text-indent: -1000px;
-    overflow: hidden;
+    text-indent: -9000px;
     width: var(--spacer-2);
     height: var(--spacer-2);
     border-radius: 200px;
     background: var(--color-outline);
 }
 
-.status--primary {
+// Extended hover area
+label.status {
+    cursor: pointer;
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        left: calc(var(--spacer-3) * -0.75);
+        top: calc(var(--spacer-3) * -0.75);
+        right: calc(var(--spacer-3) * -0.75);
+        bottom: calc(var(--spacer-3) * -0.75);
+    }
+}
+
+// Active state
+.status--primary,
+input:checked + label.status {
     background: var(--color-primary);
+}
+
+// Focused state
+input {
+    @include link-focus-visible () {
+        & + label.status {
+            box-shadow: $link-focus-visible-shadow;
+        }
+    }
 }

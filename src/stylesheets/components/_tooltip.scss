@@ -165,6 +165,8 @@
 .tooltip[data-popper-placement="left-end"] {
     // Arrow
     .tooltip__arrow {
+        left: 100%;
+        right: auto;
         border-width: var(--spacer-2) 0 var(--spacer-2) var(--spacer-2);
         border-color: transparent transparent transparent var(--color-background);
     }

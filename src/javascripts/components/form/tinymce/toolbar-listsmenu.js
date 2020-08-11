@@ -2,7 +2,7 @@ export default function setupToolbarListsMenu (editor) {
     editor.ui.registry.addMenuButton('listmenu', {
         type: 'menubutton',
         text: '',
-        tooltip: 'Insert list',
+        tooltip: 'Lists',
         icon: 'unordered-list',
 
         fetch: (callback) => {

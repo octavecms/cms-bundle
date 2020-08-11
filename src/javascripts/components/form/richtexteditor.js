@@ -60,8 +60,6 @@ class RichTextEditor {
     }
 
     constructor ($container, opts) {
-        console.log($container, opts);
-
         this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.ns = namespace();
@@ -94,6 +92,11 @@ class RichTextEditor {
         const formats = {...options.formats};
         delete(options.formats);
 
+        // Plugins
+        const plugins = `code link lists paste table quickbars image lists ${ options.plugins }`;
+        delete(options.plugins);
+
+
         const styleFormats = [
             { title: 'Paragraph', format: 'p' },
             { title: 'Heading 1', format: 'h1' },
@@ -113,7 +116,7 @@ class RichTextEditor {
             skin_url: null,
 
             // Plugins
-            plugins: 'code link lists paste table quickbars image lists',
+            plugins: plugins,
 
             // Styles
             body_class: '',

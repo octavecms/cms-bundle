@@ -14,9 +14,9 @@
 {# Draggable / sortable #}
 {% set draggable = draggable|default(false) %}
 
-{# Dot showing if content has changed #}
-{% set withChangedDot = withChangedDot|default(false) %}
-{% set changed = changed|default(false) %}
+{# Active toggle #}
+{% set withActiveToggle = withActiveToggle|default(false) %}
+{% set active = active|default(false) %}
 
 {# Accordion #}
 {% set withAccordion = withAccordion|default(false) %}
@@ -68,8 +68,12 @@
 
         <div><div class="group group--nowrap group--middle group--5">
             {# Unsaved change dot / indicator #}
-            {% if withChangedDot %}
-                <span class="{% if draggable %}card__is-hidden-dragging{% endif %} status {% if changed %}status--primary{% endif %}" aria-hidden="true">Unsaved changes</span>
+            {% if withActiveToggle %}
+                <input type="checkbox" class="sr-only" id="{{ id }}-active" name="{{ id }}[active]" value="1" {% if active %}checked{% endif %} />
+                <label for="{{ id }}-active" class="{% if draggable %}card__is-hidden-dragging{% endif %} status" aria-hidden="true"
+                    data-plugin="tooltip" data-tooltip-trigger="hover" data-tooltip-placement="left" title="Toggle section active state">
+                        Toggle section active state
+                </label>
             {% endif %}
 
             {# Buttons #}

@@ -60,10 +60,13 @@ class Tooltip {
         
         this.ns = namespace();
         this.$container = $container;
+        this.$focusTarget = $container.is('label[for]') ? $(`#${ $container.attr('for') }`) : $container;
         this.$tooltip = null;
         this.mouseLeaveTimer = null;
         this.popper = null;
         this.open = false;
+        this.focused = false;
+        this.hovered = false;
         
         // Events
         $container
@@ -71,13 +74,12 @@ class Tooltip {
             .on('keydown', this.handleToggleKey.bind(this));
 
         if (options.trigger === 'hover') {
+            this.$focusTarget
+                .on('focus', this.handleFocus.bind(this))
+                .on('blur', this.handleBlur.bind(this));
+                
             $container
-                .on('click', this.show.bind(this))
-                .on('focus', this.show.bind(this))
-                .on('blur', this.hide.bind(this))
-                .on('mouseenter', this.handleMouseEnter.bind(this));
-            
-            $container
+                .on('mouseenter', this.handleMouseEnter.bind(this))
                 .on('mouseleave', this.handleMouseLeave.bind(this));
         } else {
             $container
@@ -122,7 +124,7 @@ class Tooltip {
      */
     show () {
         if (!this.isDisabled() && !this.open) {
-            const { eventShow, classNameOpen } = this.options;
+            const { eventShow, classNameOpen, trigger } = this.options;
             const ns = this.ns;
 
             // Trigger event and show dropdown only if event wasn't prevented
@@ -150,8 +152,10 @@ class Tooltip {
                 });
 
                 // Add event listeners
-                $(document)
-                    .on(`click.${ ns }`, this.handleDocumentClick.bind(this))
+                if (trigger === 'click') {
+                    $(document)
+                        .on(`click.${ ns }`, this.handleDocumentClick.bind(this))
+                }
 
                 // Prevent clicking on a button from submitting a form or link navigation
                 if (event && event.type === 'click') {
@@ -368,6 +372,7 @@ class Tooltip {
             this.mouseLeaveTimer = null;
         }
 
+        this.hovered = true;
         this.show();
     }
 
@@ -379,8 +384,29 @@ class Tooltip {
     handleMouseLeave () {
         this.mouseLeaveTimer = setTimeout(() => {
             this.mouseLeaveTimer = null;
-            this.hide();
+            this.hovered = false;
+
+            if (!this.focused && !this.hovered) {
+                this.hide();
+            }
         }, MOUSE_LEAVE_DELAY);
+    }
+
+    handleFocus () {
+        if (!this.hovered) {
+            this.focused = true;
+            this.show();
+        }
+    }
+
+    handleBlur () {
+        if (this.focused) {
+            this.focused = false;
+
+            if (!this.hovered) {
+                this.hide();
+            }
+        }
     }
 
 }
