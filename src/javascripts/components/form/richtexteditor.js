@@ -20,6 +20,7 @@ import 'tinymce/plugins/image/index';
 
 import setupQuickLinkMediaLibraryLink from 'components/form/tinymce/quicklink-media-library';
 import setupQuickBarsMediaLibraryImage from 'components/form/tinymce/quickbars-media-library';
+import setupToolbarListsMenu from 'components/form/tinymce/toolbar-listsmenu';
 
 
 /**
@@ -124,7 +125,7 @@ class RichTextEditor {
             style_formats_autohide: true,
 
             // Quick toolbar
-            quickbars_selection_toolbar: 'bold | italic | quicklink | styleselect',
+            quickbars_selection_toolbar: 'bold | italic | quicklink | listmenu | styleselect',
             quickbars_insert_toolbar: 'quickimage-ml-insert | quicktable | numlist | bullist',
             quickbars_image_toolbar: 'quickimage-ml-replace | quicklink',
 
@@ -142,6 +143,8 @@ class RichTextEditor {
 
             setup: (editor) => {
                 window.editor = editor;
+
+                setupToolbarListsMenu(editor);
                 
                 setTimeout(() => {
                     setupQuickLinkMediaLibraryLink(editor);
