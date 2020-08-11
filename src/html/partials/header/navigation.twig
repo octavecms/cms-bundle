@@ -1,11 +1,19 @@
+{% set withLog = withLog|default(false) %}
+{% set logCount = logCount|default(0) %}
+
 <ol class="nav group group--middle group--5">
     <li class="nav__item"><a role="button" tabindex="0" href="media-modal.html" data-plugin="ajaxModalTrigger">Media</a></li>
     <li class="nav__item"><a href="#">Global Data</a></li>
     <li class="nav__item"><a href="#">Sitemap</a></li>
     <li class="nav__item"><a href="#">Settings</a></li>
-    <li class="group__divider"></li>
-    <li class="nav__item"><a href="#">
-        <span>Log</span>
-        <sup class="badge badge--square badge--tiny badge--pill badge--inverted">3</sup>
-    </a></li>
+
+    {% if withLog %}
+        <li class="group__divider"></li>
+        <li class="nav__item"><a href="#">
+            <span>Log</span>
+            {% if logCount %}
+                <sup class="badge badge--square badge--tiny badge--pill badge--inverted">{{ logCount }}</sup>
+            {% endif %}
+        </a></li>
+    {% endif %}
 </ol>

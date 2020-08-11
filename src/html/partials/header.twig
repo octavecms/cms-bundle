@@ -2,6 +2,9 @@
 {% set headerStickyNavigation = headerStickyNavigation|default([]) %}
 {% set languages = languages|default([]) %}
 
+{% set withLog = withLog|default(false) %}
+{% set logCount = logCount|default(0) %}
+
 {% set withStickyHeader = false %}
 {% if languages|length or headerStickyNavigation|length %}
     {% set withStickyHeader = true %}
@@ -31,9 +34,14 @@
             {# Navigation, right aligned #}
             <div>
                 <div class="group group--middle group--5">
-                    <div>
-                        {% include 'partials/header/navigation.twig' %}
-                    </div>
+                    {% if withLog %}
+                        <div>
+                            {% include 'partials/header/navigation.twig' with {
+                                withLog: withLog,
+                                logCount: logCount
+                            } %}
+                        </div>
+                    {% endif %}
 
                     {# Profile #}
                     <div>

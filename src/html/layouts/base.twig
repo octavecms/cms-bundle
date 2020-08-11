@@ -51,7 +51,10 @@
 <body>
 
     <div class="main-page">
-        {% include 'partials/header.twig' %}
+        {% include 'partials/header.twig' with {
+            withLog: true,
+            logCount: 3
+        } %}
 
         {% block body %}
             <div class="ui-gray-background main-content">
