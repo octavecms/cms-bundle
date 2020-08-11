@@ -1,11 +1,18 @@
+/**
+ * @typedef {object} JQuery
+ * @typedef {object} MouseEvent
+ */
+
 import $ from 'util/jquery';
-import assign from 'lodash/assign';
 import 'util/template/jquery.template';
+import assign from 'lodash/assign';
+import map from 'lodash/map';
 import each from 'lodash/each';
 import namespace from 'util/namespace';
 import debounce from 'media/util/debounce-raf';
 import Sortable from 'sortablejs';
 
+import isIntersecting from 'media/util/is-intersecting';
 import { loadFiles } from 'media/modules/actions-files';
 import { addSelectedFile, setSelectedFile, toggleSelectedFile, expandSelectedFileList } from 'media/modules/actions-selection';
 
@@ -25,6 +32,12 @@ export default class MediaFileList {
         };
     }
 
+    /**
+     * Constructor
+     * 
+     * @param {JQuery} $container Container element
+     * @param {object} opts Media file list options
+     */
     constructor ($container, opts) {
         const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
@@ -44,6 +57,11 @@ export default class MediaFileList {
         this.reload();
     }
 
+    /**
+     * Initialize events
+     * 
+     * @protected
+     */
     events () {
         const store = this.store;
         const $container = this.$container;
@@ -95,6 +113,9 @@ export default class MediaFileList {
             });
         });
 
+        // Click and drag file selection
+        $container.on('mousedown', this.dragSelectionStart.bind(this));
+
         // Empty file list message
         store.files.grid.on(`change.${ ns }`, (newValue) => {
             $container.find('.js-image-list-empty').toggleClass('d-none', !!newValue.length);
@@ -111,10 +132,20 @@ export default class MediaFileList {
         $container.on('click', this.handleClickDeselect.bind(this));
     }
 
+    /**
+     * Reload file list
+     * 
+     * @protected
+     */
     reload () {
         loadFiles(this.store, this.store.folders.selected.get());
     }
 
+    /**
+     * Render file list
+     * 
+     * @protected
+     */
     render () {
         const store = this.store;
         const files = store.files.grid.get();
@@ -131,9 +162,33 @@ export default class MediaFileList {
     }
 
     /**
+     * Destructor
+     * 
+     * @protected
+     */
+    destroy () {
+        this.destroySortable();
+        this.destroyDragSelection();
+        
+        if (this.store) {
+            if (this.store.off) {
+                this.store.off(`.${ this.ns }`);
+            }
+            this.store = null;
+        }
+    }
+
+
+    /**
+     * Helper functions
+     * ------------------------------------------------------------------------
+     */
+
+
+    /**
      * Returns id from element
      * 
-     * @param {object} $element Element
+     * @param {JQuery} $element Element
      * @returns {string} Element id
      */
     getId ($element) {
@@ -144,7 +199,7 @@ export default class MediaFileList {
      * Returns element from id
      * 
      * @param {string} id Element id
-     * @returns {object} Element
+     * @returns {JQuery} Element
      */
     getElement (id, selector) {
         const $element = this.$container.find(`${ IMAGE_ITEM_SELECTOR }[data-id="${ id }"]`);
@@ -162,17 +217,17 @@ export default class MediaFileList {
      * Clicking on file should select it
      * Holding control or shift keys allows to select multiple files
      * 
-     * @param {object} e Event
+     * @param {MouseEvent} e Event
      * @protected
      */
     handleClickSelect (e) {
-        const multiselect = this.isMultiSelectEvent(e);
+        const eventType = this.isMultiSelectEvent(e);
         const id = this.getId(e.target);
         
-        if (multiselect == 'item') {
+        if (eventType == 'item') {
             // Selecting single item
             toggleSelectedFile(this.store, id);
-        } else if (multiselect == 'list') {
+        } else if (eventType == 'list') {
             // Selecting list of items using shift key
             expandSelectedFileList(this.store, id);
         } else {
@@ -185,7 +240,7 @@ export default class MediaFileList {
     /**
      * Doublce clicking on file should select it and close media library
      * 
-     * @param {object} e Event
+     * @param {MouseEvent} e Event
      * @protected
      */
     handleDoubleClickSelect (e) {
@@ -199,14 +254,14 @@ export default class MediaFileList {
     /**
      * Clicking outside any item deselect files
      * 
-     * @param {object} e Event
+     * @param {MouseEvent} e Event
      * @protected
      */
     handleClickDeselect (e) {
         if ($(e.target).closest(IMAGE_ITEM_SELECTOR).length === 0) {
             const multiselect = this.isMultiSelectEvent(e);
 
-            if (!multiselect) {
+            if (!multiselect && !this.dragSelectionActive) {
                 this.store.files.selected.set([]);
             }
         }
@@ -215,20 +270,20 @@ export default class MediaFileList {
     /**
      * When starting to drag select the file
      * 
-     * @param {object} e Event
+     * @param {MouseEvent} e Event
      * @protected
      */
     handleDragSelect (e) {
-        const multiselect = this.isMultiSelectEvent(e);
+        const eventType = this.isMultiSelectEvent(e);
         const id = this.getId(e.target);
         const selected = this.store.files.selected.get();
 
         // Don't deselect
         if (selected.indexOf(id) === -1) {
-            if (multiselect == 'item') {
+            if (eventType == 'item') {
                 // Selecting single item
                 addSelectedFile(this.store, id);
-            } else if (multiselect == 'list') {
+            } else if (eventType == 'list') {
                 // Selecting list of items using shift key
                 expandSelectedFileList(this.store, id);
             } else {
@@ -240,27 +295,27 @@ export default class MediaFileList {
     /**
      * Retursn true if event if for multiple file selection
      * 
-     * @param {object} e Event
+     * @param {MouseEvent} e Event
      * @returns {boolean} True if event is for file multi-select, otherwise false
      * @protected
      */
     isMultiSelectEvent (e) {
-        if (this.store.multiselect.get()) {
-            const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
-            if ((isOSX && e.metaKey) || (!isOSX && e.ctrlKey)) {
-                return 'item';
-            } else if (e.shiftKey) {
-                return 'list';
-            }
+        const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
+        if ((isOSX && e.metaKey) || (!isOSX && e.ctrlKey)) {
+            return 'item';
+        } else if (e.shiftKey) {
+            return 'list';
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
      * Set transferable data, this for example allow to drag item from the
      * list into the browser url and full size image will be opened in the browser
      * 
+     * @param {object} dataTransfer Data transfer object
+     * @param {HTMLElement} dragEl Element which is dragged
      * @protected
      */
     setDataTransferData (dataTransfer, dragEl) {
@@ -290,25 +345,162 @@ export default class MediaFileList {
 
 
     /**
+     * File selection using click and drag
+     * ------------------------------------------------------------------------
+     */
+
+
+     /**
+      * Validate drag selection event
+      * Mouse down on item is for dragging item, ignore it
+      * 
+      * @param {MouseEvent} e Event
+      * @returns {boolean} True if event is valid, otherwise false
+      * @protected
+      */
+    validateDragSelectionEvent (e) {
+        if ($(e.target).closest(IMAGE_ITEM_SELECTOR).length) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * Start drag selection
+     * 
+     * @param {MouseEvent} e Event
+     * @protected
+     */
+    dragSelectionStart (e) {
+        if (this.validateDragSelectionEvent(e)) {
+            let selected = [].concat(this.store.files.selected.get());
+
+            this.dragSelectionMultiSelectEvent = !!this.isMultiSelectEvent(e);
+            this.dragSelectionActive = true;
+            this.dragSelectionInitial = selected;
+            this.dragSelectionMouse = {
+                x: e.pageX,
+                y: e.pageY
+            };
+
+            // If not multi selection event then reset selection
+            if (!this.dragSelectionMultiSelectEvent) {
+                selected = this.dragSelectionInitial = [];
+                this.store.files.selected.set([]);
+            }
+
+            // Find all targets
+            this.dragSelectionTargets = map(this.$container.find(IMAGE_ITEM_SELECTOR).toArray(), (item) => {
+                const $item = $(item);
+                const id = this.getId($item);
+                const box = item.getBoundingClientRect();
+
+                return {
+                    element: $item,
+                    id: id,
+                    x: box.left + $(window).scrollLeft(),
+                    y: box.top + $(window).scrollTop(),
+                    width: box.width,
+                    height: box.height,
+                    selected: selected.indexOf(id) !== -1
+                };
+            });
+
+            // Preview
+            const containerBox = this.$container.get(0).getBoundingClientRect();
+            this.$dragSelectionPreview = $('<div class="media-filelist-drag-selection-preview"></div>').prependTo(this.$container);
+            this.dragSelectionPreviewOffset = [-containerBox.left, -containerBox.top];
+
+            $(document)
+                .on(`mousemove.${ this.ns }`, this.dragSelectionMove.bind(this))
+                .on(`mouseup.${ this.ns }`, debounce(this.destroyDragSelection.bind(this)));
+
+            e.preventDefault();
+        }
+    }
+
+
+    /**
+     * Handle drag selection mouse event
+     * 
+     * @param {MouseEvent} e Event
+     * @protected
+     */
+    dragSelectionMove (e) {
+        const mouseTo = [e.pageX, e.pageY];
+        const mouseFrom = [this.dragSelectionMouse.x, this.dragSelectionMouse.y];
+        const targets = this.dragSelectionTargets;
+        const selected = [].concat(this.dragSelectionInitial);
+
+        // Normalize x/y so that from is < than to
+        if (mouseTo[0] < mouseFrom[0]) {
+            let mouseTemp = mouseTo[0];
+            mouseTo[0] = mouseFrom[0];
+            mouseFrom[0] = mouseTemp;
+        }
+        if (mouseTo[1] < mouseFrom[1]) {
+            let mouseTemp = mouseTo[1];
+            mouseTo[1] = mouseFrom[1];
+            mouseFrom[1] = mouseTemp;
+        }
+
+        for (let i = 0; i < targets.length; i++) {
+            const target = targets[i];
+
+            if (!target.selected) {
+                if (
+                    isIntersecting(mouseFrom, mouseTo, [target.x, target.y]) ||
+                    isIntersecting(mouseFrom, mouseTo, [target.x + target.width, target.y]) ||
+                    isIntersecting(mouseFrom, mouseTo, [target.x, target.y + target.height]) ||
+                    isIntersecting(mouseFrom, mouseTo, [target.x + target.width, target.y + target.height])
+                ) {
+                    selected.push(target.id);
+                }
+            }
+        }
+
+        // Preview
+        const offset = this.dragSelectionPreviewOffset;
+        this.$dragSelectionPreview.css('transform', `translate(${ mouseFrom[0] + offset[0] }px, ${ mouseFrom[1] + offset[1] }px) scale(${ (mouseTo[0] - mouseFrom[0]) / 1000 }, ${ (mouseTo[1] - mouseFrom[1]) / 1000 })`)
+
+        store.files.selected.set(selected);
+    }
+
+    /**
+     * Handle drag selection end event
+     * 
+     * @protected
+     */
+    destroyDragSelection () {
+        if (this.$dragSelectionPreview) {
+            this.$dragSelectionPreview.remove();
+            this.$dragSelectionPreview = null;
+        }
+
+        this.dragSelectionActive = false;
+        this.dragSelectionMouse = null;
+        this.dragSelectionTargets = null;
+        this.dragSelectionTargets = null;
+        this.dragSelectionPreviewOffset = null;
+        $(document).off(`mouseup.${ this.ns } mousemove.${ this.ns }`);
+    }
+
+
+    /**
      * Drag and drop sortable
      * ------------------------------------------------------------------------
      */
 
-    setSortableMultiSelectIds (elements) {
-        const ids = [];
 
-        $(elements).each((_, el) => {
-            ids.push($(el).data('id'));
-        });
-
-        store.files.selected.set(ids);
-        // $(elements).data('multiselectIds', ids);
-    }
-
+    /**
+     * Create sortable
+     * 
+     * @protected
+     */
     sortable () {
         const $list = this.$container.find('.js-image-list-list');
-        const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
-        const multiselect = this.store.multiselect.get();
 
         this.sortableInstance = new Sortable($list.get(0), {
             dragClass: 'is-dragging',
@@ -338,27 +530,37 @@ export default class MediaFileList {
                 this.setSortableMultiSelectIds(e.items);
             },
             onDeselect: (e) => {
-                // $(e.item).removeData('multiselectIds');
                 this.setSortableMultiSelectIds(e.items);
             },
         });
     }
 
+    /**
+     * On sortable selection change mark items selected / deselected
+     * 
+     * @param {HTMLElement[]} elements Selected elements
+     * @protected
+     */
+    setSortableMultiSelectIds (elements) {
+        const ids = [];
+
+        $(elements).each((_, el) => {
+            ids.push($(el).data('id'));
+        });
+
+        store.files.selected.set(ids);
+        // $(elements).data('multiselectIds', ids);
+    }
+
+    /**
+     * Destroy sortable
+     * 
+     * @protected
+     */
     destroySortable () {
         if (this.sortableInstance) {
             this.sortableInstance.destroy();
             this.sortableInstance = null;
-        }
-    }
-
-    destroy () {
-        this.destroySortable();
-        
-        if (this.store) {
-            if (this.store.off) {
-                this.store.off(`.${ this.ns }`);
-            }
-            this.store = null;
         }
     }
 }

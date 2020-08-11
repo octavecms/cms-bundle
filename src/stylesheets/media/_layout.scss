@@ -22,9 +22,12 @@
         &__content {
             padding: var(--spacer-5) 0 0;
             flex-grow: 1;
-
+            
             display: flex;
             flex-direction: column;
+
+            // Prevent overflow of drag select preview
+            overflow: hidden;
         }
         &__footer {
             // position: absolute;

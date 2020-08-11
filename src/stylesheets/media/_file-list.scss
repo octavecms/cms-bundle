@@ -5,3 +5,15 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.media-filelist-drag-selection-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1000px;
+    height: 1000px;
+    transform-origin: 0 0 ;
+    background: rgba(var(--color-focus-raw), 0.4);
+    // opacity: 0.15;
+    transform: translate(0px, 0px) scale(0);
+}
