@@ -36,6 +36,8 @@ class RichTextEditor {
 
             style_formats: [],
 
+            plugins: '',
+
             // Content filtering
             // https://www.tiny.cloud/docs/configure/content-filtering/#invalid_elements
             invalid_elements: 'script,style,link',

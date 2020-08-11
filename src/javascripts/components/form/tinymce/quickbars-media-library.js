@@ -1,17 +1,10 @@
-function isFigure (elm) {
-    return elm.nodeName === 'FIGURE';
-};
-function isImage (elm) {
-    return elm.nodeName === 'IMG';
-};
-
 /**
  * Add buttons to the quickbars toolbar which will open
  * media library to insert or replace image
  * 
  * @param {object} editor Editor object
  */
-export default function setupQuickBarsMediaLibraryImage (editor) {
+function addButton (editor) {
     const imageAction = function () {
         $.ajaxmodal.open('/media-modal.html', null, {
             // Media library args
@@ -50,4 +43,23 @@ export default function setupQuickBarsMediaLibraryImage (editor) {
         text: 'Image...',
         onAction: imageAction
     });
+}
+
+/**
+ * Add buttons to the quickbars toolbar which will open
+ * media library to insert or replace image
+ * 
+ * @param {object} editor Editor object
+ */
+export default function setupQuickBarsMediaLibraryImage (editor) {
+    // Re-try for 1 second to add a button, give up after that
+    let retries = 10;
+    const check = () => {
+        if (!addButton(editor) && retries) {
+            retries--;
+            setTimeout(check, 100);
+        }
+    };
+
+    check();
 }
