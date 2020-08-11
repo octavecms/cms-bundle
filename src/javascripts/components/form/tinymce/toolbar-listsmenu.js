@@ -19,6 +19,18 @@ export default function setupToolbarListsMenu (editor) {
                     tooltip: 'Numbered list',
                     onAction: () => { editor.execCommand('InsertOrderedList'); },
                 },
+                {
+                    type: 'menuitem',
+                    icon: 'indent',
+                    tooltip: 'Indent list',
+                    onAction: () => { editor.execCommand('indent'); },
+                },
+                {
+                    type: 'menuitem',
+                    icon: 'outdent',
+                    tooltip: 'Outdent list',
+                    onAction: () => { editor.execCommand('outdent'); },
+                },
             ]);
         }
     });
