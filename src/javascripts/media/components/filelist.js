@@ -1,8 +1,3 @@
-/**
- * @typedef {object} JQuery
- * @typedef {object} MouseEvent
- */
-
 import $ from 'util/jquery';
 import 'util/template/jquery.template';
 import assign from 'lodash/assign';
@@ -217,12 +212,12 @@ export default class MediaFileList {
      * Clicking on file should select it
      * Holding control or shift keys allows to select multiple files
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.ClickEvent} e Event
      * @protected
      */
-    handleClickSelect (e) {
-        const eventType = this.isMultiSelectEvent(e);
-        const id = this.getId(e.target);
+    handleClickSelect (event) {
+        const eventType = this.isMultiSelectEvent(event);
+        const id = this.getId(event.target);
         
         if (eventType == 'item') {
             // Selecting single item
@@ -234,32 +229,32 @@ export default class MediaFileList {
             setSelectedFile(this.store, id);
         }
 
-        e.preventDefault();
+        event.preventDefault();
     }
 
     /**
      * Doublce clicking on file should select it and close media library
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.DoubleClickEvent} event Event
      * @protected
      */
-    handleDoubleClickSelect (e) {
+    handleDoubleClickSelect (event) {
         if (this.options.onselect) {
             this.options.onselect();
         }
         
-        e.preventDefault();
+        event.preventDefault();
     }
 
     /**
      * Clicking outside any item deselect files
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.ClickEvent} event Event
      * @protected
      */
-    handleClickDeselect (e) {
-        if ($(e.target).closest(IMAGE_ITEM_SELECTOR).length === 0) {
-            const multiselect = this.isMultiSelectEvent(e);
+    handleClickDeselect (event) {
+        if ($(event.target).closest(IMAGE_ITEM_SELECTOR).length === 0) {
+            const multiselect = this.isMultiSelectEvent(event);
 
             if (!multiselect && !this.dragSelectionActive) {
                 this.store.files.selected.set([]);
@@ -270,12 +265,12 @@ export default class MediaFileList {
     /**
      * When starting to drag select the file
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.DragStartEvent} event Event
      * @protected
      */
-    handleDragSelect (e) {
-        const eventType = this.isMultiSelectEvent(e);
-        const id = this.getId(e.target);
+    handleDragSelect (event) {
+        const eventType = this.isMultiSelectEvent(event);
+        const id = this.getId(event.target);
         const selected = this.store.files.selected.get();
 
         // Don't deselect
@@ -295,15 +290,15 @@ export default class MediaFileList {
     /**
      * Retursn true if event if for multiple file selection
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.Event} event Event
      * @returns {boolean} True if event is for file multi-select, otherwise false
      * @protected
      */
-    isMultiSelectEvent (e) {
+    isMultiSelectEvent (event) {
         const isOSX = navigator.platform.toLowerCase().indexOf('mac') >= 0;
-        if ((isOSX && e.metaKey) || (!isOSX && e.ctrlKey)) {
+        if ((isOSX && event.metaKey) || (!isOSX && event.ctrlKey)) {
             return 'item';
-        } else if (e.shiftKey) {
+        } else if (event.shiftKey) {
             return 'list';
         } else {
             return false;
@@ -354,12 +349,12 @@ export default class MediaFileList {
       * Validate drag selection event
       * Mouse down on item is for dragging item, ignore it
       * 
-      * @param {MouseEvent} e Event
+      * @param {JQuery.Event} event Event
       * @returns {boolean} True if event is valid, otherwise false
       * @protected
       */
-    validateDragSelectionEvent (e) {
-        if ($(e.target).closest(IMAGE_ITEM_SELECTOR).length) {
+    validateDragSelectionEvent (event) {
+        if ($(event.target).closest(IMAGE_ITEM_SELECTOR).length) {
             return false;
         } else {
             return true;
@@ -370,19 +365,19 @@ export default class MediaFileList {
     /**
      * Start drag selection
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.MouseDownEvent} event Event
      * @protected
      */
-    dragSelectionStart (e) {
-        if (this.validateDragSelectionEvent(e)) {
+    dragSelectionStart (event) {
+        if (this.validateDragSelectionEvent(event)) {
             let selected = [].concat(this.store.files.selected.get());
 
-            this.dragSelectionMultiSelectEvent = !!this.isMultiSelectEvent(e);
+            this.dragSelectionMultiSelectEvent = !!this.isMultiSelectEvent(event);
             this.dragSelectionActive = true;
             this.dragSelectionInitial = selected;
             this.dragSelectionMouse = {
-                x: e.pageX,
-                y: e.pageY
+                x: event.pageX,
+                y: event.pageY
             };
 
             // If not multi selection event then reset selection
@@ -417,7 +412,7 @@ export default class MediaFileList {
                 .on(`mousemove.${ this.ns }`, this.dragSelectionMove.bind(this))
                 .on(`mouseup.${ this.ns }`, debounce(this.destroyDragSelection.bind(this)));
 
-            e.preventDefault();
+            event.preventDefault();
         }
     }
 
@@ -425,11 +420,11 @@ export default class MediaFileList {
     /**
      * Handle drag selection mouse event
      * 
-     * @param {MouseEvent} e Event
+     * @param {JQuery.MouseMoveEvent} event Event
      * @protected
      */
-    dragSelectionMove (e) {
-        const mouseTo = [e.pageX, e.pageY];
+    dragSelectionMove (event) {
+        const mouseTo = [event.pageX, event.pageY];
         const mouseFrom = [this.dragSelectionMouse.x, this.dragSelectionMouse.y];
         const targets = this.dragSelectionTargets;
         const selected = [].concat(this.dragSelectionInitial);
@@ -526,11 +521,11 @@ export default class MediaFileList {
 
             setData: this.setDataTransferData.bind(this),
 
-            onSelect: (e) => {
-                this.setSortableMultiSelectIds(e.items);
+            onSelect: (event) => {
+                this.setSortableMultiSelectIds(event.items);
             },
-            onDeselect: (e) => {
-                this.setSortableMultiSelectIds(e.items);
+            onDeselect: (event) => {
+                this.setSortableMultiSelectIds(event.items);
             },
         });
     }

@@ -133,7 +133,7 @@ export default class VisualEditorAddSection {
      */
     addSection (event) {
         const $target = $(event.target);
-        const $dropdown = $target.closest('[data-plugin~="dropdown"]');
+        const $dropdown = $target.closest(`[data-${ $.app.settings.namespace }~="dropdown"]`);
         const $item = $target.closest(SELECTOR_ADD_ITEM_CONTROL);
         
         const type = $item.data('type');

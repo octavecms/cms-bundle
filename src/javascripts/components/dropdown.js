@@ -80,6 +80,12 @@ class Dropdown {
         };
     }
 
+    /**
+     * Constructor
+     * 
+     * @param {JQuery} $container Container element
+     * @param {object} opts Plugin options
+     */
     constructor ($container, opts) {
         const options = this.options = assign({}, this.constructor.Defaults, opts);
 
@@ -134,6 +140,8 @@ class Dropdown {
 
     /**
      * Toggle dropdown
+     * 
+     * @param {JQuery.ClickEvent} [event] Event
      */
     toggle (event) {
         if (this.open) {
@@ -146,7 +154,7 @@ class Dropdown {
     /**
      * Show dropdown
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      */
     show (event) {
         if (!this.isDisabled() && !this.open) {
@@ -188,7 +196,8 @@ class Dropdown {
 
                 this.$menu
                     .on(`focus.${ namespace } mouseenter.${ namespace }`, itemSelector, this.handleItemMouseEnter.bind(this))
-                    .on(`keydown.${ namespace }`, itemSelector, this.handleKey.bind(this))
+                    .on(`keydown.${ namespace }`, itemSelector, this.handleItemKey.bind(this))
+                    .on(`keydown.${ namespace }`, this.handleMenuKey.bind(this))
                     .on(`click.${ namespace } returnkey.${ namespace }`, closeSelector, this.hide.bind(this));
 
                 // Prevent clicking on a button from submitting a form or link navigation
@@ -202,7 +211,7 @@ class Dropdown {
     /**
      * Focus item when dropdown is shown
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      * @protected
      */
     onShow (event) {
@@ -224,7 +233,7 @@ class Dropdown {
     /**
      * After dropdown has been shown trigger 'shown' event
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      * @protected
      */
     onShown (event) {
@@ -234,6 +243,9 @@ class Dropdown {
 
     /**
      * Hide dropdown
+     * 
+     * @param {JQuery.ClickEvent} [event] Optional event 
+     * @protected
      */
     hide (event) {
         if (!this.isDisabled() && this.open) {
@@ -282,7 +294,7 @@ class Dropdown {
      * After dropdown has been hidden trigger 'hidden' event and reset
      * indicator
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      * @protected
      */
     onHidden (event) {
@@ -306,19 +318,24 @@ class Dropdown {
     /**
      * Returns list of all items
      * 
-     * @returns {jQuery} List of all items
+     * @returns {JQuery} List of all items
      * @protected
      */
     getItems () {
         const { itemSelector, menuSelector, classNameDisabled } = this.options;
         const $menu = this.$menu;
-        return $menu.find(itemSelector).not($menu.find(`${ menuSelector} ${ itemSelector }`)).not(`.${ classNameDisabled }`);
+        const $items = $menu.find(itemSelector).not($menu.find(`${ menuSelector} ${ itemSelector }`)).not(`.${ classNameDisabled }`);
+
+        // Filter only visible items
+        return $items.filter((_, element) => {
+            return !!element.offsetParent;
+        });
     }
 
     /**
      * Returns active item
      * 
-     * @returns {jQuery} Active item
+     * @returns {JQuery} Active item
      * @protected
      */
     getActiveItem () {
@@ -328,8 +345,8 @@ class Dropdown {
     /**
      * Returns next item
      * 
-     * @param {jQuery} $item Item for which to return next item
-     * @returns {jQuery} Next item
+     * @param {JQuery} $item Item for which to return next item
+     * @returns {JQuery} Next item
      * @protected
      */
     getNextItem ($item) {
@@ -347,8 +364,8 @@ class Dropdown {
     /**
      * Returns previous item
      * 
-     * @param {jQuery} $item Item for which to return previous item
-     * @returns {jQuery} Previous item
+     * @param {JQuery} $item Item for which to return previous item
+     * @returns {JQuery} Previous item
      * @protected
      */
     getPreviousItem ($item) {
@@ -366,7 +383,7 @@ class Dropdown {
     /**
      * Focus item element
      * 
-     * @param {jQuery} $item Item element
+     * @param {JQuery} $item Item element
      */
     focusItem ($item) {
         const { classNameFocused } = this.options;
@@ -391,7 +408,7 @@ class Dropdown {
     /**
      * Remove focus from item element
      * 
-     * @param {jQuery} $item Item element
+     * @param {JQuery} $item Item element
      */
     blurItem ($item) {
         const { classNameFocused, menuToggleSelector } = this.options;
@@ -535,35 +552,52 @@ class Dropdown {
     /**
      * Handle key press on one of the items
      * 
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
-    handleKey (event) {
+    handleItemKey (event) {
         const $item = $(event.target);
 
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-            const $items = this.getItems();
-
-            if ($items.index($item) !== -1) {
-                if (event.key === 'ArrowDown') {
-                    this.focusNextItem();
-                } else {
-                    this.focusPreviousItem();
-                }
-
+        if (!event.isDefaultPrevented()) {
+            if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'ArrowUp') {
+                const $items = this.getItems();
+    
+                if ($items.index($item) !== -1) {
+                    if (event.key === 'ArrowDown' || (event.key === 'Tab' && !event.shiftKey)) {
+                        // Overwrite tab key to prevent going outside the menu
+                        this.focusNextItem();
+                    } else {
+                        this.focusPreviousItem();
+                    }
+    
+                    event.preventDefault();
+                }               
+            } else if (event.key === 'Escape') {
+                this.hide();
                 event.preventDefault();
-            }               
-        } else if (event.key === 'Escape') {
+            } else if ((this.position === 'left' && event.key === 'ArrowRight') || (this.position === 'right' && event.key === 'ArrowLeft')) {
+                this.hide(); 
+                event.preventDefault();
+            }
+        }
+    }
+
+    /**
+     * Handle key press on the menu
+     * 
+     * @param {JQuery.KeyDownEvent} event Event
+     */
+    handleMenuKey (event) {
+        if (!event.isDefaultPrevented() && event.key === 'Escape') {
             this.hide();
-        } else if ((this.position === 'left' && event.key === 'ArrowRight') || (this.position === 'right' && event.key === 'ArrowLeft')) {
-            this.hide(); 
+            event.preventDefault();
         }
     }
 
     /**
      * Handle key press on the toggle element
      * 
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
     handleToggleKey (event) {
@@ -593,7 +627,7 @@ class Dropdown {
     /**
      * Handle key press on the document element
      * 
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
     handleDocumentKey (event) {
@@ -616,7 +650,7 @@ class Dropdown {
      * Handle click on document
      * Close dropdown if necessary
      * 
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.ClickEvent} event Event
      * @protected
      */
     handleDocumentClick (event) {
@@ -639,7 +673,7 @@ class Dropdown {
     /**
      * Position indicator below the item
      * 
-     * @param {jQuery} $item Item element
+     * @param {JQuery} $item Item element
      * @protected
      */
     positionIndicator ($item) {
@@ -805,10 +839,10 @@ class Dropdown {
     }
 
     /**
-      * On mouse leave wait before hiding menu
-      * 
-      * @protected
-      */
+     * On mouse leave wait before hiding menu
+     * 
+     * @protected
+     */
     handleMouseLeave () {
         this.mouseLeaveTimer = setTimeout(() => {
             this.mouseLeaveTimer = null;

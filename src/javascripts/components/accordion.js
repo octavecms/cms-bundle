@@ -28,6 +28,9 @@ class Accordion extends ResponsiveComponent {
             // Parent selector for 'activeHeadingParentClassName'
             'headingParentSelector': '.accordion__header',
 
+            // Collapse accordion sibling accordions when clicking on this element
+            'collapseSiblingsSelector': '.js-accordion-collapse-siblings',
+
             // CSS selector to find an accordion content
             'contentSelector': '[role="region"], [data-accordion-content-id]',
 
@@ -92,13 +95,32 @@ class Accordion extends ResponsiveComponent {
         };
     }
 
+    /**
+     * Initialize plugin
+     * 
+     * @protected
+     */
     init () {
         this.hashReady   = false;
 
+        // Cache element which is used to collapse siblings, in case it's in the dropdown
+        const selector = this.options.collapseSiblingsSelector;
+
+        if (selector) {
+            const $container = this.$container;
+            const $subaccordions = $container.find(`[data-${ $.app.settings.namespace }~="accordion"]`);
+            this.$collapseSiblingsElement = $container.find(selector).not($subaccordions.find(selector));
+        }
+        
         // When opening / closing elements save height changes for autoScroll
         this.heightDiffs = map(Array(this.getAllIds().length), () => 0);
     }
 
+    /**
+     * Destroy plugin
+     * 
+     * @protected
+     */
     destroy () {
         this.disable();
 
@@ -121,6 +143,9 @@ class Accordion extends ResponsiveComponent {
             // other plugins are called after we have prevented default behaviour
             $(document.body).on(`click.${ this.ns } returnkey.${ this.ns }`, options.headingSelector, this.handleHeadingClick.bind(this));
 
+            // Collapse sibling accordions
+            this.$collapseSiblingsElement.on(`click.${ this.ns } returnkey.${ this.ns }`, this.collapseSiblings.bind(this));
+
             // Open item based on hash value
             this.handleHashChange();
         }
@@ -135,6 +160,8 @@ class Accordion extends ResponsiveComponent {
         if (super.disable()) {
             // Cleanup global events
             $(document.body).off(`.${ this.ns }`);
+
+            this.$collapseSiblingsElement.off(`.${ this.ns }`);
 
             // Page loaded with accordion disabled, prevent accordion toggle when it becomes
             // enabled
@@ -174,7 +201,7 @@ class Accordion extends ResponsiveComponent {
      * Handle heading click
      * Make sure heading belongs to this accordion instance before toggling content
      *
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.ClickEvent} event Event
      * @protected
      */
     handleHeadingClick (event) {
@@ -202,6 +229,22 @@ class Accordion extends ResponsiveComponent {
      * ----------------------------------------------------
      */
 
+
+    /**
+     * Collapse sibling accordions
+     * 
+     * @param {JQuery.ClickEvent} [event] Event
+     */
+    collapseSiblings (event) {
+        if (!event || !event.isDefaultPrevented()) {
+            const $siblings = this.$container.siblings(`[data-${ $.app.settings.namespace }~="accordion"]`);
+            $siblings.accordion('close');
+
+            if (event) {
+                event.preventDefault();
+            }
+        }
+    }
 
     /**
      * Returns if item with given id is expanded
@@ -274,7 +317,7 @@ class Accordion extends ResponsiveComponent {
     /**
      * Collapse item
      *
-     * @param {string} id Item id
+     * @param {string} [id] Item id
      * @param {boolean} [withAnimation=true] Use animation
      */
     close (id, withAnimation = true) {
@@ -329,7 +372,7 @@ class Accordion extends ResponsiveComponent {
     /**
      * Returns accordion id from an element
      *
-     * @param {jQuery} $element Heading element
+     * @param {JQuery.ClickEvent} $element Heading element
      * @returns {string} Accordion id
      */
     getId ($element) {
@@ -409,7 +452,7 @@ class Accordion extends ResponsiveComponent {
      * Returns content element by id
      *
      * @param {string} id Item id
-     * @returns {jQuery} Content jQuery element
+     * @returns {JQuery} Content jQuery element
      */
     getContent (id) {
         return this.getContents().filter((_, element) => {
@@ -421,7 +464,7 @@ class Accordion extends ResponsiveComponent {
      * Returns heading element by id
      *
      * @param {string} id Item id
-     * @returns {jQuery} Heading jQuery element
+     * @returns {JQuery} Heading jQuery element
      */
     getHeading (id) {
         return this.getHeadings().filter((_, element) => {
@@ -432,7 +475,7 @@ class Accordion extends ResponsiveComponent {
     /**
      * Finds and returns all content elements
      * 
-     * @returns {jQuery} List of content elements
+     * @returns {JQuery} List of content elements
      */
     getContents () {
         const $container = this.$container;
@@ -443,7 +486,7 @@ class Accordion extends ResponsiveComponent {
     /**
      * Finds and returns all headings
      * 
-     * @returns {jQuery} List of heading elements
+     * @returns {JQuery} List of heading elements
      */
     getHeadings () {
         const $container = this.$container;

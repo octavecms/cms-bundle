@@ -24,6 +24,7 @@ module.exports = {
         './components/editable',
         './components/sticky-header',
         './components/scrollspy',
+        './components/active-state',
     ],
     'example-grid': [
         './components/common/init',

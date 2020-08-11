@@ -34,18 +34,18 @@ $.fn.inputState = createPlugin(function ($element) {
     function updateDelayed () {
         setTimeout(update, 16);
     }
-    function getInput (e) {
-        if ($(e.target).is('input, select, textarea')) {
-            return $(e.target);
-        } else if ($(e.currentTarget).is('input, select, textarea')) {
-            return $(e.target);
+    function getInput (event) {
+        if ($(event.target).is('input, select, textarea')) {
+            return $(event.target);
+        } else if ($(event.currentTarget).is('input, select, textarea')) {
+            return $(event.target);
         } else {
             return $element.find('input, select, textarea');
         }
     }
 
-    $element.on('input change focus blur', 'input, select, textarea, [tabindex]', (e) => {
-        updateInput(getInput(e));
+    $element.on('input change focus blur', 'input, select, textarea, [tabindex]', (event) => {
+        updateInput(getInput(event));
     });
 
     $element.closest('form').on('reset', updateDelayed);

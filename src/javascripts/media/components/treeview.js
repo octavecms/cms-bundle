@@ -160,7 +160,7 @@ export default class TreeView {
     /**
      * On toggler click toggle foldesr expanded state
      * 
-     * @param {object} event Event
+     * @param {JQuery.ClickEvent} event Event
      * @protected
      */
     handleTogglerClick (event) {
@@ -175,7 +175,7 @@ export default class TreeView {
     /**
      * On item click set that folder as selected and expand it
      * 
-     * @param {object} event Event
+     * @param {JQuery.ClickEvent} event Event
      * @protected
      */
     handleItemClick (event) {
@@ -198,7 +198,7 @@ export default class TreeView {
     /**
      * Handle key on item 
      * 
-     * @param {event} event 
+     * @param {JQuery.Event} event 
      */
     handleItemKey (event) {
         if (!event.isDefaultPrevented()) {
@@ -233,7 +233,7 @@ export default class TreeView {
     /**
      * On form submit add folder
      * 
-     * @param {object} event Event
+     * @param {JQuery.SubmitEvent} event Event
      * @protected
      */
     handleAddFolderSubmit (event) {
@@ -293,10 +293,10 @@ export default class TreeView {
                 // Items are sorted in alphabetic order
                 sort: false,
 
-                onDropInside: isRoot ? (e) => {
-                    const dragFolderId = this.getId(e.dragEl);
-                    const dragImageIds = this.getImageIds(e.dragEl);
-                    const targetFolderId = this.getId(e.dropInsideEl);
+                onDropInside: isRoot ? (event) => {
+                    const dragFolderId = this.getId(event.dragEl);
+                    const dragImageIds = this.getImageIds(event.dragEl);
+                    const targetFolderId = this.getId(event.dropInsideEl);
                     
                     if (dragFolderId && targetFolderId) {
                         // Move folder
@@ -309,8 +309,8 @@ export default class TreeView {
                     }
                 } : null,
 
-                onDropHold: (e) => {
-                    const targetFolderId = this.getId(e.dropInsideEl);
+                onDropHold: (event) => {
+                    const targetFolderId = this.getId(event.dropInsideEl);
                     expandFolder(this.store, targetFolderId);
                 },
             });

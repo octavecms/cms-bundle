@@ -27,7 +27,7 @@ export default class Modal {
             'autoClose': true,
 
             // CSS selector clicking on which won't automatically close modal
-            'autoCloseIgnoreSelector': '.js-modal-ignore-auto-close',
+            'autoCloseIgnoreSelector': '.js-modal-ignore-auto-close, .dropdown__menu, .tooltip',
 
             // Close button selector
             'closeSelector': '.js-modal-close',
@@ -91,6 +91,9 @@ export default class Modal {
         this.visible = !$container.hasClass(this.options.classNameHidden);
         this.$trigger = $();
         this.$focused = $();
+
+        // Debounced hide event
+        this.hideDebounced = debounce(this.hide.bind(this), 1);
 
         // // Clean up global events to prevent memory leaks and errors, if pages are dynamically loaded using JS
         // // Requires util/jquery.destroyed.js */
@@ -322,7 +325,8 @@ export default class Modal {
      * @protected
      */
     attachModalListeners () {
-        this.$container.on(`click.${ this.namespace } returnkey.${ this.namespace }`, this.options.closeSelector, debounce(this.hide.bind(this), 60));
+        // Close modal on special close button click
+        this.$container.on(`click.${ this.namespace } returnkey.${ this.namespace }`, this.options.closeSelector, this.handleCloseClick.bind(this));
 
         // If user clicks outside the modal then hide it
         if (this.options.autoClose) {
@@ -357,7 +361,7 @@ export default class Modal {
     /**
      * Clicking outside the modal or trigger should close this modal
      *
-     * @param {event} event Event
+     * @param {JQuery.Event} event Event
      * @protected
      */
     handleDocumentClick (event) {
@@ -371,11 +375,11 @@ export default class Modal {
     /**
      * Escape key closes this modal
      *
-     * @param {event} event Event
+     * @param {JQuery.Event} event Event
      * @protected
      */
     handleDocumentKey (event) {
-        if (event.which === 27 && !$(document.activeElement).is('input,textarea,select')) {
+        if (!event.isDefaultPrevented() && event.key === 'Escape' && !$(document.activeElement).is('input,textarea,select')) {
             this.hide();
         }
     }
@@ -383,7 +387,7 @@ export default class Modal {
     /**
      * On link click which has href with id of the modal, open modal
      *
-     * @param {event} event Event
+     * @param {JQuery.Event} event Event
      * @protected
      */
     handleDocumentLinkClick (event) {
@@ -391,6 +395,19 @@ export default class Modal {
             event.preventDefault();
 
             this.show($(event.curentTarget));
+        }
+    }
+
+    /**
+     * On close click close this modal
+     *
+     * @param {JQuery.Event} event Event
+     * @protected
+     */
+    handleCloseClick (event) {
+        if (!event.isDefaultPrevented()) {
+            event.preventDefault();
+            this.hideDebounced();
         }
     }
 

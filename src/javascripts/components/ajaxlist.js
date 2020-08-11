@@ -94,11 +94,11 @@ export default class AjaxList {
         if (options.reloadOnFilterChange) {
             $filters
                 .on('change', debounce(this.handleFilterChange.bind(this), 60))
-                .on('submit', (e) => e.preventDefault());
+                .on('submit', (event) => event.preventDefault());
         } else {
             $filters
                 .on('submit', this.handleFilterChange.bind(this))
-                .on('submit', (e) => e.preventDefault());
+                .on('submit', (event) => event.preventDefault());
         }
     }
 

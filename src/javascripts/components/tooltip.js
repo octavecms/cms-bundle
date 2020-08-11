@@ -10,7 +10,9 @@ import namespace from 'util/namespace';
 import { createPopper } from '@popperjs/core';
 
 
-const MOUSE_LEAVE_DELAY = 200;
+// Delay between mouse leave event and hiding tooltip
+// Allows user for a period of time to re-hover the element
+const MOUSE_LEAVE_DELAY = 120;
 
 
 /**
@@ -88,46 +90,35 @@ class Tooltip {
     }
 
     /**
-     * Returns tooltip element or creates a tooltip if it exists
+     * Change tooltip content
+     * 
+     * @param {string} text Tooltip text
      */
-    getTooltipElement () {
-        if (!this.$tooltip) {
-            const $tooltip = this.$tooltip = $(this.options.template);
-            const $text = $tooltip.find(this.options.textSelector);
-            const text = this.$container.attr('title');
+    setContent (text) {
+        if (this.$tooltip) {
+            const $text = this.$tooltip.find(this.options.textSelector);
 
             if (this.options.html) {
                 $text.html(text);
             } else {
                 $text.text(text);
             }
-
-            // Hide
-            $tooltip.addClass('d-none');
-
-            // Add to the document
-            $(document.body).append($tooltip);
-
-            // Events
-            if (this.options.trigger === 'hover') {
-                $tooltip
-                    .on('mouseenter', this.handleMouseEnter.bind(this))
-                    .on('mouseleave', this.handleMouseLeave.bind(this));
-            }
         }
 
-        return this.$tooltip;
+        this.$container.attr('title', text);
     }
 
     /**
      * Show tooltip
+     * 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      */
-    show () {
+    show (event) {
         if (!this.isDisabled() && !this.open) {
             const { eventShow, classNameOpen, trigger } = this.options;
             const ns = this.ns;
 
-            // Trigger event and show dropdown only if event wasn't prevented
+            // Trigger event and show tooltip only if event wasn't prevented
             const showEventObject = $.Event(eventShow);
             this.$container.trigger(showEventObject);
 
@@ -168,7 +159,7 @@ class Tooltip {
     /**
      * Update popper position
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      * @protected
      */
     onShow (event) {
@@ -178,7 +169,7 @@ class Tooltip {
     /**
      * After tooltip has been shown trigger 'shown' event
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      * @protected
      */
     onShown (event) {
@@ -187,7 +178,9 @@ class Tooltip {
     }
 
     /**
-     * Hide dropdown
+     * Hide tooltip
+     * 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      */
     hide (event) {
         if (!this.isDisabled() && this.open) {
@@ -218,10 +211,10 @@ class Tooltip {
     }
 
     /**
-     * After dropdown has been hidden trigger 'hidden' event and reset
+     * After tooltip has been hidden trigger 'hidden' event and reset
      * indicator
      * 
-     * @param {jQuery.Event} [event] Optional event 
+     * @param {JQuery.ClickEvent} [event] Optional event 
      * @protected
      */
     onHidden (event) {
@@ -232,7 +225,9 @@ class Tooltip {
     }
 
     /**
-     * Toggle dropdown
+     * Toggle tooltip
+     * 
+     * @param {JQuery.ClickEvent} [event] Event
      */
     toggle (event) {
         if (this.open) {
@@ -243,7 +238,7 @@ class Tooltip {
     }
 
     /**
-     * Returns true if dropdown is disabled
+     * Returns true if tooltip is disabled
      * 
      * @returns {boolean} True if disabled, otherwise false
      * @protected
@@ -254,13 +249,47 @@ class Tooltip {
     }
 
     /**
-     * Clean up dropdown
+     * Clean up tooltip
      * 
      * @protected
      */
     handleDestroy () {
         // Cleanup global events
         $(window).add(document).off(`.${ this.ns }`);
+    }
+
+    /**
+     * Returns tooltip element or creates a tooltip if it exists
+     * 
+     * @protected
+     */
+    getTooltipElement () {
+        if (!this.$tooltip) {
+            const $tooltip = this.$tooltip = $(this.options.template);
+            const $text = $tooltip.find(this.options.textSelector);
+            const text = this.$container.attr('title');
+
+            if (this.options.html) {
+                $text.html(text);
+            } else {
+                $text.text(text);
+            }
+
+            // Hide
+            $tooltip.addClass('d-none');
+
+            // Add to the document
+            $(document.body).append($tooltip);
+
+            // Events
+            if (this.options.trigger === 'hover') {
+                $tooltip
+                    .on('mouseenter', this.handleMouseEnter.bind(this))
+                    .on('mouseleave', this.handleMouseLeave.bind(this));
+            }
+        }
+
+        return this.$tooltip;
     }
 
 
@@ -327,7 +356,7 @@ class Tooltip {
     /**
      * Handle key press on the toggle element
      * 
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
     handleToggleKey (event) {
@@ -342,9 +371,9 @@ class Tooltip {
 
     /**
      * Handle click on document
-     * Close dropdown if necessary
+     * Close tooltip if necessary
      * 
-     * @param {jQuery.Event} event Event
+     * @param {JQuery.ClickEvent} event Event
      * @protected
      */
     handleDocumentClick (event) {

@@ -1,9 +1,19 @@
-function DropInsidePlugin (sortable, el, options) {
+import Sortable from "sortablejs";
+
+function DropInsidePlugin () {
     let dragEl;
     let dropInsideEl;
     let isDragging = false;
     let holdTimer = null;
 
+    /**
+     * Sortable DropInside plugin
+     * Plugin detect when item is dropped inside the target
+     * 
+     * @param {Sortable} sortable Sortable instance
+     * @param {HTMLElement} el Element
+     * @param {object} options Sortable options
+     */
     function DropInside (sortable, el, options) {
         if (options.dropInside) {
             this.target = null;
@@ -29,20 +39,23 @@ function DropInsidePlugin (sortable, el, options) {
     }
 
     DropInside.prototype = {
+        /**
+         * Destructor, clean up events when plugin is destroyed
+         */
         destroy () {
             this.sortable.el.removeEventListener('dragleave', this.dragLeave, false);
             document.removeEventListener('dragend', this.dragEnd, false);
         },
 
-        delayStartGlobal(e) {
-            dragEl = e.dragEl;
+        delayStartGlobal(event) {
+            dragEl = event.dragEl;
             dropInsideEl = null;
             isDragging = true;
         },
 
-        dragLeave (e) {
+        dragLeave (event) {
             if (this.sortable.nativeDraggable && isDragging) {
-                let related = e.relatedTarget;
+                let related = event.relatedTarget;
 
                 while (related && related !== document.body) {
                     if (related === this.sortable.el) {
@@ -57,9 +70,9 @@ function DropInsidePlugin (sortable, el, options) {
             }
         },
 
-        dragOver (e) {
+        dragOver (event) {
             if (this.options.dropInside) {
-                let target = e.target;
+                let target = event.target;
 
                 if (target === this.sortable.el) {
                     // Dropping inside the root list, ignoring it
@@ -70,7 +83,7 @@ function DropInsidePlugin (sortable, el, options) {
                 if (target) {
                     let parent = target.parentElement;
                     while (parent && parent !== document.body) {
-                        if (parent === e.dragEl) {
+                        if (parent === event.dragEl) {
                             return;
                         } else {
                             parent = parent.parentElement;
@@ -82,8 +95,8 @@ function DropInsidePlugin (sortable, el, options) {
             }
         },
 
-        dragEnd (e) {
-            this.drop(e);
+        dragEnd (event) {
+            this.drop(event);
             this.nulling();
         },
 
@@ -112,14 +125,14 @@ function DropInsidePlugin (sortable, el, options) {
             }
         },
 
-        drop (e) {
+        drop (event) {
             if (this.options.dropInside) {
                 const dropInsideClass = this.options.dropInsideClass;
                 
                 if (dropInsideEl) {
                     dropInsideEl.classList.remove(dropInsideClass);
                     this.dispatchEvent('dropInside', {
-                        originalEvent: e,
+                        originalEvent: event,
                         sortable: this.sortable,
                         rootEl: this.sortable.el,
                     });
@@ -127,9 +140,9 @@ function DropInsidePlugin (sortable, el, options) {
             }
         },
 
-        triggerHold (e) {
+        triggerHold (event) {
             this.dispatchEvent('dropHold', {
-                originalEvent: e,
+                originalEvent: event,
                 sortable: this.sortable,
                 rootEl: this.sortable.el,
             });

@@ -54,37 +54,9 @@
 
         {# Save #}
         <div>
-            <div class="btn-group">
-                <button type="submit" class="btn-group__fill btn btn--secondary btn--md"><span class="btn__content">
-                    Save
-                </span></button>
-
-                <div class="dropdown">
-
-                {# More options dropdown #}
-                <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
-                    <button type="button" class="dropdown__toggle btn btn--secondary btn--md btn--square" title="More options" aria-expanded="false" id="modalMoreOptionsDropdown">
-                        <span class="btn__content">
-                            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
-                        </span>
-                    </button>
-                    
-                    <div class="dropdown__menu d-none" aria-labelledby="modalMoreOptionsDropdown">
-                        <ul class="dropdown__menu__content">
-                            <li>
-                                <a href="#" class="dropdown__item">
-                                    Schedule
-                                </a>
-                            </li>
-                            <li class="dropdown__divider"></li>
-                            <li class="dropdown__form">
-                                Or maybe here should be a form???
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
+            <button type="submit" class="btn-group__fill btn btn--secondary btn--md js-modal-close"><span class="btn__content">
+                Save
+            </span></button>
         </div>
 
     </div>

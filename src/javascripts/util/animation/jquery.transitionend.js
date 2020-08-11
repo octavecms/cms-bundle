@@ -3,6 +3,13 @@ import $ from 'util/jquery';
 const REGEX_DURATION = /([\d.]+)(ms|s)/g;
 let uniqueId = 0;
 
+
+/**
+ * Convert CSS duration string into a number
+ * 
+ * @param {string} duration CSS duration
+ * @returns {number} Duration
+ */
 function getDuration (duration) {
     let maxDuration = 0;
 
@@ -21,6 +28,11 @@ function getDuration (duration) {
     return maxDuration;
 }
 
+/**
+ * Returns transition/animation duration for element
+ * 
+ * @param {number} [default_duration] Default value which to return if duration is not found
+ */
 $.fn.transitionduration = function (default_duration) {
     let transition = getDuration($(this).css('transition-duration'));
     if (transition) transition += getDuration($(this).css('transition-delay'));
@@ -48,8 +60,8 @@ $.fn.transitionend = function () {
             deferred.resolve();
         }, duration + 16 /* 1 frame */);
 
-        $element.on(event, function (e) {
-            if ($element.is(e.target)) {
+        $element.on(event, function (event) {
+            if ($element.is(event.target)) {
                 clearTimeout(timer);
                 $element.off(event);
                 deferred.resolve();
@@ -59,7 +71,6 @@ $.fn.transitionend = function () {
         return deferred.promise();
     }));
 };
-
 
 /**
  * Returns promise, which is resolved when all elements and their children have
@@ -75,8 +86,8 @@ $.fn.animationend = function () {
 
         let pending = 0;
 
-        $element.on(eventStart, (e) => {
-            const $target = $(e.target);
+        $element.on(eventStart, (event) => {
+            const $target = $(event.target);
 
             // Infinite animations won't stop, we are not interested in them
             if ($target.css('animationIterationCount') !== 'infinite') {
