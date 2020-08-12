@@ -76,7 +76,8 @@
                         {% set sectionAssetHTML %}
                             {% include 'partials/article-edit/section-article/table.twig' with {
                                 'namePrefix': sectionNamePrefix ~ '[__name__]',
-                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                                'sectionId': 'section-' ~ random() ~ '-__name__',
+                                'values': {}
                             } %}
                         {% endset %}
 

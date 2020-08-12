@@ -41,7 +41,7 @@
                     {% include 'partials/form/text.twig' with {
                         id: sectionId ~ '-title',
                         name: namePrefix ~ '[title]',
-                        value: values['title']|default(''),
+                        value: values.title|default(''),
                         required: true,
                     } %}
                     
@@ -61,7 +61,7 @@
                 {% include 'partials/form/text.twig' with {
                     id: sectionId ~ '-description',
                     name: namePrefix ~ '[description]',
-                    value: values['description']|default(''),
+                    value: values.description|default(''),
                     required: true,
                     maxlength: 512
                 } %}
@@ -81,7 +81,7 @@
                     {% include 'partials/form/image.twig' with {
                         id: sectionId ~ '-thumbnail',
                         name: namePrefix ~ '[image]',
-                        value: values[image]|default({}),
+                        value: values.image|default({}),
                         required: true,
                         imageMinWidth: 320,
                         imageMinHeight: 320
