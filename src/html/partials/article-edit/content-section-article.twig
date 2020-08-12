@@ -1,0 +1,100 @@
+{% set namePrefix = namePrefix|default('') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+
+<div class="card accordion accordion--expanded"
+    data-plugin="accordion"
+    data-accordion-active-heading-parent-class-name="ui-dark"
+>
+    <div class="card__anchor" id="article-content"></div>
+
+    {% include 'partials/section-header.twig' with {
+        'title': 'Article Content',
+        'id': sectionId,
+        
+        'withAccordion': true,
+        'expanded': true,
+        'accordionExpandedClassName': 'ui-dark',
+
+        'withEditor': true,
+    } %}
+
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content"
+        {# Add sorting and "Add" / "Remove" functionality #}
+        data-plugin="sortableList collection"
+        data-sortable-list-invert-swap="true"
+    >
+
+        {# Language tabs, duplicate for each content, in the real app this won't be a copy #}
+        <div class="tabs-contents">
+            {% for languageItem in languages %}
+                {% set language = languageItem.id %}
+
+                {# Locale tab content #}
+                <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ language }}">
+                    {% set sectionNamePrefix = namePrefix ~ '[translations][' ~ language ~ '][content]' %}
+
+                    {# Article content sections #}
+                    <div class="card__body card-list card-list--small js-sortable-list-list js-collection-list">
+
+                        {% for section in values.content[language] %}
+                            {% set order = loop.index0 %}
+
+                            {% include 'partials/article-edit/section-article/' ~ section.type ~ '.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[' ~ order ~']',
+                                'sectionId': null,
+                                'values': {'order': order}|merge(section)
+                            } %}
+                        {% endfor %}
+
+                    </div>
+                    <footer class="card__footer card__footer--short">
+
+                        {# Generate HTML for client-side templating, JS will replace __name__ #}
+                        {% set sectionTextHTML %}
+                            {% include 'partials/article-edit/section-article/text.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                            } %}
+                        {% endset %}
+                        {% set sectionQuoteHTML %}
+                            {% include 'partials/article-edit/section-article/quote.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                            } %}
+                        {% endset %}
+                        {% set sectionImageHTML %}
+                            {% include 'partials/article-edit/section-article/image.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                            } %}
+                        {% endset %}
+                        {% set sectionGalleryHTML %}
+                            {% include 'partials/article-edit/section-article/gallery.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                            } %}
+                        {% endset %}
+                        {% set sectionTableHTML %}
+                            {% include 'partials/article-edit/section-article/table.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                            } %}
+                        {% endset %}
+
+                        {% include 'partials/add-section.twig' with {
+                            'sections': [
+                                {'text': 'Text', 'html': sectionTextHTML},
+                                {'text': 'Quote', 'html': sectionQuoteHTML},
+                                {'text': 'Image', 'html': sectionImageHTML},
+                                {'text': 'Image Gallery', 'html': sectionGalleryHTML},
+                                {'text': 'Table', 'html': sectionTableHTML}
+                            ]
+                        } %}
+                    </footer>
+
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>

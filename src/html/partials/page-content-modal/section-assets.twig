@@ -1,14 +1,18 @@
+{% set namePrefix = namePrefix|default('') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set assetsValues = values|default({}) %}
+
 <div class="card accordion accordion--expanded js-sortable-list-item"
     data-plugin="accordion"
     data-accordion-active-heading-parent-class-name="ui-dark"
 >
     {% include 'partials/section-header.twig' with {
         'title': 'Assets',
-        'id': 'modalAssets',
+        'id': sectionId,
         
         'draggable': true,
 
-        'withOptions': true,
+        'withDeleteOption': false,
 
         'withActiveToggle': true,
         'active': true,
@@ -18,71 +22,27 @@
         'expanded': true,
     } %}
 
-    <div role="region" aria-labelledby="modalAssetsTitle" id="modalAssets" aria-hidden="false" class="accordion__content card__content"
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content"
         {# Add sorting #}
         data-plugin="sortableList"
-        data-sortable-list-invert-swap="true"
     >
 
         {# Content for Article Content #}
         <div class="card__body">
+            
+            <div class="tabs-contents">
+                {% for languageItem in languages %}
+                    {% set language = languageItem.id %}
+                    {% set sectionNamePrefix = namePrefix ~ '[translations][' ~ language ~ ']' %}
 
-            {# Title #}
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--lg-6">
-
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'List Title',
-                        attrs: {
-                            for: 'input-67865745643-' ~ language
-                        }
-                    }) %}
-
-                    {% include 'partials/form/text.twig' with {
-                        id: 'input-67865745643-' ~ language,
-                        name: 'assets-list-title[' ~ language ~ ']',
-                        value: 'Требования к активам',
-                        required: true
-                    } %}
-                    
-                </div>
-            </div>
-
-            {# Main title #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Main Title',
-                    attrs: {
-                        for: 'input-6634563453-' ~ language
-                    }
-                }) %}
-
-                {% include 'partials/form/textarea.twig' with {
-                    id: 'input-6634563453-' ~ language,
-                    name: 'assets-list-main-title[' ~ language ~ ']',
-                    value: 'Целевые требования
-к активам',
-                    required: true,
-                    maxlength: 512,
-                    className: 'form-control--textarea--short'
-                } %}
-            </div>
-
-            {# Text #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Text',
-                    attrs: {
-                        for: 'input-7563462352345-' ~ language
-                    }
-                }) %}
-
-                {% include 'partials/form/textarea.twig' with {
-                    id: 'input-7563462352345-' ~ language,
-                    name: 'assets-list-main-title[' ~ language ~ ']',
-                    value: 'Accent Capital фокусирует свое внимание на 3 ключевых сектора рынка: офисная, торговая и складская недвижимость. Мы рассматриваем широкий круг характеристик, определяющих инвестиционное качество инвестиции, имея в приоритете экономически развитые географии (метрополии и «миллионники»), лучшие локации (с производственной, транспортной и пешеходной доступностью), пулы долгосрочных арендаторов с низкими кредитными рисками (международных и федеральных).',
-                    required: true
-                } %}
+                    <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                        {% include 'partials/page-content-modal/section-asset-main.twig' with {
+                            'namePrefix': sectionNamePrefix,
+                            'sectionId': null,
+                            'values': assetsValues[language]|default({})
+                        } %}
+                    </div>
+                {% endfor %}
             </div>
 
         </div>
@@ -90,52 +50,41 @@
         {# Language tabs, duplicate for each content, in the real app this won't be a copy #}
         <div class="tabs-contents">
             {% for languageItem in languages %}
+                {% set language = languageItem.id %}
+                {% set sectionNamePrefix = namePrefix ~ '[translations][' ~ language ~ '][assets]' %}
+
+                {# Locale tab content #}
                 <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
-                    {# Locale tab content #}
-                    {% set language = languageItem.id %}
-
                     <div class="card__body card-list card-list--small js-sortable-list-list">
+
                         {# Asset content sections #}
+                        {% set assetsValue = assetsValues[language].assets|default([]) %}
+                        {% for assetsItem in assetsValue %}
+                            {% set order = loop.index0 %}
 
-                        {% for i in range(0, 3) %}
-                            {% set assetId = 'modalAsset' ~ i %}
-
-                            <div class="card card--draggable accordion accordion--expanded js-sortable-list-item"
-                                data-plugin="accordion sectionTitle"
-                            >
-                                {# Order, for backend #}
-                                <input type="hidden" name="assets[{{ i }}][order]" value="{{ i }}" />
-
-                                {% include 'partials/section-header.twig' with {
-                                    'title': 'Asset',
-                                    'subtitle': true,
-                                    'id': assetId ~ language,
-
-                                    'size': 'small',
-                                    
-                                    'draggable': true,
-
-                                    'withCardListCounter': true,
-
-                                    'withOptions': true,
-
-                                    'withAccordion': true,
-                                    'expanded': true,
-                                } %}
-                                <div role="region" aria-labelledby="{{ assetId }}{{ language }}Title" id="{{ assetId }}{{ language }}" aria-hidden="false" class="accordion__content card__content">
-                                    <div class="card__body">
-                                        {% include 'partials/page-content-modal/section-asset-content.twig' with {
-                                            'language': language,
-                                            'name': 'assets[' ~ i ~ ']',
-                                        } %}
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'partials/page-content-modal/section-asset-content.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[' ~ order ~']',
+                                'sectionId': null,
+                                'values': {'order': order}|merge(assetsItem)
+                            } %}
                         {% endfor %}
                     
                     </div>
                     <footer class="card__footer card__footer--short">
-                        {% include 'partials/page-content-modal/add-section.twig' %}
+
+                        {# Generate HTML for client-side templating, JS will replace __name__ #}
+                        {% set sectionAssetHTML %}
+                            {% include 'partials/article-edit/section-article/table.twig' with {
+                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'sectionId': 'section-' ~ random() ~ '-__name__'
+                            } %}
+                        {% endset %}
+
+                        {% include 'partials/add-section.twig' with {
+                            'sections': [
+                                {'text': 'Asset', 'html': sectionAssetHTML},
+                            ]
+                        } %}
                     </footer>
 
                 </div>

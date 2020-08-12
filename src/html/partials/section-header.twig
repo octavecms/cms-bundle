@@ -23,8 +23,11 @@
 {% set accordionExpandedClassName = accordionExpandedClassName|default('') %}
 {% set expanded = expanded|default(false) %}
 
-{# Show options dropdown, eg. Edit, Delete #}
-{% set withOptions = withOptions|default(false) %}
+{# Show "Delete" option in the dropdown #}
+{% set withDeleteOption = withDeleteOption|default(false) %}
+
+{# Show options dropdown, eg. Delete, ... #}
+{% set withOptions = withActiveToggle or withAccordion or withDeleteOption %}
 
 {# A text with "1", "2", ... near the header counting list items #}
 {% set withCardListCounter = withCardListCounter|default(false) %}
@@ -124,11 +127,13 @@
                                         </li>
                                     {% endif %}
 
-                                    <li>
-                                        <a class="dropdown__item js-dropdown-close js-collection-remove" role="button" tabindex="0" href="#{{ id }}">
-                                            Delete
-                                        </a>
-                                    </li>
+                                    {% if withDeleteOption %}
+                                        <li>
+                                            <a class="dropdown__item js-dropdown-close js-collection-remove" role="button" tabindex="0" href="#{{ id }}">
+                                                Delete
+                                            </a>
+                                        </li>
+                                    {% endif %}
 
                                     {% if withAccordion %}
                                         <li>

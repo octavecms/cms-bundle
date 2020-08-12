@@ -21,7 +21,7 @@
         modal content and viewport
         #}
         <div class="modal__content-wrapper">
-            <form class="modal__content js-modal-ignore-auto-close ui-gray-background card card--modal">
+            <form class="modal__content js-modal-ignore-auto-close ui-gray-background card card--modal card--sticky-header">
 
                 {% include 'partials/page-content-modal/header.twig' %}
 
@@ -34,13 +34,61 @@
                         
                         <div class="card-list js-sortable-list-list">
 
-                            {% include 'partials/page-content-modal/section-general.twig' %}
+                            {% include 'partials/page-content-modal/section-general.twig' with {
+                                'sectionId': null,
+                                'namePrefix': namePrefix,
+                            } %}
 
-                            {% include 'partials/page-content-modal/section-property.twig' %}
+                            {% include 'partials/page-content-modal/section-property.twig' with {
+                                'sectionId': null,
+                                'namePrefix': namePrefix,
+                            } %}
 
-                            {% include 'partials/page-content-modal/section-assets.twig' %}
+                            {% include 'partials/page-content-modal/section-assets.twig' with {
+                                'sectionId': null,
+                                'namePrefix': namePrefix,
+                                'values': {
+                                    'ru': {
+                                        'list-title': 'Требования к активам',
+                                        'main-title': 'Целевые требования\nк активам',
+                                        'text': 'Accent Capital фокусирует свое внимание на 3 ключевых сектора рынка: офисная, торговая и складская недвижимость. Мы рассматриваем широкий круг характеристик, определяющих инвестиционное качество инвестиции, имея в приоритете экономически развитые географии (метрополии и «миллионники»), лучшие локации (с производственной, транспортной и пешеходной доступностью), пулы долгосрочных арендаторов с низкими кредитными рисками (международных и федеральных).',
+                                        'assets': {
+                                            {
+                                                'title': 'Офисная недвижимость',
+                                                'description': 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
+                                                'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', fileName: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                            },
+                                            {
+                                                'title': 'Офисная недвижимость',
+                                                'description': 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
+                                                'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', fileName: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                            },
+                                            {
+                                                'title': 'Офисная недвижимость',
+                                                'description': 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
+                                                'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', fileName: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                            }
+                                        }
+                                    },
+                                    'en': {
+                                        'list-title': 'Asset requirements',
+                                        'main-title': 'Target Requirements to assets',
+                                        'text': 'Accent Capital focuses on 3 key market sectors: office, retail and warehouse real estate. We consider a wide range of characteristics that determine the investment quality of an investment, prioritizing economically developed geographies (metropolises and millionaires), the best locations (with industrial, transport and pedestrian accessibility), pools of long-term tenants with low credit risks (international and federal).',
+                                        'assets': [
+                                            {
+                                                'title': 'Office property',
+                                                'description': 'Real estate for the placement of offices of companies and businesses in various forms.',
+                                                'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', fileName: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                            }
+                                        ]
+                                    }
+                                }
+                            } %}
 
-                            {% include 'partials/page-content-modal/section-strategy.twig' %}
+                            {% include 'partials/page-content-modal/section-strategy.twig' with {
+                                'sectionId': null,
+                                'namePrefix': namePrefix,
+                            } %}
 
                         </div>
 

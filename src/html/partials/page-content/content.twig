@@ -1,164 +1,34 @@
 {% from 'macros/icon.twig' import icon %}
+{% set namePrefix = 'content' %}
 
 <div class="card-list">
-    <div class="card accordion accordion--collapsed"
-        data-plugin="accordion"
-        data-accordion-active-heading-parent-class-name="ui-dark"
-    >
-        <div class="card__anchor" id="general"></div>
+    
+    {% include 'partials/page-content/content-section-general.twig' with {
+        'namePrefix': namePrefix,
+        'values': {
+            'title': {
+                'en': 'Id ut magna consequat aute culpa enim nostrud consequat',
+                'ru': 'Duis qui excepteur irure Lorem ex officia elit occaecat aute eiusmod'
+            },
+            'url': 'id-ut-magna-consequat-aute-culpa-enim-nostrud-consequat'
+        }
+     } %}
 
-        {% include 'partials/section-header.twig' with {
-            'title': 'General',
-            'id': 'contentGeneral',
-            
-            'withAccordion': true,
-            'accordionExpandedClassName': 'ui-dark',
-            'expanded': false,
-        } %}
-        
-        <div role="region" aria-labelledby="contentGeneralTitle" id="contentGeneral" aria-hidden="true" class="accordion__content card__content">
-            <div class="card__body">
-                {% include 'partials/page-content/content-section-general.twig' %}
-            </div>
-        </div>
-    </div>
+    {% include 'partials/article-edit/content-section-seo.twig' with {
+        'namePrefix': namePrefix,
+        'values': {
+            'meta-title': {
+                'en': 'Types of commercial real estate: sectors, types and formats',
+                'ru': 'Виды коммерческой недвижимости: сектора, типы и форматы'
+            },
+            'meta-keywords': {'en': '', 'ru': ''},
+            'meta-description': {'en': '', 'ru': ''}
+        }
+    } %}
 
-    <div class="card accordion accordion--collapsed"
-        data-plugin="accordion"
-        data-accordion-active-heading-parent-class-name="ui-dark"
-    >
-        <div class="card__anchor" id="seo"></div>
+    {% include 'partials/page-content/content-section-content.twig' with {
+        'namePrefix': namePrefix
+    } %}
 
-        {% include 'partials/section-header.twig' with {
-            'title': 'SEO Settings',
-            'id': 'contentSEO',
-            
-            'withAccordion': true,
-            'accordionExpandedClassName': 'ui-dark',
-            'expanded': false,
-        } %}
-        
-        <div role="region" aria-labelledby="contentSEOTitle" id="contentSEO" aria-hidden="true" class="accordion__content card__content">
-            <div class="card__body">
-                {% include 'partials/article-edit/content-section-seo.twig' %}
-            </div>
-        </div>
-    </div>
-
-    <div class="card accordion accordion--expanded"
-        data-plugin="accordion"
-        data-accordion-active-heading-parent-class-name="ui-dark"
-    >
-        <div class="card__anchor" id="content"></div>
-
-        {% include 'partials/section-header.twig' with {
-            'title': 'Content',
-            'id': 'contentSections',
-            
-            'withAccordion': true,
-            'accordionExpandedClassName': 'ui-dark',
-            'expanded': true,
-            'withEditor': true
-        } %}
-
-        <div role="region" aria-labelledby="contentSectionsTitle" id="contentSections" aria-hidden="false" class="accordion__content card__content"
-            {# Add sorting #}
-            data-plugin="sortableList"
-
-            {# Since items are small, disable invert swap #}
-            {# data-sortable-list-invert-swap="true" #}
-        >
-
-            <div class="card__body card-list card-list--small js-sortable-list-list">
-                {# Page content sections, opens external editor #}
-
-                <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/section-header.twig' with {
-                        'id': 'section-' ~ random(),
-                        'title': 'Intro',
-                        'size': 'small',
-                        'draggable': true,
-
-                        'withActiveToggle': true,
-                        'active': true,
-                        
-                        'withOptions': true,
-
-                        'withEdit': true,
-                        'editTarget': '#crud-form-modal',
-                    } %}
-                </div>
-
-                <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/section-header.twig' with {
-                        'id': 'section-' ~ random(),
-                        'title': 'About Us',
-                        'size': 'small',
-                        'draggable': true,
-
-                        'withActiveToggle': true,
-                        'active': true,
-                        
-                        'withOptions': true,
-
-                        'withEdit': true,
-                        'editTarget': '#crud-form-modal',
-                    } %}
-                </div>
-
-                <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/section-header.twig' with {
-                        'id': 'section-' ~ random(),
-                        'title': 'Mission',
-                        'size': 'small',
-                        'draggable': true,
-
-                        'withActiveToggle': true,
-                        'active': true,
-                        
-                        'withOptions': true,
-
-                        'withEdit': true,
-                        'editTarget': '#crud-form-modal',
-                    } %}
-                </div>
-
-                <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/section-header.twig' with {
-                        'id': 'section-' ~ random(),
-                        'title': 'Values',
-                        'size': 'small',
-                        'draggable': true,
-
-                        'withActiveToggle': true,
-                        'active': true,
-                        
-                        'withOptions': true,
-
-                        'withEdit': true,
-                        'editTarget': '#crud-form-modal',
-                    } %}
-                </div>
-
-                <div class="card card--draggable js-sortable-list-item">
-                    {% include 'partials/section-header.twig' with {
-                        'id': 'section-' ~ random(),
-                        'title': 'Philosophy',
-                        'size': 'small',
-                        'draggable': true,
-
-                        'withActiveToggle': true,
-                        'active': true,
-                        
-                        'withOptions': true,
-
-                        'withEdit': true,
-                        'editTarget': '#crud-form-modal',
-                    } %}
-                </div>
-
-            </div>
-        
-        </div>
-    </div>
+    
 </div>

@@ -86,10 +86,22 @@
 
 
 /**
+ * Sticky header
+ */
+
+ .card--sticky-header > .card__header {
+    border-bottom: 1px solid color($color-gray-background);
+    z-index: $z-index-header;
+    position: sticky;
+    top: 0;
+}
+
+
+/**
  * Card anchor element
  */
 
- .card__anchor {
+.card__anchor {
     position: absolute;
     top: calc(var(--spacer) * -7);
     bottom: 0;

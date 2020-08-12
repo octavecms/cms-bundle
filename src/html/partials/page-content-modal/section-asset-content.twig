@@ -1,79 +1,95 @@
-{% set language = language|default('en') %}
-{% set id = id|default('section-' ~ random()) %}
-{% set name = name|default('') %}
+{% set namePrefix = namePrefix|default('') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
 
 
-{# Title #}
-<div class="row row--pad form-group">
-    <div class="col col--xs-12 col--lg-6">
-        {% set uniqueId = 'input-' ~ random() %}
+<div class="card card--draggable accordion accordion--expanded js-sortable-list-item"
+    data-plugin="accordion sectionTitle"
+>
+    {# Order, for backend #}
+    <input type="hidden" name="assets[{{ i }}][order]" value="{{ i }}" />
 
-        {% include 'partials/form/label.twig' with ({
-            text: 'Title',
-            attrs: {
-                for: uniqueId,
-            }
-        }) %}
+    {% include 'partials/section-header.twig' with {
+        'title': 'Asset',
+        'subtitle': true,
+        'id': sectionId,
 
-        {% include 'partials/form/text.twig' with {
-            id: uniqueId,
-            name: name ~ '[title]',
-            value: 'Офисная недвижимость',
-            required: true
-        } %}
+        'size': 'small',
         
-    </div>
-</div>
+        'draggable': true,
 
+        'withCardListCounter': true,
 
-{# Description #}
-<div class="form-group">
-    {% set uniqueId = 'input-' ~ random() %}
+        'withDeleteOption': true,
 
-    {% include 'partials/form/label.twig' with ({
-        text: 'Description',
-        attrs: {
-            for: uniqueId,
-        }
-    }) %}
-
-    {% include 'partials/form/text.twig' with {
-        id: uniqueId,
-        name: name ~ '[description]',
-        value: 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
-        required: true,
-        maxlength: 512
+        'withAccordion': true,
+        'expanded': true,
     } %}
-</div>
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+        <div class="card__body">
+
+            {# Title #}
+            <div class="row row--pad form-group">
+                <div class="col col--xs-12 col--lg-6">
+                    {% include 'partials/form/label.twig' with ({
+                        text: 'Title',
+                        attrs: {
+                            for: sectionId ~ '-title',
+                        }
+                    }) %}
+
+                    {% include 'partials/form/text.twig' with {
+                        id: sectionId ~ '-title',
+                        name: namePrefix ~ '[title]',
+                        value: values['title']|default(''),
+                        required: true,
+                    } %}
+                    
+                </div>
+            </div>
 
 
-{# Image #}
-<div class="row row--pad form-group">
-    <div class="col col--xs-12 col--lg-6">
-        {% set uniqueId = 'input-' ~ random() %}
+            {# Description #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Description',
+                    attrs: {
+                        for: sectionId ~ '-description'
+                    }
+                }) %}
 
-        {% include 'partials/form/label.twig' with ({
-            text: 'Thumbnail',
-            attrs: {
-                for: uniqueId,
-            }
-        }) %}
+                {% include 'partials/form/text.twig' with {
+                    id: sectionId ~ '-description',
+                    name: namePrefix ~ '[description]',
+                    value: values['description']|default(''),
+                    required: true,
+                    maxlength: 512
+                } %}
+            </div>
 
-        {% include 'partials/form/image.twig' with {
-            id: uniqueId,
-            name: name ~ '[image]',
-            value: {
-                id: 'qweasdzxc',
-                thumbnail: '/assets/images/temp/image-thumb-3.png',
-                url: '/assets/images/temp/image-thumb-3.png',
-                fileName: 'academy_article_chart_01.jpg',
-                width: 620,
-                height: 620
-            },
-            required: true,
-            imageMinWidth: 320,
-            imageMinHeight: 320
-        } %}
 
+            {# Image #}
+            <div class="row row--pad form-group">
+                <div class="col col--xs-12 col--lg-6">
+                    {% include 'partials/form/label.twig' with ({
+                        text: 'Thumbnail',
+                        attrs: {
+                            for: sectionId ~ '-thumbnail'
+                        }
+                    }) %}
+
+                    {% include 'partials/form/image.twig' with {
+                        id: sectionId ~ '-thumbnail',
+                        name: namePrefix ~ '[image]',
+                        value: values[image]|default({}),
+                        required: true,
+                        imageMinWidth: 320,
+                        imageMinHeight: 320
+                    } %}
+
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>

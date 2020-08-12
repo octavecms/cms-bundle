@@ -4,7 +4,7 @@
 
 <div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
-    {# Order input, used for backend to know #}
+    {# Order input, used for backend to know order of sections #}
     <input type="hidden" name="{{ namePrefix }}[order]" value="{{ values.order|default(0) }}" />
 
     {# Header #}
@@ -15,7 +15,7 @@
         
         'draggable': true,
 
-        'withOptions': true,
+        'withDeleteOption': true,
 
         'withActiveToggle': true,
         'active': values.active|default(false),

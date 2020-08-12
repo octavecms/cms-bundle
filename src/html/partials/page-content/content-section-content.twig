@@ -1,0 +1,128 @@
+{# "General" form section #}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
+
+<div class="card accordion accordion--expanded"
+    data-plugin="accordion"
+    data-accordion-active-heading-parent-class-name="ui-dark"
+>
+    <div class="card__anchor" id="content"></div>
+
+    {% include 'partials/section-header.twig' with {
+        'title': 'Content',
+        'id': sectionId,
+        
+        'withAccordion': true,
+        'accordionExpandedClassName': 'ui-dark',
+        'expanded': true,
+        'withEditor': true
+    } %}
+
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content"
+        {# Add sorting #}
+        data-plugin="sortableList"
+    >
+
+        <div class="card__body card-list card-list--small js-sortable-list-list">
+            {# Page content sections, opens external editor #}
+
+            <div class="card card--draggable js-sortable-list-item">
+                {# Order input, used for backend to know order of sections #}
+                <input type="hidden" name="{{ namePrefix }}[order]" value="0" />
+
+                {% include 'partials/section-header.twig' with {
+                    'id': 'section-' ~ random(),
+                    'title': 'Intro',
+                    'size': 'small',
+                    'draggable': true,
+
+                    'withActiveToggle': true,
+                    'active': true,
+                    
+                    'withDeleteOption': false,
+
+                    'withEdit': true,
+                    'editTarget': '#crud-form-modal',
+                } %}
+            </div>
+
+            <div class="card card--draggable js-sortable-list-item">
+                <input type="hidden" name="{{ namePrefix }}[order]" value="1" />
+                
+                {% include 'partials/section-header.twig' with {
+                    'id': 'section-' ~ random(),
+                    'title': 'About Us',
+                    'size': 'small',
+                    'draggable': true,
+
+                    'withActiveToggle': true,
+                    'active': true,
+                    
+                    'withDeleteOption': false,
+
+                    'withEdit': true,
+                    'editTarget': '#crud-form-modal',
+                } %}
+            </div>
+
+            <div class="card card--draggable js-sortable-list-item">
+                <input type="hidden" name="{{ namePrefix }}[order]" value="2" />
+                
+                {% include 'partials/section-header.twig' with {
+                    'id': 'section-' ~ random(),
+                    'title': 'Mission',
+                    'size': 'small',
+                    'draggable': true,
+
+                    'withActiveToggle': true,
+                    'active': true,
+                    
+                    'withDeleteOption': false,
+
+                    'withEdit': true,
+                    'editTarget': '#crud-form-modal',
+                } %}
+            </div>
+
+            <div class="card card--draggable js-sortable-list-item">
+                <input type="hidden" name="{{ namePrefix }}[order]" value="3" />
+
+                {% include 'partials/section-header.twig' with {
+                    'id': 'section-' ~ random(),
+                    'title': 'Values',
+                    'size': 'small',
+                    'draggable': true,
+
+                    'withActiveToggle': true,
+                    'active': true,
+                    
+                    'withDeleteOption': false,
+
+                    'withEdit': true,
+                    'editTarget': '#crud-form-modal',
+                } %}
+            </div>
+
+            <div class="card card--draggable js-sortable-list-item">
+                <input type="hidden" name="{{ namePrefix }}[order]" value="4" />
+                
+                {% include 'partials/section-header.twig' with {
+                    'id': 'section-' ~ random(),
+                    'title': 'Philosophy',
+                    'size': 'small',
+                    'draggable': true,
+
+                    'withActiveToggle': true,
+                    'active': true,
+                    
+                    'withDeleteOption': false,
+
+                    'withEdit': true,
+                    'editTarget': '#crud-form-modal',
+                } %}
+            </div>
+
+        </div>
+    
+    </div>
+</div>
