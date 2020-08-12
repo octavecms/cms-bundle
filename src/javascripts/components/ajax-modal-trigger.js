@@ -30,6 +30,7 @@ class AjaxModalLoader {
         this.insertOnLoad = false;
         this.openOnLoad = false;
         this.$modal = null;
+        this.$elements = null;
         this.modalArgs = null;
     }
 
@@ -45,7 +46,8 @@ class AjaxModalLoader {
      * Remove modal from the DOM, that will trigger destroy
      */
     remove () {
-        this.$modal.remove();
+        this.$elements.remove();
+        this.$elements = null;
         this.$modal = null;
     }
 
@@ -140,7 +142,7 @@ class AjaxModalLoader {
             this.inserted = true;
 
             // Find modal
-            const $elements = $(html).appendTo(document.body).app();
+            const $elements = this.$elements = $(html).appendTo(document.body).app();
 
             this.$modal = $elements.filter((_, element) => {
                 return $.app.hasPlugin(element, 'modal');

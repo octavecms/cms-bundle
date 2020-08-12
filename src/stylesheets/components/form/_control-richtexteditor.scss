@@ -12,8 +12,8 @@
     textarea {
         height: 460px; // Min height set in javascripts/components/form/richtexteditor.js
 
-        // Make it look like disabled
-        color: var(--color-disabled);
+        // Hide text
+        color: transparent;
         pointer-events: none;
     }
 }
