@@ -1,36 +1,52 @@
 {% set language = language|default('en') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
 
-{# Title #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Text Body',
-        attrs: {
-            for: 'input-5785673542345-' ~ language
-        }
-    }) %}
+<div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
-    {% include 'partials/form/richtexteditor.twig' with {
-        id: 'input-5785673542345-' ~ language,
-        name: 'text[' ~ language ~ ']',
-        value: '
-            <h1>Hello world</h1>
-            <p>Culpa commodo non <a href="#">reprehenderit magna exercitation</a> nisi et in proident voluptate ipsum Lorem aute anim. Dolor culpa deserunt sint adipisicing et velit velit. Est excepteur sint aute nostrud velit sit nostrud nulla. Ullamco labore velit labore adipisicing incididunt commodo nulla anim id magna veniam nulla aliqua esse. Esse sunt amet voluptate veniam occaecat exercitation reprehenderit et velit consequat proident.</p>
-            <table border="1">
-                <tbody>
-                <tr>
-                <td>Lorem ipsum</td>
-                <td>Dolor sit</td>
-                <td>Amet</td>
-                </tr>
-                <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                </tr>
-                </tbody>
-            </table>
+    {# Order input, used for backend to know #}
+    <input type="hidden" name="{{ namePrefix }}[order]" value="{{ values.order|default(0) }}" />
 
-        ',
-        required: false
+    {# Header #}
+    {% include 'partials/section-header.twig' with {
+        'title': 'Text',
+        'id': sectionId,
+        'size': 'small',
+        
+        'draggable': true,
+
+        'withOptions': true,
+
+        'withActiveToggle': true,
+        'active': values.active|default(false),
+
+        'withAccordion': true,
+        'expanded': true,
     } %}
+
+    {# Content #}
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+        <div class="card__body">
+            {# Section content #}
+
+            {# Rick text editor input #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Text Body',
+                    attrs: {
+                        for: sectionId ~ '-text'
+                    }
+                }) %}
+
+                {% include 'partials/form/richtexteditor.twig' with {
+                    id: sectionId ~ '-text',
+                    name: 'text[' ~ language ~ ']',
+                    value: values.text|default(''),
+                    required: false
+                } %}
+            </div>
+
+        
+        </div>
+    </div>
 </div>

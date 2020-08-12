@@ -1,41 +1,40 @@
 {% from 'macros/icon.twig' import icon %}
+{% set text = text|default('Add Section') %}
+{% set sections = sections|default([]) %}
 
-{# Add section dropdown #}
-<div class="dropdown" data-plugin="dropdown" data-dropdown-placement="top-start" data-dropdown-trigger="hover">
-    <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="addSectionDropdown{{ language }}">
-        <span class="btn__content">
-            <span>Add Section</span>
-            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
-        </span>
-    </button>
-    
-    <div class="dropdown__menu d-none" aria-labelledby="addSectionDropdown{{ language }}">
-        <ul class="dropdown__menu__content">
-            <li>
-                <a role="button" tabindex="0" class="dropdown__item">
-                    Text
-                </a>
-            </li>
-            <li>
-                <a role="button" tabindex="0" class="dropdown__item">
-                    Quote
-                </a>
-            </li>
-            <li>
-                <a role="button" tabindex="0" class="dropdown__item">
-                    Image
-                </a>
-            </li>
-            <li>
-                <a role="button" tabindex="0" class="dropdown__item">
-                    Image Gallery
-                </a>
-            </li>
-            <li>
-                <a role="button" tabindex="0" class="dropdown__item">
-                    Table
-                </a>
-            </li>
-        </ul>
+
+{% if sections|length > 1 %}
+    {# Add section dropdown #}
+    {% set uniqueId = 'dropdown-' ~ random() %}
+
+    <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="top-start" data-dropdown-trigger="hover">
+        <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="{{ uniqueId }}">
+            <span class="btn__content">
+                <span>{{ text }}</span>
+                {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+            </span>
+        </button>
+        
+        <div class="dropdown__menu d-none" aria-labelledby="{{ uniqueId }}">
+            <ul class="dropdown__menu__content">
+                {% for section in sections %}
+                    <li>
+                        <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add" data-collection-html="{{ section.html|escape('html_attr') }}">
+                            {{ section.text }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
+{% elseif sections|length == 1 %}
+    {# Add single section button #}
+    {% for section in sections %}
+        <button type="button" class="btn btn--tetriary btn--pill js-collection-add" data-collection-html="{{ section.html|escape('html_attr') }}">
+            <span class="btn__content">
+                {{ icon('add-small', {width: 10, height: 10}) }}
+                <span>Add {{ section.text }}</span>
+            </span>
+        </button>
+    {% endfor %}
+{% endif %}

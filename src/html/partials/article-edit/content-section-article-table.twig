@@ -1,91 +1,121 @@
-{% set language = language|default('en') %}
+{% set namePrefix = namePrefix|default('') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
 
-{# "Table" form section #}
+<div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
-{# Title #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Table Title',
-        attrs: {
-            for: 'input-67576585676-' ~ language
-        }
-    }) %}
+    {# Order input, used for backend to know #}
+    <input type="hidden" name="{{ namePrefix }}[order]" value="{{ values.order|default(0) }}" />
 
-    {% include 'partials/form/text.twig' with {
-        id: 'input-67576585676-' ~ language,
-        name: 'table-title[' ~ language ~ ']',
-        value: 'Сектора и разновидности коммерческой недвижимости',
-        required: false
+    {# Header #}
+    {% include 'partials/section-header.twig' with {
+        'title': 'Table',
+        'id': sectionId,
+        'size': 'small',
+        
+        'draggable': true,
+
+        'withOptions': true,
+
+        'withActiveToggle': true,
+        'active': values.active|default(false),
+
+        'withAccordion': true,
+        'expanded': true,
     } %}
-</div>
+
+    {# Content #}
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+        <div class="card__body">
+
+            {# Title #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Table Title',
+                    attrs: {
+                        for: sectionId ~ '-title'
+                    }
+                }) %}
+
+                {% include 'partials/form/text.twig' with {
+                    id: sectionId ~ '-title',
+                    name: namePrefix ~ '[title]',
+                    value: values.title|default(''),
+                    required: false
+                } %}
+            </div>
 
 
-{# Multi column layout #}
-<div class="row row--pad form-group">
-    <div class="col col--xs-12 col--md-6 col--lg-3">
+            {# Multi column layout #}
+            <div class="row row--pad form-group">
+                <div class="col col--xs-12 col--md-6 col--lg-3">
 
-        {# Columns #}
-        <div class="form-group">
-            {% include 'partials/form/label.twig' with ({
-                text: 'Columns',
-                attrs: {
-                    for: 'input-54645674567-' ~ language
-                }
-            }) %}
+                    {# Columns #}
+                    <div class="form-group">
+                        {% include 'partials/form/label.twig' with ({
+                            text: 'Columns',
+                            attrs: {
+                                for: sectionId ~ '-columns'
+                            }
+                        }) %}
 
-            {% include 'partials/form/number.twig' with {
-                id: 'input-54645674567-' ~ language,
-                name: 'table-header-columns[' ~ language ~ ']',
-                min: 1,
-                value: 2,
-                required: true
-            } %}
+                        {% include 'partials/form/number.twig' with {
+                            id: sectionId ~ '-columns',
+                            name: namePrefix ~ '[columns]',
+                            min: 1,
+                            value: values.columns|default(2),
+                            required: true
+                        } %}
+                    </div>
+
+                </div>
+                <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-md-0">
+
+                    {# Rows #}
+                    <div class="form-group">
+                        {% include 'partials/form/label.twig' with ({
+                            text: 'Rows',
+                            attrs: {
+                                for: sectionId ~ '-rows'
+                            }
+                        }) %}
+
+                        {% include 'partials/form/number.twig' with {
+                            id: sectionId ~ '-rows',
+                            name: namePrefix ~ '[rows]',
+                            min: 1,
+                            value: values.rows|default(2),
+                            required: true
+                        } %}
+                    </div>
+
+                </div>
+                <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-lg-0">
+
+                    {# Header Row #}
+                    <div class="form-group">
+                        {% include 'partials/form/label.twig' with ({
+                            text: 'Header Row',
+                            attrs: {
+                                for: sectionId ~ '-header-row'
+                            }
+                        }) %}
+
+                        {% include 'partials/form/select-switch.twig' with {
+                            id: sectionId ~ '-header-row',
+                            name: namePrefix ~ '[header]',
+                            value: values.header|default('0'),
+                            values: [
+                                {id: '0', text: 'No'},
+                                {id: '1', text: 'Yes'},
+                            ],
+                            required: true
+                        } %}
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-
-    </div>
-    <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-md-0">
-
-        {# Rows #}
-        <div class="form-group">
-            {% include 'partials/form/label.twig' with ({
-                text: 'Rows',
-                attrs: {
-                    for: 'input-675678568-' ~ language
-                }
-            }) %}
-
-            {% include 'partials/form/number.twig' with {
-                id: 'input-675678568-' ~ language,
-                name: 'table-header-rows[' ~ language ~ ']',
-                min: 1,
-                value: 2,
-                required: true
-            } %}
-        </div>
-
-    </div>
-    <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-lg-0">
-
-        {# Header Row #}
-        <div class="form-group">
-            {% include 'partials/form/label.twig' with ({
-                text: 'Header Row',
-                attrs: {
-                    for: 'input-47456745-' ~ language
-                }
-            }) %}
-
-            {% include 'partials/form/select-switch.twig' with {
-                id: 'input-47456745-' ~ language,
-                name: 'table-header-row[' ~ language ~ ']',
-                value: '0',
-                values: [
-                    {id: '0', text: 'No'},
-                    {id: '1', text: 'Yes'},
-                ],
-                required: true
-            } %}
-        </div>
-
     </div>
 </div>

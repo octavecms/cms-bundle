@@ -1,7 +1,7 @@
 import { loadPage } from 'visual-editor/modules/actions';
 import pollTimer from 'visual-editor/modules/poll-timer';
 
-import { animateElement } from 'visual-editor/modules/animation';
+import { animateElement } from 'util/animation/element';
 
 
 const CLASS_LIST = 'cms-section-list';
@@ -206,7 +206,9 @@ export default class VisualEditorIframe {
 
         // Animate element into view
         animateElement($item, {
-            'height': 0,
+            'from': {
+                'height': 0
+            },
             'duration': SHOW_ANIMATION_DURATION
         });
     }
@@ -251,7 +253,9 @@ export default class VisualEditorIframe {
                 const diff = prevOffsets[id] - newOffsets[id];
 
                 animateElement(this.getItem(id), {
-                    'transform': `translateY(${ diff }px)`,
+                    'from': {
+                        'transform': `translateY(${ diff }px)`,
+                    },
                     'duration': MOVE_ANIMATION_DURATION
                 });
             }

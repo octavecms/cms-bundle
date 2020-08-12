@@ -109,6 +109,9 @@ class SortableList {
             onChange: this.onChange.bind(this),
         });
 
+        // When collection adds / removes items update
+        this.$container.on('collection.add collection.remove', this.onChange.bind(this));
+
         if (options.handleSelector && options.keyboardSorting) {
             this.$list.on(`keydown.${ this.ns }`, `${ options.draggableSelector } ${ options.handleSelector }`, this.handleSortKey.bind(this));
         }

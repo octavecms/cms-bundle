@@ -1,64 +1,88 @@
 {# "SEO" form section #}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
 
-{# Localized title, duplicate for each content, in the real app this won't be a copy #}
-<div class="tabs-contents">
-    {% for languageItem in languages %}
-        <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
-            {# Locale tab content #}
-            {% set language = languageItem.id %}
+<div class="card accordion accordion--collapsed"
+    data-plugin="accordion"
+    data-accordion-active-heading-parent-class-name="ui-dark"
+>
+    <div class="card__anchor" id="seo"></div>
 
-            {# Meta title #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Meta title',
-                    attrs: {
-                        for: 'input-6784675674-' ~ language
-                    }
-                }) %}
+    {% include 'partials/section-header.twig' with {
+        'title': 'SEO Settings',
+        'id': sectionId,
+        
+        'withAccordion': true,
+        'expanded': false,
+        'accordionExpandedClassName': 'ui-dark',
+    } %}
 
-                {% include 'partials/form/text.twig' with {
-                    id: 'input-6784675674-' ~ language,
-                    name: 'meta-title[' ~ language ~ ']',
-                    value: 'Виды коммерческой недвижимости: сектора, типы и форматы',
-                    maxlength: 512,
-                    required: true
-                } %}
-            </div>
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="true" class="accordion__content card__content">
+        <div class="card__body">
 
-            {# Meta keywords #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Meta keywords',
-                    attrs: {
-                        for: 'input-86875645323-' ~ language
-                    }
-                }) %}
+            {# Localized title, duplicate for each content, in the real app this won't be a copy #}
+            <div class="tabs-contents">
+                {% for languageItem in languages %}
+                    {# Locale tab content #}
+                    <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                        {% set language = languageItem.id %}
 
-                {% include 'partials/form/textarea.twig' with {
-                    id: 'input-86875645323-' ~ language,
-                    name: 'meta-keywords[' ~ language ~ ']',
-                    value: '',
-                    required: false
-                } %}
-            </div>
+                        {# Meta title #}
+                        <div class="form-group">
+                            {% include 'partials/form/label.twig' with ({
+                                text: 'Meta title',
+                                attrs: {
+                                    for: sectionId ~ '-meta-title-' ~ language
+                                }
+                            }) %}
 
-            {# Meta description #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Meta description',
-                    attrs: {
-                        for: 'input-5778756745-' ~ language
-                    }
-                }) %}
+                            {% include 'partials/form/text.twig' with {
+                                id: sectionId ~ '-meta-title-' ~ language,
+                                name: namePrefix ~ '[translations][' ~ language ~ '][meta-title]',
+                                value: values['meta-title'][language]|default(''),
+                                maxlength: 512,
+                                required: true
+                            } %}
+                        </div>
 
-                {% include 'partials/form/textarea.twig' with {
-                    id: 'input-5778756745-' ~ language,
-                    name: 'meta-description[' ~ language ~ ']',
-                    value: '',
-                    required: false
-                } %}
+                        {# Meta keywords #}
+                        <div class="form-group">
+                            {% include 'partials/form/label.twig' with ({
+                                text: 'Meta keywords',
+                                attrs: {
+                                    for: sectionId ~ '-meta-keywords-' ~ language
+                                }
+                            }) %}
+
+                            {% include 'partials/form/textarea.twig' with {
+                                id: sectionId ~ '-meta-keywords-' ~ language,
+                                name: namePrefix ~ '[translations][' ~ language ~ '][meta-keywords]',
+                                value: values['meta-keywords'][language]|default(''),
+                                required: false
+                            } %}
+                        </div>
+
+                        {# Meta description #}
+                        <div class="form-group">
+                            {% include 'partials/form/label.twig' with ({
+                                text: 'Meta description',
+                                attrs: {
+                                    for: sectionId ~ '-meta-description-' ~ language
+                                }
+                            }) %}
+
+                            {% include 'partials/form/textarea.twig' with {
+                                id: sectionId ~ '-meta-description-' ~ language,
+                                name: namePrefix ~ '[translations][' ~ language ~ '][meta-description]',
+                                value: values['meta-description'][language]|default(''),
+                                required: false
+                            } %}
+                        </div>
+
+                    </div>
+                {% endfor %}
             </div>
 
         </div>
-    {% endfor %}
+    </div>
 </div>

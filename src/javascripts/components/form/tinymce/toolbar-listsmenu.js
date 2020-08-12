@@ -17,6 +17,7 @@ function matchNodeNames (regex) {
  * @param {object} editor Editor
  * @param {function} activate Callback function
  */
+/*
 function listState (editor, activate) {
     return function () {
         var nodeChangeHandler = function (e) {
@@ -41,6 +42,7 @@ function listState (editor, activate) {
         };
     };
 };
+*/
 
 export default function setupToolbarListsMenu (editor) {
     editor.ui.registry.addMenuButton('listmenu', {
@@ -68,24 +70,24 @@ export default function setupToolbarListsMenu (editor) {
                     icon: 'indent',
                     tooltip: 'Indent list',
                     onAction: () => { editor.execCommand('indent'); },
-                    onSetup: function (api) {
-                        return listState(editor, function (active) {
-                            console.log('setDisabled', !active);
-                            return api.setDisabled(!active); // @TODO Not working!!!
-                        });
-                    }
+                    // onSetup: function (api) {
+                    //     return listState(editor, function (active) {
+                    //         console.log('setDisabled', !active);
+                    //         return api.setDisabled(!active); // @TODO Not working!!!
+                    //     });
+                    // }
                 },
                 {
                     type: 'menuitem',
                     icon: 'outdent',
                     tooltip: 'Outdent list',
                     onAction: () => { editor.execCommand('outdent'); },
-                    onSetup: function (api) {
-                        return listState(editor, function (active) {
-                            console.log('setDisabled', !active);
-                            return api.setDisabled(!active); // @TODO Not working!!!
-                        });
-                    }
+                    // onSetup: function (api) {
+                    //     return listState(editor, function (active) {
+                    //         console.log('setDisabled', !active);
+                    //         return api.setDisabled(!active); // @TODO Not working!!!
+                    //     });
+                    // }
                 },
             ]);
         }

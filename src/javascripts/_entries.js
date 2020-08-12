@@ -17,6 +17,7 @@ module.exports = {
         './components/form/number',
         './components/form/richtexteditor',
         './components/sortable-list',
+        './components/collection',
         './components/data-table',
         './components/modal',
         './components/ajax-modal-trigger',

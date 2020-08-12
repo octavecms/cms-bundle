@@ -63,7 +63,8 @@
  *     </div>
  */
 
-.form-control--textarea textarea {
+.form-control--textarea textarea,
+.form-control--richtexteditor textarea {
     @extend %input;
 
     min-height: calc(var(--spacer) * 9.5);

@@ -1,91 +1,116 @@
-{% set language = language|default('en') %}
+{% set namePrefix = namePrefix|default('') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
 
-{# Image #}
-<div class="row row--pad form-group">
-    <div class="col col--xs-12 col--lg-6">
+<div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
-        {% include 'partials/form/label.twig' with ({
-            text: 'Image',
-            attrs: {
-                for: 'input-545656332-' ~ language
-            }
-        }) %}
+    {# Order input, used for backend to know #}
+    <input type="hidden" name="{{ namePrefix }}[order]" value="{{ values.order|default(0) }}" />
 
-        {% include 'partials/form/image.twig' with {
-            id: 'input-545656332-' ~ language,
-            name: 'image[' ~ language ~ ']',
-            value: {
-                id: 'qweasdzxc',
-                thumbnail: '/assets/images/temp/image-thumb-3.png',
-                url: '/assets/images/temp/image-thumb-3.png',
-                fileName: 'academy_article_chart_01.jpg',
-                width: 620,
-                height: 620
-            },
-            required: true,
-            imageMinWidth: 620,
-            imageMinHeight: 620
-        } %}
+    {# Header #}
+    {% include 'partials/section-header.twig' with {
+        'title': 'Image',
+        'id': sectionId,
+        'size': 'small',
+        
+        'draggable': true,
 
+        'withOptions': true,
+
+        'withActiveToggle': true,
+        'active': values.active|default(false),
+
+        'withAccordion': true,
+        'expanded': true,
+    } %}
+
+    {# Content #}
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+        <div class="card__body">
+        
+            {# Image #}
+            <div class="row row--pad form-group">
+                <div class="col col--xs-12 col--lg-6">
+
+                    {% include 'partials/form/label.twig' with ({
+                        text: 'Image',
+                        attrs: {
+                            for: sectionId ~ '-image'
+                        }
+                    }) %}
+
+                    {% include 'partials/form/image.twig' with {
+                        id: sectionId ~ '-image',
+                        name: namePrefix ~ '[image]',
+                        value: values.image|default({}),
+                        required: true,
+                        imageMinWidth: 620,
+                        imageMinHeight: 620
+                    } %}
+
+                </div>
+            </div>
+
+
+            {# Description #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Description',
+                    additionalText: 'Optional',
+                    attrs: {
+                        for: sectionId ~ '-description'
+                    }
+                }) %}
+
+                {% include 'partials/form/text.twig' with {
+                    id: sectionId ~ '-description',
+                    name: namePrefix ~ '[description]',
+                    value: values.description|default(''),
+                    maxlength: 255,
+                    required: false
+                } %}
+            </div>
+
+            {# Source #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Source',
+                    additionalText: 'Optional',
+                    attrs: {
+                        for: sectionId ~ '-source'
+                    }
+                }) %}
+
+                {% include 'partials/form/textarea.twig' with {
+                    id: sectionId ~ '-source',
+                    name: namePrefix ~ '[source]',
+                    value: values.source|default(''),
+                    maxlength: 600,
+                    required: false
+                } %}
+            </div>
+
+            {# Full width #}
+            <div class="form-group">
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Full width',
+                    attrs: {
+                        for: sectionId ~ '-full-width'
+                    }
+                }) %}
+
+                {% include 'partials/form/select-switch.twig' with {
+                    id: sectionId ~ '-full-width',
+                    name: namePrefix ~ '[full-width]',
+                    value: values['full-width']|default('0'),
+                    values: [
+                        {id: '0', text: 'No'},
+                        {id: '1', text: 'Yes'},
+                    ],
+                    required: true
+                } %}
+            </div>
+
+        </div>
     </div>
-</div>
-
-
-{# Description #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Description',
-        additionalText: 'Optional',
-        attrs: {
-            for: 'input-64234253-' ~ language
-        }
-    }) %}
-
-    {% include 'partials/form/text.twig' with {
-        id: 'input-64234253-' ~ language,
-        name: 'image-description[' ~ language ~ ']',
-        value: 'Сектора в портфеле инвестиций в недвижимость (на Июнь 2012, Мир без США)',
-        maxlength: 255,
-        required: false
-    } %}
-</div>
-
-{# Source #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Source',
-        additionalText: 'Optional',
-        attrs: {
-            for: 'input-234235562-' ~ language
-        }
-    }) %}
-
-    {% include 'partials/form/textarea.twig' with {
-        id: 'input-234235562-' ~ language,
-        name: 'image-source[' ~ language ~ ']',
-        value: 'INREV, Accent Capital. Уровни риска измерены качественно. Уровни диапазонов доходностей указаны для России (города Москва и Санкт-Петербург с областями) по данным расчетов Accent Capital за 2019 год, с учетом инвестиционных вознаграждений Accent Capital, до налогов. IRR (Internal Rate of Return) – внутренняя норма доходности (ВНД). Исключительно в качестве иллюстрации принципа соотношения риск/доходность.',
-        maxlength: 600,
-        required: false
-    } %}
-</div>
-
-{# Full width #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Full width',
-        attrs: {
-            for: 'input-745734523-' ~ language
-        }
-    }) %}
-
-    {% include 'partials/form/select-switch.twig' with {
-        id: 'input-745734523-' ~ language,
-        name: 'image-source[' ~ language ~ ']',
-        value: '1',
-        values: [
-            {id: '0', text: 'No'},
-            {id: '1', text: 'Yes'},
-        ],
-        required: true
-    } %}
 </div>

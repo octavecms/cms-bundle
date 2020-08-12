@@ -1,88 +1,65 @@
-{% set language = language|default('en') %}
+{% set namePrefix = namePrefix|default('') %}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
+{% set values = values|default({}) %}
 
-{# Image #}
-<div class="form-group">
+<div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
-    {% include 'partials/form/label.twig' with ({
-        text: 'Image',
-        additionalText: '620x620 min',
-        tooltip: 'Ex in et adipisicing et ad enim eu in eu anim.',
-        attrs: {
-            for: 'input-75674567456' ~ language
-        }
-    }) %}
+    {# Order input, used for backend to know #}
+    <input type="hidden" name="{{ namePrefix }}[order]" value="{{ values.order|default(0) }}" />
 
-    {% include 'partials/form/image-list.twig' with {
-        id: 'input-75674567456' ~ language,
-        name: 'gallery',
-        editable: [
-            {
-                'name': 'description',
-                'type': 'textarea',
-                'label': 'Description',
-                'className': 'form-control--textarea--short',
-                'maxlength': 255
-            }
-        ],
-        value: [
-            {
-                id: 'qweasdzxc',
-                thumbnail: '/assets/images/temp/gallery-thumb-1.png',
-                url: '/assets/images/temp/gallery-1.png',
-                fileName: 'gallery-1.png',
-                meta: {
-                    description: ''
-                }
-            },
-            {
-                id: 'sdfgsdfgsdfg',
-                thumbnail: '/assets/images/temp/gallery-thumb-2.png',
-                url: '/assets/images/temp/gallery-2.png',
-                fileName: 'gallery-2.png',
-                meta: {
-                    description: ''
-                }
-            },
-            {
-                id: 'ertyertyedfg',
-                thumbnail: '/assets/images/temp/gallery-thumb-3.png',
-                url: '/assets/images/temp/gallery-3.png',
-                fileName: 'gallery-3.png',
-                meta: {
-                    description: 'Целевые требования к активам'
-                }
-            },
-            {
-                id: 'xvbxcvbxcvb',
-                thumbnail: '/assets/images/temp/gallery-thumb-4.png',
-                url: '/assets/images/temp/gallery-4.png',
-                fileName: 'gallery-4.png',
-                meta: {
-                    description: 'Целевые требования к активам'
-                }
-            },
-            {
-                id: 'asdfasdfas',
-                thumbnail: '/assets/images/temp/gallery-thumb-5.png',
-                url: '/assets/images/temp/gallery-5.png',
-                fileName: 'gallery-5.png',
-                meta: {
-                    description: ''
-                }
-            },
-            {
-                id: 'rtyrurtyh',
-                thumbnail: '/assets/images/temp/gallery-thumb-6.png',
-                url: '/assets/images/temp/gallery-6.png',
-                fileName: 'gallery-6.png',
-                meta: {
-                    description: 'Целевые требования к активам'
-                }
-            }
-        ],
-        required: true,
-        imageMinWidth: 620,
-        imageMinHeight: 620
+    {# Header #}
+    {% include 'partials/section-header.twig' with {
+        'title': 'Image Gallery',
+        'id': sectionId,
+        'size': 'small',
+        
+        'draggable': true,
+
+        'withOptions': true,
+
+        'withActiveToggle': true,
+        'active': values.active|default(false),
+
+        'withAccordion': true,
+        'expanded': true,
     } %}
 
+    {# Content #}
+    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+        <div class="card__body">
+
+            {# Image #}
+            <div class="form-group">
+
+                {% include 'partials/form/label.twig' with ({
+                    text: 'Image',
+                    additionalText: '620x620 min',
+                    tooltip: 'Ex in et adipisicing et ad enim eu in eu anim.',
+                    attrs: {
+                        for: sectionId ~ '-image'
+                    }
+                }) %}
+
+                {% include 'partials/form/image-list.twig' with {
+                    id: sectionId ~ '-image',
+                    name: namePrefix ~ '[gallery]',
+                    editable: [
+                        {
+                            'name': 'description',
+                            'type': 'textarea',
+                            'label': 'Description',
+                            'className': 'form-control--textarea--short',
+                            'maxlength': 255
+                        }
+                    ],
+                    value: values.gallery|default([]),
+                    required: true,
+                    imageMinWidth: 620,
+                    imageMinHeight: 620
+                } %}
+
+            </div>
+
+        </div>
+    </div>
 </div>

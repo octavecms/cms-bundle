@@ -1,4 +1,5 @@
 {# "General" form section #}
+{% set sectionId = sectionId|default('section-' ~ random()) %}
 
 {# Localized title, duplicate for each content, in the real app this won't be a copy #}
 <div class="tabs-contents">
@@ -12,12 +13,12 @@
                 {% include 'partials/form/label.twig' with ({
                     text: 'Title',
                     attrs: {
-                        for: 'input-45552222-' ~ language
+                        for: sectionId ~ '-title'
                     }
                 }) %}
 
                 {% include 'partials/form/text.twig' with {
-                    id: 'input-45552222-' ~ language,
+                    id: sectionId ~ '-title',
                     name: 'title[' ~ language ~ ']',
                     value: 'Id ut magna consequat aute culpa enim nostrud consequat',
                     maxlength: 512,
@@ -36,12 +37,12 @@
         text: 'URL',
         tooltip: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
         attrs: {
-            for: 'input-76556342'
+            for: sectionId ~ '-url'
         }
     }) %}
 
     {% include 'partials/form/text.twig' with {
-        id: 'input-76556342',
+        id: sectionId ~ '-url',
         name: 'url',
         pattern: '[A-Za-z0-9-_]*',
         value: 'id-ut-magna-consequat-aute-culpa-enim-nostrud-consequat',
