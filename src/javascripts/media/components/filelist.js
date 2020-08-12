@@ -370,15 +370,17 @@ export default class MediaFileList {
      */
     dragSelectionStart (event) {
         if (this.validateDragSelectionEvent(event)) {
+            const containerBox = this.$container.get(0).getBoundingClientRect();
+
             let selected = [].concat(this.store.files.selected.get());
 
             this.dragSelectionMultiSelectEvent = !!this.isMultiSelectEvent(event);
             this.dragSelectionActive = true;
             this.dragSelectionInitial = selected;
-            this.dragSelectionMouse = {
-                x: event.pageX,
-                y: event.pageY
-            };
+            this.dragSelectionMouse = [
+                event.clientX - containerBox.left,
+                event.clientY - containerBox.top
+            ];
 
             // If not multi selection event then reset selection
             if (!this.dragSelectionMultiSelectEvent) {
@@ -395,8 +397,8 @@ export default class MediaFileList {
                 return {
                     element: $item,
                     id: id,
-                    x: box.left + $(window).scrollLeft(),
-                    y: box.top + $(window).scrollTop(),
+                    x: box.left - containerBox.left,
+                    y: box.top - containerBox.top,
                     width: box.width,
                     height: box.height,
                     selected: selected.indexOf(id) !== -1
@@ -404,9 +406,8 @@ export default class MediaFileList {
             });
 
             // Preview
-            const containerBox = this.$container.get(0).getBoundingClientRect();
             this.$dragSelectionPreview = $('<div class="media-filelist-drag-selection-preview"></div>').prependTo(this.$container);
-            this.dragSelectionPreviewOffset = [-containerBox.left, -containerBox.top];
+            this.dragSelectionPreviewOffset = [0, 0];
 
             $(document)
                 .on(`mousemove.${ this.ns }`, this.dragSelectionMove.bind(this))
@@ -424,8 +425,9 @@ export default class MediaFileList {
      * @protected
      */
     dragSelectionMove (event) {
-        const mouseTo = [event.pageX, event.pageY];
-        const mouseFrom = [this.dragSelectionMouse.x, this.dragSelectionMouse.y];
+        const containerBox = this.$container.get(0).getBoundingClientRect();
+        const mouseTo = [event.clientX - containerBox.left, event.clientY - containerBox.top];
+        const mouseFrom = [].concat(this.dragSelectionMouse);
         const targets = this.dragSelectionTargets;
         const selected = [].concat(this.dragSelectionInitial);
 
