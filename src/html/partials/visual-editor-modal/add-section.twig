@@ -15,7 +15,7 @@
                 <ul class="dropdown__menu__content">
                     {% for section in sections %}
                         <li>
-                            <a role="button" tabindex="0" class="dropdown__item js-visual-editor-add-item-control" data-type="{{ section.id }}" data-reference="<%- reference %>" data-parent="<%- parent %>">
+                            <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-visual-editor-add-item-control" data-type="{{ section.id }}" data-reference="<%- reference %>" data-parent="<%- parent %>">
                                 {{ section.text }}
                             </a>
                         </li>

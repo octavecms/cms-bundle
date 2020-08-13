@@ -1,0 +1,15 @@
+.animation--select-in,
+.animation--select-out {
+    @extend %transition-fast;
+    transition-property: transform, opacity;
+}
+
+.animation--select-in--inactive,
+.animation--select-out--active {
+    transform: translateY(-20px);
+    opacity: 0;
+    
+    &.select2-dropdown--above {
+        transform: translateY(20px);
+    }
+}

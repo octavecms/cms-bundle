@@ -35,12 +35,28 @@ function formatResult (state) {
 const originalSelect2Plugin = $.fn.select2;
 
 $.fn.select2 = function (options = {}) {
-    return originalSelect2Plugin.call($(this), assign({
+    originalSelect2Plugin.call(this, assign({
         theme: 'cms',
         templateResult: formatResult,
         templateSelection: formatSelection,
 
+        dropdownAutoWidth: true,
+
         // Hide search box
         minimumResultsForSearch: Infinity,
     }, options));
+
+    // Add show animation to dropdown
+    const instance = this.data('select2');
+    const $dropdown = instance.$dropdown.find('.select2-dropdown');
+
+    this.on('select2:opening', () => {
+        $dropdown.addClass('d-none');
+    });
+
+    this.on('select2:open', () => {
+        $dropdown.transition('select-in');
+    });
+
+    return this;
 };

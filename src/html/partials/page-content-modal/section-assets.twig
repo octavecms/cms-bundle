@@ -24,7 +24,7 @@
 
     <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content"
         {# Add sorting #}
-        data-plugin="sortableList"
+        data-plugin="sortableList collection"
     >
 
         {# Content for Article Content #}
@@ -55,7 +55,7 @@
 
                 {# Locale tab content #}
                 <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
-                    <div class="card__body card-list card-list--small js-sortable-list-list">
+                    <div class="card__body card-list card-list--small js-sortable-list-list js-collection-list">
 
                         {# Asset content sections #}
                         {% set assetsValue = assetsValues[language].assets|default([]) %}
@@ -74,7 +74,7 @@
 
                         {# Generate HTML for client-side templating, JS will replace __name__ #}
                         {% set sectionAssetHTML %}
-                            {% include 'partials/article-edit/section-article/table.twig' with {
+                            {% include 'partials/page-content-modal/section-asset-content.twig' with {
                                 'namePrefix': sectionNamePrefix ~ '[__name__]',
                                 'sectionId': 'section-' ~ random() ~ '-__name__',
                                 'values': {}

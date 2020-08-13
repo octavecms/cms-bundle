@@ -11,6 +11,7 @@ const IS_IOS = detect.isIOS();
 const IS_ANDROID_PHONE = detect.isAndroid() && detect.isPhone();
 
 let activeModal = null;
+let activeModalCount = 0;
 
 
 /**
@@ -116,13 +117,14 @@ export default class Modal {
     }
 
     destroy () {
-        if (this.visible) {
+        if (this.visible && activeModalCount === 1) {
+            // Destroyed while still being visible
             this.resetFixForIOS();
             this.resetFixForAndroid();
+            $('html').removeClass(this.options.htmlScrollClassName);
         }
 
         $(document).off(`.${ this.namespace }`).off(`.${ this.triggerNamespace }`);
-        $('html').removeClass(this.options.htmlScrollClassName);
 
         this.$trigger = $();
     }
@@ -154,7 +156,7 @@ export default class Modal {
     updateScrollableContent () {
         const options = this.options;
 
-        if (this.visible) {
+        if (activeModalCount) {
             $('html')
                 .addClass(options.htmlScrollClassName)
                 .get(0).offsetWidth;
@@ -240,6 +242,9 @@ export default class Modal {
             this.$trigger = $trigger || this.$trigger;
             this.visible = true;
 
+            // Save modal count
+            activeModalCount++;
+
             // Close previous modal
             if (options.onePerPage) {
                 if (activeModal) {
@@ -291,14 +296,18 @@ export default class Modal {
 
             this.visible = false;
 
+            activeModalCount--;
+
             this.$container.transitionstop(() => {
                 this.$container.transition(animationName, {
                     'before':     () => this.beforeModalHide(),
                     'after':      ()  => this.afterModalHide()
                 }, {
                     'before':     ()  => {
-                        this.resetFixForIOS();
-                        this.resetFixForAndroid();
+                        if (!activeModalCount) {
+                            this.resetFixForIOS();
+                            this.resetFixForAndroid();
+                        }
                     },
                     'after':      ($el) => {
                         $el.attr('aria-hidden', 'true');
@@ -368,7 +377,12 @@ export default class Modal {
         const $trigger = $(event.target);
 
         if (!$trigger.closest(this.$trigger).length && !$trigger.closest(this.$ignoreClick).length) {
-            this.hide();
+            // If user clicked on the different modal, then ignore since that modal
+            // could have been opened from this one
+            const $modal = $trigger.closest('.modal');
+            if (!$modal.length || $modal.closest(this.$container).length) {
+                this.hide();
+            }
         }
     }
 
