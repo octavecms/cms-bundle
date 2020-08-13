@@ -1,0 +1,152 @@
+{% extends 'layouts/base.twig' %}
+{%- from 'partials/blocks/form_widget.twig' import form_widget -%}
+{%- from 'partials/blocks/form_widget_submit.twig' import submit_widget -%}
+
+{% block content %}
+
+    <div class="container container-h container-v">
+        <form method="POST" class="card"><div class="card__content">
+            <div class="card__body">
+
+                {{ form_widget({
+                    'compound': true,
+                    'children': [
+                        {
+                            id: 'ndcvbxcbdsgs',
+                            name: 'title',
+                            full_name: 'title',
+                            type: 'text',
+                            value: 'I am title',
+                            required: true
+                        },
+                        {
+                            id: 'fdgsdfgsdfgsdfgdfsdf',
+                            name: 'description',
+                            full_name: 'description',
+                            type: 'textarea',
+                            label: 'Description',
+                            value: 'Duis est non consectetur elit elit culpa.',
+                            label_attr: {
+                                text: 'Cutom label description text'
+                            },
+                            attr: {
+                                maxlength: 255
+                            }
+                        },
+                        {
+                            id: 'dsfgdgsdfgsdfgsdf',
+                            name: 'email',
+                            full_name: 'email',
+                            type: 'email',
+                            label: 'E-mail',
+                            help: 'Lorem ipsum dolor sit amet',
+                        },
+                        {
+                            id: 'dfbxcvbxcvbxcvbxc',
+                            name: 'phone',
+                            full_name: 'phone',
+                            type: 'tel',
+                            label: 'Phone number',
+                        },
+                        {
+                            id: 'sdfgsthjwrtaera',
+                            name: 'text-with-max-length',
+                            full_name: 'text-with-max-length',
+                            type: 'text',
+                            label: 'Text with max length',
+                            attr: {
+                                maxlength: 255
+                            }
+                        },
+                        {
+                            id: 'dfsgdfgsdfvdcvsd',
+                            name: 'url-with-prefix',
+                            full_name: 'title-url-prefix',
+                            type: 'url',
+                            label: 'URL with prefix and help tooltip',
+                            help: 'Lorem ipsum',
+                            required: true,
+                            attr: {
+                                prefix: 'academy/',
+                            }
+                        },
+                        {
+                            id: 'sdfsghgfhjdfjs',
+                            name: 'search-1',
+                            full_name: 'search-1',
+                            type: 'search',
+                            label: 'Search input',
+                            attr: {
+                                placeholder: 'Search',
+                            }
+                        },
+                        {
+                            id: 'fghdfghsdfgafsdfgsfsd',
+                            name: 'search-2',
+                            full_name: 'search-2',
+                            type: 'search',
+                            label: 'Search input styled',
+                            attr: {
+                                placeholder: 'Search',
+                                class: 'form-control--small form-control--pill'
+                            },
+                            group_attr: {
+                                class: 'input-group--small input-group--pill'
+                            }
+                        },
+                        {
+                            id: 'dfhdfghdfhghdfghfd',
+                            name: 'image',
+                            full_name: 'image',
+                            type: 'image',
+                            label: 'Image',
+                            minWidth: 300,
+                            minHeight: 300,
+                            value: {
+                                id: 'fgsdfgsdfgsdfgsdfgsd',
+                                thumbnail: '/assets/images/temp/image-thumb-1.png',
+                                url: '/assets/images/temp/image-thumb-1.png',
+                                filename: 'academy_thumb_01.jpg',
+                                width: 620,
+                                height: 620
+                            }
+                        },
+                        {
+                            id: 'fgdfgsdfgsdfgsdf',
+                            name: 'date',
+                            full_name: 'date',
+                            type: 'datetime',
+                            label: 'Date and time picker'
+                        },
+                        {
+                            id: 'asfasdfasdfsdfasd',
+                            name: 'number',
+                            full_name: 'number',
+                            type: 'number',
+                            label: 'Number'
+                        },
+                        {
+                            id: 'sdfgsdfgfdgsdfgsdf',
+                            name: 'percent',
+                            full_name: 'percent',
+                            type: 'percent',
+                            label: 'Percent'
+                        },
+                        {
+                            id: 'asdfasdfasdasdfasdf',
+                            name: 'money',
+                            full_name: 'money',
+                            type: 'money',
+                            label: 'Money'
+                        },
+                    ]
+                }) }}
+
+            </div>
+            <div class="card__footer">
+                {{ submit_widget({'label': 'Update'}) }}
+            </div>
+        </div></form>
+    </div>
+xx
+{% endblock %}

@@ -1,0 +1,31 @@
+{% macro form_widget_textarea (attr) -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set maxlength = widget_attr.maxlength|default(null) -%}
+    {%- set className = ('form-control form-control--textarea ' ~ widget_attr.class|default(''))|trim -%}
+
+    {# Remove properties from widget_attr #}
+    {%- set widget_attr_omit = ['class'] %}
+
+    {# {%- set widget_attr = widget_attr|filter((v, k) => k not in widget_attr_omit) -%} #}
+    {%- set widget_attr = widget_attr|omit(widget_attr_omit) -%}
+    {%- set widget_full_attr = ({}|merge(attr))|merge({'attr': widget_attr}) -%}
+
+    <div class="{{ className }}"
+        {%- if maxlength %} data-plugin="inputMaxLength"{% endif -%}
+    >
+        <textarea type="{{ type }}"
+            {%- if attr.value is not empty %} value="{{ attr.value }}"{% endif -%}
+            {{ widget_attributes(widget_full_attr) }}
+        >
+            {%- if attr.value is not empty %}{{ attr.value }}{% endif -%}
+        </textarea>
+
+        {%- if maxlength -%}
+            <span class="form-control__info text-small text-color-small">
+                <span class="sr-only">Characters remaining</span> <span class="js-input-max-length-text">{{ maxlength - attr.value|default('')|length }}</span>
+            </span>
+        {%- endif -%}
+    </div>
+{%- endmacro %}

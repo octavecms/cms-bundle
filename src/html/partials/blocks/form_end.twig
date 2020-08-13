@@ -1,0 +1,11 @@
+{% macro form_end (form) -%}
+    {%- from 'partials/blocks/form_rest.twig' import form_rest -%}
+
+    {# In TwigJS we don't have global variables, eg. rootform #}
+    {# {%- if not render_rest is defined or render_rest -%}
+        {{ form_rest(form) }}
+    {%- endif -%} #}
+
+        {{- form_rest(form) -}}
+    </form>
+{%- endmacro -%}

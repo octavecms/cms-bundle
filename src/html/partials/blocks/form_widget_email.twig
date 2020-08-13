@@ -1,0 +1,7 @@
+{% macro form_widget_email (attr) -%}
+    {%- from 'partials/blocks/form_widget_simple.twig' import form_widget_simple -%}
+
+    {%- set attr = {}|merge(attr)|merge({'type': 'email'}) -%}
+
+    {{- form_widget_simple(attr) -}}
+{%- endmacro %}

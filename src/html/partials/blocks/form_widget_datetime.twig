@@ -1,0 +1,45 @@
+{% macro form_widget_datetime (attr) -%}
+    {%- from 'partials/blocks/form_widget_simple.twig' import form_widget_simple -%}
+
+    {%- set dp_options = {
+        pickTime: true,
+        pickDate: true,
+        useCurrent: true,
+        dateFormat: 'YYYY-MM-DD hh:mm:ss',
+        minDate: '1900-01-01',
+        maxDate: null,
+        showToday: true,
+        language: locale|default('en'),
+        defaultDate: "",
+        disabledDates: [],
+        enabledDates: [],
+        useStrict: false,
+        sideBySide: false,
+        daysOfWeekDisabled: [],
+        collapse: true,
+        calendarWeeks: false,
+        viewMode: 'days',
+        minViewMode: 'days',
+        useMinutes: true,
+        useSeconds: true,
+        minuteStepping: 1
+    }|merge(attr.dp_options|default({})) -%}
+
+    {%- set attr = {}|merge(attr) -%}
+    {%- set widget_attr = attr.attr|default({}) %}
+    {%- set group_attr = attr.group_attr|default({}) %}
+
+    {%- set attr = attr|merge({
+        type: 'text',
+        attr: {}|merge(widget_attr)|merge({
+            class: ('form-control--date ' ~ widget_attr.class|default(''))|trim,
+            postfixIcon: 'calendar',
+        }),
+        group_attr: {}|merge(group_attr)|merge({
+            'data-plugin': ('datetimepicker ' ~ group_attr['data-plugin']|default(''))|trim,
+            'data-datetimepicker': dp_options|json_encode,
+        }),
+    }) -%}
+
+    {{- form_widget_simple(attr) -}}
+{%- endmacro %}

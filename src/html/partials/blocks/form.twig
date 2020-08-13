@@ -1,0 +1,9 @@
+{% macro form (form) -%}
+    {%- from 'partials/blocks/form_start.twig' import form_start -%}
+    {%- from 'partials/blocks/form_widget.twig' import form_widget -%}
+    {%- from 'partials/blocks/form_end.twig' import form_end -%}
+
+    {{ form_start(form) }}
+        {{- form_widget(form) -}}
+    {{ form_end(form) }}
+{%- endmacro -%}

@@ -1,0 +1,13 @@
+{% macro form_rows (form) -%}
+    {%- from 'partials/blocks/form_row.twig' import form_row -%}
+
+    {# Symfony #}
+    {# {% for child in form|filter(child => not child.rendered) %}
+        {{- form_row(child) -}}
+    {% endfor %} #}
+
+    {# TwigJS #}
+    {% for child in form %}
+        {{- form_row(child) -}}
+    {% endfor %}
+{%- endmacro %}

@@ -1,0 +1,26 @@
+{% macro form_widget_percent (attr) -%}
+    {%- from 'partials/blocks/form_widget_simple.twig' import form_widget_simple -%}
+
+    {%- set attr = {
+        'scale': 2,
+        'symbol': '%',
+    }|merge(attr) -%}
+
+    {# Convert scale into a step #}
+    {%- set step = 1 %}
+    {%- for i in range(1, attr.scale) -%}
+        {%- set step = step / 1 %}
+    {%- endfor -%}
+
+    {%- set widget_attr = {}|merge(attr.attr|default({})) -%}
+
+    {%- set attr = attr|merge({
+        attr: {
+            postfix: attr.symbol,
+            step: step,
+            pattern: '-?[0-9.]*'
+        }|merge(widget_attr)
+    }) -%}
+
+    {{- form_widget_simple(attr) -}}
+{%- endmacro %}

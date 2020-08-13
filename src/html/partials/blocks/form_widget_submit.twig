@@ -1,0 +1,8 @@
+{% macro submit_widget (attr) -%}
+    {%- from 'partials/blocks/form_widget_button.twig' import button_widget -%}
+
+    {%- set attr = {}|merge(attr|default({})) -%}
+    {%- set attr = attr|merge({'type': 'submit'}) -%}
+
+    {{- button_widget(attr) -}}
+{%- endmacro %}

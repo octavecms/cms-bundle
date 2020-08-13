@@ -1,3 +1,5 @@
+{% from 'partials/blocks/form_label.twig' import form_label %}
+
 {# "General" form section #}
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
@@ -21,29 +23,24 @@
         <div class="card__body">
 
             {# Localized title, duplicate for each content, in the real app this won't be a copy #}
-            <div class="tabs-contents">
+            <div class="tabs-contents form-group">
                 {% for languageItem in languages %}
 
-                    {# Locale tab content #}
+                    {# Locale tab content for titles #}
                     <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
 
-                        {# Title #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Title',
-                                attrs: {
-                                    for: sectionId ~ '-title-' ~ languageItem.id
-                                }
-                            }) %}
+                        {{ form_label({
+                            id: sectionId ~ '-title-' ~ languageItem.id,
+                            label: 'Title'
+                        }) }}
 
-                            {% include 'partials/form/text.twig' with {
-                                id: sectionId ~ '-title-' ~ languageItem.id,
-                                name: namePrefix ~ '[translations][' ~ languageItem.id ~ '][title]',
-                                value: values.title[languageItem.id]|default(''),
-                                maxlength: 512,
-                                required: true
-                            } %}
-                        </div>
+                        {% include 'partials/form/text.twig' with {
+                            id: sectionId ~ '-title-' ~ languageItem.id,
+                            name: namePrefix ~ '[translations][' ~ languageItem.id ~ '][title]',
+                            value: values.title[languageItem.id]|default(''),
+                            maxlength: 512,
+                            required: true
+                        } %}
 
                     </div>
                 {% endfor %}
@@ -52,16 +49,14 @@
 
             {# URL #}
             <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'URL',
+                {{ form_label({
+                    id: sectionId ~ '-url',
+                    label: 'URL',
                     tooltip: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
-                    attrs: {
-                        for: sectionId ~ 'url'
-                    }
-                }) %}
+                }) }}
 
                 {% include 'partials/form/text.twig' with {
-                    id: sectionId ~ 'url',
+                    id: sectionId ~ '-url',
                     name: namePrefix ~ '[url]',
                     pattern: '[A-Za-z0-9-_]*',
                     value: values.url|default(''),

@@ -1,0 +1,10 @@
+{% macro attributes (attr) -%}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname|escape('html_attr') }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue|escape('html_attr') }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}

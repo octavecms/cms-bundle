@@ -1,0 +1,9 @@
+{% macro form_widget_tel (attr) -%}
+    {%- from 'partials/blocks/form_widget_simple.twig' import form_widget_simple -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set widget_attr = {}|merge(widget_attr)|merge({'pattern': '[0-9-+ ()]*'}) -%}
+    {%- set attr = {}|merge(attr)|merge({'type': 'tel', 'attr': widget_attr}) -%}
+
+    {{- form_widget_simple(attr) -}}
+{%- endmacro %}

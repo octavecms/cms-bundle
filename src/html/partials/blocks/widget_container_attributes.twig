@@ -1,0 +1,8 @@
+{% macro widget_container_attributes (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+
+    {%- set widget_attr = attr.attr|default(null) -%}
+
+    {%- if attr.id is not empty %}id="{{ attr.id }}"{% endif -%}
+    {%- if widget_attr %}{{ attributes(widget_attr) }}{% endif -%}
+{%- endmacro %}

@@ -1,0 +1,20 @@
+{% macro form_label_help (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- set help_attr = attr.attr|default({}) %}
+    {%- set label = attr.label|default('?') %}
+    {%- set help = attr.help|default('') %}
+
+    {%- if help -%}
+        {%- set help_attr = {
+            'tabindex': 0,
+            'data-tooltip-trigger': 'hover',
+            'data-tooltip-placement': 'right'
+        }|merge(help_attr|merge({
+            'data-plugin': (help_attr['data-plugin']|default('') ~ ' tooltip')|trim,
+            'class': (help_attr.class|default('') ~ ' tooltip-icon')|trim,
+            'title': help
+        })) -%}
+
+        <span {{ attributes(help_attr) }}>{{ label }}</span>
+    {%- endif -%}
+{%- endmacro %}

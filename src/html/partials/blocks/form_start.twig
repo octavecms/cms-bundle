@@ -1,0 +1,20 @@
+{% macro form_start (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+
+    {# {%- do form.setMethodRendered() -%} #}
+    {%- set form_attr = attr.attr|default({}) %}
+    {%- set multipart = attr.multipart|default(false) %}
+    {%- set name = attr.name|default('') %}
+    {%- set action = attr.action|default('') %}
+    {%- set method = attr.method|upper -%}
+    {%- set form_method = "POST" -%}
+
+    {%- if method in ["GET", "POST"] -%}
+        {% set form_method = attr.method %}
+    {%- endif -%}
+
+    <form{% if name != '' %} name="{{ name }}"{% endif %} method="{{ form_method|lower }}"{% if action != '' %} action="{{ action }}"{% endif %}{{ attributes(form_attr) }}{% if multipart %} enctype="multipart/form-data"{% endif %}>
+    {%- if form_method != method -%}
+        <input type="hidden" name="_method" value="{{ method }}" />
+    {%- endif -%}
+{%- endmacro -%}

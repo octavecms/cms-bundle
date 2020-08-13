@@ -1,0 +1,52 @@
+{% macro form_label (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- from 'partials/blocks/form_label_help.twig' import form_label_help -%}
+    
+    {%- set compound = attr.compound|default(false) -%}
+    {%- set label = attr.label|default('') -%}
+    {%- set name = attr.name|default('') -%}
+    {%- set id = attr.id|default('') -%}
+    {%- set label_attr = attr.label_attr|default({}) -%}
+    {%- set element = attr.element|default('label') -%}
+
+    {%- set help = attr.help|default('') -%}
+    {%- set help_attr = attr.help_attr|default({}) -%}
+
+    {# "compound" label is for group of inputs, not single specific input #}
+    {%- if not compound -%}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {%- endif -%}
+
+    {%- set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' form-label')|trim}) -%}
+    {%- set label_text = label_attr.text|default('') -%}
+
+    {# Convert name into a label #}
+    {%- if label is empty -%}
+        {% set label = name|humanize %}
+    {%- endif -%}
+
+    {# Remove text from label attribute list #}
+    {%- set label_attr_omit = ['text'] %}
+
+    {# {%- set label_attr = label_attr|filter((v, k) => k not in label_attr_omit) -%} #}
+    {%- set label_attr = label_attr|omit(label_attr_omit) -%}
+
+    {# Set text as "Optional" if input is not required #}
+    {%- if not label_text and not attr.required -%}
+        {% set label_text = 'Optional' %}
+    {%- endif -%}
+
+    <{{ element }} {{ attributes(label_attr) }}>
+        {{ label }}
+
+        {# Additional text #}
+        {%- if label_text -%}
+            <small>({{ label_text }})</small>
+        {%- endif -%}
+
+        {# Tooltip #}
+        {%- if help -%}
+            {{- form_label_help({'help': help, 'attr': help_attr}) -}}
+        {%- endif -%}
+    </{{ element }}>
+{%- endmacro %}

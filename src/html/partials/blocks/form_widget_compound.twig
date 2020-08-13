@@ -1,0 +1,15 @@
+{% macro form_widget_compound (attr) -%}
+    {%- from 'partials/blocks/widget_container_attributes.twig' import widget_container_attributes -%}
+    {%- from 'partials/blocks/form_errors.twig' import form_errors -%}
+    {%- from 'partials/blocks/form_rows.twig' import form_rows -%}
+    {%- from 'partials/blocks/form_rest.twig' import form_rest -%}
+
+    <div {{ widget_container_attributes(attr) }}>
+        {# In TwigJS we don't have global variables, eg. rootform #}
+        {# {%- if attr is rootform|default(null) -%}
+            {{ form_errors(form) }}
+        {%- endif -%} #}
+        {{- form_rows(attr.children) -}}
+        {{- form_rest(attr.children) -}}
+    </div>
+{%- endmacro %}

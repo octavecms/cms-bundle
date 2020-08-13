@@ -1,0 +1,13 @@
+{% macro form_widget_time (attr) -%}
+    {%- from 'partials/blocks/form_widget_datetime.twig' import form_widget_datetime -%}
+
+    {%- set datetime_attr = {}|merge(attr) -%}
+    {%- set datetime_attr = datetime_attr|merge({
+        dp_options: ({}|merge(datetime_attr.dp_options))|merge({
+            pickTime: true,
+            pickDate: false
+        })
+    }) -%}
+    
+    {{- form_widget_datetime(datetime_attr) -}}
+{%- endmacro %}

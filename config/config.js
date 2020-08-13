@@ -46,6 +46,9 @@ exports.plugins = [
 
     // Enables TwigJS engine .twig file compilation
     require('@videinfra/static-website-builder/plugins/twig'),
+    require('@videinfra/static-website-builder/plugins/twig/symfony-filters'),
+    require('@videinfra/static-website-builder/plugins/twig/symfony-functions'),
+    require('@videinfra/static-website-builder/plugins/twig/lodash-filters'),
 ];
 
 

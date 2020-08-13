@@ -1,0 +1,12 @@
+{% macro widget_attributes (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+
+    id="{{ attr.id }}"
+    name="{{ attr.full_name|default('') }}"
+    {%- if attr.disabled|default(false) %} disabled="disabled"{% endif -%}
+    {%- if attr.required|default(false) %} required="required"{% endif -%}
+    {%- if attr.readonly|default(false) %} readonly="readonly"{% endif -%}
+    {%- if attr.checked|default(false) %} checked="checked"{% endif -%}
+    
+    {{ attributes(attr.attr|default({})) }}
+{%- endmacro %}

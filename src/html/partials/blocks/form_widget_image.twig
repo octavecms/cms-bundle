@@ -1,0 +1,93 @@
+{% macro form_widget_image (attr) -%}
+    {%- from 'macros/icon.twig' import icon -%}
+    {%- from 'partials/blocks/form_widget_hidden.twig' import form_widget_hidden -%}
+
+    {# ID, in current OctaveCMS it's actually a url #}
+    {%- set value = attr.value|default(null) -%}
+
+    {# Image ID which is sent back to backend #}
+    {%- set id = '' -%}
+
+    {# Small preview image url #}
+    {%- set thumbnail = '' -%}
+
+    {# Full image url #}
+    {%- set url = '' -%}
+
+    {# Image filename, to display as text #}
+    {%- set filename = '' -%}
+
+    {# Image width and height #}
+    {%- set width = 0 -%}
+    {%- set height = 0 -%}
+
+    {# Image size requirements #}
+    {%- set minWidth = attr.minWidth|default(0) %}
+    {%- set minHeight = attr.minHeight|default(0) %}
+
+    {%- if value is not empty -%}
+        {%- set id = value.id -%}
+        {%- set url = value.url|default('') -%}
+        {%- set thumbnail = value.thumbnail|default(url) -%}
+        {%- set filename = value.filename|default('') -%}
+        {%- set width = value.width|default(0) -%}
+        {%- set height = value.height|default(0) -%}
+
+        {%- if filename == '' -%}
+            {% set filename = url|split('/')|slice(0, -1) %}
+        {%- endif -%}
+    {%- endif -%}
+
+    {# Input #}
+    <div class="form-control-image
+        {% if not value %}form-control-image--empty{% endif %}
+        {% if attr.disabled %}form-control-image--disabled{% endif %}
+        {% if attr.readonly %}form-control-image--readonly{% endif %}
+        "
+        data-plugin="image"
+    >
+        {%- set hidden_attr = {'attr': {'class': 'js-image-id'}}|merge(attr)|merge({'value': id}) -%}
+        {{- form_widget_hidden(hidden_attr) -}}
+
+        <a class="form-control-image__preview ui-gray btn-container js-image-edit" role="button" aria-label="Replace image" tabindex="0" href="/media-modal.html">
+
+            <img class="form-control-image__preview__image js-image-thumbnail" src="{% if thumbnail != '' %}{{ thumbnail }}{% else %}/assets/images/px.gif{% endif %}" alt="" onerror="this.src='/assets/images/file-icons/unknown.png'" />
+
+            {# Edit icon #}
+            <span class="form-control-image__preview__icon btn btn--square btn--pill btn--shadow btn--tetriary"><span class="btn__content">
+                {{ icon('edit', {width: 32, height: 32}) }}
+            </span></span>
+        </a>
+        <div class="form-control-image__content">
+            <span class="form-control-image__content__title js-section-title-source js-image-title">
+                {{ filename }}
+            </span>
+            
+            <a class="form-control-image__content__link js-image-preview-link {% if url == '' %}d-none{% endif %}" href="{{ url }}" target="_blank">
+                Preview
+            </a>
+
+            {# Image size requirement or image size #}
+            <span class="form-control-image__content__spacer"></span>
+            <span class="form-control-image__content__meta {% if minWidth == 0 and minHeight == 0 %}js-image-size{% endif %} {% if width == 0 and height == 0 %}d-none{% endif %}">
+                {% if minWidth and minHeight %}
+                    {{ minWidth }}×{{ minHeight }} min
+                {% elseif minWidth %}
+                    {{ minWidth }} min width
+                {% elseif minHeight %}
+                    {{ minHeight }} min height
+                {% else %}
+                    {{ width }}×{{ height }}
+                {% endif %}
+            </span>
+
+            {# Delete button #}
+            <div class="form-control-image__content__action">
+                <a class="btn btn--square btn--pill btn--tetriary js-image-delete {% if id == '' %}d-none{% endif %}" role="button" tabindex="0" aria-label="Remove image"><span class="btn__content">
+                    {{ icon('delete', {width: 32, height: 32}) }}
+                </span></a>
+            </div>
+        </div>
+    </div>
+
+{%- endmacro %}

@@ -1,0 +1,120 @@
+{#
+{% macro form_widget_number (attr) -%}
+    @TODO
+
+    {% from 'macros/icon.twig' import icon %}
+
+    {% set name = name|default('') %}
+    {% set value = value|default('') %}
+    {% set min = min|default(null) %}
+    {% set max = max|default(null) %}
+    {% set step = step|default(null) %}
+    {% set required = required|default(false) %}
+    {% set disabled = disabled|default(false) %}
+    {% set readonly = readonly|default(false) %}
+    {% set id = id|default('input-' ~ random()) %}
+    {% set prefixText = prefixText|default('') %}
+
+    <div class="input-group input-group--focusable" data-plugin="number">
+        {% if prefixText %}
+            <label class="form-label input-group__text input-group__merge text-medium" for="{{ id }}">
+                {{ prefixText }}
+            </label>
+        {% endif %}
+
+        <div class="input-group__input input-group__merge form-control form-control--input">
+            <input
+                id="{{ id }}"
+                name="{{ name }}"
+                type="number" 
+                value="{{ value }}"
+                {% if step != null %}step="{{ step }}"{% endif %}
+                {% if min != null %}min="{{ min }}"{% endif %}
+                {% if max != null %}max="{{ max }}"{% endif %}
+                {% if required %}required{% endif %}
+                {% if disabled %}disabled{% endif %}
+                {% if readonly %}readonly{% endif %}
+                />
+        </div>
+
+        <div class="input-group__inside-button input-group__merge" for="{{ id }}">
+            <div class="group group--1 group--nowrap">
+                <a class="btn btn--sm btn--square btn--pill btn--tetriary js-number-subtract" role="button" tabindex="0" aria-label="Subtract"><span class="btn__content">
+                    {{ icon('number-subtract', {width: 24, height: 24}) }}
+                </span></a>
+                <a class="btn btn--sm btn--square btn--pill btn--tetriary js-number-add" role="button" tabindex="0" aria-label="Add"><span class="btn__content">
+                    {{ icon('number-add', {width: 24, height: 24}) }}
+                </span></a>
+            </div>
+        </div>
+
+    </div>
+
+{%- endmacro %}
+#}
+
+
+
+{% macro form_widget_number (attr) -%}
+    {%- from 'macros/icon.twig' import icon -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+    {%- from 'partials/blocks/widget_prefix.twig' import widget_prefix -%}
+    {%- from 'partials/blocks/widget_postfix.twig' import widget_postfix -%}
+
+    {%- set attr = attr|default({}) -%}
+    {%- set group_attr = attr.group_attr|default({}) -%}
+
+    {%- set attr = attr|merge({
+        attr: {
+            'postfix': true
+        }|merge(attr.attr|default({})),
+
+        group_attr: ({}|merge(group_attr))|merge({
+            'data-plugin': ('number ' ~ group_attr['data-plugin']|default(''))|trim
+        }),
+    }) -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set type = attr.type|default('text') -%}
+    {%- set maxlength = widget_attr.maxlength|default(null) -%}
+    {%- set widgetClassName = ('form-control form-control--input ' ~ widget_attr.class|default(''))|trim -%}
+    
+    {%- set prefix = widget_attr.prefix|default(null) -%}
+    {%- set prefixIcon = widget_attr.prefixIcon|default(null) -%}
+    {%- set postfix = widget_attr.postfix|default(null) -%}
+    {%- set postfixIcon = widget_attr.postfixIcon|default(null) -%}
+
+    {%- if prefix or prefixIcon or postfix or postfixIcon or maxlength -%}
+        {% set widgetClassName = (widgetClassName ~ ' input-group__input input-group__merge')|trim %}
+    {%- endif -%}
+
+    {# Remove properties from widget_attr #}
+    {%- set widget_attr_omit = ['class', 'prefix', 'prefixIcon', 'postfix', 'postfixIcon'] %}
+
+    {# {%- set widget_attr = widget_attr|filter((v, k) => k not in widget_attr_omit) -%} #}
+    {%- set widget_attr = widget_attr|omit(widget_attr_omit) -%}
+    {%- set widget_full_attr = {}|merge(attr)|merge({'attr': widget_attr}) -%}
+
+
+    {{- widget_prefix(attr) -}}
+
+        <div class="{{ widgetClassName }}">
+            <input type="number"
+                {% if attr.value is not empty %}value="{{ attr.value }}"{% endif %}
+                {{ widget_attributes(widget_full_attr) -}}
+            />
+        </div>
+
+        <div class="input-group__inside-button input-group__merge" for="{{ attr.id }}">
+            <div class="group group--1 group--nowrap">
+                <a class="btn btn--sm btn--square btn--pill btn--tetriary js-number-subtract" role="button" tabindex="0" aria-label="Subtract"><span class="btn__content">
+                    {{ icon('number-subtract', {width: 24, height: 24}) }}
+                </span></a>
+                <a class="btn btn--sm btn--square btn--pill btn--tetriary js-number-add" role="button" tabindex="0" aria-label="Add"><span class="btn__content">
+                    {{ icon('number-add', {width: 24, height: 24}) }}
+                </span></a>
+            </div>
+        </div>
+
+    {{- widget_postfix(attr) -}}
+{%- endmacro %}

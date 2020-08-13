@@ -1,0 +1,16 @@
+{% macro form_row (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- from 'partials/blocks/form_label.twig' import form_label -%}
+    {%- from 'partials/blocks/form_errors.twig' import form_errors -%}
+    {%- from 'partials/blocks/form_widget.twig' import form_widget -%}
+
+    {%- set row_attr = attr.row_attr|default({}) -%}
+    {%- set row_attr = row_attr|merge({'class': row_attr.class|default('') ~ ' form-group'|trim}) -%}
+    
+    <div {{ attributes(row_attr) }}>
+        {%- if attr.show_label is not same as(false) -%}
+            {{ form_label(attr) }}
+        {%- endif -%}
+        {{- form_widget(attr) -}}
+    </div>
+{%- endmacro %}

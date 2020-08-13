@@ -1,0 +1,40 @@
+{% macro widget_prefix (attr) -%}
+    {%- from 'macros/icon.twig' import icon -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+
+    {%- set group_attr = attr.group_attr|default({}) -%}
+    {%- set group_attr = group_attr|merge({'class': 'input-group input-group--focusable ' ~ group_attr.class|default('')}) -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set maxlength = widget_attr.maxlength|default(null) -%}
+    
+    {%- set prefix = widget_attr.prefix|default(null) -%}
+    {%- set prefixIcon = widget_attr.prefixIcon|default(null) -%}
+    {%- set postfix = widget_attr.postfix|default(null) -%}
+    {%- set postfixIcon = widget_attr.postfixIcon|default(null) -%}
+    {%- set withGroup = false -%}
+
+    {%- if prefix or prefixIcon or postfix or postfixIcon or maxlength -%}
+        {%- set withGroup = true -%}
+    {%- endif -%}
+
+    {%- if maxlength -%}
+        {% set group_attr = group_attr|merge({'data-plugin': 'inputMaxLength ' ~ group_attr['data-plugin']|default('')}) %}
+    {%- endif -%}
+
+
+    {# Prefix #}
+    {%- if withGroup -%}
+    <div {{ attributes(group_attr) }}>
+        {%- if prefixIcon -%}
+            <label class="form-label input-group__icon input-group__merge text-medium" for="{{ attr.id }}">
+                {{ icon(prefixIcon) }}
+            </label>
+        {%- endif -%}
+        {%- if prefix and prefix is not same as(true) -%}
+            <label class="form-label input-group__text input-group__merge text-medium" for="{{ attr.id }}">
+                {{ prefix }}
+            </label>
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro %}

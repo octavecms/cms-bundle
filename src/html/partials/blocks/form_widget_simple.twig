@@ -1,0 +1,38 @@
+{% macro form_widget_simple (attr) -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+    {%- from 'partials/blocks/widget_prefix.twig' import widget_prefix -%}
+    {%- from 'partials/blocks/widget_postfix.twig' import widget_postfix -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set type = attr.type|default('text') -%}
+    {%- set maxlength = widget_attr.maxlength|default(null) -%}
+    {%- set widgetClassName = ('form-control form-control--input ' ~ widget_attr.class|default(''))|trim -%}
+    
+    {%- set prefix = widget_attr.prefix|default(null) -%}
+    {%- set prefixIcon = widget_attr.prefixIcon|default(null) -%}
+    {%- set postfix = widget_attr.postfix|default(null) -%}
+    {%- set postfixIcon = widget_attr.postfixIcon|default(null) -%}
+
+    {%- if prefix or prefixIcon or postfix or postfixIcon or maxlength -%}
+        {% set widgetClassName = (widgetClassName ~ ' input-group__input input-group__merge')|trim %}
+    {%- endif -%}
+
+    {# Remove properties from widget_attr #}
+    {%- set widget_attr_omit = ['class', 'prefix', 'prefixIcon', 'postfix', 'postfixIcon'] %}
+
+    {# {%- set widget_attr = widget_attr|filter((v, k) => k not in widget_attr_omit) -%} #}
+    {%- set widget_attr = widget_attr|omit(widget_attr_omit) -%}
+    {%- set widget_full_attr = {}|merge(attr)|merge({'attr': widget_attr}) -%}
+
+
+    {{- widget_prefix(attr) -}}
+
+        <div class="{{ widgetClassName }}">
+            <input type="{{ type }}"
+                {% if attr.value is not empty %}value="{{ attr.value }}"{% endif %}
+                {{ widget_attributes(widget_full_attr) -}} 
+            />
+        </div>
+
+    {{- widget_postfix(attr) -}}
+{%- endmacro %}

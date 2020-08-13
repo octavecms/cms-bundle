@@ -1,0 +1,36 @@
+{% macro widget_postfix (attr) -%}
+    {%- from 'macros/icon.twig' import icon -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set maxlength = widget_attr.maxlength|default(null) -%}
+    
+    {%- set prefix = widget_attr.prefix|default(null) -%}
+    {%- set prefixIcon = widget_attr.prefixIcon|default(null) -%}
+    {%- set postfix = widget_attr.postfix|default(null) -%}
+    {%- set postfixIcon = widget_attr.postfixIcon|default(null) -%}
+    {%- set withGroup = false -%}
+
+    {%- if prefix or prefixIcon or postfix or postfixIcon or maxlength -%}
+        {% set withGroup = true %}
+    {%- endif -%}
+
+    {# Postfix #}
+    {%- if withGroup -%}
+        {%- if postfix and postfix is not same as(true) -%}
+            <label class="form-label input-group__text input-group__merge text-medium" for="{{ attr.id }}">
+                {{ postfix }}
+            </label>
+        {%- endif -%}
+        {%- if postfixIcon -%}
+            <label class="form-label input-group__icon input-group__merge text-medium" for="{{ attr.id }}">
+                {{ icon(postfixIcon) }}
+            </label>
+        {%- endif -%}
+        {%- if maxlength -%}
+            <label class="form-label input-group__text input-group__merge text-small text-color-small" for="{{ attr.id }}">
+                <span class="sr-only">Characters remaining</span> <span class="js-input-max-length-text">{{ maxlength - attr.value|default('')|length }}</span>
+            </label>
+        {%- endif -%}
+    </div>
+    {%- endif -%}
+{%- endmacro %}

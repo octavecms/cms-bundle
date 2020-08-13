@@ -23,7 +23,10 @@ class DateTimePicker {
 
     static get Defaults () {
         return {
-            // 'minDate': '1/1/1900',
+            // Date format
+            // 'dateFormat': 'YYYY-MM-DD hh:mm:ss',
+
+            // 'minDate': '1900-01-01 00:00:00',
             // 'maxDate': null,
 
             // Use strict mode when validating date
@@ -39,9 +42,10 @@ class DateTimePicker {
         this.$container = $container;
         this.$input = $container.find('input').addBack('input');
 
-        this.options = this.transformOptions(assign({
+        
+        this.options = this.transformOptions(assign({}, this.constructor.Defaults, {
             'dateFormat': this.$input.data('dateFormat')
-        }, this.constructor.Defaults, opts));
+        }, opts));
 
         $container.on('destroyed', this.destroy.bind(this));
 

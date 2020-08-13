@@ -1,0 +1,93 @@
+{% macro form_widget (attr) -%}
+    {%- from 'partials/blocks/form_widget_compound.twig' import form_widget_compound -%}
+    {%- from 'partials/blocks/form_widget_simple.twig' import form_widget_simple -%}
+    {%- from 'partials/blocks/form_widget_choice.twig' import form_widget_choice -%}
+    {%- from 'partials/blocks/form_widget_radio.twig' import form_widget_radio -%}
+    {%- from 'partials/blocks/form_widget_checkbox.twig' import form_widget_checkbox -%}
+    {%- from 'partials/blocks/form_widget_textarea.twig' import form_widget_textarea -%}
+    {%- from 'partials/blocks/form_widget_datetime.twig' import form_widget_datetime -%}
+    {%- from 'partials/blocks/form_widget_date.twig' import form_widget_date -%}
+    {%- from 'partials/blocks/form_widget_time.twig' import form_widget_time -%}
+    {%- from 'partials/blocks/form_widget_dateinterval.twig' import form_widget_dateinterval -%}
+    {%- from 'partials/blocks/form_widget_number.twig' import form_widget_number -%}
+    {%- from 'partials/blocks/form_widget_money.twig' import form_widget_money -%}
+    {%- from 'partials/blocks/form_widget_integer.twig' import form_widget_integer -%}
+    {%- from 'partials/blocks/form_widget_percent.twig' import form_widget_percent -%}
+    {%- from 'partials/blocks/form_widget_url.twig' import form_widget_url -%}
+    {%- from 'partials/blocks/form_widget_password.twig' import form_widget_password -%}
+    {%- from 'partials/blocks/form_widget_hidden.twig' import form_widget_hidden -%}
+    {%- from 'partials/blocks/form_widget_email.twig' import form_widget_email -%}
+    {%- from 'partials/blocks/form_widget_tel.twig' import form_widget_tel -%}
+    {%- from 'partials/blocks/form_widget_color.twig' import form_widget_color -%}
+    {%- from 'partials/blocks/form_widget_range.twig' import form_widget_range -%}
+    {%- from 'partials/blocks/form_widget_search.twig' import form_widget_search -%}
+    {%- from 'partials/blocks/form_widget_button.twig' import form_widget_button -%}
+    {%- from 'partials/blocks/form_widget_submit.twig' import form_widget_submit -%}
+    {%- from 'partials/blocks/form_widget_reset.twig' import form_widget_reset -%}
+    {%- from 'partials/blocks/form_widget_image.twig' import form_widget_image -%}
+    {%- from 'partials/blocks/form_widget_gallery.twig' import form_widget_gallery -%}
+    {%- from 'partials/blocks/form_widget_collection.twig' import form_widget_collection -%}
+
+    {% if attr.compound|default(false) %}
+        {{- form_widget_compound(attr) -}}
+    {% else %}
+        {# We can't replicate symfony, we need to call each widget type manually #}
+        {%- set type = attr.type|default('text') -%}
+
+        {%- if type == 'text' -%}
+            {{- form_widget_simple(attr) -}}
+        {%- elseif type == 'choice' -%}
+            {{- form_widget_choice(attr) -}}
+        {%- elseif type == 'radio' -%}
+            {{- form_widget_radio(attr) -}}
+        {%- elseif type == 'checkbox' -%}
+            {{- form_widget_checkbox(attr) -}}
+        {%- elseif type == 'textarea' -%}
+            {{- form_widget_textarea(attr) -}}
+        {%- elseif type == 'datetime' -%}
+            {{- form_widget_datetime(attr) -}}
+        {%- elseif type == 'date' -%}
+            {{- form_widget_date(attr) -}}
+        {%- elseif type == 'time' -%}
+            {{- form_widget_time(attr) -}}
+        {%- elseif type == 'dateinterval' -%}
+            {{- form_widget_dateinterval(attr) -}}
+        {%- elseif type == 'number' -%}
+            {{- form_widget_number(attr) -}}
+        {%- elseif type == 'money' -%}
+            {{- form_widget_money(attr) -}}
+        {%- elseif type == 'integer' -%}
+            {{- form_widget_integer(attr) -}}
+        {%- elseif type == 'percent' -%}
+            {{- form_widget_percent(attr) -}}
+        {%- elseif type == 'url' -%}
+            {{- form_widget_url(attr) -}}
+        {%- elseif type == 'password' -%}
+            {{- form_widget_password(attr) -}}
+        {%- elseif type == 'hidden' -%}
+            {{- form_widget_hidden(attr) -}}
+        {%- elseif type == 'email' -%}
+            {{- form_widget_email(attr) -}}
+        {%- elseif type == 'tel' -%}
+            {{- form_widget_tel(attr) -}}
+        {%- elseif type == 'color' -%}
+            {{- form_widget_color(attr) -}}
+        {%- elseif type == 'search' -%}
+            {{- form_widget_search(attr) -}}
+        {%- elseif type == 'range' -%}
+            {{- form_widget_range(attr) -}}
+        {%- elseif type == 'button' -%}
+            {{- form_widget_button(attr) -}}
+        {%- elseif type == 'submit' -%}
+            {{- form_widget_submit(attr) -}}
+        {%- elseif type == 'reset' -%}
+            {{- form_widget_reset(attr) -}}
+        {%- elseif type == 'image' -%}
+            {{- form_widget_image(attr) -}}
+        {%- elseif type == 'gallery' -%}
+            {{- form_widget_gallery(attr) -}}
+        {%- elseif type == 'collection' -%}
+            {{- form_widget_collection(attr) -}}
+        {%- endif -%}
+    {% endif %}
+{%- endmacro %}

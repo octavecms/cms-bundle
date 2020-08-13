@@ -1,0 +1,20 @@
+{% macro button_widget (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+
+    {%- set attr = {
+        'type': 'button'
+    }|merge(attr|default({})) -%}
+
+    {%- set label = attr.label -%}
+    {%- if label is empty -%}
+        {% set label = attr.name|default('')|humanize %}
+    {%- endif -%}
+
+    {%- set widget_attr = attr.attr|default({}) -%}
+    {%- set widget_attr = {}|merge(widget_attr)|merge({
+        type: attr.type,
+        class: ('btn btn--secondary btn--lg ' ~ widget_attr.class|default(''))|trim
+    }) -%}
+
+    <button {{ attributes(widget_attr) }}><span class="btn__content">{{ label }}</span></button>
+{%- endmacro %}

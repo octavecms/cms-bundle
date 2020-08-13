@@ -36,7 +36,7 @@
                     {% set sectionNamePrefix = namePrefix ~ '[translations][' ~ language ~ ']' %}
 
                     <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
-                        {% include 'partials/page-content-modal/section-asset-main.twig' with {
+                        {% include 'partials/page-content/modals/philosophy/section-asset-main.twig' with {
                             'namePrefix': sectionNamePrefix,
                             'sectionId': null,
                             'values': assetsValues[language]|default({})
@@ -62,7 +62,7 @@
                         {% for assetsItem in assetsValue %}
                             {% set order = loop.index0 %}
 
-                            {% include 'partials/page-content-modal/section-asset-content.twig' with {
+                            {% include 'partials/page-content/modals/philosophy/section-asset-content.twig' with {
                                 'namePrefix': sectionNamePrefix ~ '[' ~ order ~']',
                                 'sectionId': null,
                                 'values': {'order': order}|merge(assetsItem)
@@ -74,7 +74,7 @@
 
                         {# Generate HTML for client-side templating, JS will replace __name__ #}
                         {% set sectionAssetHTML %}
-                            {% include 'partials/page-content-modal/section-asset-content.twig' with {
+                            {% include 'partials/page-content/modals/philosophy/section-asset-content.twig' with {
                                 'namePrefix': sectionNamePrefix ~ '[__name__]',
                                 'sectionId': 'section-' ~ random() ~ '-__name__',
                                 'values': {}

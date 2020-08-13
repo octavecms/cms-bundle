@@ -1,0 +1,4 @@
+{% macro form_widget_integer (attr) -%}
+    {%- from 'partials/blocks/form_widget_number.twig' import form_widget_number -%}
+    {{- form_widget_number(attr) -}}
+{%- endmacro %}

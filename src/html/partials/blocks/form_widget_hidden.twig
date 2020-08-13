@@ -1,0 +1,5 @@
+{% macro form_widget_hidden (attr) -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+
+    <input type="hidden" {{ widget_attributes(attr) }} {% if attr.value is not empty %}value="{{ attr.value }}" {% endif %}/>
+{%- endmacro %}
