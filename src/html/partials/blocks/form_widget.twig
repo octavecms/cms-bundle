@@ -6,6 +6,7 @@
     {%- from 'partials/blocks/form_widget_radio.twig' import form_widget_radio -%}
     {%- from 'partials/blocks/form_widget_checkbox.twig' import form_widget_checkbox -%}
     {%- from 'partials/blocks/form_widget_textarea.twig' import form_widget_textarea -%}
+    {%- from 'partials/blocks/form_widget_tinymce.twig' import form_widget_tinymce -%}
     {%- from 'partials/blocks/form_widget_datetime.twig' import form_widget_datetime -%}
     {%- from 'partials/blocks/form_widget_date.twig' import form_widget_date -%}
     {%- from 'partials/blocks/form_widget_time.twig' import form_widget_time -%}
@@ -47,6 +48,8 @@
             {{- form_widget_checkbox(attr) -}}
         {%- elseif type == 'textarea' -%}
             {{- form_widget_textarea(attr) -}}
+        {%- elseif type == 'tinymce' -%}
+            {{- form_widget_tinymce(attr) -}}
         {%- elseif type == 'datetime' -%}
             {{- form_widget_datetime(attr) -}}
         {%- elseif type == 'date' -%}

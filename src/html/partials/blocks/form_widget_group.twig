@@ -1,0 +1,6 @@
+{% macro form_widget_group (attr) -%}
+    {%- set collapsable = attr.collapsable|default(false) -%}
+    {%- set sortable = attr.sortable|default(false) -%}
+    {%- set label = attr.label|default('') -%}
+
+{%- endmacro %} 

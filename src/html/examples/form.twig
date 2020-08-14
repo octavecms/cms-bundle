@@ -34,6 +34,40 @@
                             }
                         },
                         {
+                            id: 'sdsfgsdgsdfgsdfgsdfgsdf',
+                            name: 'example-tinymce',
+                            full_name: 'example-tinymce',
+                            type: 'tinymce',
+                            label: 'TinyMCE editor',
+                            value: 'Duis est non consectetur elit elit culpa.',
+                            tinymce_options: {
+                                body_class: "text",
+                                content_css: [
+                                    "/assets/stylesheets/example-page-visual-editor.css"
+                                ],
+                                formats: {
+                                },
+                                style_formats: [
+                                    {title: "Square bullets", selector: "ol",classes: "list-separated"},
+                                    {title: "Gray text", inline: "span", classes: "text--color-small"},
+
+                                    {title: "Table layout", selector: "table", classes: "table-layout"},
+
+                                    {title: "Image title", selector: "img+p, figure+p",classes:"image-caption"},
+                                    {title: "Image description", selector: "img+.image-caption+p, figure+.image-caption+p",classes: "image-description"},
+                                    {title: "Image full text width", selector: "figure, img", classes: "image-full-text"},
+                                    {title: "Image full page width", selector: "figure, img", classes: "image-full-page"},
+
+                                    {title: "Icon", "items": [
+                                        {title: "Icon fund opportunity", selector: "h1, h2, h3, h4", classes: "text-icon-fund-opportunity"},
+                                        {title: "Icon fund value", selector: "h1, h2, h3, h4", classes: "text-icon-fund-value"},
+                                        {title: "Icon fund core", selector: "h1, h2, h3, h4", classes: "text-icon-fund-core"},
+                                        {title: "Icon fund core+", selector: "h1, h2, h3, h4", classes: "text-icon-fund-core-plus"}
+                                    ]}
+                                ]
+                            }
+                        },
+                        {
                             compound: true,
                             attr: {
                                 class: 'form-grid-layout',

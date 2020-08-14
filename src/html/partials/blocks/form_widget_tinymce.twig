@@ -1,0 +1,25 @@
+{% macro form_widget_tinymce (attr) -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+
+    {%- set attr = attr|default({}) -%}
+    {%- set input_attr = attr.attr|default({}) -%}
+    {%- set widget_attr = attr.widget_attr|default({}) -%}
+    {%- set tinymce_options = attr.tinymce_options|default({}) %}
+
+    {%- set attr = attr|merge({
+        attr: ({}|merge(input_attr))|merge({
+            'data-plugin': ('richtexteditor ' ~ input_attr['data-plugin']|default(''))|trim
+        }),
+    }) -%}
+
+    {%- set widget_attr = {}|merge(widget_attr|default({}))|merge({
+        'class': ('form-control form-control--richtexteditor ' ~ widget_attr.class|default(''))|trim
+    }) -%}
+
+    <div {{ attributes(widget_attr) }}>
+        <textarea {{ widget_attributes(attr) }} data-richtexteditor="{{ tinymce_options|json_encode|escape('html_attr') }}">
+            {{- attr.value|default('') -}}
+        </textarea>
+    </div>
+{%- endmacro %}
