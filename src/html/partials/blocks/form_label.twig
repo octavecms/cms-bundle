@@ -32,21 +32,23 @@
     {%- set label_attr = label_attr|omit(label_attr_omit) -%}
 
     {# Set text as "Optional" if input is not required #}
-    {%- if not label_text and not attr.required -%}
+    {%- if label and (not label_text and not attr.required) -%}
         {% set label_text = 'Optional' %}
     {%- endif -%}
 
-    <{{ element }} {{ attributes(label_attr) }}>
-        {{ label }}
+    {%- if label or label_text -%}
+        <{{ element }} {{ attributes(label_attr) }}>
+            {{ label }}
 
-        {# Additional text #}
-        {%- if label_text -%}
-            <small>({{ label_text }})</small>
-        {%- endif -%}
+            {# Additional text #}
+            {%- if label_text -%}
+                <small>({{ label_text }})</small>
+            {%- endif -%}
 
-        {# Tooltip #}
-        {%- if help -%}
-            {{- form_label_help({'help': help, 'attr': help_attr}) -}}
-        {%- endif -%}
-    </{{ element }}>
+            {# Tooltip #}
+            {%- if help -%}
+                {{- form_label_help({'help': help, 'attr': help_attr}) -}}
+            {%- endif -%}
+        </{{ element }}>
+    {%- endif -%}
 {%- endmacro %}

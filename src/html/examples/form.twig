@@ -13,16 +13,16 @@
                     'children': [
                         {
                             id: 'ndcvbxcbdsgs',
-                            name: 'title',
-                            full_name: 'title',
+                            name: 'example-title',
+                            full_name: 'example-title',
                             type: 'text',
                             value: 'I am title',
                             required: true
                         },
                         {
                             id: 'fdgsdfgsdfgsdfgdfsdf',
-                            name: 'description',
-                            full_name: 'description',
+                            name: 'example-description',
+                            full_name: 'example-description',
                             type: 'textarea',
                             label: 'Description',
                             value: 'Duis est non consectetur elit elit culpa.',
@@ -34,24 +34,32 @@
                             }
                         },
                         {
-                            id: 'dsfgdgsdfgsdfgsdf',
-                            name: 'email',
-                            full_name: 'email',
-                            type: 'email',
-                            label: 'E-mail',
-                            help: 'Lorem ipsum dolor sit amet',
-                        },
-                        {
-                            id: 'dfbxcvbxcvbxcvbxc',
-                            name: 'phone',
-                            full_name: 'phone',
-                            type: 'tel',
-                            label: 'Phone number',
+                            compound: true,
+                            attr: {
+                                class: 'form-grid-layout',
+                            },
+                            children: [
+                                {
+                                    id: 'dsfgdgsdfgsdfgsdf',
+                                    name: 'example-email',
+                                    full_name: 'example-email',
+                                    type: 'email',
+                                    label: 'E-mail',
+                                    help: 'Lorem ipsum dolor sit amet',
+                                },
+                                {
+                                    id: 'dfbxcvbxcvbxcvbxc',
+                                    name: 'example-phone',
+                                    full_name: 'example-phone',
+                                    type: 'tel',
+                                    label: 'Phone number',
+                                },
+                            ]
                         },
                         {
                             id: 'sdfgsthjwrtaera',
-                            name: 'text-with-max-length',
-                            full_name: 'text-with-max-length',
+                            name: 'example-text-with-max-length',
+                            full_name: 'example-text-with-max-length',
                             type: 'text',
                             label: 'Text with max length',
                             attr: {
@@ -60,8 +68,8 @@
                         },
                         {
                             id: 'dfsgdfgsdfvdcvsd',
-                            name: 'url-with-prefix',
-                            full_name: 'title-url-prefix',
+                            name: 'example-url-with-prefix',
+                            full_name: 'example-title-url-prefix',
                             type: 'url',
                             label: 'URL with prefix and help tooltip',
                             help: 'Lorem ipsum',
@@ -72,8 +80,8 @@
                         },
                         {
                             id: 'sdfsghgfhjdfjs',
-                            name: 'search-1',
-                            full_name: 'search-1',
+                            name: 'example-search-1',
+                            full_name: 'example-search-1',
                             type: 'search',
                             label: 'Search input',
                             attr: {
@@ -82,8 +90,8 @@
                         },
                         {
                             id: 'fghdfghsdfgafsdfgsfsd',
-                            name: 'search-2',
-                            full_name: 'search-2',
+                            name: 'example-search-2',
+                            full_name: 'example-search-2',
                             type: 'search',
                             label: 'Search input styled',
                             attr: {
@@ -96,8 +104,8 @@
                         },
                         {
                             id: 'dfhdfghdfhghdfghfd',
-                            name: 'image',
-                            full_name: 'image',
+                            name: 'example-image',
+                            full_name: 'example-image',
                             type: 'image',
                             label: 'Image',
                             minWidth: 300,
@@ -106,39 +114,242 @@
                                 id: 'fgsdfgsdfgsdfgsdfgsd',
                                 thumbnail: '/assets/images/temp/image-thumb-1.png',
                                 url: '/assets/images/temp/image-thumb-1.png',
-                                filename: 'academy_thumb_01.jpg',
+                                filename: 'example-academy_thumb_01.jpg',
                                 width: 620,
                                 height: 620
                             }
                         },
                         {
+                            compound: true,
+                            attr: {
+                                class: 'form-grid-layout',
+                            },
+                            children: [
+                                {
+                                    id: 'fdgsdgsdfgsdfgsdfgsdf',
+                                    name: 'example-image-2',
+                                    full_name: 'example-image-2',
+                                    type: 'image',
+                                    label: '2 image inputs side by side',
+                                    minWidth: 300,
+                                    minHeight: 300,
+                                    value: {
+                                        id: 'fgsdfgsdfgsdfgsdfgsd',
+                                        thumbnail: '/assets/images/temp/image-thumb-1.png',
+                                        url: '/assets/images/temp/image-thumb-1.png',
+                                        filename: 'example-academy_thumb_01.jpg',
+                                        width: 620,
+                                        height: 620
+                                    }
+                                },
+                                {
+                                    id: 'vcxbcvbxcvbxcvbcxvbxc',
+                                    name: 'example-image-3',
+                                    full_name: 'example-image-3',
+                                    type: 'image',
+                                    label: '2 image inputs side by side',
+                                    minWidth: 300,
+                                    minHeight: 300,
+                                    value: {
+                                        id: 'fgsdfgsdfgsdfgsdfgsd',
+                                        thumbnail: '/assets/images/temp/image-thumb-1.png',
+                                        url: '/assets/images/temp/image-thumb-1.png',
+                                        filename: 'example-academy_thumb_01.jpg',
+                                        width: 620,
+                                        height: 620
+                                    }
+                                },
+                            ]
+                        },
+                        {
+                            id: 'asdfasdfasdfasdfas',
+                            name: 'example-gallery',
+                            full_name: 'example-gallery',
+                            type: 'image_list',
+                            label: 'Gallery',
+                            minWidth: 300,
+                            minHeight: 300,
+                            editable: [
+                                {
+                                    id: 'cvzxcvzxcvzxcvzxcvzxcvzx',
+                                    name: 'description',
+                                    full_name: 'description',
+                                    type: 'textarea',
+                                    label: 'Description',
+                                    attr: {
+                                        maxlength: 255
+                                    }
+                                },
+                            ],
+                            value: [
+                                {
+                                    id: 'qweasdzxc',
+                                    thumbnail: '/assets/images/temp/gallery-thumb-1.png',
+                                    url: '/assets/images/temp/gallery-1.png',
+                                    filename: 'gallery-1.png',
+                                    description: ''
+                                },
+                                { id: 'sdfgsdfgsdfg', thumbnail: '/assets/images/temp/gallery-thumb-2.png', url: '/assets/images/temp/gallery-2.png', filename: 'gallery-2.png', description: '' },
+                                { id: 'ertyertyedfg', thumbnail: '/assets/images/temp/gallery-thumb-3.png', url: '/assets/images/temp/gallery-3.png', filename: 'gallery-3.png', description: 'Целевые требования к активам' },
+                                { id: 'xvbxcvbxcvb', thumbnail: '/assets/images/temp/gallery-thumb-4.png', url: '/assets/images/temp/gallery-4.png', filename: 'gallery-4.png', description: 'Целевые требования к активам' },
+                                { id: 'asdfasdfas', thumbnail: '/assets/images/temp/gallery-thumb-5.png', url: '/assets/images/temp/gallery-5.png', filename: 'gallery-5.png', description: '' },
+                                { id: 'rtyrurtyh', thumbnail: '/assets/images/temp/gallery-thumb-6.png', url: '/assets/images/temp/gallery-6.png', filename: 'gallery-6.png', description: 'Целевые требования к активам' },
+                            ]
+                        },
+                        {
                             id: 'fgdfgsdfgsdfgsdf',
-                            name: 'date',
-                            full_name: 'date',
+                            name: 'example-date',
+                            full_name: 'example-date',
                             type: 'datetime',
                             label: 'Date and time picker',
                             value: '2020-08-13 00:00:00',
                         },
                         {
-                            id: 'asfasdfasdfsdfasd',
-                            name: 'number',
-                            full_name: 'number',
-                            type: 'number',
-                            label: 'Number'
+                            compound: true,
+                            attr: {
+                                class: 'form-grid-layout form-grid-layout--4',
+                            },
+                            children: [
+                                {
+                                    id: 'asfasdfasdfsdfasd',
+                                    name: 'example-number',
+                                    full_name: 'example-number',
+                                    type: 'number',
+                                    label: 'Number'
+                                },
+                                {
+                                    id: 'sdfgsdfgfdgsdfgsdf',
+                                    name: 'example-percent',
+                                    full_name: 'example-percent',
+                                    type: 'percent',
+                                    label: 'Percent'
+                                },
+                                {
+                                    id: 'asdfasdfasdasdfasdf',
+                                    name: 'example-money',
+                                    full_name: 'example-money',
+                                    type: 'money',
+                                    label: 'Money'
+                                },
+                            ]
                         },
                         {
-                            id: 'sdfgsdfgfdgsdfgsdf',
-                            name: 'percent',
-                            full_name: 'percent',
-                            type: 'percent',
-                            label: 'Percent'
+                            compound: true,
+                            attr: {
+                                class: 'form-grid-layout form-grid-layout--4',
+                            },
+                            children: [
+                                {
+                                    id: 'asdfsfgjsdhfgshdfkgsjd',
+                                    name: 'example-choice-1',
+                                    full_name: 'example-choice-1',
+                                    type: 'choice',
+                                    label: 'Author with images',
+                                    multiple: false,
+                                    placeholder: null,
+                                    value: 'bbb',
+                                    choices: [
+                                        { value: 'aaa', label: 'Lorem ipsum', attr: {'data-image': '/assets/images/temp/select-user.png'} },
+                                        { value: 'bbb', label: 'Dolor sit amet', attr: {'data-image': '/assets/images/temp/select-user.png'} },
+                                        { value: 'ccc', label: 'Cupidatat culpa', attr: {'data-image': '/assets/images/temp/select-user.png'} }
+                                    ]
+                                },
+
+                                {
+                                    id: 'cvzxcvxzcvzxcvzxcvz',
+                                    name: 'example-choice-2',
+                                    full_name: 'example-choice-2',
+                                    type: 'choice',
+                                    label: 'With prefered choices',
+                                    multiple: false,
+                                    placeholder: null,
+                                    value: 'bbb',
+                                    preferred_choices: [
+                                        { value: 'aaa', label: 'Lorem ipsum', attr: {} },
+                                        { value: 'bbb', label: 'Dolor sit amet', attr: {} },
+                                        { value: 'ccc', label: 'Cupidatat culpa', attr: {} },
+                                    ],
+                                    choices: [
+                                        { value: 'ddd', label: 'Ea qui exercitation', attr: {} },
+                                        { value: 'eee', label: 'Laborum velit', attr: {} },
+                                        { value: 'fff', label: 'Cupidatat culpa', attr: {} },
+                                        { value: 'ggg', label: 'Cupidatat culpa', attr: {} },
+                                    ],
+                                },
+                                {
+                                    id: 'sdfasdfsadfasdfasdfas',
+                                    name: 'example-choice-3',
+                                    full_name: 'example-choice-3',
+                                    type: 'choice',
+                                    label: 'Category',
+                                    multiple: true,
+                                    placeholder: null,
+                                    value: ['bbb', 'ccc'],
+                                    preferred_choices: [
+                                        { value: 'aaa', label: 'Lorem ipsum', attr: {} },
+                                        { value: 'bbb', label: 'Dolor sit amet', attr: {} },
+                                        { value: 'ccc', label: 'Cupidatat culpa', attr: {} },
+                                    ],
+                                    choices: [
+                                        { value: 'ddd', label: 'Ea qui exercitation', attr: {} },
+                                        { value: 'eee', label: 'Laborum velit', attr: {} },
+                                        { value: 'fff', label: 'Cupidatat culpa', attr: {} },
+                                        { value: 'ggg', label: 'Cupidatat culpa', attr: {} },
+                                    ],
+                                },
                         },
                         {
-                            id: 'asdfasdfasdasdfasdf',
-                            name: 'money',
-                            full_name: 'money',
-                            type: 'money',
-                            label: 'Money'
+                            compound: true,
+                            attr: {
+                                class: 'form-grid-layout form-grid-layout--4',
+                            },
+                            children: [
+                                {
+                                    id: 'sdfgsdfgsdfgsdfgsdfgsd',
+                                    name: 'example-switch-1',
+                                    full_name: 'example-switch-1',
+                                    type: 'switch',
+                                    label: 'Switch',
+                                    multiple: false,
+                                    placeholder: null,
+                                    value: 'no',
+                                    choices: [
+                                        { value: 'no', label: 'No' },
+                                        { value: 'yes', label: 'Yes' }
+                                    ]
+                                },
+                                {
+                                    id: 'asdfasdfasdfasdfas',
+                                    name: 'example-switch-2',
+                                    full_name: 'example-switch-2',
+                                    type: 'switch',
+                                    label: 'Switch',
+                                    multiple: false,
+                                    placeholder: null,
+                                    required: true,
+                                    value: '',
+                                    choices: [
+                                        { value: 'a', label: 'A' },
+                                        { value: 'b', label: 'B' },
+                                        { value: 'c', label: 'C' },
+                                    ]
+                                },
+                                {
+                                    id: 'dfsdfgsdfgsdf',
+                                    name: 'example-switch-3',
+                                    full_name: 'example-switch-3',
+                                    type: 'switch',
+                                    label: 'Multiple choices',
+                                    multiple: true,
+                                    placeholder: null,
+                                    value: '',
+                                    choices: [
+                                        { value: 'a', label: 'A' },
+                                        { value: 'b', label: 'B' },
+                                        { value: 'c', label: 'C' },
+                                    ]
+                                },
+                            ]
                         },
                     ]
                 }) }}
@@ -149,5 +360,4 @@
             </div>
         </div></form>
     </div>
-
 {% endblock %}

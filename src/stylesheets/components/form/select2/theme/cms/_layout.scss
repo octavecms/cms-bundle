@@ -88,6 +88,13 @@
                 border-radius: var(--border-radius-small);
             }
         }
+
+        // Separator
+        .select2-results__option__separator {
+            display: block;
+            border-top: 1px solid var(--color-line);
+            margin: var(--spacer-3) calc(#{ $select2-padding } * -2);
+        }
     }
 
     .select2-results__option--group {

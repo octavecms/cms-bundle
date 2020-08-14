@@ -13,7 +13,7 @@
                         <div class="media-info__image__sizer"></div>
                         <div class="media-info__image__item">
                             <% if (data.thumbnail) { %>
-                                <img loading="lazy" src="<%- data.thumbnail %>" alt="<%- data.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                <img loading="lazy" src="<%- data.thumbnail %>" alt="<%- data.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                             <% } else { %>
                                 <img loading="lazy" src="/assets/images/file-icons/<%- data.icon %>.png" alt="<%- data.icon %>" draggable="false" />
                             <% } %>
@@ -21,7 +21,7 @@
                     </figure>
 
                     <p class="media-info__title text-truncate-fade">
-                        <%- data.fileName %>
+                        <%- data.filename %>
                     </p>
                     <p class="media-info__meta">
                         <% if (data.isImage) { %>
@@ -50,7 +50,7 @@
                         <% each(data.slice(0, 3), function (file) { %>
                             <div class="media-info__image__item">
                                 <% if (file.thumbnail) { %>
-                                    <img loading="lazy" src="<%- file.thumbnail %>" alt="<%- file.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                    <img loading="lazy" src="<%- file.thumbnail %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                 <% } else { %>
                                     <img loading="lazy" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                 <% } %>
@@ -78,7 +78,7 @@
                             <% each(files.slice(0, 3), (file) => { %>
                                 <div class="media-info__image__item">
                                     <% if (file.thumbnail) { %>
-                                        <img loading="lazy" src="<%- file.thumbnail %>" alt="<%- file.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                        <img loading="lazy" src="<%- file.thumbnail %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                     <% } else { %>
                                         <img loading="lazy" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                     <% } %>

@@ -76,7 +76,7 @@ class ImageInput {
         const $container = this.$container;
         const data = {
             id: '',
-            fileName: '',
+            filename: '',
             thumbnail: '/assets/images/px.gif',
             url: null,
             width: 0,
@@ -95,7 +95,7 @@ class ImageInput {
         $img.attr('src', data.thumbnail || data.url);
         
         const $title = $container.find(SELECTOR_TITLE);
-        $title.text(data.fileName);
+        $title.text(data.filename);
 
         const $size = $container.find(SELECTOR_SIZE);
         $size.toggleClass('d-none', !data.width && !data.height);

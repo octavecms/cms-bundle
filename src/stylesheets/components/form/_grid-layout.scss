@@ -1,0 +1,32 @@
+/**
+ * By design select (choice widget) and date
+ */
+.form-group > .form-control--select,
+.form-group > .form-control-image {
+    max-width: calc(50% - var(--spacer-5)/2);
+}
+
+/**
+ * Grid with 2 indentically sized columns
+ */
+.form-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc((var(--spacer-4) + 4px) / 2) var(--spacer-5);
+
+    // Grid with 4 indentically sized columns
+    &--4 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    // Spacing is controlled by gap, no need for this
+    > .form-group {
+        margin-top: 0;
+        margin-bottom: 0;
+
+        > .form-control--select,
+        > .form-control-image {
+            max-width: 100%;
+        }
+    }
+}

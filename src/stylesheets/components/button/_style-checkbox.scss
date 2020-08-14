@@ -79,5 +79,18 @@ input:checked + .btn--checkbox {
         ),
     );
 
+    &:before,
+    &:after {
+        $border-color: color($color-light-base, 0.25);
+        border-right: 1px solid #{ $border-color } !important;
+    }
+
     @include button-colors ($styles);
+}
+
+.btn-group > div:last-child > input:checked + .btn--checkbox {
+    &:before,
+    &:after {
+        border-right: 0 !important;
+    }
 }

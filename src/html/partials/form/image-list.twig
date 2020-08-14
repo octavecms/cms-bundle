@@ -33,7 +33,7 @@
         {% for item in value %}
             {% set index = loop.index0 %}
             {% set id = item.id|default('') %}
-            {% set fileName = item.fileName|default('') %}
+            {% set filename = item.filename|default('') %}
             {% set thumbnail = item.thumbnail|default('') %}
             {% set url = item.url|default('') %}
             {% set meta = item.meta|default('') %}
@@ -46,13 +46,13 @@
             {% endfor %}
 
             {# Server-side template #}
-            <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ fileName }}" data-id="{{ id }}">
+            <li class="image-list__list__item image-item js-image-list-item" aria-label="Image {{ filename }}" data-id="{{ id }}">
                 <input type="hidden" name="{{ name }}[{{ index }}][id]" value="{{ id }}" {% if disabled %}disabled{% endif %} />
                 <input type="hidden" name="{{ name }}[{{ index }}][order]" value="{{ index }}" {% if disabled %}disabled{% endif %} />
 
                 <div class="image-item__sizer"></div>
                 <div class="image-item__image">
-                    <img class="js-image-list-thumbnail" src="{{ thumbnail|default(url) }}" alt="{{ fileName }}" draggable="false" {% if thumbnail and url %}data-full-image-url="{{ url }}"{% endif %} onerror="this.src='/assets/images/file-icons/unknown.png'" />
+                    <img class="js-image-list-thumbnail" src="{{ thumbnail|default(url) }}" alt="{{ filename }}" draggable="false" {% if thumbnail and url %}data-full-image-url="{{ url }}"{% endif %} onerror="this.src='/assets/images/file-icons/unknown.png'" />
                 </div>
                 <div class="image-item__controls ui-gray">
                     <div class="group group--2">
@@ -93,7 +93,7 @@
         {# Client-side template #}
         {% if not readonly and not disabled %}
             <script type="text/template" data-template-variable="image">
-                <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- image.fileName %>" data-id="<%- image.id %>">
+                <li class="image-list__list__item image-item js-image-list-item" aria-label="Image <%- image.filename %>" data-id="<%- image.id %>">
                     <input type="hidden" name="{{ name }}[<%- image.index %>][id]" value="<%- image.id %>" />
                     <input type="hidden" name="{{ name }}[<%- image.index %>][order]" value="<%- image.index %>" />
 
@@ -101,10 +101,10 @@
                     <div class="image-item__image">
                         <% if (image.thumbnail) { %>
                             {# Thumbnail image #}
-                            <img src="<%- image.thumbnail %>" alt="<%- image.fileName %>" draggable="false" <% if (image.url) { %>data-full-image-url="<%- image.url %>"<% } %> onerror="this.src='/assets/images/file-icons/unknown.png'" />
+                            <img src="<%- image.thumbnail %>" alt="<%- image.filename %>" draggable="false" <% if (image.url) { %>data-full-image-url="<%- image.url %>"<% } %> onerror="this.src='/assets/images/file-icons/unknown.png'" />
                         <% } else if (image.url) { %>
                             {# Full image, this is not optimal due to possibly large image sizes #}
-                            <img src="<%- image.url %>" alt="<%- image.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'" />
+                            <img src="<%- image.url %>" alt="<%- image.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'" />
                         <% } %>
                     </div>
                     <div class="image-item__controls ui-gray">
@@ -156,9 +156,9 @@
 </div>
 
 {# Editable popup (dropdown) form content #}
-{% if editable %}
+{# {% if editable %}
     {% include 'partials/editable.twig' with {
         id: imageListId ~ '-editable',
         form: editable
     } %}
-{% endif %}
+{% endif %} #}

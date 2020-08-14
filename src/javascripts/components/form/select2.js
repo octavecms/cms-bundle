@@ -17,17 +17,23 @@ function formatSelection (state) {
 };
 
 function formatResult (state) {
-    const image = $(state.element).data('image');
-
-    if (!state.id || !image) {
-        return state.text;
+    const separator = $(state.element).data('separator');
+    
+    if (separator) {
+        return $('<span class="select2-results__option__separator"></span>');
     } else {
-        const $state = $('<span class="select2-results__option__image"><img src="" alt="" draggable="false" /> <span></span></span>');
+        const image = $(state.element).data('image');
 
-        $state.find('img').attr('src', image).attr('alt', state.text);
-        $state.find('span').text(state.text);
-
-        return $state;
+        if (!state.id || !image) {
+            return state.text;
+        } else {
+            const $state = $('<span class="select2-results__option__image"><img src="" alt="" draggable="false" /> <span></span></span>');
+    
+            $state.find('img').attr('src', image).attr('alt', state.text);
+            $state.find('span').text(state.text);
+    
+            return $state;
+        }
     }
 };
 

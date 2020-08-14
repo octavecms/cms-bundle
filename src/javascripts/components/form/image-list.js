@@ -133,7 +133,7 @@ class ImageList {
             const $item = this.getItemElement(id);
             const $thumbnail = $item.find(SELECTOR_THUMBNAIL);
             
-            $thumbnail.attr('alt', image.fileName);
+            $thumbnail.attr('alt', image.filename);
             $thumbnail.attr('src', image.thumbnail || image.src);
             
             $item.attr('data-id', image.id).data('id', image.id);

@@ -9,20 +9,20 @@
                 <% each(items, (id) => { %>
                     <% var file = store.files.list[id].get(); %>
 
-                    <li class="image-list__list__item image-item js-image-list-item <%- !file.searchMatch ? 'd-none' : '' %> <%- file.loading ? 'is-loading' : '' %> <%- selected.indexOf(id) !== -1 ? 'is-selected' : '' %>" aria-label="Image <%- file.fileName %>" data-id="<%- id %>">
+                    <li class="image-list__list__item image-item js-image-list-item <%- !file.searchMatch ? 'd-none' : '' %> <%- file.loading ? 'is-loading' : '' %> <%- selected.indexOf(id) !== -1 ? 'is-selected' : '' %>" aria-label="Image <%- file.filename %>" data-id="<%- id %>">
                         <span class="image-item__loader"><span class="loader loader--faded loader--sm"></span></span>
 
                         <div class="image-item__sizer">
                             <figure class="image-item__image">
                                 <% if (file.thumbnail) { %>
-                                    <img loading="lazy" data-full-image-url="<%- file.url %>" src="<%- file.thumbnail %>" alt="<%- file.fileName %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                    <img loading="lazy" data-full-image-url="<%- file.url %>" src="<%- file.thumbnail %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                 <% } else { %>
                                     <img loading="lazy" data-full-image-url="<%- file.url %>" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                 <% } %>
                             </figure>
                         </div>
                         <div class="image-item__text">
-                            <p class="text-truncate-fade"><%- file.fileName %></p>
+                            <p class="text-truncate-fade"><%- file.filename %></p>
                         </div>
 
                         <a class="image-item__overlay" href="<%- file.url || file.thumbnail %>"></a>

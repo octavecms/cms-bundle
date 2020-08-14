@@ -88,7 +88,7 @@ export function setFiles (store, files) {
     each(files, (file) => {
         // Add icons to the files
         if (!file.thumbnail && !file.icon) {
-            const extension = file.fileName.replace(/^.*\./, '');
+            const extension = file.filename.replace(/^.*\./, '');
             const icon = filter(FILE_ICONS, (icon) => icon.extensions.indexOf(extension) !== -1);
 
             file.icon = icon ? icon.icon : 'unknown';
@@ -220,8 +220,8 @@ export function addFilesToTheGrid (store, fileIds) {
 
     // Sort by filename
     grid = grid.sort((aId, bId) => {
-        const aName = store.files.list[aId].fileName.get('');
-        const bName = store.files.list[bId].fileName.get('');
+        const aName = store.files.list[aId].filename.get('');
+        const bName = store.files.list[bId].filename.get('');
         return aName.localeCompare(bName);
     });
 

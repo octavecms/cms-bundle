@@ -4,6 +4,11 @@
     {%- from 'partials/blocks/form_errors.twig' import form_errors -%}
     {%- from 'partials/blocks/form_widget.twig' import form_widget -%}
 
+    {# Generate an ID, used for dynamically generated front-end stuff #}
+    {%- if not attr.id|default(null) -%}
+        {% set attr = {}|merge(attr)|merge({'id': 'input-' ~ random()}) %}
+    {%- endif -%}
+
     {%- set row_attr = attr.row_attr|default({}) -%}
     {%- set row_attr = row_attr|merge({'class': row_attr.class|default('') ~ ' form-group'|trim}) -%}
     

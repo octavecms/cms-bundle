@@ -1,3 +1,55 @@
 {% macro form_widget_switch (attr) -%}
     @TODO
 {%- endmacro %}
+
+{% macro form_widget_switch (attr) -%}
+    {%- from 'macros/icon.twig' import icon -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+    {%- from 'partials/blocks/form_widget_choice_options.twig' import choice_widget_options -%}
+
+    {%- set attr = attr|default({}) -%}
+    {%- set widget_attr = attr.widget_attr|default({}) -%}
+
+    {%- set id = attr.id|default('') -%}
+    {%- set full_name = attr.full_name|default('') -%}
+    {%- set required = attr.required|default(false) -%}
+    {%- set disabled = attr.disabled|default(false) -%}
+    {%- set readonly = attr.readonly|default(false) -%}
+    {%- set multiple = attr.multiple|default(false) -%}
+    {%- set value = attr.value|default('') -%}
+    {%- set choices = attr.choices|default([]) -%}
+
+    {%- set widget_attr = {}|merge(widget_attr|default({}))|merge({
+        'class': ('btn-group btn-group--collapsed ' ~ widget_attr.class|default(''))|trim
+    }) -%}
+
+    <div {{ attributes(widget_attr) }}>
+        {%- for option in choices -%}
+            {%- set checked = false -%}
+            {%- if multiple and value|length and option.value in value -%}
+                {% set checked = true %}
+            {%- elseif option.value == value -%}
+                {% set checked = true %}
+            {%- endif -%}
+
+            <div>
+                <input id="{{ id }}-{{ loop.index }}"
+                    type="{% if multiple %}checkbox{% else %}radio{% endif %}"
+                    name="{{ full_name }}{% if multiple %}[]{% endif %}"
+                    value="{{ option.value|default('') }}"
+                    class="sr-only"
+                    {%- if not multiple and required %} required{% endif -%}
+                    {%- if readonly %} readonly{% endif -%}
+                    {%- if disabled %} disabled{% endif -%}
+                    {%- if checked %} checked{% endif -%}
+                />
+                
+                <label for="{{ id }}-{{ loop.index }}" class="btn btn--checkbox btn--checkbox--outline btn--lg btn--wide"><span class="btn__content">
+                    {{- option.label|default('') -}}
+                </span></label>
+            </div>
+        {%- endfor -%}
+    </div>
+
+{%- endmacro %}

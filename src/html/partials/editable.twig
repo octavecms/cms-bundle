@@ -1,4 +1,5 @@
 {% from 'macros/icon.twig' import icon %}
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
 
 {% set form = form|default([]) %}
 {% set id = id|default('') %}
@@ -7,7 +8,8 @@
     <ul class="dropdown__menu__content">
         <li class="dropdown__form">
 
-            {% for input in form %}
+            {{ form_rows(form) }}
+            {# {% for input in form %}
                 <div class="form-group">
                     {% set editableAttributes = {
                         'id': 'input-' ~ random(),
@@ -20,7 +22,7 @@
 
                     {% include 'partials/form/' ~ input.type ~ '.twig' with editableAttributes %}
                 </div>
-            {% endfor %}
+            {% endfor %} #}
 
             {# Footer #}
             <div class="form-footer">

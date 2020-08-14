@@ -2,6 +2,7 @@
     {%- from 'partials/blocks/form_widget_compound.twig' import form_widget_compound -%}
     {%- from 'partials/blocks/form_widget_simple.twig' import form_widget_simple -%}
     {%- from 'partials/blocks/form_widget_choice.twig' import form_widget_choice -%}
+    {%- from 'partials/blocks/form_widget_switch.twig' import form_widget_switch -%}
     {%- from 'partials/blocks/form_widget_radio.twig' import form_widget_radio -%}
     {%- from 'partials/blocks/form_widget_checkbox.twig' import form_widget_checkbox -%}
     {%- from 'partials/blocks/form_widget_textarea.twig' import form_widget_textarea -%}
@@ -25,7 +26,7 @@
     {%- from 'partials/blocks/form_widget_submit.twig' import form_widget_submit -%}
     {%- from 'partials/blocks/form_widget_reset.twig' import form_widget_reset -%}
     {%- from 'partials/blocks/form_widget_image.twig' import form_widget_image -%}
-    {%- from 'partials/blocks/form_widget_gallery.twig' import form_widget_gallery -%}
+    {%- from 'partials/blocks/form_widget_image_list.twig' import form_widget_image_list -%}
     {%- from 'partials/blocks/form_widget_collection.twig' import form_widget_collection -%}
 
     {% if attr.compound|default(false) %}
@@ -38,6 +39,8 @@
             {{- form_widget_simple(attr) -}}
         {%- elseif type == 'choice' -%}
             {{- form_widget_choice(attr) -}}
+        {%- elseif type == 'switch' -%}
+            {{- form_widget_switch(attr) -}}
         {%- elseif type == 'radio' -%}
             {{- form_widget_radio(attr) -}}
         {%- elseif type == 'checkbox' -%}
@@ -84,8 +87,8 @@
             {{- form_widget_reset(attr) -}}
         {%- elseif type == 'image' -%}
             {{- form_widget_image(attr) -}}
-        {%- elseif type == 'gallery' -%}
-            {{- form_widget_gallery(attr) -}}
+        {%- elseif type == 'image_list' -%}
+            {{- form_widget_image_list(attr) -}}
         {%- elseif type == 'collection' -%}
             {{- form_widget_collection(attr) -}}
         {%- endif -%}

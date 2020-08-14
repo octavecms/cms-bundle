@@ -1,3 +1,61 @@
 {% macro form_widget_choice (attr) -%}
-    @TODO
+    {%- from 'macros/icon.twig' import icon -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+    {%- from 'partials/blocks/widget_prefix.twig' import widget_prefix -%}
+    {%- from 'partials/blocks/widget_postfix.twig' import widget_postfix -%}
+    {%- from 'partials/blocks/form_widget_choice_options.twig' import choice_widget_options -%}
+
+    {%- set attr = attr|default({}) -%}
+    {%- set widget_attr = attr.widget_attr|default({}) -%}
+    {%- set input_attr = attr.attr|default({}) -%}
+
+    {%- set expanded = attr.expanded|default(false) -%} {# @TODO #}
+    {%- set required = attr.required|default(false) -%}
+    {%- set disabled = attr.disabled|default(false) -%}
+    {%- set readonly = attr.readonly|default(false) -%}
+    {%- set multiple = attr.multiple|default(false) -%}
+    {%- set value = attr.value|default('') -%}
+    {%- set placeholder = attr.placeholder|default('') -%}
+    {%- set placeholder_in_choices = attr.placeholder_in_choices|default(false) -%}
+
+    {%- set choices = attr.choices|default([]) -%}
+    {%- set preferred_choices = attr.preferred_choices|default([]) -%}
+
+    {%- if required and placeholder == '' and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+
+    {%- set attr = attr|merge({
+        attr: ({}|merge(input_attr))|merge({
+            'data-plugin': ('select2 ' ~ input_attr['data-plugin']|default(''))|trim
+        }),
+    }) -%}
+
+    {%- set widget_attr = {}|merge(widget_attr|default({}))|merge({
+        'class': ('form-control form-control--select ' ~ widget_attr.class|default(''))|trim
+    }) -%}
+
+
+    {{- widget_prefix(attr) -}}
+
+        <div {{ attributes(widget_attr) }}>
+            <select {% if multiple %}multiple="multiple"{% endif %} {{ widget_attributes(attr) }}>
+                {%- if placeholder != '' -%}
+                    <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder }}</option>
+                {%- endif -%}
+
+                {%- if preferred_choices|length > 0 -%}
+                    {{- choice_widget_options({'options': preferred_choices, 'value': value}) -}}
+                    
+                    {%- if choices|length > 0 and attr.separator is not same as (false) -%}
+                        <option disabled="disabled" data-separator="true"></option>
+                    {%- endif -%}
+                {%- endif -%}
+
+                {{- choice_widget_options({'options': choices, 'value': value}) -}}
+            </select>
+        </div>
+
+    {{- widget_postfix(attr) -}}
 {%- endmacro %}

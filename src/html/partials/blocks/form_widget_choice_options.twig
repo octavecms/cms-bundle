@@ -1,0 +1,29 @@
+{% macro choice_widget_options (attr) -%}
+    {%- from 'partials/blocks/form_widget_choice_options.twig' import choice_widget_options -%}
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+
+    {%- set options = attr.options|default([]) -%}
+    {%- set value = attr.value|default([]) -%}
+
+    {%- for group_label, choice in options -%}
+        {# {%- if choice is iterable -%} #}
+        {%- if choice[0] is defined and choice[0].value is defined -%}
+            <optgroup label="{{ group_label }}">
+                {% set options = choice %}
+                {{- choice_widget_options({'value': value, 'options': options}) -}}
+            </optgroup>
+        {%- else -%}
+            {%- set selected = false -%}
+            
+            {%- if value is iterable -%}
+                {% set selected = choice.value in value %}
+            {%- elseif (choice.value == value) -%}
+                {% set selected = true %}
+            {%- endif -%}
+
+            <option value="{{ choice.value }}"{% if choice.attr %} {{ attributes(choice.attr|default({})) }}{% endif %}{% if selected %} selected="selected"{% endif %}>
+                {{- choice.label -}}
+            </option>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}

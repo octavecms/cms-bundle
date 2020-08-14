@@ -20,7 +20,7 @@ export function setSearchQuery (state, query) {
 
     for (let key in files) {
         const id = files[key].id;
-        const matches = !query || getSearchMatch(query, files[id].fileName);
+        const matches = !query || getSearchMatch(query, files[id].filename);
         state.files.list[id].searchMatch.set(matches);
 
         if (matches) {
