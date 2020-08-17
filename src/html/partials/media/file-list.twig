@@ -22,9 +22,9 @@
                                     <% } %>
                                 <% } else { %>
                                     <% if (file.thumbnail) { %>
-                                        <img class="js-lazy" data-src="<%- file.url %>" src="<%- file.thumbnail %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
+                                        <img class="js-lazy" data-full-image-url="<%- file.url %>" data-src="<%- file.thumbnail %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                     <% } else { %>
-                                        <img class="js-lazy" data-src="<%- file.url %>" src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
+                                        <img class="js-lazy" data-full-image-url="<%- file.url %>" data-src="/assets/images/file-icons/<%- file.icon %>.png" alt="<%- file.icon %>" draggable="false" />
                                     <% } %>
                                 <% } %>
                             </figure>

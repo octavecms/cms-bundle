@@ -16,6 +16,7 @@ class DataTable {
         return {
             elementSelector: '.js-data-table-element',
             selectAllSelector: null,
+            selectItemSelector: null,
         };
     }
 
@@ -27,9 +28,9 @@ class DataTable {
         if (options.selectAllSelector) {
             this.$selectall = $container.find(options.selectAllSelector);
             this.$selectall.on('click change', this.toggleAll.bind(this));
-            this.$container.on('click change', 'input:checkbox', this.updateToggle.bind(this));
+            this.$container.on('click change', options.selectItemSelector, this.updateToggle.bind(this));
         }
-        
+
         this.update();
     }
 
@@ -40,10 +41,10 @@ class DataTable {
         for (let i = 0; i < $elements.length; i++) {
             const $element = $elements.eq(i);
             const $row = $element.closest('tr');
-            
+
             const elementBox = $element.get(0).getBoundingClientRect();
             const rowBox = $row.get(0).getBoundingClientRect();
-            
+
             updates.push([
                 $element,
                 'height',
@@ -63,7 +64,7 @@ class DataTable {
 
     toggleAll () {
         const $selectall = this.$selectall;
-        const $inputs = this.$container.find('input[type="checkbox"]').not($selectall);
+        const $inputs = this.$container.find(this.options.selectItemSelector).not($selectall);
 
         if ($selectall.is(':checked')) {
             $inputs.not(':checked').prop('checked', true).change();
@@ -74,7 +75,7 @@ class DataTable {
 
     updateToggle () {
         const $selectall = this.$selectall;
-        const isChecked = !!this.$container.find('input[type="checkbox"]:checked').not($selectall).length;
+        const isChecked = !!this.$container.find(`${ this.options.selectItemSelector }:checked`).not($selectall).length;
         const wasChecked = $selectall.prop('checked');
 
         if (isChecked !== wasChecked) {

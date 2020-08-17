@@ -20,6 +20,9 @@ class ActiveState {
 
             'setActiveSelector': '.js-active-state-set-active',
             'setInactiveSelector': '.js-active-state-set-inactive',
+
+            // URL which to use to save data
+            'saveUrl': null
         };
     }
 
@@ -33,6 +36,7 @@ class ActiveState {
         this.$setActive = $();
         this.$setInactive = $();
         this.ns = namespace();
+        this.savedState = null;
         this.refresh();
     }
 
@@ -59,6 +63,8 @@ class ActiveState {
         this.$setInactive.off(`.${ ns }`);
         this.$setInactive = $container.find(options.setInactiveSelector);
         this.$setInactive.on(`click.${ ns } returnkey.${ ns }`, this.setState.bind(this, false));
+
+        this.savedState = this.$input.prop('checked');
     }
 
     /**
@@ -71,17 +77,19 @@ class ActiveState {
 
         this.$hidden.toggleClass('d-none', state);
         this.$visible.toggleClass('d-none', !state);
+
+        this.save();
     }
 
     /**
      * Update tooltip text
-     * 
+     *
      * @param {boolean} state Active state
      * @protected
      */
     updateTooltip (state) {
         const $tooltip = this.$tooltip;
-        
+
         if ($tooltip.length) {
             const text = state ? $tooltip.data('activeStateActiveText') : $tooltip.data('activeStateInactiveText');
             $tooltip.tooltip('setContent', text);
@@ -90,7 +98,7 @@ class ActiveState {
 
     /**
      * Change active state
-     * 
+     *
      * @param {boolean} state State
      * @param {JQuery.ChangeEvent} [event] Event
      */
@@ -104,6 +112,46 @@ class ActiveState {
         if (event) {
             event.preventDefault();
         }
+    }
+
+    /**
+     * Save
+     */
+    save () {
+        const url = this.options.saveUrl;
+
+        if (url) {
+            const $input = this.$input;
+            const checked = $input.prop('checked');
+
+            if (checked !== this.savedState) {
+                const name = $input.attr('name');
+                const id = $input.val();
+                const data = {
+                    id: id
+                };
+
+                data[name] = checked ? 1 : 0;
+
+                $.ajax({
+                    'url': url,
+                    'method': 'GET',
+                    'data': data
+                })
+                    .done((response) => {
+                        if (response && response.status) {
+                            this.savedState = checked;
+                        } else {
+                            this.handleSaveFailure();
+                        }
+                    })
+                    .fail(this.handleSaveFailure.bind(this));
+            }
+        }
+    }
+
+    handleSaveFailure () {
+        this.$input.prop('checked', this.savedState).change();
     }
 }
 
