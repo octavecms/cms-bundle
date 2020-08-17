@@ -36,6 +36,7 @@
             postfixIcon: 'calendar',
         }),
         group_attr: {}|merge(group_attr)|merge({
+            'class': ('input-group--narrow ' ~ group_attr.class|default(''))|trim,
             'data-plugin': ('datetimepicker ' ~ group_attr['data-plugin']|default(''))|trim,
             'data-datetimepicker': dp_options|json_encode,
         }),

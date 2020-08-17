@@ -1,4 +1,6 @@
 {% from 'macros/icon.twig' import icon %}
+{% from 'partials/blocks/form_widget.twig' import form_widget %}
+
 
 {% set sortable = sortable|default(true) %}
 
@@ -70,9 +72,11 @@
         <thead>
             <tr>
                 <th>
-                    {% include 'partials/form/checkbox.twig' with {
+                    {{ form_widget({
+                        'id': 'crud_table_selectall_' ~ random(),
+                        'type': 'checkbox',
                         'name': 'selectall'
-                    } %}
+                    }) }}
                 </th>
                 <th></th>
                 <th>Name</th>
@@ -100,11 +104,15 @@
                             </a>
                         {% endif %}
 
-                        {% include 'partials/form/checkbox.twig' with {
+                        {{ form_widget({
+                            'id': 'crud_table_select_' ~ item.id,
+                            'type': 'checkbox',
                             'name': 'selected[]',
                             'value': item.id,
-                            'class': 'data-table__is-hidden-dragging'
-                        } %}
+                            'attr': {
+                                'class': 'data-table__is-hidden-dragging'
+                            }
+                        }) }}
                     </td>
                     <td class="data-table__row__image">
                         <div class="data-table__image">

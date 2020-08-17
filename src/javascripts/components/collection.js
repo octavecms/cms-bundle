@@ -28,7 +28,7 @@ class Collection {
         const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.ns = namespace();
         this.$container = $container;
-        this.$list = $container.find(options.listSelector).eq(0);
+        this.$list = $container.is(options.listSelector) ? $container : $container.find(options.listSelector).eq(0);
         this.counter = this.$list.children(options.itemSelector).length;
 
         this.refresh();

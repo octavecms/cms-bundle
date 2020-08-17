@@ -2,6 +2,9 @@
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
+
 <div class="card accordion accordion--collapsed"
     data-plugin="accordion"
     data-accordion-active-heading-parent-class-name="ui-dark"
@@ -17,7 +20,7 @@
         'accordionExpandedClassName': 'ui-dark',
     } %}
 
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="true" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="true" class="accordion__content card__content">
         <div class="card__body">
 
             {# Localized title, duplicate for each content, in the real app this won't be a copy #}
@@ -27,57 +30,35 @@
                     <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
                         {% set language = languageItem.id %}
 
-                        {# Meta title #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Meta title',
-                                attrs: {
-                                    for: sectionId ~ '-meta-title-' ~ language
-                                }
-                            }) %}
-
-                            {% include 'partials/form/text.twig' with {
-                                id: sectionId ~ '-meta-title-' ~ language,
+                        {{ form_rows([
+                            {
+                                type: 'text',
+                                label: 'Meta title',
                                 name: namePrefix ~ '[translations][' ~ language ~ '][meta-title]',
+                                full_name: namePrefix ~ '[translations][' ~ language ~ '][meta-title]',
                                 value: values['meta-title'][language]|default(''),
-                                maxlength: 512,
-                                required: true
-                            } %}
-                        </div>
-
-                        {# Meta keywords #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Meta keywords',
-                                attrs: {
-                                    for: sectionId ~ '-meta-keywords-' ~ language
+                                required: false,
+                                attr: {
+                                    maxlength: 512,
                                 }
-                            }) %}
-
-                            {% include 'partials/form/textarea.twig' with {
-                                id: sectionId ~ '-meta-keywords-' ~ language,
+                            },
+                            {
+                                type: 'textarea',
+                                label: 'Meta keywords',
                                 name: namePrefix ~ '[translations][' ~ language ~ '][meta-keywords]',
+                                full_name: namePrefix ~ '[translations][' ~ language ~ '][meta-keywords]',
                                 value: values['meta-keywords'][language]|default(''),
-                                required: false
-                            } %}
-                        </div>
-
-                        {# Meta description #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Meta description',
-                                attrs: {
-                                    for: sectionId ~ '-meta-description-' ~ language
-                                }
-                            }) %}
-
-                            {% include 'partials/form/textarea.twig' with {
-                                id: sectionId ~ '-meta-description-' ~ language,
+                                required: false,
+                            },
+                            {
+                                type: 'textarea',
+                                label: 'Meta description',
                                 name: namePrefix ~ '[translations][' ~ language ~ '][meta-description]',
+                                full_name: namePrefix ~ '[translations][' ~ language ~ '][meta-description]',
                                 value: values['meta-description'][language]|default(''),
-                                required: false
-                            } %}
-                        </div>
+                                required: false,
+                            },
+                        ]) }}
 
                     </div>
                 {% endfor %}

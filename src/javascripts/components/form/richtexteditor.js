@@ -151,6 +151,8 @@ class RichTextEditor {
             setup: (editor) => {
                 window.editor = editor;
 
+                this.$container.closest('.form-control--richtexteditor').addClass('form-control--not-ready');
+
                 setupToolbarListsMenu(editor);
                 setupQuickblockCollapsedToolbar(editor);
                 
@@ -158,6 +160,10 @@ class RichTextEditor {
                     setupQuickLinkMediaLibraryLink(editor);
                     setupQuickBarsMediaLibraryImage(editor);
                 });
+            },
+
+            init_instance_callback: (editor) => {
+                this.$container.closest('.form-control--richtexteditor').removeClass('form-control--not-ready');
             },
             
             // Merge with options

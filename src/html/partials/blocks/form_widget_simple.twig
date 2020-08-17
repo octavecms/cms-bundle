@@ -4,7 +4,7 @@
     {%- from 'partials/blocks/widget_postfix.twig' import widget_postfix -%}
 
     {%- set widget_attr = attr.attr|default({}) -%}
-    {%- set type = attr.type|default('text') -%}
+    {%- set type = widget_attr.type|default(attr.type)|default('text') -%}
     {%- set maxlength = widget_attr.maxlength|default(null) -%}
     {%- set widgetClassName = ('form-control form-control--input ' ~ widget_attr.class|default(''))|trim -%}
     

@@ -69,7 +69,7 @@
 
             {# Image size requirement or image size #}
             <span class="form-control-image__content__spacer"></span>
-            <span class="form-control-image__content__meta {% if minWidth == 0 and minHeight == 0 %}js-image-size{% endif %} {% if width == 0 and height == 0 %}d-none{% endif %}">
+            <span class="form-control-image__content__meta {% if minWidth == 0 and minHeight == 0 %}js-image-size{% endif %} {% if minWidth == 0 and minHeight == 0 and width == 0 and height == 0 %}d-none{% endif %}">
                 {% if minWidth and minHeight %}
                     {{ minWidth }}×{{ minHeight }} min
                 {% elseif minWidth %}

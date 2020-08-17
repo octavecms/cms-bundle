@@ -2,6 +2,9 @@
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
+
 <div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
     {# Order input, used for backend to know order of sections #}
@@ -25,91 +28,61 @@
     } %}
 
     {# Content #}
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
-        
-            {# Image #}
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--lg-6">
 
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Image',
-                        attrs: {
-                            for: sectionId ~ '-image'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/image.twig' with {
-                        id: sectionId ~ '-image',
-                        name: namePrefix ~ '[image]',
-                        value: values.image|default({}),
-                        required: true,
-                        imageMinWidth: 620,
-                        imageMinHeight: 620
-                    } %}
-
-                </div>
-            </div>
-
-
-            {# Description #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Description',
-                    additionalText: 'Optional',
-                    attrs: {
-                        for: sectionId ~ '-description'
-                    }
-                }) %}
-
-                {% include 'partials/form/text.twig' with {
-                    id: sectionId ~ '-description',
+            {{ form_rows([
+                {
+                    name: namePrefix ~ '[image]',
+                    full_name: namePrefix ~ '[image]',
+                    type: 'image',
+                    label: 'Image',
+                    value: values.image|default({}),
+                    required: true,
+                    minWidth: 620,
+                    minHeight: 620,
+                },
+                {
+                    type: 'textarea',
+                    label: 'Description',
                     name: namePrefix ~ '[description]',
+                    full_name: namePrefix ~ '[description]',
                     value: values.description|default(''),
-                    maxlength: 255,
-                    required: false
-                } %}
-            </div>
-
-            {# Source #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Source',
-                    additionalText: 'Optional',
-                    attrs: {
-                        for: sectionId ~ '-source'
+                    required: false,
+                    attr: {
+                        maxlength: 255,
                     }
-                }) %}
-
-                {% include 'partials/form/textarea.twig' with {
-                    id: sectionId ~ '-source',
+                },
+                {
+                    type: 'textarea',
+                    label: 'Source',
                     name: namePrefix ~ '[source]',
+                    full_name: namePrefix ~ '[source]',
                     value: values.source|default(''),
-                    maxlength: 600,
-                    required: false
-                } %}
-            </div>
-
-            {# Full width #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Full width',
-                    attrs: {
-                        for: sectionId ~ '-full-width'
+                    required: false,
+                    attr: {
+                        maxlength: 600,
                     }
-                }) %}
-
-                {% include 'partials/form/select-switch.twig' with {
-                    id: sectionId ~ '-full-width',
-                    name: namePrefix ~ '[full-width]',
-                    value: values['full-width']|default('0'),
-                    values: [
-                        {id: '0', text: 'No'},
-                        {id: '1', text: 'Yes'},
-                    ],
-                    required: true
-                } %}
-            </div>
+                },
+                {
+                    compound: true,
+                    attr: { class: 'form-grid-layout form-grid-layout--4' },
+                    children: [
+                        {
+                            name: namePrefix ~ '[full-width]',
+                            full_name: namePrefix ~ '[full-width]',
+                            type: 'switch',
+                            label: 'Full width',
+                            value: values['full-width']|default('0'),
+                            required: true,
+                            choices: [
+                                { value: '0', label: 'No' },
+                                { value: '1', label: 'Yes' },
+                            ]
+                        }
+                    ]
+                },
+            ]) }}
 
         </div>
     </div>

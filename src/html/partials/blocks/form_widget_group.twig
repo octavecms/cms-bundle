@@ -1,6 +1,33 @@
+{# NOT USED!!!!#}
+{# It's unclear how backend will implement it #}
+
 {% macro form_widget_group (attr) -%}
+    {%- from 'partials/blocks/form_rows.twig' import form_rows -%}
+
     {%- set collapsable = attr.collapsable|default(false) -%}
     {%- set sortable = attr.sortable|default(false) -%}
+    {%- set id = attr.id|default('') -%}
     {%- set label = attr.label|default('') -%}
 
+    <div class="card {% if collapsable %}accordion accordion--expanded{% endif %}"
+        {% if collapsable %}data-plugin="accordion"{% endif %}
+        {% if collapsable %}data-accordion-active-heading-parent-class-name="ui-dark"{% endif %}
+    >
+        <div class="card__anchor" id="{{ id }}"></div>
+
+        {% include 'partials/section-header.twig' with {
+            'title': label,
+            'id': id ~ '-content',
+            
+            'withAccordion': true,
+            'expanded': true,
+            'accordionExpandedClassName': 'ui-dark',
+        } %}
+
+        <div role="region" aria-labelledby="{{ id }}-content-title" id="{{ id }}-content" aria-hidden="false" class="accordion__content card__content">
+            <div class="card__body">
+                {{ form_rows(children) }}
+            </div>
+        </div>
+    </div>
 {%- endmacro %} 

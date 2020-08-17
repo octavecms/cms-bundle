@@ -2,6 +2,9 @@
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
+
 <div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
     {# Order input, used for backend to know order of sections #}
@@ -25,96 +28,59 @@
     } %}
 
     {# Content #}
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
 
-            {# Title #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Table Title',
-                    attrs: {
-                        for: sectionId ~ '-title'
-                    }
-                }) %}
 
-                {% include 'partials/form/text.twig' with {
-                    id: sectionId ~ '-title',
+            {{ form_rows([
+                {
+                    type: 'text',
+                    label: 'Table Title',
                     name: namePrefix ~ '[title]',
+                    full_name: namePrefix ~ '[title]',
                     value: values.title|default(''),
                     required: false
-                } %}
-            </div>
-
-
-            {# Multi column layout #}
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--md-6 col--lg-3">
-
-                    {# Columns #}
-                    <div class="form-group">
-                        {% include 'partials/form/label.twig' with ({
-                            text: 'Columns',
-                            attrs: {
-                                for: sectionId ~ '-columns'
-                            }
-                        }) %}
-
-                        {% include 'partials/form/number.twig' with {
-                            id: sectionId ~ '-columns',
+                },
+                {
+                    compound: true,
+                    attr: { class: 'form-grid-layout form-grid-layout--4' },
+                    children: [
+                        {
+                            type: 'number',
+                            label: 'Columns',
                             name: namePrefix ~ '[columns]',
-                            min: 1,
+                            full_name: namePrefix ~ '[columns]',
                             value: values.columns|default(2),
-                            required: true
-                        } %}
-                    </div>
-
-                </div>
-                <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-md-0">
-
-                    {# Rows #}
-                    <div class="form-group">
-                        {% include 'partials/form/label.twig' with ({
-                            text: 'Rows',
-                            attrs: {
-                                for: sectionId ~ '-rows'
-                            }
-                        }) %}
-
-                        {% include 'partials/form/number.twig' with {
-                            id: sectionId ~ '-rows',
+                            required: true,
+                            attr: {
+                                min: 1
+                            },
+                        },
+                        {
+                            type: 'number',
+                            label: 'Rows',
                             name: namePrefix ~ '[rows]',
-                            min: 1,
+                            full_name: namePrefix ~ '[rows]',
                             value: values.rows|default(2),
-                            required: true
-                        } %}
-                    </div>
-
-                </div>
-                <div class="col col--xs-12 col--md-6 col--lg-3 form-group mt-lg-0">
-
-                    {# Header Row #}
-                    <div class="form-group">
-                        {% include 'partials/form/label.twig' with ({
-                            text: 'Header Row',
-                            attrs: {
-                                for: sectionId ~ '-header-row'
-                            }
-                        }) %}
-
-                        {% include 'partials/form/select-switch.twig' with {
-                            id: sectionId ~ '-header-row',
+                            required: true,
+                            attr: {
+                                min: 1
+                            },
+                        },
+                        {
                             name: namePrefix ~ '[header]',
+                            full_name: namePrefix ~ '[header]',
+                            type: 'switch',
+                            label: 'Multiple choices',
                             value: values.header|default('0'),
-                            values: [
-                                {id: '0', text: 'No'},
-                                {id: '1', text: 'Yes'},
-                            ],
-                            required: true
-                        } %}
-                    </div>
-
-                </div>
-            </div>
+                            choices: [
+                                { value: '0', label: 'No' },
+                                { value: '1', label: 'Yes' },
+                            ]
+                        }
+                    ]
+                },
+            ]) }}
 
         </div>
     </div>

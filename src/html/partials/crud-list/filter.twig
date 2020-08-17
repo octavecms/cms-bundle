@@ -1,5 +1,7 @@
 {% from 'macros/icon.twig' import icon %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
 {# Sitemap dropdown #}
 <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
     <button type="button" class="dropdown__toggle btn btn--dropdown btn--dropdown--heading btn--pill" aria-expanded="false" id="crudListFilters">
@@ -12,26 +14,23 @@
     <div class="dropdown__menu dropdown__menu--wide d-none" aria-labelledby="crudListFilters">
         <div class="dropdown__menu__content">
             <div class="dropdown__form">
-                <div class="form-group">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Company',
-                        attrs: {
-                            for: 'input-6745675467456'
-                        }
-                    }) %}
 
-                    {% include 'partials/form/select.twig' with {
-                        id: 'input-6745675467456',
+                {{ form_rows([
+                    {
                         name: 'company',
-                        value: '',
-                        values: [
-                            {id: '', text: 'All'},
-                            {id: 'a', text: 'Accent Capital'},
-                            {id: 'b', text: 'Accent Asset Management'},
-                        ],
-                        required: true
-                    } %}
-                </div>
+                        full_name: 'company',
+                        type: 'choice',
+                        label: 'Company',
+                        value: 'bbb',
+                        required: true,
+                        choices: [
+                            { value: '', label: 'All'},
+                            { value: 'a', label: 'Accent Capital'},
+                            { value: 'b', label: 'Accent Asset Management'},
+                        ]
+                    }
+                ]) }}
+                
             </div>
         </div>
     </div>

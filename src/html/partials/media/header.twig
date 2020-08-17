@@ -1,4 +1,6 @@
 {% from 'macros/icon.twig' import icon %}
+{% from 'partials/blocks/form_widget.twig' import form_widget %}
+
 
 <header class="card__header ui-light">
     <div class="group group--5 group--middle">
@@ -14,16 +16,18 @@
         <div><div class="group group--2 group--middle group--nowrap">
             {# Search #}
             <form class="js-media-file-search">
-                {% include 'partials/form/text.twig' with {
+                {{ form_widget({
                     name: 'search',
-                    className: 'form-control--small form-control--pill input-group--small input-group--pill',
-                    placeholder: 'Search',
-                    prefixIcon: {
-                        id: 'search',
-                        width: 15,
-                        height: 16
+                    full_name: 'search',
+                    type: 'search',
+                    attr: {
+                        placeholder: 'Search',
+                        class: 'form-control--small form-control--pill'
+                    },
+                    group_attr: {
+                        class: 'input-group--small input-group--pill'
                     }
-                } %}
+                }) }}
             </form>
 
             {# Upload button #}

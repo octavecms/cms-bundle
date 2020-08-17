@@ -2,6 +2,9 @@
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
+
 <div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
     {# Order input, used for backend to know order of sections #}
@@ -25,40 +28,36 @@
     } %}
 
     {# Content #}
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
 
-            {# Image #}
-            <div class="form-group">
-
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Image',
-                    additionalText: '620x620 min',
-                    tooltip: 'Ex in et adipisicing et ad enim eu in eu anim.',
-                    attrs: {
-                        for: sectionId ~ '-image'
-                    }
-                }) %}
-
-                {% include 'partials/form/image-list.twig' with {
-                    id: sectionId ~ '-image',
-                    name: namePrefix ~ '[gallery]',
-                    editable: [
-                        {
-                            'name': 'description',
-                            'type': 'textarea',
-                            'label': 'Description',
-                            'className': 'form-control--textarea--short',
-                            'maxlength': 255
-                        }
-                    ],
+            {{ form_rows([
+                {
+                    name: 'example-gallery',
+                    full_name: 'example-gallery',
+                    type: 'image_list',
+                    label: 'Images',
+                    label_attr: {
+                        text: '620x620 min'
+                    },
+                    help: 'Ex in et adipisicing et ad enim eu in eu anim.',
+                    minWidth: 620,
+                    minHeight: 620,
                     value: values.gallery|default([]),
                     required: true,
-                    imageMinWidth: 620,
-                    imageMinHeight: 620
-                } %}
-
-            </div>
+                    editable: [
+                        {
+                            name: 'description',
+                            full_name: 'description',
+                            type: 'textarea',
+                            label: 'Description',
+                            attr: {
+                                maxlength: 255
+                            }
+                        },
+                    ],
+                },
+            ]) }}
 
         </div>
     </div>

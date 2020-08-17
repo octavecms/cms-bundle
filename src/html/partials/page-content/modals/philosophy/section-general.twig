@@ -1,3 +1,6 @@
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
+
 <div class="card js-sortable-list-force-start">
     <header class="card__header">
         <div class="group group--middle group--5">
@@ -28,47 +31,40 @@
                         {% set language = languageItem.id %}
 
                         {# Title #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Title',
-                                attrs: {
-                                    for: 'input-6756745674-' ~ language
-                                }
-                            }) %}
-
-                            {% include 'partials/form/textarea.twig' with {
-                                id: 'input-6756745674-' ~ language,
+                        {{ form_rows([
+                            {
+                                type: 'textarea',
+                                label: 'Title',
                                 name: 'title[' ~ language ~ ']',
                                 value: 'Инвестиционная
 философия',
-                                maxlength: 512,
                                 required: true,
-                                className: 'form-control--textarea--short'
-                            } %}
-                        </div>
+                                attr: {
+                                    class: 'form-control--textarea--short',
+                                    maxlength: 512,
+                                }
+                            }
+                        ]) }}
 
                     </div>
                 {% endfor %}
             </div>
 
             {# URL #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Anchor Link',
-                    attrs: {
-                        for: 'input-86786784657'
-                    }
-                }) %}
-
-                {% include 'partials/form/text.twig' with {
-                    id: 'input-86786784657',
+            {{ form_rows([
+                {
+                    type: 'url',
+                    label: 'Anchor Link',
+                    help: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
                     name: 'url',
-                    pattern: '[A-Za-z0-9-_]*',
+                    full_name: 'url',
                     value: 'philosophy',
-                    prefixText: 'academy/',
-                    required: true
-                } %}
-            </div>
+                    required: true,
+                    attr: {
+                        prefix: 'academy/'
+                    }
+                },
+            ]) }}
 
         </div>
     </div>

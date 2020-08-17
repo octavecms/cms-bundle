@@ -63,7 +63,7 @@ class SortableList {
     constructor ($container, opts) {
         const options = this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
-        this.$list = $container.find(options.listSelector).eq(0);
+        this.$list = $container.is(options.listSelector) ? $container : $container.find(options.listSelector).eq(0);
         this.ns = namespace();
 
         if (!options.disabled) {

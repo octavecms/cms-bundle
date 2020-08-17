@@ -1,60 +1,42 @@
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
 {% set namePrefix = namePrefix|default('') %}
-{% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
-{# Title #}
-<div class="row row--pad form-group">
-    <div class="col col--xs-12 col--lg-6">
 
-        {% include 'partials/form/label.twig' with ({
-            text: 'List Title',
-            attrs: {
-                for: sectionId ~ '-list-title'
-            }
-        }) %}
-
-        {% include 'partials/form/text.twig' with {
-            id: sectionId ~ '-list-title',
-            name: namePrefix ~ '[list-title]',
-            value: values['list-title']|default(''),
-            required: true
-        } %}
-        
-    </div>
-</div>
-
-{# Main title #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Main Title',
-        attrs: {
-            for: sectionId ~ '-main-title'
-        }
-    }) %}
-
-    {% include 'partials/form/textarea.twig' with {
-        id: sectionId ~ '-main-title',
+{{ form_rows([
+    {
+        compound: true,
+        attr: { class: 'form-grid-layout' },
+        children: [
+            {
+                type: 'text',
+                label: 'List Title',
+                name: namePrefix ~ '[list-title]',
+                full_name: namePrefix ~ '[list-title]',
+                value: values['list-title']|default(''),
+                required: true
+            },
+        ]
+    },
+    {
+        type: 'textarea',
+        label: 'Main Title',
         name: namePrefix ~ '[main-title]',
+        full_name: namePrefix ~ '[main-title]',
         value: values['main-title']|default(''),
         required: true,
-        maxlength: 512,
-        className: 'form-control--textarea--short'
-    } %}
-</div>
-
-{# Text #}
-<div class="form-group">
-    {% include 'partials/form/label.twig' with ({
-        text: 'Text',
-        attrs: {
-            for: sectionId ~ '-text'
+        attr: {
+            class: 'form-control--textarea--short',
+            maxlength: 512,
         }
-    }) %}
-
-    {% include 'partials/form/textarea.twig' with {
-        id: sectionId ~ '-text',
+    },
+    {
+        type: 'textarea',
+        label: 'Text',
         name: namePrefix ~ '[text]',
+        full_name: namePrefix ~ '[text]',
         value: values['text']|default(''),
-        required: true
-    } %}
-</div>
+        required: true,
+    }
+]) }}

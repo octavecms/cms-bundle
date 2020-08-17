@@ -2,6 +2,9 @@
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
+
 <div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
     {# Order input, used for backend to know order of sections #}
@@ -25,50 +28,34 @@
     } %}
 
     {# Content #}
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
 
-            {# Quote text #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Quote Text',
-                    attrs: {
-                        for: sectionId ~ '-text'
-                    }
-                }) %}
-
-                {% include 'partials/form/textarea.twig' with {
-                    id: sectionId ~ '-text',
+            {{ form_rows([
+                {
                     name: namePrefix ~ '[text]',
+                    full_name: namePrefix ~ '[text]',
+                    type: 'textarea',
+                    label: 'Quote Text',
                     value: values.text|default(''),
-                    maxlength: 600,
-                    required: true
-                } %}
-            </div>
-
-            {# Quote author #}
-            <div class="form-group">
-                <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Author',
-                        attrs: {
-                            for: sectionId ~ '-author'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/select.twig' with {
-                        id: sectionId ~ '-author',
-                        name: namePrefix ~ '[author]',
-                        value: values.author|default('a'),
-                        values: [
-                            {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
-                            {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
-                            {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
-                        ],
-                        required: true
-                    } %}
-                </div></div>
-            </div>
+                    required: true,
+                    attr: {
+                        maxlength: 600
+                    }
+                },
+                {
+                    name: namePrefix ~ '[author]',
+                    full_name: namePrefix ~ '[author]',
+                    type: 'choice',
+                    label: 'Author',
+                    value: values.author|default('a'),
+                    choices: [
+                        { value: 'aaa', label: 'Lorem ipsum', attr: {'data-image': '/assets/images/temp/select-user.png'} },
+                        { value: 'bbb', label: 'Dolor sit amet', attr: {'data-image': '/assets/images/temp/select-user.png'} },
+                        { value: 'ccc', label: 'Cupidatat culpa', attr: {'data-image': '/assets/images/temp/select-user.png'} }
+                    ]
+                },
+            ]) }}
 
         </div>
     </div>

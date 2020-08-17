@@ -5,6 +5,7 @@
     {%- set input_attr = attr.attr|default({}) -%}
     {%- set widget_attr = attr.widget_attr|default({}) -%}
     {%- set maxlength = input_attr.maxlength|default(null) -%}
+    {%- set className = ('form-control form-control--textarea ' ~ input_attr.class|default('') ~ ' ' ~ widget_attr.class|default(''))|trim %}
 
     {# Remove properties from input_attr #}
     {%- set input_attr_omit = ['class'] %}
@@ -14,12 +15,7 @@
     {%- set attr = ({}|merge(attr))|merge({'attr': input_attr}) -%}
 
     {# Plugin and class attributes #}
-    {%- set className = 'form-control form-control--textarea' -%}
     {%- set plugin = '' -%}
-
-    {%- if widget_attr.class|default('') -%}
-        {%- set className = className ~ ' ' ~ widget_attr.class -%}
-    {%- endif -%}
 
     {%- if maxlength -%}
         {%- set plugin = 'inputMaxLength' -%}
@@ -29,7 +25,7 @@
     {%- endif -%}
 
     {%- set widget_attr = ({}|merge(widget_attr))|merge({
-        'class': className|trim,
+        'class': className,
         'data-plugin': plugin|trim
     }) -%}
 

@@ -6,16 +6,4 @@
     {%- set attr = {}|merge(attr)|merge({'type': 'search', 'attr': widget_attr}) -%}
 
     {{- form_widget_simple(attr) -}}
-
-    {# @TODO
-    {% include 'partials/form/text.twig' with {
-                name: 'search',
-                className: 'form-control--small form-control--pill input-group--small input-group--pill',
-                placeholder: 'Search',
-                prefixIcon: {
-                    id: 'search',
-                    width: 15,
-                    height: 16
-                }
-            } %} #}
 {%- endmacro %}

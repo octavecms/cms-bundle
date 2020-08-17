@@ -1,4 +1,6 @@
 {% from 'macros/icon.twig' import icon %}
+{% from 'partials/blocks/form_widget.twig' import form_widget %}
+
 
 <div class="dropdown dropdown--narrow js-tree-view-add-folder" data-plugin="dropdown" data-dropdown-placement="right-end">
     <button type="button" class="dropdown__toggle btn btn--tetriary btn--square" title="Add folder" aria-expanded="false" id="mediaAddFolderDropdown">
@@ -12,14 +14,18 @@
             <li class="dropdown__form">
 
                 <form class="input-group input-group--nofocus">
-                    {% include 'partials/form/text.twig' with {
-                        name: 'name',
-                        className: 'input-group__input input-group__merge',
-                        placeholder: 'Folder name',
-                        value: '',
-                        required: true,
-                        pattern: '[A-Za-z0-9-_ ]+'
-                    } %}
+                    {{ form_widget(
+                        {
+                            type: 'url',
+                            name: 'name',
+                            required: true,
+                            attr: {
+                                placeholder: 'Folder name',
+                                class: 'input-group__input input-group__merge',
+                            }
+                        }
+                    ) }}
+                    
                     <button type="submit" class="btn btn--secondary btn--lg"><span class="btn__content">
                         Add folder
                     </span></button>

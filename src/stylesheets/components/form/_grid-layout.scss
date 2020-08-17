@@ -1,15 +1,16 @@
 /**
  * By design select (choice widget) and date
  */
-.form-group > .form-control--select,
-.form-group > .form-control-image {
+.form-wide .form-group > .form-control--select,
+.form-wide .form-group > .form-control-image,
+.form-wide .input-group--narrow {
     max-width: calc(50% - var(--spacer-5)/2);
 }
 
 /**
  * Grid with 2 indentically sized columns
  */
-.form-grid-layout {
+.form-wide .form-grid-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: calc((var(--spacer-4) + 4px) / 2) var(--spacer-5);
@@ -25,7 +26,8 @@
         margin-bottom: 0;
 
         > .form-control--select,
-        > .form-control-image {
+        > .form-control-image,
+        > .input-group--narrow {
             max-width: 100%;
         }
     }

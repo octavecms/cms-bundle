@@ -37,6 +37,7 @@ body {
     // Make sure grid doesn't get broken when there is a scrollbar
     width: 100vw;
     min-height: var(--viewport-height);
+    overflow-x: hidden;
 
     // Print styles
     @include media-breakpoint(print) {

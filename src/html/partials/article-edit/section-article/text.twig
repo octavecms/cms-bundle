@@ -1,6 +1,10 @@
 {% set language = language|default('en') %}
+{% set namePrefix = namePrefix|default('') %}
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
+
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
 
 <div class="card card--draggable accordion accordion--expanded js-sortable-list-item js-collection-item" data-plugin="accordion">
 
@@ -25,27 +29,46 @@
     } %}
 
     {# Content #}
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
             {# Section content #}
 
-            {# Rick text editor input #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Text Body',
-                    attrs: {
-                        for: sectionId ~ '-text'
-                    }
-                }) %}
-
-                {% include 'partials/form/richtexteditor.twig' with {
-                    id: sectionId ~ '-text',
-                    name: 'text[' ~ language ~ ']',
+            {{ form_rows([
+                {
+                    type: 'tinymce',
+                    label: 'Text Body',
+                    name: namePrefix ~ '[text][' ~ language ~ ']',
+                    full_name: namePrefix ~ '[text][' ~ language ~ ']',
                     value: values.text|default(''),
-                    required: false
-                } %}
-            </div>
+                    required: true,
+                    tinymce_options: {
+                        body_class: "text",
+                        content_css: [
+                            "/assets/stylesheets/example-page-visual-editor.css"
+                        ],
+                        formats: {
+                        },
+                        style_formats: [
+                            {title: "Square bullets", selector: "ol",classes: "list-separated"},
+                            {title: "Gray text", inline: "span", classes: "text--color-small"},
 
+                            {title: "Table layout", selector: "table", classes: "table-layout"},
+
+                            {title: "Image title", selector: "img+p, figure+p",classes:"image-caption"},
+                            {title: "Image description", selector: "img+.image-caption+p, figure+.image-caption+p",classes: "image-description"},
+                            {title: "Image full text width", selector: "figure, img", classes: "image-full-text"},
+                            {title: "Image full page width", selector: "figure, img", classes: "image-full-page"},
+
+                            {title: "Icon", "items": [
+                                {title: "Icon fund opportunity", selector: "h1, h2, h3, h4", classes: "text-icon-fund-opportunity"},
+                                {title: "Icon fund value", selector: "h1, h2, h3, h4", classes: "text-icon-fund-value"},
+                                {title: "Icon fund core", selector: "h1, h2, h3, h4", classes: "text-icon-fund-core"},
+                                {title: "Icon fund core+", selector: "h1, h2, h3, h4", classes: "text-icon-fund-core-plus"}
+                            ]}
+                        ]
+                    }
+                },
+            ]) }}
         
         </div>
     </div>

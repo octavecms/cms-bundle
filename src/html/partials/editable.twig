@@ -9,20 +9,6 @@
         <li class="dropdown__form">
 
             {{ form_rows(form) }}
-            {# {% for input in form %}
-                <div class="form-group">
-                    {% set editableAttributes = {
-                        'id': 'input-' ~ random(),
-                        'value': null
-                    }|merge(input) %}
-
-                    {% if input.label %}
-                        {% include 'partials/form/label.twig' with {text: input.label, attrs: {for: editableAttributes.id}} %}
-                    {% endif %}
-
-                    {% include 'partials/form/' ~ input.type ~ '.twig' with editableAttributes %}
-                </div>
-            {% endfor %} #}
 
             {# Footer #}
             <div class="form-footer">

@@ -1,3 +1,5 @@
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+
 {% set namePrefix = namePrefix|default('') %}
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
@@ -25,70 +27,46 @@
         'withAccordion': true,
         'expanded': true,
     } %}
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
 
-            {# Title #}
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--lg-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Title',
-                        attrs: {
-                            for: sectionId ~ '-title',
-                        }
-                    }) %}
-
-                    {% include 'partials/form/text.twig' with {
-                        id: sectionId ~ '-title',
-                        name: namePrefix ~ '[title]',
-                        value: values.title|default(''),
-                        required: true,
-                    } %}
-                    
-                </div>
-            </div>
-
-
-            {# Description #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'Description',
-                    attrs: {
-                        for: sectionId ~ '-description'
-                    }
-                }) %}
-
-                {% include 'partials/form/text.twig' with {
-                    id: sectionId ~ '-description',
+            {{ form_rows([
+                {
+                    compound: true,
+                    attr: { class: 'form-grid-layout' },
+                    children: [
+                        {
+                            type: 'text',
+                            label: 'Title',
+                            name: namePrefix ~ '[title]',
+                            full_name: namePrefix ~ '[title]',
+                            value: values['title']|default(''),
+                            required: true
+                        },
+                    ]
+                },
+                {
+                    type: 'text',
+                    label: 'Description',
                     name: namePrefix ~ '[description]',
+                    full_name: namePrefix ~ '[description]',
                     value: values.description|default(''),
                     required: true,
-                    maxlength: 512
-                } %}
-            </div>
-
-
-            {# Image #}
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--lg-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Thumbnail',
-                        attrs: {
-                            for: sectionId ~ '-thumbnail'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/image.twig' with {
-                        id: sectionId ~ '-thumbnail',
-                        name: namePrefix ~ '[image]',
-                        value: values.image|default({}),
-                        required: true,
-                        imageMinWidth: 320,
-                        imageMinHeight: 320
-                    } %}
-
-                </div>
-            </div>
+                    attr: {
+                        maxlength: 512
+                    }
+                },
+                {
+                    name: namePrefix ~ '[image]',
+                    full_name: namePrefix ~ '[image]',
+                    type: 'image',
+                    label: 'Thumbnail',
+                    value: values.image|default({}),
+                    required: true,
+                    minWidth: 320,
+                    minHeight: 320,
+                },
+            ]) }}
 
         </div>
     </div>

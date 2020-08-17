@@ -2,7 +2,7 @@
     {%- from 'partials/blocks/attributes.twig' import attributes -%}
 
     id="{{ attr.id }}"
-    name="{{ attr.full_name|default('') }}"
+    name="{{ attr.full_name|default(attr.name|default('')) }}"
     {%- if attr.disabled|default(false) %} disabled="disabled"{% endif -%}
     {%- if attr.required|default(false) %} required="required"{% endif -%}
     {%- if attr.readonly|default(false) %} readonly="readonly"{% endif -%}

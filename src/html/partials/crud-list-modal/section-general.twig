@@ -1,3 +1,7 @@
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+{% from 'partials/blocks/form_row.twig' import form_row %}
+
+
 <div class="card js-sortable-list-force-start">
     <header class="card__header">
         <div class="group group--middle group--5">
@@ -28,79 +32,50 @@
                         {% set language = languageItem.id %}
 
                         {# Title #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Name',
-                                attrs: {
-                                    for: 'input-56756756745-' ~ language
-                                }
-                            }) %}
-
-                            {% include 'partials/form/text.twig' with {
-                                id: 'input-56756756745-' ~ language,
-                                name: 'name[' ~ language ~ ']',
-                                value: 'Александр Самонов',
-                                required: true
-                            } %}
-                        </div>
+                        {{ form_row({
+                            type: 'text',
+                            label: 'Name',
+                            name: 'name[' ~ language ~ ']',
+                            full_name: 'name[' ~ language ~ ']',
+                            value: 'Александр Самонов',
+                            required: true,
+                        }) }}
 
                     </div>
                 {% endfor %}
             </div>
 
-            {# Company #}
-            <div class="form-group">
-                <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Company',
-                        attrs: {
-                            for: 'input-67456764353'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/select.twig' with {
-                        id: 'input-67456764353',
-                        name: 'company',
-                        value: 'a',
-                        values: [
-                            {id: 'a', text: 'Accent Capital'},
-                            {id: 'b', text: 'Accent Asset Management'}
-                        ],
-                        required: true
-                    } %}
-                </div></div>
-            </div>
-
-
-            {# Image #}
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--lg-6">
-
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Image',
-                        attrs: {
-                            for: 'input-674657547456'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/image.twig' with {
-                        id: 'input-674657547456',
-                        name: 'image',
-                        value: {
-                            id: 'qweasdzxc',
-                            thumbnail: '/assets/images/temp/table/1.png',
-                            url: '/assets/images/temp/table/1.png',
-                            filename: '1.png',
-                            width: 128,
-                            height: 128
-                        },
-                        required: false,
-                        imageMinWidth: 128,
-                        imageMinHeight: 128
-                    } %}
-
-                </div>
-            </div>
+            {{ form_rows([
+                {
+                    type: 'choice',
+                    label: 'Company',
+                    name: 'company',
+                    full_name: 'company',
+                    value: 'a',
+                    choices: [
+                        {value: 'a', label: 'Accent Capital'},
+                        {value: 'b', label: 'Accent Asset Management'}
+                    ],
+                    required: true,
+                },
+                {
+                    name: 'image',
+                    full_name: 'image',
+                    type: 'image',
+                    label: 'Image',
+                    value: {
+                        id: 'qweasdzxc',
+                        thumbnail: '/assets/images/temp/table/1.png',
+                        url: '/assets/images/temp/table/1.png',
+                        filename: '1.png',
+                        width: 128,
+                        height: 128
+                    },
+                    required: false,
+                    minWidth: 128,
+                    minHeight: 128,
+                },
+            ]) }}
 
         </div>
     </div>

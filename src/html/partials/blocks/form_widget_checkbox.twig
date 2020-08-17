@@ -1,3 +1,59 @@
 {% macro form_widget_checkbox (attr) -%}
-    @TODO
+    {%- from 'partials/blocks/attributes.twig' import attributes -%}
+    {%- from 'partials/blocks/widget_attributes.twig' import widget_attributes -%}
+
+    {%- set id = attr.id|default('') %}
+    {%- set label = attr.label|default('') %}
+
+    {%- set attr_attr = attr.attr|default({}) -%}
+    {%- set widget_attr = attr.widget_attr|default({}) -%}
+
+    {%- set widget_attr = {}|merge(widget_attr)|merge({
+        class: ('form-control-checkbox ' ~ widget_attr.class|default('') ~ attr_attr.class|default(''))|trim
+    }) -%}
+
+    {# Remove properties from attr_attr #}
+    {%- set attr_attr_omit = ['class'] %}
+
+    {# {%- set widget_attr = attr_attr|filter((v, k) => k not in attr_attr_omit) -%} #}
+    {%- set attr_attr = attr_attr|omit(attr_attr_omit) -%}
+    {%- set widget_full_attr = {}|merge(attr)|merge({'attr': attr_attr}) -%}
+
+
+    {# Convert name into a label #}
+    {%- if label is empty and label is not same as ('') -%}
+        {% set label = name|humanize %}
+    {%- endif -%}
+
+    <div {{ attributes(widget_attr) }}>
+        <input type="checkbox"
+            class="sr-only"
+            {% if attr.value is not empty %}value="{{ attr.value }}"{% endif %}
+            {{ widget_attributes(widget_full_attr) -}} 
+        />
+        <label for="{{ id }}" class="form-control-checkbox__icon"></label>
+        {% if label %}
+            <label for="{{ id }}" class="form-control-checkbox__label">{{ label }}</label>
+        {% endif %}
+    </div>
+
+
+    {# --------- #}
+{# 
+    <div class="form-control-checkbox {{ class }}">
+        <input
+            id="{{ id }}"
+            type="checkbox"
+            name="{% if multiple %}{{ name }}[]{% else %}{{ name }}{% endif %}"
+            value="{{ valueItem.id }}"
+            class="sr-only"
+            {% if readonly %}readonly{% endif %}
+            {% if disabled %}disabled{% endif %}
+            {% if checked %}checked{% endif %}
+        />
+        <label for="{{ id }}" class="form-control-checkbox__icon"></label>
+        {% if label %}
+            <label for="{{ id }}" class="form-control-checkbox__label">{{ label }}</label>
+        {% endif %}
+    </div> #}
 {%- endmacro %}

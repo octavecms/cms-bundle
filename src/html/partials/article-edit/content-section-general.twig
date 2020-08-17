@@ -2,6 +2,10 @@
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
 
+{% from 'partials/blocks/form_rows.twig' import form_rows %}
+{% from 'partials/blocks/form_row.twig' import form_row %}
+
+
 <div class="card accordion accordion--expanded"
     data-plugin="accordion"
     data-accordion-active-heading-parent-class-name="ui-dark"
@@ -17,7 +21,7 @@
         'accordionExpandedClassName': 'ui-dark',
     } %}
 
-    <div role="region" aria-labelledby="{{ sectionId }}Title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
         <div class="card__body">
 
             {# Localized title, duplicate for each content, in the real app this won't be a copy #}
@@ -27,157 +31,94 @@
                     {# Locale tab content #}
                     <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
 
-                        {# Title #}
-                        <div class="form-group">
-                            {% include 'partials/form/label.twig' with ({
-                                text: 'Article Title',
-                                attrs: {
-                                    for: sectionId ~ '-title-' ~ languageItem.id
-                                }
-                            }) %}
-
-                            {% include 'partials/form/text.twig' with {
-                                id: sectionId ~ '-title-' ~ languageItem.id,
-                                name: namePrefix ~ '[translations][' ~ languageItem.id ~ '][title]',
-                                value: values.title[languageItem.id]|default(''),
+                        {{ form_row({
+                            type: 'text',
+                            label: 'Article Title',
+                            name: namePrefix ~ '[translations][' ~ languageItem.id ~ '][title]',
+                            full_name: namePrefix ~ '[translations][' ~ languageItem.id ~ '][title]',
+                            value: values.title[languageItem.id]|default(''),
+                            required: true,
+                            attr: {
                                 maxlength: 512,
-                                required: true
-                            } %}
-                        </div>
+                            }
+                        }) }}
 
                     </div>
                 {% endfor %}
             </div>
 
 
-            {# Category #}
-            <div class="form-group">
-                <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Category',
-                        attrs: {
-                            for: sectionId ~ '-category'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/select.twig' with {
-                        id: sectionId ~ '-category',
-                        name: namePrefix ~ '[category]',
-                        value: values.category|default('a'),
-                        values: [
-                            {id: 'a', text: 'Основы'},
-                            {id: 'b', text: 'Lorem ipsum'},
-                            {id: 'c', text: 'Dolor sit amet'}
-                        ],
-                        required: true
-                    } %}
-                </div></div>
-            </div>
-
-            {# Author #}
-            <div class="form-group">
-                <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Author',
-                        additionalText: 'Optional',
-                        attrs: {
-                            for: sectionId ~ '-author'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/select.twig' with {
-                        id: sectionId ~ '-author',
-                        name: namePrefix ~ '[author]',
-                        value: values.author|default('a'),
-                        values: [
-                            {id: 'a', text: 'Андрей Богданов', image: '/assets/images/temp/select-user.png'},
-                            {id: 'b', text: 'Lorem ipsum', image: '/assets/images/temp/select-user.png'},
-                            {id: 'c', text: 'Dolor sit amet', image: '/assets/images/temp/select-user.png'}
-                        ],
-                        required: false
-                    } %}
-                </div></div>
-            </div>
-
-
-            <div class="row row--pad form-group">
-                <div class="col col--xs-12 col--lg-6">
-
-                    {# Thumbnail image #}
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Thumbnail',
-                        attrs: {
-                            for: sectionId ~ '-thumbnail'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/image.twig' with {
-                        id: sectionId ~ '-thumbnail',
-                        name: namePrefix ~ '[thumbnail]',
-                        value: values.thumbnail|default({}),
-                        required: true
-                    } %}
-
-                </div>
-                <div class="col col--xs-12 col--lg-6 form-group mt-lg-0">
-
-                    {# Background image #}
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Background Image',
-                        required: true,
-                        attrs: {
-                            for: sectionId ~ '-background'
-                        }
-                    }) %}
-
-                    {% include 'partials/form/image.twig' with {
-                        id: sectionId ~ '-background',
-                        name: namePrefix ~ '[background]',
-                        value: values.background|default({}),
-                        required: true
-                    } %}
-
-                </div>
-            </div>
-
-
-            {# URL #}
-            <div class="form-group">
-                {% include 'partials/form/label.twig' with ({
-                    text: 'URL',
-                    tooltip: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
-                    attrs: {
-                        for: sectionId ~ 'url'
-                    }
-                }) %}
-
-                {% include 'partials/form/text.twig' with {
-                    id: sectionId ~ 'url',
-                    name: namePrefix ~ '[url]',
-                    pattern: '[A-Za-z0-9-_]*',
-                    value: values.url|default(''),
-                    prefixText: 'academy/',
+            {{ form_rows([
+                {
+                    type: 'choice',
+                    label: 'Article Title',
+                    name: namePrefix ~ '[category]',
+                    full_name: namePrefix ~ '[category]',
+                    value: values.category,
+                    choices: [
+                        {value: 'a', label: 'Основы'},
+                        {value: 'b', label: 'Lorem ipsum'},
+                        {value: 'c', label: 'Dolor sit amet'}
+                    ],
                     required: true
-                } %}
-            </div>
-
-            {# Date #}
-            <div class="form-group">
-                <div class="row row--pad"><div class="col col--xs-12 col--md-6">
-                    {% include 'partials/form/label.twig' with ({
-                        text: 'Publication date',
-                        attrs: {
-                            for: sectionId ~ '-date'
-                        }
-                    }) %}
-                    {% include 'partials/form/date.twig' with {
-                        id: sectionId ~ '-date',
-                        name: namePrefix ~ '[date]',
-                        value: values.date|default('1900-01-01 00:00:00'),
-                        required: true
-                    } %}
-                </div></div>
-            </div>
+                },
+                {
+                    type: 'choice',
+                    label: 'Author',
+                    name: namePrefix ~ '[author]',
+                    full_name: namePrefix ~ '[author]',
+                    value: values.author,
+                    choices: [
+                        {value: 'a', label: 'Андрей Богданов', attr: {'data-image': '/assets/images/temp/select-user.png'} },
+                        {value: 'b', label: 'Lorem ipsum', attr: {'data-image': '/assets/images/temp/select-user.png'} },
+                        {value: 'c', label: 'Dolor sit amet', attr: {'data-image': '/assets/images/temp/select-user.png'} }
+                    ],
+                    required: true
+                },
+                {
+                    compound: true,
+                    attr: { class: 'form-grid-layout' },
+                    children: [
+                        {
+                            name: namePrefix ~ '[thumbnail]',
+                            full_name: namePrefix ~ '[thumbnail]',
+                            type: 'image',
+                            label: 'Thumbnail',
+                            value: values.thumbnail|default({}),
+                            required: true,
+                        },
+                        {
+                            name: namePrefix ~ '[background]',
+                            full_name: namePrefix ~ '[background]',
+                            type: 'image',
+                            label: 'Background Image',
+                            value: values.background|default({}),
+                            required: true,
+                        },
+                    ]
+                },
+                {
+                    type: 'url',
+                    label: 'URL',
+                    help: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
+                    name: namePrefix ~ '[url]',
+                    full_name: namePrefix ~ '[url]',
+                    value: values.url,
+                    required: true,
+                    attr: {
+                        prefix: 'academy/'
+                    }
+                },
+                {
+                    type: 'datetime',
+                    label: 'Publication date',
+                    help: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
+                    name: namePrefix ~ '[date]',
+                    full_name: namePrefix ~ '[date]',
+                    value: values.date|default('1900-01-01 00:00:00'),
+                    required: true,
+                },
+            ]) }}
 
         </div>
     </div>

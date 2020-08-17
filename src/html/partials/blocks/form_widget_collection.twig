@@ -1,5 +1,18 @@
+{# NOT USED!!!!#}
+{# It's unclear how backend will implement it #}
+
 {% macro form_widget_collection (attr) -%}
-    {%- set label = attr.label|default('') -%}
+    {%- from 'partials/blocks/form_rows.twig' import form_rows -%}
+
+    {%- set sortable = attr.sortable|default(false) -%}
+    {%- set add = attr.add|default(false) -%}
+    {%- set remove = attr.remove|default(false) -%}
     
-    @TODO
+    {# @TODO Can we detect if parent is a group??? #}
+    <div class="card__body card-list card-list--small js-sortable-list-list {% if add or remove %}js-collection-list{% endif %}"
+        data-plugin="sortable {% if add or remove %}collection{% endif %}"
+        {% if not sortable %}data-sortable-disabled="true"{% endif %}
+    >
+        {{- form_rows(attr.children) -}}
+    </div>
 {%- endmacro %}

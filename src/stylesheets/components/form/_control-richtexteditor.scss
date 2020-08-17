@@ -17,3 +17,10 @@
         pointer-events: none;
     }
 }
+
+.form-control--richtexteditor.form-control--not-ready {
+    .tox-edit-area {
+        pointer-events: none;
+        opacity: 0;
+    }
+}
