@@ -29,7 +29,7 @@ export default class MediaFileList {
 
     /**
      * Constructor
-     * 
+     *
      * @param {JQuery} $container Container element
      * @param {object} opts Media file list options
      */
@@ -38,6 +38,12 @@ export default class MediaFileList {
         this.$container = $container;
         this.store = options.store;
         this.ns = namespace();
+        this.isLazy = 'loading' in HTMLImageElement.prototype;
+        this.$scrollContainer = this.$container.closest('.modal__scroller') || $('body');
+
+        if (!this.isLazy) {
+            this.lazyLoad = this.$scrollContainer.lazyLoad();
+        }
 
         // Initialize template
         $container.template({'removeSiblings': true});
@@ -54,7 +60,7 @@ export default class MediaFileList {
 
     /**
      * Initialize events
-     * 
+     *
      * @protected
      */
     events () {
@@ -129,7 +135,7 @@ export default class MediaFileList {
 
     /**
      * Reload file list
-     * 
+     *
      * @protected
      */
     reload () {
@@ -138,38 +144,47 @@ export default class MediaFileList {
 
     /**
      * Render file list
-     * 
+     *
      * @protected
      */
     render () {
         const store = this.store;
         const files = store.files.grid.get();
-        
+
         this.$container.template('replace', {
             'store': store,
             'items': files,
             'selected': store.files.selected.get(),
             'loading': store.files.loading.get(),
+            'isLazy': this.isLazy,
         });
 
         this.destroySortable();
         this.sortable();
+
+        if (!this.isLazy) {
+            this.lazyLoad.lazyLoad('update');
+        }
     }
 
     /**
      * Destructor
-     * 
+     *
      * @protected
      */
     destroy () {
         this.destroySortable();
         this.destroyDragSelection();
-        
+
         if (this.store) {
             if (this.store.off) {
                 this.store.off(`.${ this.ns }`);
             }
             this.store = null;
+        }
+
+        if (!this.isLazy) {
+            this.lazyLoad.lazyLoad('destroy');
         }
     }
 
@@ -182,7 +197,7 @@ export default class MediaFileList {
 
     /**
      * Returns id from element
-     * 
+     *
      * @param {JQuery} $element Element
      * @returns {string} Element id
      */
@@ -192,7 +207,7 @@ export default class MediaFileList {
 
     /**
      * Returns element from id
-     * 
+     *
      * @param {string} id Element id
      * @returns {JQuery} Element
      */
@@ -211,14 +226,14 @@ export default class MediaFileList {
     /**
      * Clicking on file should select it
      * Holding control or shift keys allows to select multiple files
-     * 
+     *
      * @param {JQuery.ClickEvent} e Event
      * @protected
      */
     handleClickSelect (event) {
         const eventType = this.isMultiSelectEvent(event);
         const id = this.getId(event.target);
-        
+
         if (eventType == 'item') {
             // Selecting single item
             toggleSelectedFile(this.store, id);
@@ -234,7 +249,7 @@ export default class MediaFileList {
 
     /**
      * Doublce clicking on file should select it and close media library
-     * 
+     *
      * @param {JQuery.DoubleClickEvent} event Event
      * @protected
      */
@@ -242,13 +257,13 @@ export default class MediaFileList {
         if (this.options.onselect) {
             this.options.onselect();
         }
-        
+
         event.preventDefault();
     }
 
     /**
      * Clicking outside any item deselect files
-     * 
+     *
      * @param {JQuery.ClickEvent} event Event
      * @protected
      */
@@ -264,7 +279,7 @@ export default class MediaFileList {
 
     /**
      * When starting to drag select the file
-     * 
+     *
      * @param {JQuery.DragStartEvent} event Event
      * @protected
      */
@@ -289,7 +304,7 @@ export default class MediaFileList {
 
     /**
      * Retursn true if event if for multiple file selection
-     * 
+     *
      * @param {JQuery.Event} event Event
      * @returns {boolean} True if event is for file multi-select, otherwise false
      * @protected
@@ -308,7 +323,7 @@ export default class MediaFileList {
     /**
      * Set transferable data, this for example allow to drag item from the
      * list into the browser url and full size image will be opened in the browser
-     * 
+     *
      * @param {object} dataTransfer Data transfer object
      * @param {HTMLElement} dragEl Element which is dragged
      * @protected
@@ -329,7 +344,7 @@ export default class MediaFileList {
         if (url && url.indexOf('://') === -1 && url.indexOf('//') === -1) {
             url = document.location.origin + url;
         }
-        
+
         if (url) {
             dataTransfer.setData('text/uri-list', url);
             dataTransfer.setData('text/plain', url);
@@ -348,7 +363,7 @@ export default class MediaFileList {
      /**
       * Validate drag selection event
       * Mouse down on item is for dragging item, ignore it
-      * 
+      *
       * @param {JQuery.Event} event Event
       * @returns {boolean} True if event is valid, otherwise false
       * @protected
@@ -364,7 +379,7 @@ export default class MediaFileList {
 
     /**
      * Start drag selection
-     * 
+     *
      * @param {JQuery.MouseDownEvent} event Event
      * @protected
      */
@@ -420,7 +435,7 @@ export default class MediaFileList {
 
     /**
      * Handle drag selection mouse event
-     * 
+     *
      * @param {JQuery.MouseMoveEvent} event Event
      * @protected
      */
@@ -467,7 +482,7 @@ export default class MediaFileList {
 
     /**
      * Handle drag selection end event
-     * 
+     *
      * @protected
      */
     destroyDragSelection () {
@@ -493,7 +508,7 @@ export default class MediaFileList {
 
     /**
      * Create sortable
-     * 
+     *
      * @protected
      */
     sortable () {
@@ -517,7 +532,7 @@ export default class MediaFileList {
                 name: 'tree',
                 put: false
             },
-            
+
             // Items are sorted in alphabetic order
             sort: false,
 
@@ -534,7 +549,7 @@ export default class MediaFileList {
 
     /**
      * On sortable selection change mark items selected / deselected
-     * 
+     *
      * @param {HTMLElement[]} elements Selected elements
      * @protected
      */
@@ -551,7 +566,7 @@ export default class MediaFileList {
 
     /**
      * Destroy sortable
-     * 
+     *
      * @protected
      */
     destroySortable () {

@@ -28,7 +28,8 @@
     "normalize-scss": "^7.0.0",
     "select2": "^4.0.13",
     "sortablejs": "^1.10.2",
-    "tinymce": "^5.4.1"
+    "tinymce": "^5.4.1",
+    "vanilla-lazyload": "^17.1.0"
   },
   "browserslist": [
     "defaults",

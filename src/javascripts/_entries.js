@@ -35,6 +35,7 @@ module.exports = {
     // Media gallery
     'media': [
         './components/common/init',
+        './components/lazy-load',
         './media/components/media',
     ],
 
