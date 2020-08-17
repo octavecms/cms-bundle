@@ -1,6 +1,9 @@
 function isImage (node) {
     return node.nodeName === 'IMG' || node.nodeName === 'FIGURE' && /image/i.test(node.className);
 };
+function isTable (node) {
+    return node.nodeName === 'TD' || node.nodeName === 'TH' || node.nodeName === 'TR' || node.nodeName === 'TBODY' || node.nodeName === 'THEAD' || node.nodeName === 'TABLE';
+};
 function isEditable (editor, node) {
     return editor.dom.getContentEditableParent(node) !== 'false';
 };
@@ -19,7 +22,8 @@ export default function setupQuickblockCollapsedToolbar (editor) {
     if (collapsedToolbarItems && collapsedToolbarItems.trim().length > 0) {
         editor.ui.registry.addContextToolbar('textscollapsed', {
             predicate: function (node) {
-                return !isImage(node) && editor.selection.isCollapsed() && isEditable(editor, node) && !editor.dom.isEmpty(node);
+                // Image and table have different editors when collapsed, skip for those
+                return !isImage(node) && !isTable(node) && editor.selection.isCollapsed() && isEditable(editor, node) && !editor.dom.isEmpty(node);
             },
             items: collapsedToolbarItems,
             position: 'node',
