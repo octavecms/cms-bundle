@@ -21,11 +21,10 @@ class LazyLoad {
             elements_selector: this.options.selector
         });
 
-        console.log($scrollContainer, this.lazyLoad);
+        $scrollContainer.on('destroyed', this.destroy.bind(this));
     }
 
     update() {
-        console.log('update');
         this.lazyLoad.update();
     }
 
@@ -34,7 +33,6 @@ class LazyLoad {
     }
 
     destroy() {
-        console.log('destroy');
         this.lazyLoad.destroy();
     }
 }

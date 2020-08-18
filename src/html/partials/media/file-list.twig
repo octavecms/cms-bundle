@@ -14,7 +14,7 @@
 
                         <div class="image-item__sizer">
                             <figure class="image-item__image">
-                                <% if (isLazy) { %>
+                                <% if (isLazyLoadingSupported) { %>
                                     <% if (file.thumbnail) { %>
                                         <img loading="lazy" data-full-image-url="<%- file.url %>" src="<%- file.thumbnail %>" alt="<%- file.filename %>" draggable="false" onerror="this.src='/assets/images/file-icons/unknown.png'"/>
                                     <% } else { %>

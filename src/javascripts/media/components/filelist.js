@@ -13,7 +13,7 @@ import { addSelectedFile, setSelectedFile, toggleSelectedFile, expandSelectedFil
 
 
 const IMAGE_ITEM_SELECTOR = '.js-image-list-item';
-
+const IS_LAZY_LOADING_SUPPORTED = 'loading' in HTMLImageElement.prototype;
 
 /**
  * File list component
@@ -38,10 +38,9 @@ export default class MediaFileList {
         this.$container = $container;
         this.store = options.store;
         this.ns = namespace();
-        this.isLazy = 'loading' in HTMLImageElement.prototype;
         this.$scrollContainer = this.$container.closest('.modal__scroller') || $('body');
 
-        if (!this.isLazy) {
+        if (!IS_LAZY_LOADING_SUPPORTED) {
             this.lazyLoad = this.$scrollContainer.lazyLoad();
         }
 
@@ -156,13 +155,13 @@ export default class MediaFileList {
             'items': files,
             'selected': store.files.selected.get(),
             'loading': store.files.loading.get(),
-            'isLazy': this.isLazy,
+            'isLazyLoadingSupported': IS_LAZY_LOADING_SUPPORTED,
         });
 
         this.destroySortable();
         this.sortable();
 
-        if (!this.isLazy) {
+        if (!IS_LAZY_LOADING_SUPPORTED) {
             this.lazyLoad.lazyLoad('update');
         }
     }
@@ -183,7 +182,7 @@ export default class MediaFileList {
             this.store = null;
         }
 
-        if (!this.isLazy) {
+        if (!IS_LAZY_LOADING_SUPPORTED) {
             this.lazyLoad.lazyLoad('destroy');
         }
     }
