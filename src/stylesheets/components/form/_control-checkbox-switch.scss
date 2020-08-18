@@ -1,44 +1,23 @@
 /**
- * Switch style checkbox
+ * Checkbox button input as switch control styles
  */
 
 $switch-spacing: 6px;
 $switch-spacing-xs: 3px;
 
-.form-control-switch {
-    position: relative;
-    display: flex;
+
+.form-control-checkbox--switch {
     align-items: center;
+    flex-direction: row-reverse;
     justify-content: space-between;
 
-    // Hide input out of view
-    &__input {
-        position: absolute;
-        clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);
-    }
-
-    &__label {
-        cursor: pointer;
-        text-align: right;
-
-        // Extended hover area
-        &:before {
-            content: "";
-            position: absolute;
-            z-index: 1;
-            left: calc(var(--spacer-4) * -1);
-            top: calc(var(--spacer-4) * -1);
-            right: calc(var(--spacer-4) * -1);
-            bottom: calc(var(--spacer-4) * -1);
-        }
-    }
-
-    &__icon {
+    .form-control-checkbox__icon {
         position: relative;
         width: var(--spacer-6);
         height: var(--spacer-5);
         border-radius: 200px;
         background: var(--color-disabled);
+        border: 0;
 
         @extend %transition;
         transition-property: background, box-shadow;
@@ -58,35 +37,56 @@ $switch-spacing-xs: 3px;
             @extend %transition;
             transition-property: transform;
             will-change: transform;
+
+            // Overwrite checkbox
+            opacity: 1;
         }
     }
+    .form-control-checkbox__label {
+        padding: 0 var(--spacer-3) 0 0;
+        color: var(--color-heading);
 
-    &__label ~ .form-control-switch__icon {
-        margin-left: var(--spacer-5);
+        // Extended hover area
+        &:before {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            left: calc(var(--spacer-4) * -1);
+            top: calc(var(--spacer-4) * -1);
+            right: calc(var(--spacer-4) * -1);
+            bottom: calc(var(--spacer-4) * -1);
+        }
+
     }
-    
+
     // Disabled state
-    &__input[disabled] ~ &__label {
+    input[disabled] ~ .form-control-checkbox__label {
         cursor: default;
     }
     // input[disabled] ~ &__icon {
     //     background: var(--color-disabled);
     // }
 
+    // Readonly state
+    input.readonly ~ .form-control-checkbox__label,
+    input[readonly] ~ .form-control-checkbox__label {
+        pointer-events: none;
+    }
+
     // Focused
-    &__input {
+    input {
         @include link-focus-visible () {
-            & ~ .form-control-switch__icon {
+            & ~ .form-control-checkbox__icon {
                 box-shadow: $link-focus-visible-shadow;
             }
         }
     }
 
     // Checked state
-    &__input:checked ~ &__icon {
+    input:checked ~ .form-control-checkbox__icon {
         background: var(--color-primary);
     }
-    &__input:checked ~ &__icon:before {
+    input:checked ~ .form-control-checkbox__icon:before {
         transform: translateX(16px);
     }
 }
@@ -96,8 +96,8 @@ $switch-spacing-xs: 3px;
  * Tiny sized switch
  */
 
-.form-control-switch--xs {
-    .form-control-switch__icon {
+.form-control-checkbox--switch--xs {
+    .form-control-checkbox__icon {
         width: var(--spacer-4);
         height: var(--spacer-3);
 
@@ -108,7 +108,7 @@ $switch-spacing-xs: 3px;
             top: $switch-spacing-xs;
         }
     }
-    .form-control-switch__input:checked ~ .form-control-switch__icon:before {
+    input:checked ~ .form-control-checkbox__icon:before {
         transform: translateX(8px);
     }
 }

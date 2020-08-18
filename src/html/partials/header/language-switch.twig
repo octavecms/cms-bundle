@@ -2,9 +2,10 @@
 {% set defaultLanguage = defaultLanguage|default((languages|first).id) %}
 {% set id = id|default('language_') %}
 {% set name = name|default('language') %}
+{% set class = class|default('') %}
 
 {% if languages|length > 1 %}
-    <div class="group group--1">
+    <div class="group group--1 {{ class }}">
         {% for language in languages %}
             <input id="{{ id }}{{ language.id }}"
                 type="radio"
@@ -13,7 +14,7 @@
                 class="sr-only"
                 {% if loop.first %}checked{% endif %}
             />
-            
+
             <label for="{{ id }}{{ language.id }}" class="btn btn--sm btn--checkbox btn--pill"><span class="btn__content">
                 {{ language.text }}
             </span></label>

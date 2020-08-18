@@ -11,7 +11,7 @@
     {% include 'partials/section-header.twig' with {
         'title': 'Content',
         'id': sectionId,
-        
+
         'withAccordion': true,
         'accordionExpandedClassName': 'ui-dark',
         'expanded': true,
@@ -28,7 +28,56 @@
 
             <div class="card card--draggable js-sortable-list-item">
                 {# Order input, used for backend to know order of sections #}
-                <input type="hidden" name="{{ namePrefix }}[order]" value="0" />
+                <input type="hidden" name="intro[order]" value="0" />
+
+                <input type="hidden" name="intro[values]" value="{{
+                    {
+                        active: true,
+                        title: {
+                            ru: 'Инвестиционная\nфилософия',
+                            en: 'Investment\nphilosophy'
+                        },
+                        url: 'philosophy',
+                        assets: {
+                            translations: {
+                                ru: {
+                                    'list-title': 'Требования к активам',
+                                    'main-title': 'Целевые требования\nк активам',
+                                    'text': 'Accent Capital фокусирует свое внимание на 3 ключевых сектора рынка: офисная, торговая и складская недвижимость. Мы рассматриваем широкий круг характеристик, определяющих инвестиционное качество инвестиции, имея в приоритете экономически развитые географии (метрополии и «миллионники»), лучшие локации (с производственной, транспортной и пешеходной доступностью), пулы долгосрочных арендаторов с низкими кредитными рисками (международных и федеральных).',
+                                    'assets': [
+                                        {
+                                            'title': 'Офисная недвижимость',
+                                            'description': 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
+                                            'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', filename: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                        },
+                                        {
+                                            'title': 'Офисная недвижимость',
+                                            'description': 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
+                                            'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', filename: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                        },
+                                        {
+                                            'title': 'Офисная недвижимость',
+                                            'description': 'Недвижимость для размещения офисов компаний и бизнеса в различных формах.',
+                                            'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', filename: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                        }
+                                    ]
+                                },
+                                en: {
+                                    'list-title': 'Asset requirements',
+                                    'main-title': 'Target Requirements to assets',
+                                    'text': 'Accent Capital focuses on 3 key market sectors: office, retail and warehouse real estate. We consider a wide range of characteristics that determine the investment quality of an investment, prioritizing economically developed geographies (metropolises and millionaires), the best locations (with industrial, transport and pedestrian accessibility), pools of long-term tenants with low credit risks (international and federal).',
+                                    'assets': [
+                                        {
+                                            'title': 'Office property',
+                                            'description': 'Real estate for the placement of offices of companies and businesses in various forms.',
+                                            'image': { id: 'qweasdzxc', thumbnail: '/assets/images/temp/image-thumb-3.png', url: '/assets/images/temp/image-thumb-3.png', filename: 'academy_article_chart_01.jpg', width: 620, height: 620 }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }|json_encode|escape('html_attr')
+                }}" />
 
                 {% include 'partials/section-header.twig' with {
                     'id': 'section-' ~ random(),
@@ -38,17 +87,17 @@
 
                     'withActiveToggle': true,
                     'active': true,
-                    
+
                     'withDeleteOption': false,
 
                     'withEdit': true,
-                    'editTarget': '#crud-form-modal',
+                    'editTarget': '#philosophy-form-modal',
                 } %}
             </div>
 
             <div class="card card--draggable js-sortable-list-item">
-                <input type="hidden" name="{{ namePrefix }}[order]" value="1" />
-                
+                <input type="hidden" name="aboutus[order]" value="1" />
+
                 {% include 'partials/section-header.twig' with {
                     'id': 'section-' ~ random(),
                     'title': 'About Us',
@@ -57,17 +106,17 @@
 
                     'withActiveToggle': true,
                     'active': true,
-                    
+
                     'withDeleteOption': false,
 
                     'withEdit': true,
-                    'editTarget': '#crud-form-modal',
+                    'editTarget': '#philosophy-form-modal',
                 } %}
             </div>
 
             <div class="card card--draggable js-sortable-list-item">
-                <input type="hidden" name="{{ namePrefix }}[order]" value="2" />
-                
+                <input type="hidden" name="mission[order]" value="2" />
+
                 {% include 'partials/section-header.twig' with {
                     'id': 'section-' ~ random(),
                     'title': 'Mission',
@@ -76,16 +125,16 @@
 
                     'withActiveToggle': true,
                     'active': true,
-                    
+
                     'withDeleteOption': false,
 
                     'withEdit': true,
-                    'editTarget': '#crud-form-modal',
+                    'editTarget': '#philosophy-form-modal',
                 } %}
             </div>
 
             <div class="card card--draggable js-sortable-list-item">
-                <input type="hidden" name="{{ namePrefix }}[order]" value="3" />
+                <input type="hidden" name="values[order]" value="3" />
 
                 {% include 'partials/section-header.twig' with {
                     'id': 'section-' ~ random(),
@@ -95,17 +144,17 @@
 
                     'withActiveToggle': true,
                     'active': true,
-                    
+
                     'withDeleteOption': false,
 
                     'withEdit': true,
-                    'editTarget': '#crud-form-modal',
+                    'editTarget': '#philosophy-form-modal',
                 } %}
             </div>
 
             <div class="card card--draggable js-sortable-list-item">
-                <input type="hidden" name="{{ namePrefix }}[order]" value="4" />
-                
+                <input type="hidden" name="philosophy[order]" value="4" />
+
                 {% include 'partials/section-header.twig' with {
                     'id': 'section-' ~ random(),
                     'title': 'Philosophy',
@@ -114,15 +163,15 @@
 
                     'withActiveToggle': true,
                     'active': true,
-                    
+
                     'withDeleteOption': false,
 
                     'withEdit': true,
-                    'editTarget': '#crud-form-modal',
+                    'editTarget': '#philosophy-form-modal',
                 } %}
             </div>
 
         </div>
-    
+
     </div>
 </div>

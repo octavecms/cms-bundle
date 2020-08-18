@@ -1,14 +1,21 @@
 {% from 'macros/icon.twig' import icon %}
+{% from 'partials/blocks/form_row.twig' import form_row %}
+
 
 <div class="sticky-sidebar form-sidebar card card--small">
     <header class="form-sidebar__header card__header">
-        
-        {# Switch #}
-        <div class="form-control-switch">
-            <input class="form-control-switch__input" type="checkbox" id="formPageOnline" name="active" value="1" checked="checked" />
-            <label class="form-control-switch__label text-color-heading" for="formPageOnline">Online</label>
-            <span class="form-control-switch__icon"></span>
-        </div>
+
+        {{ form_row({
+            name: 'active',
+            full_name: 'active',
+            type: 'checkbox',
+            label: 'Online',
+            value: '1',
+            checked: true,
+            widget_attr: {
+                class: 'form-control-checkbox--switch'
+            }
+        }) }}
 
     </header>
     <div class="card__content">
@@ -46,7 +53,7 @@
             </div>
         </div>
         <footer class="form-sidebar__footer card__footer">
-            
+
             <div class="btn-group btn-group--full">
                 <button type="submit" class="btn-group__fill btn btn--secondary btn--lg"><span class="btn__content">
                     Update
@@ -61,7 +68,7 @@
                             {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
                         </span>
                     </button>
-                    
+
                     <div class="dropdown__menu d-none" aria-labelledby="moreOptionsDropdown">
                         <ul class="dropdown__menu__content">
                             <li>

@@ -11,9 +11,10 @@
 
     {%- set row_attr = attr.row_attr|default({}) -%}
     {%- set row_attr = row_attr|merge({'class': row_attr.class|default('') ~ ' form-group'|trim}) -%}
-    
+
     <div {{ attributes(row_attr) }}>
-        {%- if attr.show_label is not same as(false) -%}
+        {#- Checkbox has separate label -#}
+        {%- if attr.type != 'checkbox' and attr.show_label is not same as(false) -%}
             {{ form_label(attr) }}
         {%- endif -%}
         {{- form_widget(attr) -}}

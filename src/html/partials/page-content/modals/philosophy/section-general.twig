@@ -1,4 +1,5 @@
 {% from 'partials/blocks/form_rows.twig' import form_rows %}
+{% from 'partials/blocks/form_row.twig' import form_row %}
 
 
 <div class="card js-sortable-list-force-start">
@@ -9,12 +10,18 @@
 
             {# Control #}
             <div>
-                
-                <div class="form-control-switch">
-                    <input class="form-control-switch__input" type="checkbox" id="input-wegfjwe78r2374723e33" name="active" value="1" checked="checked" />
-                    <label class="form-control-switch__label text-color-heading" for="input-wegfjwe78r2374723e33">Online</label>
-                    <span class="form-control-switch__icon"></span>
-                </div>
+
+                {{ form_row({
+                    name: 'active',
+                    full_name: 'active',
+                    type: 'checkbox',
+                    label: 'Online',
+                    value: '1',
+                    checked: false,
+                    widget_attr: {
+                        class: 'form-control-checkbox--switch'
+                    }
+                }) }}
 
             </div>
         </div>
@@ -22,7 +29,7 @@
 
     <div aria-labelledby="modalGeneralTitle" class="card__content">
         <div class="card__body">
-            
+
             {# Localized title, duplicate for each content, in the real app this won't be a copy #}
             <div class="tabs-contents">
                 {% for languageItem in languages %}
@@ -36,8 +43,7 @@
                                 type: 'textarea',
                                 label: 'Title',
                                 name: 'title[' ~ language ~ ']',
-                                value: 'Инвестиционная
-философия',
+                                value: '',
                                 required: true,
                                 attr: {
                                     class: 'form-control--textarea--short',
@@ -58,7 +64,7 @@
                     help: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
                     name: 'url',
                     full_name: 'url',
-                    value: 'philosophy',
+                    value: '',
                     required: true,
                     attr: {
                         prefix: 'academy/'

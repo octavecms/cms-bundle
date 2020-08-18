@@ -8,6 +8,8 @@
     position: relative;
     vertical-align: middle;
 
+    z-index: $z-index-select;
+
     @import "single";
     @import "multiple";
 }
@@ -45,4 +47,12 @@
     position: absolute !important;
     width: 1px !important;
     white-space: nowrap !important;
+}
+
+select.readonly,
+select[readonly] {
+    & + .select2-container {
+        pointer-events: none;
+        touch-action: none;
+    }
 }

@@ -79,6 +79,9 @@ class AjaxModalLoader {
             // Call modal
             $modal.modal('show', ...modalArgs);
 
+            // Modal form
+            $modal.on('submit:success', this.handleSubmitSuccess.bind(this, modalArgs));
+
             // Set plugin options
             const pluginOptions = filter(modalArgs, isPlainObject)[0] || {};
 
@@ -132,7 +135,7 @@ class AjaxModalLoader {
 
     /**
      * Insert modal content into the DOM
-     * 
+     *
      * @param {string} html Modal HTML
      * @protected
      */
@@ -150,10 +153,10 @@ class AjaxModalLoader {
 
             // When modal is hidden, remove it from the DOM
             this.$modal.on('modal-hidden', this.remove.bind(this));
-            
+
             // When modal element is removed from DOM clean up cache
             this.$modal.on('destroyed', this.destroy.bind(this));
-    
+
             if (this.openOnLoad) {
                 this.openOnLoad = false;
 
@@ -162,6 +165,30 @@ class AjaxModalLoader {
                 });
             }
         }
+    }
+
+    /**
+     * Handle modal form success submit event
+     *
+     * @protected
+     */
+    handleSubmitSuccess (modalArgs, event, response) {
+        if (response && response.data) {
+            const data = response.data;
+            const $trigger = modalArgs.filter((arg) => arg instanceof $);
+
+            if ($trigger.length) {
+                // Update data table
+                const $datatable = $trigger[0].closest(`[data-${ $.app.settings.namespace }~="dataTable"]`);
+
+                if ($datatable.length) {
+                    $datatable.dataTable('rerender', data);
+                }
+            }
+        }
+
+        // Hide modal
+        this.$modal.modal('hide');
     }
 
 
@@ -194,16 +221,26 @@ class AjaxModalLoader {
 class AjaxModalTrigger {
 
     static get Defaults () {
-        return {};
+        return {
+            // Preload on mouse over
+            'preload': false,
+        };
     }
 
     constructor ($container, opts) {
         this.options = assign({}, this.constructor.Defaults, opts);
         this.$container = $container;
         this.ajaxUrl = $container.attr('href');
-        
+
+        if (this.options.preload) {
+            $container
+                .on('focus mouseenter', this.load.bind(this))
+        } else {
+            $container
+                .on('mousedown touchstart', this.load.bind(this))
+        }
+
         $container
-            .on('focus mouseenter', this.load.bind(this))
             .on('click returnkey', this.open.bind(this));
     }
 
@@ -213,7 +250,7 @@ class AjaxModalTrigger {
 
     /**
      * Open modal
-     * 
+     *
      * @param {object} [event] Event
      */
     open (event) {
@@ -229,7 +266,7 @@ class AjaxModalTrigger {
 
     /**
      * Load modal content
-     * 
+     *
      * @protected
      */
     load () {

@@ -8,38 +8,38 @@
                 {% if breadcrumb.icon|default(false) %}
                     {# Icon #}
                     {% if not loop.last and breadcrumb.url|default(null) %}
-                        <li class="breadcrumb__item">
+                        <li class="breadcrumb__item {{ breadcrumb.class|default('') }}">
                             <a href="{{ breadcrumb.url }}" aria-label="{{ breadcrumb.text|default('') }}">
                                 {{ icon(breadcrumb.icon) }}
                             </a>
                         </li>
                     {% elseif not loop.last and breadcrumb.modalClose|default(false) %}
-                        <li class="breadcrumb__item">
+                        <li class="breadcrumb__item {{ breadcrumb.class|default('') }}">
                             <a aria-label="{{ breadcrumb.text|default('') }}" class="js-modal-close" role="button" tabindex="0">
                                 {{ icon(breadcrumb.icon) }}
                             </a>
                         </li>
                     {% else %}
-                        <li class="breadcrumb__item {% if loop.last %}is-active{% endif %}" aria-label="{{ breadcrumb.text|default('') }}" {% if loop.last %}aria-current="page"{% endif %}>
+                        <li class="breadcrumb__item {{ breadcrumb.class|default('') }} {% if loop.last %}is-active{% endif %}" aria-label="{{ breadcrumb.text|default('') }}" {% if loop.last %}aria-current="page"{% endif %}>
                             {{ icon(breadcrumb.icon) }}
                         </li>
                     {% endif %}
                 {% else %}
                     {# Text #}
                     {% if not loop.last and breadcrumb.url|default(null) %}
-                        <li class="breadcrumb__item">
+                        <li class="breadcrumb__item {{ breadcrumb.class|default('') }}">
                             <a href="{{ breadcrumb.url }}">
                                 {{ breadcrumb.text }}
                             </a>
                         </li>
                     {% elseif not loop.last and breadcrumb.modalClose|default(false) %}
-                        <li class="breadcrumb__item">
+                        <li class="breadcrumb__item {{ breadcrumb.class|default('') }}">
                             <a aria-label="{{ breadcrumb.text|default('') }}" class="js-modal-close" role="button" tabindex="0">
                                 {{ breadcrumb.text }}
                             </a>
                         </li>
                     {% else %}
-                        <li class="breadcrumb__item {% if loop.last %}is-active{% endif %}" {% if loop.last %}aria-current="page"{% endif %}>
+                        <li class="breadcrumb__item {{ breadcrumb.class|default('') }} {% if loop.last %}is-active{% endif %}" {% if loop.last %}aria-current="page"{% endif %}>
                             {{ breadcrumb.text }}
                         </li>
                     {% endif %}

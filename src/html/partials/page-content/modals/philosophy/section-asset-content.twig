@@ -9,7 +9,7 @@
     data-plugin="accordion sectionTitle"
 >
     {# Order, for backend #}
-    <input type="hidden" name="assets[{{ i }}][order]" value="{{ i }}" />
+    <input type="hidden" name="{{ namePrefix }}[order]" value="" />
 
     {% include 'partials/section-header.twig' with {
         'title': 'Asset',
@@ -17,7 +17,7 @@
         'id': sectionId,
 
         'size': 'small',
-        
+
         'draggable': true,
 
         'withCardListCounter': true,

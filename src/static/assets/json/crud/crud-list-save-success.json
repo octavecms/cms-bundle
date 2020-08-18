@@ -1,0 +1,10 @@
+{
+    "status": true,
+    "data": {
+        "id": 34346564633,
+        "name": "John Doe",
+        "image": "/assets/images/temp/gallery-thumb-1.png",
+        "published": false,
+        "company": "Accent Asset Management"
+    }
+}

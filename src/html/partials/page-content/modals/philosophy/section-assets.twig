@@ -1,4 +1,3 @@
-{% set namePrefix = namePrefix|default('') %}
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set assetsValues = values|default({}) %}
 
@@ -9,7 +8,7 @@
     {% include 'partials/section-header.twig' with {
         'title': 'Assets',
         'id': sectionId,
-        
+
         'draggable': true,
 
         'withDeleteOption': false,
@@ -22,22 +21,19 @@
         'expanded': true,
     } %}
 
-    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content"
-        {# Add sorting #}
-        data-plugin="sortableList collection"
-    >
+    <div role="region" aria-labelledby="{{ sectionId }}-title" id="{{ sectionId }}" aria-hidden="false" class="accordion__content card__content">
 
         {# Content for Article Content #}
         <div class="card__body">
-            
+
             <div class="tabs-contents">
                 {% for languageItem in languages %}
                     {% set language = languageItem.id %}
-                    {% set sectionNamePrefix = namePrefix ~ '[translations][' ~ language ~ ']' %}
+                    {% set namePrefix = 'assets[translations][' ~ language ~ ']' %}
 
                     <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
                         {% include 'partials/page-content/modals/philosophy/section-asset-main.twig' with {
-                            'namePrefix': sectionNamePrefix,
+                            'namePrefix': namePrefix,
                             'sectionId': null,
                             'values': assetsValues[language]|default({})
                         } %}
@@ -51,10 +47,20 @@
         <div class="tabs-contents">
             {% for languageItem in languages %}
                 {% set language = languageItem.id %}
-                {% set sectionNamePrefix = namePrefix ~ '[translations][' ~ language ~ '][assets]' %}
+                {% set namePrefix = 'assets[translations][' ~ language ~ '][assets]' %}
 
                 {# Locale tab content #}
-                <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
+                <div class="tabs-contents__content"
+                    {% if not loop.first %}aria-hidden="true"{% endif %}
+                    data-tabs-content-id="{{ languageItem.id }}"
+
+                    {# Add sorting and collection #}
+                    data-plugin="sortableList collection"
+
+                    {# Collection name is special property used when setting form input values to know #}
+                    {# which values are for collection #}
+                    data-collection-name="{{ namePrefix }}"
+                >
                     <div class="card__body card-list card-list--small js-sortable-list-list js-collection-list">
 
                         {# Asset content sections #}
@@ -63,19 +69,19 @@
                             {% set order = loop.index0 %}
 
                             {% include 'partials/page-content/modals/philosophy/section-asset-content.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[' ~ order ~']',
+                                'namePrefix': namePrefix ~ '[' ~ order ~']',
                                 'sectionId': null,
                                 'values': {'order': order}|merge(assetsItem)
                             } %}
                         {% endfor %}
-                    
+
                     </div>
                     <footer class="card__footer card__footer--short">
 
                         {# Generate HTML for client-side templating, JS will replace __name__ #}
                         {% set sectionAssetHTML %}
                             {% include 'partials/page-content/modals/philosophy/section-asset-content.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[__name__]',
+                                'namePrefix': namePrefix ~ '[__name__]',
                                 'sectionId': 'section-' ~ random() ~ '-__name__',
                                 'values': {}
                             } %}
@@ -83,7 +89,7 @@
 
                         {% include 'partials/add-section.twig' with {
                             'sections': [
-                                {'text': 'Asset', 'html': sectionAssetHTML},
+                                {'type': 'asset', 'text': 'Asset', 'html': sectionAssetHTML},
                             ]
                         } %}
                     </footer>

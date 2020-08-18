@@ -170,3 +170,12 @@
 .btn--shadow {
     box-shadow: $button-shadow;
 }
+
+
+/**
+ * Button loading state
+ */
+
+.btn--loading .btn__content {
+    opacity: 0;
+}

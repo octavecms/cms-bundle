@@ -14,12 +14,12 @@
                 {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
             </span>
         </button>
-        
+
         <div class="dropdown__menu d-none" aria-labelledby="{{ uniqueId }}">
             <ul class="dropdown__menu__content">
                 {% for section in sections %}
                     <li>
-                        <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add" data-collection-html="{{ section.html|escape('html_attr') }}">
+                        <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add" data-collection-type="{{ section.id }}" data-collection-html="{{ section.html|escape('html_attr') }}">
                             {{ section.text }}
                         </a>
                     </li>
@@ -30,7 +30,7 @@
 {% elseif sections|length == 1 %}
     {# Add single section button #}
     {% for section in sections %}
-        <button type="button" class="btn btn--tetriary btn--pill js-collection-add" data-collection-html="{{ section.html|escape('html_attr') }}">
+        <button type="button" class="btn btn--tetriary btn--pill js-collection-add" data-collection-type="{{ section.id }}" data-collection-html="{{ section.html|escape('html_attr') }}">
             <span class="btn__content">
                 {{ icon('add-small', {width: 10, height: 10}) }}
                 <span>Add {{ section.text }}</span>

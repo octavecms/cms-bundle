@@ -157,7 +157,7 @@ export default class AjaxForm {
         const $form  = this.$form;
 
         // Select elements don't have "readonly" attribute
-        $form.find('input, select, textarea').prop('readonly', true).addClass('readonly');
+        $form.find('input, select, textarea').prop('readonly', true).attr('readonly', 'readonly').addClass('readonly');
         $form.find('button[type="submit"], input[type="submit"]').prop('disabled', true);
     }
 
@@ -168,7 +168,7 @@ export default class AjaxForm {
         const $form  = this.$form;
 
         // Select elements don't have "readonly" attribute
-        $form.find('input, select, textarea').prop('readonly', false).removeClass('readonly');
+        $form.find('input, select, textarea').prop('readonly', false).removeAttr('readonly').removeClass('readonly');
         $form.find('button[type="submit"], input[type="submit"]').prop('disabled', false);
     }
 
@@ -293,7 +293,22 @@ export default class AjaxForm {
      * @param {boolean} state Loading state
      */
     setLoading (state) {
-        this.isLoading = state;
+        if (this.isLoading !== state) {
+            this.isLoading = state;
+
+            // Show or hide loader / spinner
+            const $submit = this.$form.find('button[type="submit"]');
+
+            if ($submit.is('.btn')) {
+                $submit.toggleClass('btn--loading', !!state);
+            }
+
+            if (state) {
+                $submit.append('<span class="loader loader--xs"></span>');
+            } else {
+                $submit.find('.loader').remove();
+            }
+        }
     }
 
 
@@ -479,7 +494,7 @@ export default class AjaxForm {
         } else {
             // Show success message
             this.showSuccessMessage(request, response);
-            this.$form.trigger('submit:success');
+            this.$form.trigger('submit:success', response);
         }
     }
 

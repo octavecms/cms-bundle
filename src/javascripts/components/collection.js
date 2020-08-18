@@ -5,6 +5,7 @@ import assign from 'lodash/assign';
 
 import namespace from 'util/namespace';
 import { animateElement } from 'util/animation/element';
+import setFormValues from 'util/set-form-values';
 
 
 /**
@@ -15,10 +16,16 @@ class Collection {
 
     static get Defaults () {
         return {
+            // Input name prefix
+            'name': null,
+
             'listSelector': '.js-collection-list',
             'itemSelector': '.js-collection-item',
             'removeButtonSelector': '.js-collection-remove',
             'addButtonSelector': '.js-collection-add',
+
+            'attributeType': 'data-collection-type',
+            'attributeHtml': 'data-collection-html',
 
             'animationDuration': 200
         };
@@ -34,6 +41,9 @@ class Collection {
         this.refresh();
     }
 
+    /**
+     * Add events to the buttons
+     */
     refresh () {
         const options = this.options;
         const ns = this.ns;
@@ -46,35 +56,112 @@ class Collection {
     }
 
     /**
+     * Add item to the collection
+     *
+     * @param {string} type Item type
+     * @param {object|null} values Item values
+     * @param {boolean} [silent] Don't trigger any events
+     */
+    add (type, values = null, silent = false) {
+        const info = this.getTypeInfo(type);
+        const index = this.counter++;
+        const formatted = info.html.split('__name__').join(index);
+        const $item = $(formatted).appendTo(this.$list);
+
+        // Set values
+        if (values) {
+            const namePrefix = `${ this.options.name }[${ index }]`;
+            setFormValues($item, values, namePrefix);
+        }
+
+        if (silent === false) {
+            $item.app();
+            this.$container.trigger('collection.add');
+            this.refresh();
+
+            // Animate element into view
+            animateElement($item, {
+                'from': {
+                    'height': 0,
+                },
+                'duration': this.options.animationDuration
+            });
+        }
+
+        return $item;
+    }
+
+    /**
+     * Returns type info
+     *
+     * @param {string} type Item type
+     * @returns {object} Item info with keys 'type' and 'html'
+     */
+    getTypeInfo (type) {
+        const options = this.options;
+        const $buttons = this.$container.find(options.addButtonSelector);
+        let   $button = null;
+
+        if (type || $buttons.length > 1) {
+            $button = $buttons.filter(`[${ options.attributeType }="${ type }"]`);
+        } else {
+            $button = $buttons;
+        }
+
+        if ($button.length) {
+            return {
+                'type': type,
+                'html': $button.attr(options.attributeHtml),
+            };
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set collection values
+     *
+     * @param {array} values Values
+     */
+    setValues (values) {
+        if (Array.isArray(values) && values.length) {
+            this.$list.empty();
+
+            for (let i = 0; i < values.length; i++) {
+                this.add(values[i].type, values[i], true);
+            }
+
+            // Events
+            this.$container.app();
+            this.$container.trigger('collection.add');
+            this.refresh();
+        }
+    }
+
+
+    /*
+     * Event listeners
+     * ----------------------------------------------------
+     */
+
+
+    /**
      * Handle "Add item" button click
-     * 
-     * @param {JQuery.ClickEvent} event 
+     *
+     * @param {JQuery.ClickEvent} event
      */
     handleAddClick (event) {
         const $button = $(event.target).closest(this.options.addButtonSelector);
-        const html = $button.attr('data-collection-html');
-        const formatted = html.split('__name__').join(this.counter++);
-        const $item = $(formatted).appendTo(this.$list);
+        const type = $button.attr(this.options.attributeType);
 
-        $item.app();
-        this.$container.trigger('collection.add');
-        this.refresh();
-
-        // Animate element into view
-        animateElement($item, {
-            'from': {
-                'height': 0,
-            },
-            'duration': this.options.animationDuration
-        });
-
+        this.add(type);
         event.preventDefault();
     }
 
     /**
      * Handle "Remove item" button click
-     * 
-     * @param {JQuery.ClickEvent} event 
+     *
+     * @param {JQuery.ClickEvent} event
      */
     handleRemoveClick (event) {
         const $link = $(event.target);

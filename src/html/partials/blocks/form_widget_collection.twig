@@ -7,10 +7,11 @@
     {%- set sortable = attr.sortable|default(false) -%}
     {%- set add = attr.add|default(false) -%}
     {%- set remove = attr.remove|default(false) -%}
-    
+
     {# @TODO Can we detect if parent is a group??? #}
     <div class="card__body card-list card-list--small js-sortable-list-list {% if add or remove %}js-collection-list{% endif %}"
         data-plugin="sortable {% if add or remove %}collection{% endif %}"
+        data-collection-name="{{ attr.full_name|default(attr.name|default('')) }}"
         {% if not sortable %}data-sortable-disabled="true"{% endif %}
     >
         {{- form_rows(attr.children) -}}

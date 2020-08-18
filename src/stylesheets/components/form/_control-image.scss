@@ -83,7 +83,7 @@
         flex-direction: column;
         flex-grow: 1;
         padding: var(--spacer);
-        
+
         &__title {
             color: var(--color-heading);
             padding: 2px 0 0;
@@ -105,6 +105,16 @@
             position: absolute;
             right: var(--spacer);
             bottom: var(--spacer);
+        }
+    }
+
+    // Read only state
+    input.readonly,
+    input[readonly] {
+        & ~ .form-control-image__preview,
+        & ~ .form-control-image__content .btn {
+            pointer-events: none;
+            touch-action: none;
         }
     }
 }

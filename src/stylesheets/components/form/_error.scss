@@ -23,6 +23,7 @@
 label.error,
 div.error {
     display: block;
+    padding-top: var(--spacer-2);
 
     // @extend %text--size-...;
     color: var(--color-error);

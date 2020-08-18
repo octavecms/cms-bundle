@@ -2,7 +2,7 @@
 
 <header class="card__header">
     <div class="group group--5 group--middle">
-        
+
         {# Close button #}
         <a class="btn btn--md btn--tetriary btn--square js-modal-close" tabindex="0" role="button" aria-label="Close">
             <span class="btn__content">{{ icon('close', {width: 12, height: 12}) }}</span>
@@ -25,7 +25,8 @@
         <div class="group__right">
             {% include 'partials/header/language-switch.twig' with {
                 'id': 'modal-language_',
-                'name': 'modal-language'
+                'name': 'language',
+                'class': 'js-philosophy-modal-language'
             } %}
         </div>
 

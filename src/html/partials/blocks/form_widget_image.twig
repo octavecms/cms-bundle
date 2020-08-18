@@ -45,6 +45,7 @@
         {% if attr.readonly %}form-control-image--readonly{% endif %}
         "
         data-plugin="image"
+        data-image-name="{{ attr.full_name|default(attr.name|default('')) }}"
     >
         {%- set hidden_attr = {'attr': {'class': 'js-image-id'}}|merge(attr)|merge({'value': id}) -%}
         {{- form_widget_hidden(hidden_attr) -}}
@@ -62,7 +63,7 @@
             <span class="form-control-image__content__title js-section-title-source js-image-title">
                 {{ filename }}
             </span>
-            
+
             <a class="form-control-image__content__link js-image-preview-link {% if url == '' %}d-none{% endif %}" href="{{ url }}" target="_blank">
                 Preview
             </a>

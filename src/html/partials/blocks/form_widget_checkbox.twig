@@ -19,9 +19,8 @@
     {%- set attr_attr = attr_attr|omit(attr_attr_omit) -%}
     {%- set widget_full_attr = {}|merge(attr)|merge({'attr': attr_attr}) -%}
 
-
     {# Convert name into a label #}
-    {%- if label is empty and label is not same as ('') -%}
+    {%- if label is empty -%}
         {% set label = name|humanize %}
     {%- endif -%}
 
@@ -29,31 +28,16 @@
         <input type="checkbox"
             class="sr-only"
             {% if attr.value is not empty %}value="{{ attr.value }}"{% endif %}
-            {{ widget_attributes(widget_full_attr) -}} 
+            {{ widget_attributes(widget_full_attr) -}}
         />
         <label for="{{ id }}" class="form-control-checkbox__icon"></label>
-        {% if label %}
-            <label for="{{ id }}" class="form-control-checkbox__label">{{ label }}</label>
-        {% endif %}
+        {%- if label -%}
+            {%- if attr.show_label is not same as(false) -%}
+                <label for="{{ id }}" class="form-control-checkbox__label">{{ label }}</label>
+            {%- else -%}
+                {# Screen reader only #}
+                <span class="sr-only">{{ label }}</span>
+            {%- endif -%}
+        {%- endif -%}
     </div>
-
-
-    {# --------- #}
-{# 
-    <div class="form-control-checkbox {{ class }}">
-        <input
-            id="{{ id }}"
-            type="checkbox"
-            name="{% if multiple %}{{ name }}[]{% else %}{{ name }}{% endif %}"
-            value="{{ valueItem.id }}"
-            class="sr-only"
-            {% if readonly %}readonly{% endif %}
-            {% if disabled %}disabled{% endif %}
-            {% if checked %}checked{% endif %}
-        />
-        <label for="{{ id }}" class="form-control-checkbox__icon"></label>
-        {% if label %}
-            <label for="{{ id }}" class="form-control-checkbox__label">{{ label }}</label>
-        {% endif %}
-    </div> #}
 {%- endmacro %}

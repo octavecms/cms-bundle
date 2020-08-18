@@ -1,0 +1,96 @@
+{% from 'macros/icon.twig' import icon %}
+{% from 'partials/blocks/form_widget.twig' import form_widget %}
+
+
+<tr class="data-table__row data-table__row--clickable btn-container js-sortable-list-item"
+    data-plugin="activeState"
+    data-active-state-save-url="/assets/json/crud/publish-unpublish.json"
+    data-data-table-row-id="{{ item.id }}"
+>
+    <td class="data-table__row__checkbox">
+        {# Item link #}
+        <a class="data-table__link js-data-table-element"
+            role="button" tabindex="0" href="crud-list-modal.html?id={{ item.id }}"
+            data-plugin="ajaxModalTrigger"
+        ></a>
+
+        {# Draggable / Sortable handle #}
+        {% if sortable %}
+            <a class="data-table__draggable js-sortable-list-item-handle js-data-table-element" role="button" tabindex="0" title="Drag to re-order sections or use arrow up and arrow down keys">
+                {{ icon('draggable', {width: 6, height: 16}) }}
+            </a>
+        {% endif %}
+
+        {{ form_widget({
+            id: 'crud_table_select_' ~ random(),
+            type: 'checkbox',
+            name: 'selected[]',
+            full_name: 'selected[]',
+            value: item.id,
+            show_label: false,
+            attr: {
+                class: 'data-table__is-hidden-dragging'
+            }
+        }) }}
+    </td>
+    <td class="data-table__row__image">
+        <div class="data-table__image">
+            <img src="{{ item.image }}" alt="{{ item.name }}" />
+        </div>
+    </td>
+    <td class="data-table__row__text">
+        <span>{{ item.name }}</span>
+    </td>
+    <td class="data-table__row__text">
+        {{ item.company }}
+    </td>
+    <td class="{% if sortable %}data-table__is-hidden-dragging{% endif %}">
+        <div class="group group--5 group--nowrap group--middle group--right">
+            {# Published state #}
+            <input type="checkbox" class="sr-only js-active-state-input" id="{{ item.id }}-published" name="published" value="{{ item.id }}" {% if item.published %}checked{% endif %} />
+            <label for="{{ item.id }}-published" class="js-active-state-tooltip status" aria-hidden="true"
+                data-plugin="tooltip" data-tooltip-trigger="hover" data-tooltip-placement="left"
+                {% if item.active %}
+                    title="Item is published, click to unpublish"
+                {% else %}
+                    title="Item is unpublished, click to publish"
+                {% endif %}
+                data-active-state-active-text="Item is published, click to unpublish"
+                data-active-state-inactive-text="Item is unpublished, click to publish">
+                    Publish / Unpublish
+            </label>
+
+            {# Options dropdown #}
+            <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom-end">
+                <button type="button" class="dropdown__toggle btn btn--tetriary btn--tetriary--table btn--square btn--pill" title="Section options" aria-expanded="false" id="{{ item.id }}Options"><span class="btn__content">
+                    {{ icon('more', {width: 14, height: 4}) }}
+                </span></button>
+
+                <div class="dropdown__menu d-none" aria-labelledby="{{ item.id }}Options">
+                    <ul class="dropdown__menu__content">
+                        <li class="js-active-state-hidden-active {% if item.active %}d-none{% endif %}">
+                            <a class="dropdown__item js-active-state-set-active js-dropdown-close" role="button" tabindex="0">
+                                Publish
+                            </a>
+                        </li>
+                        <li class="js-active-state-visible-active {% if not item.active %}d-none{% endif %}">
+                            <a class="dropdown__item js-active-state-set-inactive js-dropdown-close" role="button" tabindex="0">
+                                Unpublish
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown__item">
+                                Edit
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown__item">
+                                Delete
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>

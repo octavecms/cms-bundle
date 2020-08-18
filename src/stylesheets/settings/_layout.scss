@@ -7,7 +7,8 @@ $z-index-under-header: 9;
 $z-index-header: 10;
 $z-index-dropdown: 11;
 $z-index-modal: 1400;
-$z-index-tooltip: 1500; // Above tinymce
+$z-index-select: 1500;
+$z-index-tooltip: 1600; // Above tinymce
 
 /**
  * Border radius
@@ -63,7 +64,7 @@ $spacing-text: (
 );
 
 
-/** 
+/**
  * Navigation bar
  */
 
@@ -71,7 +72,7 @@ $nav-link-padding-x: var(--spacer-3);
 $nav-link-padding-y: var(--spacer-2);
 
 
-/** 
+/**
  * Breadcrumbs
  */
 
@@ -80,7 +81,7 @@ $breadcrumb-link-padding-y: var(--spacer-2);
 $breadcrumb-min-height: var(--spacer-4);
 
 
-/** 
+/**
  * Badge
  */
 

@@ -10,12 +10,18 @@
 
             {# Control #}
             <div>
-                
-                <div class="form-control-switch">
-                    <input class="form-control-switch__input" type="checkbox" id="input-dggsfaw3rqa4t34r3ra" name="active" value="1" checked="checked" />
-                    <label class="form-control-switch__label text-color-heading" for="input-dggsfaw3rqa4t34r3ra">Online</label>
-                    <span class="form-control-switch__icon"></span>
-                </div>
+
+                {{ form_row({
+                    name: 'active',
+                    full_name: 'active',
+                    type: 'checkbox',
+                    label: 'Online',
+                    value: '1',
+                    checked: true,
+                    widget_attr: {
+                        class: 'form-control-checkbox--switch'
+                    }
+                }) }}
 
             </div>
         </div>
@@ -23,7 +29,7 @@
 
     <div aria-labelledby="modalGeneralTitle" class="card__content">
         <div class="card__body">
-            
+
             {# Localized title, duplicate for each content, in the real app this won't be a copy #}
             <div class="tabs-contents">
                 {% for languageItem in languages %}
@@ -37,7 +43,7 @@
                             label: 'Name',
                             name: 'name[' ~ language ~ ']',
                             full_name: 'name[' ~ language ~ ']',
-                            value: 'Александр Самонов',
+                            value: values.name[languageItem.id]|default(''),
                             required: true,
                         }) }}
 
@@ -51,7 +57,7 @@
                     label: 'Company',
                     name: 'company',
                     full_name: 'company',
-                    value: 'a',
+                    value: values.company|default(''),
                     choices: [
                         {value: 'a', label: 'Accent Capital'},
                         {value: 'b', label: 'Accent Asset Management'}
@@ -63,14 +69,7 @@
                     full_name: 'image',
                     type: 'image',
                     label: 'Image',
-                    value: {
-                        id: 'qweasdzxc',
-                        thumbnail: '/assets/images/temp/table/1.png',
-                        url: '/assets/images/temp/table/1.png',
-                        filename: '1.png',
-                        width: 128,
-                        height: 128
-                    },
+                    value: values.image|default({}),
                     required: false,
                     minWidth: 128,
                     minHeight: 128,

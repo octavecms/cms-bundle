@@ -23,6 +23,10 @@
     will-change: transform;
 }
 
+.btn .loader {
+    z-index: 3;
+}
+
 
 /**
  * Faded color theme

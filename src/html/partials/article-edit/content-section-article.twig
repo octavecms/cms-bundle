@@ -10,7 +10,7 @@
     {% include 'partials/section-header.twig' with {
         'title': 'Article Content',
         'id': sectionId,
-        
+
         'withAccordion': true,
         'expanded': true,
         'accordionExpandedClassName': 'ui-dark',
@@ -83,11 +83,11 @@
 
                         {% include 'partials/add-section.twig' with {
                             'sections': [
-                                {'text': 'Text', 'html': sectionTextHTML},
-                                {'text': 'Quote', 'html': sectionQuoteHTML},
-                                {'text': 'Image', 'html': sectionImageHTML},
-                                {'text': 'Image Gallery', 'html': sectionGalleryHTML},
-                                {'text': 'Table', 'html': sectionTableHTML}
+                                {'type': 'text', 'text': 'Text', 'html': sectionTextHTML},
+                                {'type': 'quote', 'text': 'Quote', 'html': sectionQuoteHTML},
+                                {'type': 'image', 'text': 'Image', 'html': sectionImageHTML},
+                                {'type': 'image-gallery', 'text': 'Image Gallery', 'html': sectionGalleryHTML},
+                                {'type': 'table', 'text': 'Table', 'html': sectionTableHTML}
                             ]
                         } %}
                     </footer>

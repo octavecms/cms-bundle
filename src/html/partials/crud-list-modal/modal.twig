@@ -3,7 +3,7 @@
     data-plugin="modal tabs"
     {# data-modal-auto-close="false" #}
     data-tabs-animate="false"
-    data-tabs-input-selector='input[name="modal-language"]'
+    data-tabs-input-selector='.js-crud-modal-language input[name="language"]'
     aria-hidden="true"
 >
 
@@ -21,7 +21,12 @@
         modal content and viewport
         #}
         <div class="modal__content-wrapper">
-            <form class="modal__content form-wide ui-gray-background card card--modal card--sticky-header js-modal-ignore-auto-close">
+            <form
+                class="modal__content form-wide ui-gray-background card card--modal card--sticky-header js-modal-ignore-auto-close"
+                method="GET" {# @TODO Dev server doesn't support POST, need to use GET #}
+                action="/assets/json/crud/crud-list-save-success.json"
+                data-plugin="ajaxForm sectionTitle"
+            >
 
                 {% include 'partials/crud-list-modal/header.twig' %}
 
@@ -31,10 +36,27 @@
                         data-plugin="sortableList"
                         data-sortable-list-invert-swap="true"
                     >
-                        
+
                         <div class="card-list js-sortable-list-list">
 
-                            {% include 'partials/crud-list-modal/section-general.twig' %}
+                            {% include 'partials/crud-list-modal/section-general.twig' with {
+                                values: {
+                                    active: true,
+                                    name: {
+                                        ru: 'Александр Самонов',
+                                        en: 'Alexander Samonov'
+                                    },
+                                    company: 'b',
+                                    image: {
+                                        id: 'qweasdzxc',
+                                        thumbnail: '/assets/images/temp/table/1.png',
+                                        url: '/assets/images/temp/table/1.png',
+                                        filename: '1.png',
+                                        width: 128,
+                                        height: 128
+                                    }
+                                }
+                            } %}
 
                         </div>
 
