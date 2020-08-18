@@ -22,7 +22,7 @@ import setupQuickLinkMediaLibraryLink from 'components/form/tinymce/quicklink-me
 import setupQuickBarsMediaLibraryImage from 'components/form/tinymce/quickbars-media-library';
 import setupToolbarListsMenu from 'components/form/tinymce/toolbar-listsmenu';
 import setupQuickblockCollapsedToolbar from 'components/form/tinymce/quickblock-collapsed';
-
+import setupTableDisable from 'components/form/tinymce/table-disable';
 
 /**
  * Sample component
@@ -45,7 +45,7 @@ class RichTextEditor {
 
             // https://www.tiny.cloud/docs/configure/content-filtering/#invalid_styles
             // invalid_styles: {},
-            
+
             // https://www.tiny.cloud/docs/configure/content-filtering/#valid_elements
             // valid_elements: '',
 
@@ -135,6 +135,7 @@ class RichTextEditor {
             quickbars_selection_toolbar: 'bold | italic | quicklink | listmenu | styleselect',
             quickbars_insert_toolbar: 'quickimage-ml-insert | quicktable | numlist | bullist',
             quickbars_image_toolbar: 'quickimage-ml-replace | quicklink',
+            quickbars_table_toolbar: 'quickimage-ml-replace | quicklink',
 
             // Hide toolbar, we use quickbar
             toolbar: '',
@@ -155,17 +156,18 @@ class RichTextEditor {
 
                 setupToolbarListsMenu(editor);
                 setupQuickblockCollapsedToolbar(editor);
-                
+
                 setTimeout(() => {
                     setupQuickLinkMediaLibraryLink(editor);
                     setupQuickBarsMediaLibraryImage(editor);
+                    setupTableDisable(editor);
                 });
             },
 
             init_instance_callback: (editor) => {
                 this.$container.closest('.form-control--richtexteditor').removeClass('form-control--not-ready');
             },
-            
+
             // Merge with options
             ...options
         });
@@ -177,7 +179,7 @@ class RichTextEditor {
     }
 
     ckToTinyStyles () {
-        
+
     }
 }
 

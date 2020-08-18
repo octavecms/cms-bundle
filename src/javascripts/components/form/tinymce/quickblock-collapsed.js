@@ -7,13 +7,10 @@ function isTable (node) {
 function isEditable (editor, node) {
     return editor.dom.getContentEditableParent(node) !== 'false';
 };
-function isEmtpy (node) {
-
-}
 
 /**
  * When text selection is collapsed show toolbar with "Bold", "Italic", etc. buttons too
- * 
+ *
  * @param {object} editor Editor instance
  */
 export default function setupQuickblockCollapsedToolbar (editor) {
@@ -23,7 +20,8 @@ export default function setupQuickblockCollapsedToolbar (editor) {
         editor.ui.registry.addContextToolbar('textscollapsed', {
             predicate: function (node) {
                 // Image and table have different editors when collapsed, skip for those
-                return !isImage(node) && !isTable(node) && editor.selection.isCollapsed() && isEditable(editor, node) && !editor.dom.isEmpty(node);
+                // return !isImage(node) && !isTable(node) && editor.selection.isCollapsed() && isEditable(editor, node) && !editor.dom.isEmpty(node);
+                return !isImage(node) && editor.selection.isCollapsed() && isEditable(editor, node) && !editor.dom.isEmpty(node);
             },
             items: collapsedToolbarItems,
             position: 'node',
