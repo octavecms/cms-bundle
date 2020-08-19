@@ -42,7 +42,8 @@
                             {
                                 type: 'textarea',
                                 label: 'Title',
-                                name: 'title[' ~ language ~ ']',
+                                name: 'values[title][' ~ language ~ ']',
+                                full_name: 'values[title][' ~ language ~ ']',
                                 value: '',
                                 required: true,
                                 attr: {
@@ -62,8 +63,8 @@
                     type: 'url',
                     label: 'Anchor Link',
                     help: 'Enim reprehenderit reprehenderit minim nisi eu deserunt elit sit nulla.',
-                    name: 'url',
-                    full_name: 'url',
+                    name: 'values[url]',
+                    full_name: 'values[url]',
                     value: '',
                     required: true,
                     attr: {

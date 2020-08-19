@@ -15,6 +15,7 @@
 
         'withActiveToggle': true,
         'active': true,
+        'activeInputName': 'assets[active]',
 
         'withAccordion': true,
         'accordionExpandedClassName': 'ui-dark',
@@ -29,7 +30,7 @@
             <div class="tabs-contents">
                 {% for languageItem in languages %}
                     {% set language = languageItem.id %}
-                    {% set namePrefix = 'assets[translations][' ~ language ~ ']' %}
+                    {% set namePrefix = 'values[assets][translations][' ~ language ~ ']' %}
 
                     <div class="tabs-contents__content" {% if not loop.first %}aria-hidden="true"{% endif %} data-tabs-content-id="{{ languageItem.id }}">
                         {% include 'partials/page-content/modals/philosophy/section-asset-main.twig' with {
@@ -47,7 +48,7 @@
         <div class="tabs-contents">
             {% for languageItem in languages %}
                 {% set language = languageItem.id %}
-                {% set namePrefix = 'assets[translations][' ~ language ~ '][assets]' %}
+                {% set namePrefix = 'values[assets][translations][' ~ language ~ '][assets]' %}
 
                 {# Locale tab content #}
                 <div class="tabs-contents__content"

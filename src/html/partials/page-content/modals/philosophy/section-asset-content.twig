@@ -36,6 +36,7 @@
                     attr: { class: 'form-grid-layout' },
                     children: [
                         {
+                            id: sectionId ~ '-title',
                             type: 'text',
                             label: 'Title',
                             name: namePrefix ~ '[title]',
@@ -46,6 +47,7 @@
                     ]
                 },
                 {
+                    id: sectionId ~ '-description',
                     type: 'text',
                     label: 'Description',
                     name: namePrefix ~ '[description]',
@@ -57,6 +59,7 @@
                     }
                 },
                 {
+                    id: sectionId ~ '-image',
                     name: namePrefix ~ '[image]',
                     full_name: namePrefix ~ '[image]',
                     type: 'image',

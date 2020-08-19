@@ -3,9 +3,10 @@ import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
 import assign from 'lodash/assign';
 
+import 'util/jquery.destroyed';
 import namespace from 'util/namespace';
 import { animateElement } from 'util/animation/element';
-import setFormValues from 'util/set-form-values';
+import setFormValues from 'util/form/set-form-values';
 
 
 /**
@@ -37,8 +38,22 @@ class Collection {
         this.$container = $container;
         this.$list = $container.is(options.listSelector) ? $container : $container.find(options.listSelector).eq(0);
         this.counter = this.$list.children(options.itemSelector).length;
+        this.$form = $container.closest('form');
+
+        $container.on('destroyed', this.destroy.bind(this));
+        this.$form.on(`reset.${ this.ns }`, this.handleFormReset.bind(this));
 
         this.refresh();
+    }
+
+    /**
+     * Remove global event listeners
+     */
+    destroy () {
+        if (this.$form) {
+            this.$form.off(`reset.${ this.ns }`);
+            this.$form = null;
+        }
     }
 
     /**
@@ -124,18 +139,22 @@ class Collection {
      * @param {array} values Values
      */
     setValues (values) {
-        if (Array.isArray(values) && values.length) {
-            this.$list.empty();
+        this.$list.empty();
 
+        if (Array.isArray(values)) {
             for (let i = 0; i < values.length; i++) {
-                this.add(values[i].type, values[i], true);
+                // There could be empty values if collection items previously were
+                // removed and input names have non-sequential names
+                if (values[i]) {
+                    this.add(values[i].type, values[i], true);
+                }
             }
-
-            // Events
-            this.$container.app();
-            this.$container.trigger('collection.add');
-            this.refresh();
         }
+
+        // Events
+        this.$container.app();
+        this.$container.trigger('collection.add').trigger('collection.remove');
+        this.refresh();
     }
 
 
@@ -146,9 +165,18 @@ class Collection {
 
 
     /**
+     * Reset collection when form is reset
+     *
+     * @param {JQuery.Event} event Event
+     */
+    handleFormReset () {
+        this.setValues([]);
+    }
+
+    /**
      * Handle "Add item" button click
      *
-     * @param {JQuery.ClickEvent} event
+     * @param {JQuery.ClickEvent} event Event
      */
     handleAddClick (event) {
         const $button = $(event.target).closest(this.options.addButtonSelector);
@@ -161,7 +189,7 @@ class Collection {
     /**
      * Handle "Remove item" button click
      *
-     * @param {JQuery.ClickEvent} event
+     * @param {JQuery.ClickEvent} event Event
      */
     handleRemoveClick (event) {
         const $link = $(event.target);

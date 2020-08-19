@@ -56,7 +56,9 @@ function set (object, path, value) {
                 : (!isNaN(path[index + 1]) || !path[index + 1] ? [] : {});
         }
 
-        if (Array.isArray(nested)) {
+
+        if (Array.isArray(nested) && isNaN(key)) {
+            // Part of the name is "[]"
             nested.push(newValue);
         } else {
             nested[key] = newValue;

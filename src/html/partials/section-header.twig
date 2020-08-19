@@ -38,6 +38,8 @@
 {# Show Edit button which opens modal #}
 {% set withEdit = withEdit|default(false) %}
 {% set editTarget = editTarget|default(false) %}
+{% set editSourceInputs = editSourceInputs|default([]) %}
+{% set activeInputName = activeInputName|default(null) %}
 
 <header class="card__header {% if withAccordion %}accordion__header {% if expanded and accordionExpandedClassName %}{{ accordionExpandedClassName }}{% endif %}{% endif %}"
     {% if withActiveToggle %}
@@ -45,14 +47,14 @@
         data-plugin="activeState"
     {% endif %}
 >
-    
+
     {# Draggable icon #}
     {% if draggable %}
         <a class="card__header__draggable js-sortable-list-item-handle" title="Drag to re-order sections or use arrow up and arrow down keys" tabindex="0" role="button">
             {{ icon('draggable', {width: 6, height: 16}) }}
         </a>
     {% endif %}
-    
+
     <div class="group group--middle group--nowrap group--3">
         {# Counter #}
         {% if withCardListCounter %}
@@ -77,7 +79,7 @@
         <div><div class="group group--nowrap group--middle group--5">
             {# Unsaved change dot / indicator #}
             {% if withActiveToggle %}
-                <input type="checkbox" class="sr-only js-active-state-input" id="{{ id }}-active" name="{{ id }}[active]" value="1" {% if active %}checked{% endif %} />
+                <input type="checkbox" class="sr-only js-active-state-input" id="{{ id }}-active" name="{{ activeInputName }}" value="1" {% if active %}checked{% endif %} />
                 <label for="{{ id }}-active" class="js-active-state-tooltip {% if draggable %}card__is-hidden-dragging{% endif %} status" aria-hidden="true"
                     data-plugin="tooltip" data-tooltip-trigger="hover" data-tooltip-placement="left"
                     {% if active %}
@@ -104,14 +106,14 @@
                             {{ icon('editor', {width: 32, height: 32}) }}
                         </span></button>
                     {% endif %}
-                    
+
                     {# Options dropdown #}
                     {% if withOptions %}
                         <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="bottom" data-dropdown-container=".modal, body">
                             <button type="button" class="dropdown__toggle btn btn--tetriary btn--square btn--pill" title="Section options" aria-expanded="false" id="{{ id }}Options"><span class="btn__content">
                                 {{ icon('more', {width: 14, height: 4}) }}
                             </span></button>
-                            
+
                             <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options">
                                 <ul class="dropdown__menu__content">
                                     {% if withActiveToggle %}
@@ -155,11 +157,12 @@
                             tabindex="0"
                             role="button"
                             href="{{ editTarget }}"
+                            data-modal-editor-source-inputs="{{ editSourceInputs|json_encode|escape('html_attr') }}"
                         ><span class="btn__content">
                             {{ icon('edit', {width: 32, height: 32}) }}
                         </span></a>
                     {% endif %}
-                    
+
                     {# Accordion button #}
                     {% if withAccordion %}
                         <button

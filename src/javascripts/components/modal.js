@@ -28,7 +28,8 @@ export default class Modal {
             'autoClose': true,
 
             // CSS selector clicking on which won't automatically close modal
-            'autoCloseIgnoreSelector': '.js-modal-ignore-auto-close, .dropdown__menu, .tooltip',
+            'autoCloseIgnoreSelector': '.js-modal-ignore-auto-close',
+            'autoCloseIgnoreGlobalSelector': '.dropdown__menu, .tooltip',
 
             // Close button selector
             'closeSelector': '.js-modal-close',
@@ -116,6 +117,9 @@ export default class Modal {
         }
     }
 
+    /**
+     * Destructor
+     */
     destroy () {
         if (this.visible && activeModalCount === 1) {
             // Destroyed while still being visible
@@ -375,8 +379,9 @@ export default class Modal {
      */
     handleDocumentClick (event) {
         const $trigger = $(event.target);
+        const ignoreGlobalSelector = this.options.autoCloseIgnoreGlobalSelector;
 
-        if (!$trigger.closest(this.$trigger).length && !$trigger.closest(this.$ignoreClick).length) {
+        if (!$trigger.closest(this.$trigger).length && !$trigger.closest(this.$ignoreClick).length && !$trigger.closest(ignoreGlobalSelector).length) {
             // If user clicked on the different modal, then ignore since that modal
             // could have been opened from this one
             const $modal = $trigger.closest('.modal');
@@ -408,7 +413,7 @@ export default class Modal {
         if (!event.isDefaultPrevented()) {
             event.preventDefault();
 
-            this.show($(event.curentTarget));
+            this.show($(event.currentTarget));
         }
     }
 

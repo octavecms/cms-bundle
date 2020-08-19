@@ -24,7 +24,7 @@ function setCollectionValue ($container, name, value) {
     }
 }
 
-function setInputValue ($input, value) {
+export function setInputValue ($input, value) {
     if ($input.is(':checkbox')) {
         let checked = false;
         if (value === true || value === false) {
