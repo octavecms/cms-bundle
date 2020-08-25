@@ -21,7 +21,7 @@ class ActiveState {
             'setActiveSelector': '.js-active-state-set-active',
             'setInactiveSelector': '.js-active-state-set-inactive',
 
-            'isCheckedSelector': '.js-active-state-is-checked',
+            'labelSelector': '.js-active-state-label',
 
             // URL which to use to save data
             'saveUrl': null
@@ -36,7 +36,7 @@ class ActiveState {
         this.$hidden = $();
         this.$visible = $();
         this.$setActive = $();
-        this.$isChecked = $();
+        this.$label = $();
         this.$setInactive = $();
         this.ns = namespace();
         this.savedState = null;
@@ -54,7 +54,7 @@ class ActiveState {
         this.$tooltip = $container.find(options.tooltipSelector);
         this.$hidden = $container.find(options.hiddenSelector);
         this.$visible = $container.find(options.visibleSelector);
-        this.$isChecked = $container.find(options.isCheckedSelector);
+        this.$label = $container.find(options.labelSelector);
 
         this.$input.off(`.${ ns }`);
         this.$input = $container.find(options.inputSelector);
@@ -81,7 +81,7 @@ class ActiveState {
 
         this.$hidden.toggleClass('d-none', state);
         this.$visible.toggleClass('d-none', !state);
-        this.$isChecked.toggleClass('is-checked', state);
+        this.$label.toggleClass('is-checked', state);
 
         this.save();
     }

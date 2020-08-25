@@ -83,12 +83,12 @@ $switch-spacing-xs: 3px;
     }
 
     // Checked state
-    .form-control-checkbox__icon.is-checked,
+    &.is-checked .form-control-checkbox__icon,
     input:checked ~ .form-control-checkbox__icon {
         background: var(--color-primary);
     }
 
-    .form-control-checkbox__icon.is-checked:before,
+    &.is-checked .form-control-checkbox__icon:before,
     input:checked ~ .form-control-checkbox__icon:before {
         transform: translateX(16px);
     }
@@ -112,7 +112,7 @@ $switch-spacing-xs: 3px;
         }
     }
 
-    .form-control-checkbox__icon.is-checked:before,
+    &.is-checked .form-control-checkbox__icon:before,
     input:checked ~ .form-control-checkbox__icon:before {
         transform: translateX(8px);
     }
