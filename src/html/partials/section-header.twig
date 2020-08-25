@@ -1,4 +1,4 @@
-{% from 'macros/icon.twig' import icon %}
+ {% from 'macros/icon.twig' import icon %}
 
 {# Id referencing content for which section header is for #}
 {% set id = id|default(null) %}
@@ -117,22 +117,23 @@
                             <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options">
                                 <ul class="dropdown__menu__content">
                                     {% if withActiveToggle %}
-                                        <li class="js-active-state-hidden-active {% if active %}d-none{% endif %}">
-                                            <a class="dropdown__item js-active-state-set-active js-dropdown-close" role="button" tabindex="0">
-                                                Enable
-                                            </a>
+                                        <li class="dropdown__form form-control-checkbox form-control-checkbox--switch form-control-checkbox--switch--xs">
+                                            <label for="{{ id }}-active" class="form-control-checkbox__icon js-active-state-is-checked {% if active %}is-checked{% endif %}"></label>
+                                            <label for="{{ id }}-active" class="form-control-checkbox__label js-active-state-is-checked {% if active %}is-checked{% endif %}">
+                                                <span class="js-active-state-hidden-active {% if active %}d-none{% endif %}">Disable</span>
+                                                <span class="js-active-state-visible-active {% if not active %}d-none{% endif %}">Enable</span>
+                                            </label>
                                         </li>
-                                        <li class="js-active-state-visible-active {% if not active %}d-none{% endif %}">
-                                            <a class="dropdown__item js-active-state-set-inactive js-dropdown-close" role="button" tabindex="0">
-                                                Disable
-                                            </a>
-                                        </li>
+                                        <li class="dropdown__divider-min"></li>
                                     {% endif %}
 
                                     {% if withDeleteOption %}
                                         <li>
                                             <a class="dropdown__item js-dropdown-close js-collection-remove" role="button" tabindex="0" href="#{{ id }}">
-                                                Delete
+                                                <span class="dropdown__item-content">
+                                                    {{ icon('dropdown-delete', {width: 16, height: 16}) }}
+                                                    <span>Delete</span>
+                                                </span>
                                             </a>
                                         </li>
                                     {% endif %}
@@ -140,7 +141,10 @@
                                     {% if withAccordion %}
                                         <li>
                                             <a class="dropdown__item js-dropdown-close js-accordion-collapse-siblings" role="button" tabindex="0">
-                                                Collapse other sections
+                                                <span class="dropdown__item-content">
+                                                    {{ icon('dropdown-collapse', {width: 16, height: 16}) }}
+                                                    <span>Collapse other sections</span>
+                                                </span>
                                             </a>
                                         </li>
                                     {% endif %}

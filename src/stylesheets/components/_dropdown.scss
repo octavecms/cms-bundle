@@ -56,7 +56,7 @@
             color: var(--color-small);
         }
 
-        @include link-hover () {
+        @include link-hover() {
             color: var(--color-text);
 
             .icon {
@@ -65,10 +65,33 @@
         }
     }
 
+    &__simple-item {
+        display: flex;
+        align-items: center;
+        height: var(--spacer-5);
+        padding: 0 var(--spacer-3);
+    }
+
+    &__item-content {
+        display: flex;
+        align-items: center;
+
+        .icon {
+            color: var(--color-text);
+        }
+
+        @include link-hover() {
+            .icon {
+                color: var(--color-text);
+            }
+        }
+    }
+
     // Menu text
     &__text {
         padding: 0 var(--spacer-3);
     }
+
     &__form {
         padding: var(--spacer-1) var(--spacer-3) var(--spacer-2);
     }
@@ -101,7 +124,13 @@
     &__divider {
         position: relative;
         border-top: 1px solid var(--color-line);
-        margin: var(--spacer-4) calc(#{ $dropdown-padding-x }*-1);
+        margin: var(--spacer-4) calc(#{ $dropdown-padding-x } * -1);
+    }
+
+    &__divider-min {
+        position: relative;
+        border-top: 1px solid var(--color-line);
+        margin: var(--spacer-2) var(--spacer-3);
     }
 
     // Hover indicator
@@ -120,6 +149,22 @@
             background: var(--color-tetriary);
         }
     }
+
+    // Checkbox switcher
+    &__menu__content .form-control-checkbox--switch {
+        flex-direction: inherit;
+        justify-content: inherit;
+        margin-left: -4px;
+    }
+
+    &__menu__content .form-control-checkbox__label {
+        color: var(--color-text);
+        margin-left: calc(var(--spacer) - 4px);
+
+        @include link-hover {
+            color: var(--color-heading);
+        }
+    }
 }
 
 
@@ -136,7 +181,7 @@
  * Dropdown item styles
  */
 
-@mixin dropdown-item-hover () {
+@mixin dropdown-item-hover() {
     &,
     .has-hover &:hover, // if hover events are supported
     &:hover:active {
@@ -145,7 +190,7 @@
 }
 
 .dropdown__item.is-focused {
-    @include dropdown-item-hover () {
+    @include dropdown-item-hover() {
         &,
         .icon {
             color: var(--color-background);
@@ -158,10 +203,12 @@
         & {
             color: var(--color-text);
         }
+
         .icon {
             color: var(--color-small);
         }
     }
+
     &.is-active {
         &,
         .icon {
@@ -171,7 +218,7 @@
 }
 
 .dropdown.is-open > .dropdown__item {
-    @include dropdown-item-hover () {
+    @include dropdown-item-hover() {
         &,
         .icon {
             color: var(--color-text);
@@ -201,7 +248,7 @@
 .dropdown__menu[data-popper-placement="top"] {
     // Arrow
     .dropdown__menu__content:before {
-        margin-left: calc(var(--spacer-2)*-1);
+        margin-left: calc(var(--spacer-2) * -1);
         left: 50%;
         right: auto;
     }
