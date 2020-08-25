@@ -55,11 +55,11 @@ class Tooltip {
 
     constructor ($container, opts) {
         const options = this.options = assign({}, this.constructor.Defaults, opts);
-        
+
         if (options.trigger === 'hover' && !detect.hasHoverSupport()) {
             options.trigger = 'click';
         }
-        
+
         this.ns = namespace();
         this.$container = $container;
         this.$focusTarget = $container.is('label[for]') ? $(`#${ $container.attr('for') }`) : $container;
@@ -69,7 +69,7 @@ class Tooltip {
         this.open = false;
         this.focused = false;
         this.hovered = false;
-        
+
         // Events
         $container
             .on('destroyed', this.handleDestroy.bind(this))
@@ -79,7 +79,7 @@ class Tooltip {
             this.$focusTarget
                 .on('focus', this.handleFocus.bind(this))
                 .on('blur', this.handleBlur.bind(this));
-                
+
             $container
                 .on('mouseenter', this.handleMouseEnter.bind(this))
                 .on('mouseleave', this.handleMouseLeave.bind(this));
@@ -91,7 +91,7 @@ class Tooltip {
 
     /**
      * Change tooltip content
-     * 
+     *
      * @param {string} text Tooltip text
      */
     setContent (text) {
@@ -110,8 +110,8 @@ class Tooltip {
 
     /**
      * Show tooltip
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      */
     show (event) {
         if (!this.isDisabled() && !this.open) {
@@ -134,7 +134,7 @@ class Tooltip {
                 const id = namespace();
                 this.$container.attr('aria-describedby', id);
                 this.$tooltip.attr('id', id);
-    
+
                 this.$tooltip.transitionstop(() => {
                     this.$tooltip.transition(this.options.animationIn, {
                         'before': this.onShow.bind(this, event),
@@ -158,8 +158,8 @@ class Tooltip {
 
     /**
      * Update popper position
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     onShow (event) {
@@ -168,8 +168,8 @@ class Tooltip {
 
     /**
      * After tooltip has been shown trigger 'shown' event
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     onShown (event) {
@@ -179,8 +179,8 @@ class Tooltip {
 
     /**
      * Hide tooltip
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      */
     hide (event) {
         if (!this.isDisabled() && this.open) {
@@ -213,8 +213,8 @@ class Tooltip {
     /**
      * After tooltip has been hidden trigger 'hidden' event and reset
      * indicator
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     onHidden (event) {
@@ -226,7 +226,7 @@ class Tooltip {
 
     /**
      * Toggle tooltip
-     * 
+     *
      * @param {JQuery.ClickEvent} [event] Event
      */
     toggle (event) {
@@ -239,7 +239,7 @@ class Tooltip {
 
     /**
      * Returns true if tooltip is disabled
-     * 
+     *
      * @returns {boolean} True if disabled, otherwise false
      * @protected
      */
@@ -250,7 +250,7 @@ class Tooltip {
 
     /**
      * Clean up tooltip
-     * 
+     *
      * @protected
      */
     handleDestroy () {
@@ -260,7 +260,7 @@ class Tooltip {
 
     /**
      * Returns tooltip element or creates a tooltip if it exists
-     * 
+     *
      * @protected
      */
     getTooltipElement () {
@@ -301,7 +301,7 @@ class Tooltip {
 
     /**
      * Create popper
-     * 
+     *
      * @protected
      */
     createPopper () {
@@ -339,14 +339,14 @@ class Tooltip {
 
     /**
      * Update popper position
-     * 
+     *
      * @protected
      */
     updatePopper () {
         this.popper.update();
     }
 
-    
+
     /**
      * Click mode
      * ------------------------------------------------------------------------
@@ -355,30 +355,30 @@ class Tooltip {
 
     /**
      * Handle key press on the toggle element
-     * 
+     *
      * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
     handleToggleKey (event) {
         if (!this.open && event.key === 'Enter') {
-            this.show(event);      
-            event.preventDefault();          
+            this.show(event);
+            event.preventDefault();
         } else if (this.open && event.key === 'Escape') {
-            this.hide(event);      
-            event.preventDefault();          
+            this.hide(event);
+            event.preventDefault();
         }
     }
 
     /**
      * Handle click on document
      * Close tooltip if necessary
-     * 
+     *
      * @param {JQuery.ClickEvent} event Event
      * @protected
      */
     handleDocumentClick (event) {
         const $target = $(event.target);
-        
+
         if (!$target.closest(this.$container).length && !$target.closest(this.$tooltip).length) {
             this.hide();
         }
@@ -392,7 +392,7 @@ class Tooltip {
 
      /**
       * On mouse enter reset leave timer or show the menu
-      * 
+      *
       * @protected
       */
     handleMouseEnter () {
@@ -407,7 +407,7 @@ class Tooltip {
 
     /**
       * On mouse leave wait before hiding menu
-      * 
+      *
       * @protected
       */
     handleMouseLeave () {
@@ -422,7 +422,10 @@ class Tooltip {
     }
 
     handleFocus () {
-        if (!this.hovered) {
+        // Tab key was used to focus input
+        const isTabFocused = this.$focusTarget.hasClass('focus-visible');
+
+        if (!this.hovered && isTabFocused) {
             this.focused = true;
             this.show();
         }
