@@ -2,6 +2,7 @@
 {% set text = text|default('Add Section') %}
 {% set sections = sections|default([]) %}
 
+{% set pages = pages|default(['Home', 'About']) %}
 
 {% if sections|length > 1 %}
     {# Add section dropdown #}
@@ -17,12 +18,20 @@
 
         <div class="dropdown__menu d-none" aria-labelledby="{{ uniqueId }}">
             <ul class="dropdown__menu__content">
-                {% for section in sections %}
+                {% for page in pages %}
+                    {% if loop.index0 %}
+                        <li class="dropdown__divider-min"></li>
+                    {% endif %}
                     <li>
-                        <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add" data-collection-type="{{ section.id }}" data-collection-html="{{ section.html|escape('html_attr') }}">
-                            {{ section.text }}
-                        </a>
+                        <span class="dropdown__title">{{ page }}</span>
                     </li>
+                    {% for section in sections %}
+                        <li>
+                            <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add" data-collection-type="{{ section.id }}" data-collection-html="{{ section.html|escape('html_attr') }}">
+                                {{ section.text }}
+                            </a>
+                        </li>
+                    {% endfor %}
                 {% endfor %}
             </ul>
         </div>
