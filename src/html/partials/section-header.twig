@@ -127,23 +127,42 @@
                                         <li class="dropdown__divider-min"></li>
                                     {% endif %}
 
-                                    {% if withDeleteOption %}
+                                    {% if withAccordion %}
                                         <li>
-                                            <a class="dropdown__item js-dropdown-close js-collection-remove" role="button" tabindex="0" href="#{{ id }}">
-                                                <span class="dropdown__item-content">
-                                                    {{ icon('dropdown-delete', {width: 16, height: 16}) }}
-                                                    <span>Delete</span>
+                                            <a class="dropdown__item js-dropdown-close js-accordion-collapse-siblings" role="button" tabindex="0">
+                                                <span class="dropdown__item__content">
+                                                    {{ icon('dropdown-collapse', {width: 16, height: 16}) }}
+                                                    <span>Collapse other sections</span>
                                                 </span>
                                             </a>
                                         </li>
                                     {% endif %}
 
-                                    {% if withAccordion %}
+                                    <li>
+                                        <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="right-start" data-dropdown-trigger="hover">
+                                            <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="{{ id }}-add-section">
+                                                <span class="dropdown__item__content">
+                                                    {{ icon('dropdown-add', {width: 16, height: 16}) }}
+                                                    <span>Add Section Below</span>
+                                                </span>
+                                                {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+                                            </a>
+                                            <div class="dropdown__menu d-none" aria-labelledby="{{ id }}-add-section">
+                                                <ul class="dropdown__menu__content">
+                                                    <li><a href="#" class="dropdown__item">One</a></li>
+                                                    <li><a href="#" class="dropdown__item">Two</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    {% if withDeleteOption %}
+                                        <li class="dropdown__divider-min"></li>
                                         <li>
-                                            <a class="dropdown__item js-dropdown-close js-accordion-collapse-siblings" role="button" tabindex="0">
-                                                <span class="dropdown__item-content">
-                                                    {{ icon('dropdown-collapse', {width: 16, height: 16}) }}
-                                                    <span>Collapse other sections</span>
+                                            <a class="dropdown__item js-dropdown-close js-collection-remove" role="button" tabindex="0" href="#{{ id }}">
+                                                <span class="dropdown__item__content">
+                                                    {{ icon('dropdown-delete', {width: 16, height: 16}) }}
+                                                    <span>Delete</span>
                                                 </span>
                                             </a>
                                         </li>

@@ -63,26 +63,19 @@
                 color: var(--color-small);
             }
         }
-    }
 
-    &__simple-item {
-        display: flex;
-        align-items: center;
-        height: var(--spacer-5);
-        padding: 0 var(--spacer-3);
-    }
+        &__content {
+            display: flex;
+            align-items: center;
 
-    &__item-content {
-        display: flex;
-        align-items: center;
-
-        .icon {
-            color: var(--color-text);
-        }
-
-        @include link-hover() {
             .icon {
                 color: var(--color-text);
+            }
+
+            @include link-hover() {
+                .icon {
+                    color: var(--color-text);
+                }
             }
         }
     }
