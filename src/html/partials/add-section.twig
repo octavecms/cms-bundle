@@ -32,7 +32,11 @@
                         </li>
                         {% for section in sections %}
                             <li>
-                                <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add" data-collection-type="{{ section.id }}" data-collection-html="{{ section.html|escape('html_attr') }}">
+                                <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add"
+                                   data-collection-type="{{ section.id }}"
+                                   data-collection-html="{{ section.html|escape('html_attr') }}"
+                                   data-preview-image="{{ section.preview }}"
+                                >
                                     {{ section.text }}
                                 </a>
                             </li>
@@ -40,9 +44,7 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="dropdown__preview dropdown__preview--scrollable d-none">
-                <div class="dropdown__preview__container scrollbar"></div>
-            </div>
+            <div class="dropdown__preview d-none"></div>
         </div>
     </div>
 {% elseif sections|length == 1 %}
