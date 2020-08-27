@@ -8,7 +8,11 @@
     {# Add section dropdown #}
     {% set uniqueId = 'dropdown-' ~ random() %}
 
-    <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="top-start" data-dropdown-trigger="click">
+    <div class="dropdown"
+         data-plugin="dropdown dropdownPreview"
+         data-dropdown-placement="top-start"
+         data-dropdown-trigger="click"
+    >
         <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="{{ uniqueId }}">
             <span class="btn__content">
                 <span>{{ text }}</span>
@@ -35,6 +39,9 @@
                         {% endfor %}
                     {% endfor %}
                 </ul>
+            </div>
+            <div class="dropdown__preview dropdown__preview--scrollable d-none">
+                <div class="dropdown__preview__container scrollbar"></div>
             </div>
         </div>
     </div>
