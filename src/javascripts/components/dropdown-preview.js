@@ -14,7 +14,8 @@ class DropdownPreview {
             'itemSelector': '.dropdown__item',
 
             // Item attribute with a preview html
-            'itemPreviewHtmlAttr': 'data-preview-image'
+            'itemPreviewImgAttr': 'data-preview-image',
+            'itemPreviewAltAttr': 'data-preview-image',
         };
     }
 
@@ -28,23 +29,28 @@ class DropdownPreview {
 
         this.$container
             .on('destroyed', this.destroy.bind(this))
-            .on(`mouseenter.${this.namespace}`, this.options.itemSelector, this.handleShowPreview.bind(this));
+            .on(`focus.${this.namespace}`, this.options.itemSelector, this.handleShowPreview.bind(this));
     }
 
     handleShowPreview(event) {
         const $item = $(event.currentTarget);
-        const imageSrc = $item.attr(this.options.itemPreviewHtmlAttr);
+        const imageSrc = $item.attr(this.options.itemPreviewImgAttr);
+        const imageAlt = $item.attr(this.options.itemPreviewAltAttr);
         if (imageSrc) {
-            this.showPreview(imageSrc);
+            this.showPreview(imageSrc, imageAlt);
         }
         else {
             this.hidePreview();
         }
     }
 
-    showPreview(imageSrc) {
+    showPreview(imageSrc, imageAlt) {
         this.$preview.removeClass('d-none');
-        this.$previewContainer.html(`<div class="dropdown__preview__img"><img src="${imageSrc}" alt=""></div>`);
+        this.$previewContainer.html(`
+            <div class="dropdown__preview__img">
+                <img src="${imageSrc}" alt="${imageAlt || ''}">
+            </div>
+        `);
     }
 
     hidePreview() {

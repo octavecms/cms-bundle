@@ -46,8 +46,8 @@
             margin: $dropdown-padding-y 0;
 
             .dropdown__menu__content {
-                padding: 0 calc(#{$dropdown-padding-x} - #{$scrollbar-with}) 0 $dropdown-padding-x;
-                min-width: $dropdown-menu-min-width - $scrollbar-with;
+                padding: 0 calc(#{$dropdown-padding-x} - #{$scrollbar-width}) 0 $dropdown-padding-x;
+                min-width: $dropdown-menu-min-width - $scrollbar-width;
             }
         }
     }

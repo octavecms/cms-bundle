@@ -23,24 +23,42 @@
         <div class="dropdown__menu d-none" aria-labelledby="{{ uniqueId }}">
             <div class="dropdown__menu__scrollable scrollbar">
                 <ul class="dropdown__menu__content">
-                    {% for page in pages %}
-                        {% if loop.index0 %}
-                            <li class="dropdown__divider-min"></li>
-                        {% endif %}
-                        <li>
-                            <span class="dropdown__title">{{ page }}</span>
-                        </li>
-                        {% for section in sections %}
+                    {% for section in sections %}
+                        {% if section.type == 'group' %}
+                            {% if loop.index0 %}
+                                <li class="dropdown__divider-min"></li>
+                            {% endif %}
+                            <li>
+                                <span class="dropdown__title">{{ section.text }}</span>
+                            </li>
+                            {% for section in section.children %}
+                                <li>
+                                    <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add"
+                                       data-collection-type="{{ section.id }}"
+                                       data-collection-html="{{ section.html|escape('html_attr') }}"
+                                        {% if section.preview|default(false) %}
+                                            data-preview-image="{{ section.preview }}"
+                                            data-preview-alt="{{ section.text }}"
+                                        {% endif %}
+                                    >
+                                        {{ section.text }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
                             <li>
                                 <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add"
                                    data-collection-type="{{ section.id }}"
                                    data-collection-html="{{ section.html|escape('html_attr') }}"
-                                   data-preview-image="{{ section.preview }}"
+                                    {% if section.preview|default(false) %}
+                                        data-preview-image="{{ section.preview }}"
+                                        data-preview-alt="{{ section.text }}"
+                                    {% endif %}
                                 >
                                     {{ section.text }}
                                 </a>
                             </li>
-                        {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>

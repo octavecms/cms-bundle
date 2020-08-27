@@ -1,16 +1,16 @@
 .scrollbar::-webkit-scrollbar {
-    width: $scrollbar-with;
+    width: $scrollbar-width;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
     background: var(--color-tetriary);
-    border-radius: 7px;
-    border: 5px solid var(--color-base);
+    border-radius: $scrollbar-width / 2;
+    border: $scrollbar-padding solid var(--color-base);
 }
 
 .scrollbar:hover::-webkit-scrollbar-thumb {
     background: var(--color-text);
-    transition: background-color ease 0.3s;
+    @extend %transition;
 }
 
 .scrollbar::-webkit-scrollbar-track {
