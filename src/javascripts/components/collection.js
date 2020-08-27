@@ -192,7 +192,7 @@ class Collection {
      * @param {JQuery.ClickEvent} event Event
      */
     handleRemoveClick (event) {
-        const $link = $(event.target);
+        const $link = $(event.target).closest(this.options.removeButtonSelector);
         const href = $link.attr('href');
         const $target = href && href[0] === '#' ? $($link.attr('href')) : $link;
         const $item = $target.closest(this.options.itemSelector);
