@@ -3,7 +3,7 @@
     @extend %transition-fast;
     transition-property: color;
 
-    .dropdown__menu__content {
+    &.dropdown__menu {
         @extend %transition-fast;
         transition-property: transform, opacity;
     }
@@ -12,25 +12,25 @@
 .animation--dropdown-in--inactive,
 .animation--dropdown-out--active {
     &[data-popper-placement*="top"] {
-        .dropdown__menu__content {
+        &.dropdown__menu {
             transform: translateY(20px);
             opacity: 0;
         }
     }
     &[data-popper-placement*="bottom"] {
-        .dropdown__menu__content {
+        &.dropdown__menu {
             transform: translateY(-20px);
             opacity: 0;
         }
     }
     &[data-popper-placement*="right"] {
-        .dropdown__menu__content {
+        &.dropdown__menu {
             transform: translateX(-20px);
             opacity: 0;
         }
     }
     &[data-popper-placement*="left"] {
-        .dropdown__menu__content {
+        &.dropdown__menu {
             transform: translateX(20px);
             opacity: 0;
         }

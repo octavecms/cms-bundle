@@ -41,6 +41,7 @@ class Dropdown {
             // CSS selectors
             'menuToggleSelector': '.dropdown__toggle',
             'menuSelector': '.dropdown__menu',
+            'menuScrollableSelector': '.dropdown__menu__scrollable',
             'menuContentSelector': '.dropdown__menu__content',
             'arrowSelector': '.dropdown__menu__arrow',
             'itemSelector': '.dropdown__item',
@@ -82,7 +83,7 @@ class Dropdown {
 
     /**
      * Constructor
-     * 
+     *
      * @param {JQuery} $container Container element
      * @param {object} opts Plugin options
      */
@@ -94,9 +95,10 @@ class Dropdown {
         }
 
         this.$container = $container;
-        this.$toggle = options.toggle || $container.children(options.menuToggleSelector);
+        this.$toggle = options.toggle || $container.find(options.menuToggleSelector);
         this.$menu = options.menu || $container.children(options.menuSelector);
-        this.$menuContent = this.$menu.children(options.menuContentSelector);
+        this.$menuScrollable = this.$menu.children(options.menuScrollableSelector);
+        this.$menuContent = this.$menuScrollable.length ? this.$menuScrollable.children(options.menuContentSelector) : this.$menu.children(options.menuContentSelector);
         this.$arrow = this.$menuContent.children(options.arrowSelector);
         this.$overlay = null;
         this.$indicator = $(`<div class="${ options.classNameIndicator }"></div>`).prependTo(this.$menuContent);
@@ -108,12 +110,12 @@ class Dropdown {
 
         this.ns = namespace();
         this.open = $container.attr('aria-expanded') == 'true';
-        
+
         this.position =
             options.placement.indexOf('bottom') !== -1 ? 'bottom' :
             options.placement.indexOf('top') !== -1 ? 'top' :
             options.placement.indexOf('left') !== -1 ? 'left' : 'right';
-        
+
         // Events
         const $toggle = this.$toggle;
 
@@ -126,7 +128,7 @@ class Dropdown {
             $toggle
                 .on('click', this.show.bind(this))
                 .on('mouseenter', this.handleMouseEnter.bind(this));
-            
+
             $container
                 .on('mouseleave', this.handleMouseLeave.bind(this));
         } else {
@@ -140,7 +142,7 @@ class Dropdown {
 
     /**
      * Toggle dropdown
-     * 
+     *
      * @param {JQuery.ClickEvent} [event] Event
      */
     toggle (event) {
@@ -153,8 +155,8 @@ class Dropdown {
 
     /**
      * Show dropdown
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      */
     show (event) {
         if (!this.isDisabled() && !this.open) {
@@ -180,7 +182,7 @@ class Dropdown {
                         this.$overlay.transition('fade-in');
                     });
                 }
-                
+
                 // Show dropdown menu
                 this.$menu.transitionstop(() => {
                     this.$menu.transition(this.options.animationIn, {
@@ -210,8 +212,8 @@ class Dropdown {
 
     /**
      * Focus item when dropdown is shown
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     onShow (event) {
@@ -232,8 +234,8 @@ class Dropdown {
 
     /**
      * After dropdown has been shown trigger 'shown' event
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     onShown (event) {
@@ -243,8 +245,8 @@ class Dropdown {
 
     /**
      * Hide dropdown
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     hide (event) {
@@ -293,8 +295,8 @@ class Dropdown {
     /**
      * After dropdown has been hidden trigger 'hidden' event and reset
      * indicator
-     * 
-     * @param {JQuery.ClickEvent} [event] Optional event 
+     *
+     * @param {JQuery.ClickEvent} [event] Optional event
      * @protected
      */
     onHidden (event) {
@@ -317,7 +319,7 @@ class Dropdown {
 
     /**
      * Returns list of all items
-     * 
+     *
      * @returns {JQuery} List of all items
      * @protected
      */
@@ -334,7 +336,7 @@ class Dropdown {
 
     /**
      * Returns active item
-     * 
+     *
      * @returns {JQuery} Active item
      * @protected
      */
@@ -344,7 +346,7 @@ class Dropdown {
 
     /**
      * Returns next item
-     * 
+     *
      * @param {JQuery} $item Item for which to return next item
      * @returns {JQuery} Next item
      * @protected
@@ -363,7 +365,7 @@ class Dropdown {
 
     /**
      * Returns previous item
-     * 
+     *
      * @param {JQuery} $item Item for which to return previous item
      * @returns {JQuery} Previous item
      * @protected
@@ -382,16 +384,16 @@ class Dropdown {
 
     /**
      * Focus item element
-     * 
+     *
      * @param {JQuery} $item Item element
      */
     focusItem ($item) {
         const { classNameFocused } = this.options;
-        
+
         if (this.$focused && this.$focused.length && !this.$focused.is($item)) {
             this.blurItem(this.$focused);
         }
-        
+
         if ($item && $item.length) {
             if (!this.$focused || !this.$focused.is($item)) {
                 this.$focused = $item;
@@ -407,21 +409,21 @@ class Dropdown {
 
     /**
      * Remove focus from item element
-     * 
+     *
      * @param {JQuery} $item Item element
      */
     blurItem ($item) {
         const { classNameFocused, menuToggleSelector } = this.options;
-        
+
         $item.removeClass(classNameFocused);
-        
+
         if ($item.is(menuToggleSelector)) {
             const $dropdown = $item.parent();
             if ($.app.hasPlugin($dropdown, 'dropdown')) {
                 $dropdown.dropdown('hide');
             }
         }
-        
+
         if (this.$focused && this.$focused.is($item)) {
             this.$focused = null;
         }
@@ -429,7 +431,7 @@ class Dropdown {
 
     /**
      * Focus active item in the list
-     * 
+     *
      * @returns {boolean} True if active item was focused, otherwise false
      */
     focusActiveItem () {
@@ -509,7 +511,7 @@ class Dropdown {
 
     /**
      * Returns true if dropdown is disabled
-     * 
+     *
      * @returns {boolean} True if disabled, otherwise false
      * @protected
      */
@@ -520,7 +522,7 @@ class Dropdown {
 
     /**
      * Handle mouseover the item
-     * 
+     *
      * @param {object} event Event
      * @protected
      */
@@ -535,7 +537,7 @@ class Dropdown {
 
     /**
      * Clean up dropdown
-     * 
+     *
      * @protected
      */
     handleDestroy () {
@@ -551,7 +553,7 @@ class Dropdown {
 
     /**
      * Handle key press on one of the items
-     * 
+     *
      * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
@@ -561,7 +563,7 @@ class Dropdown {
         if (!event.isDefaultPrevented()) {
             if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'ArrowUp') {
                 const $items = this.getItems();
-    
+
                 if ($items.index($item) !== -1) {
                     if (event.key === 'ArrowDown' || (event.key === 'Tab' && !event.shiftKey)) {
                         // Overwrite tab key to prevent going outside the menu
@@ -569,14 +571,14 @@ class Dropdown {
                     } else {
                         this.focusPreviousItem();
                     }
-    
+
                     event.preventDefault();
-                }               
+                }
             } else if (event.key === 'Escape') {
                 this.hide();
                 event.preventDefault();
             } else if ((this.position === 'left' && event.key === 'ArrowRight') || (this.position === 'right' && event.key === 'ArrowLeft')) {
-                this.hide(); 
+                this.hide();
                 event.preventDefault();
             }
         }
@@ -584,7 +586,7 @@ class Dropdown {
 
     /**
      * Handle key press on the menu
-     * 
+     *
      * @param {JQuery.KeyDownEvent} event Event
      */
     handleMenuKey (event) {
@@ -596,7 +598,7 @@ class Dropdown {
 
     /**
      * Handle key press on the toggle element
-     * 
+     *
      * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
@@ -626,7 +628,7 @@ class Dropdown {
 
     /**
      * Handle key press on the document element
-     * 
+     *
      * @param {JQuery.KeyDownEvent} event Event
      * @protected
      */
@@ -649,7 +651,7 @@ class Dropdown {
     /**
      * Handle click on document
      * Close dropdown if necessary
-     * 
+     *
      * @param {JQuery.ClickEvent} event Event
      * @protected
      */
@@ -658,7 +660,7 @@ class Dropdown {
         const $container = this.$container;
         const $menu = this.$menu;
         const autoClose = this.options.autoClose;
-        
+
         if (autoClose && !$target.closest($container).length && !$target.closest($menu).length) {
             this.hide();
         }
@@ -672,7 +674,7 @@ class Dropdown {
 
     /**
      * Position indicator below the item
-     * 
+     *
      * @param {JQuery} $item Item element
      * @protected
      */
@@ -680,7 +682,7 @@ class Dropdown {
         if ($item && $item.length) {
             const menuBox = this.$menuContent.get(0).getBoundingClientRect();
             const itemBox = $item.get(0).getBoundingClientRect();
-    
+
             this.$indicator
                 .toggleClass(this.options.classNameIndicatorDropdown, $item.parent().hasClass('dropdown'))
                 .css({
@@ -689,7 +691,7 @@ class Dropdown {
                     'transform': `translate(${ itemBox.left - menuBox.left }px, ${ itemBox.top - menuBox.top }px)`,
                     'opacity': 1
                 });
-            
+
             if (!this.indicatorPositioned) {
                 this.$indicator.css('transition', 'none');
 
@@ -716,7 +718,7 @@ class Dropdown {
 
     /**
      * Create popper
-     * 
+     *
      * @protected
      */
     createPopper () {
@@ -766,7 +768,7 @@ class Dropdown {
 
     /**
      * Destroy popper
-     * 
+     *
      * @protected
      */
     destroyPopper () {
@@ -778,7 +780,7 @@ class Dropdown {
 
     /**
      * Create overlay element
-     * 
+     *
      * @protected
      */
     createOverlay () {
@@ -790,7 +792,7 @@ class Dropdown {
 
     /**
      * Update popper position
-     * 
+     *
      * @protected
      */
     updatePopper () {
@@ -826,7 +828,7 @@ class Dropdown {
 
      /**
       * On mouse enter reset leave timer or show the menu
-      * 
+      *
       * @protected
       */
     handleMouseEnter () {
@@ -840,7 +842,7 @@ class Dropdown {
 
     /**
      * On mouse leave wait before hiding menu
-     * 
+     *
      * @protected
      */
     handleMouseLeave () {

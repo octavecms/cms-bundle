@@ -23,16 +23,30 @@
         top: 100%;
         left: 0;
         z-index: $z-index-dropdown;
+        background: var(--color-background);
+        border-radius: var(--border-radius);
+        box-shadow: $dropdown-shadow;
+
+        .scrollbar::-webkit-scrollbar-track {
+            border-radius: var(--border-radius);
+        }
 
         &__content {
             position: relative;
-            background: var(--color-background);
-            border-radius: var(--border-radius);
             padding: $dropdown-padding-y $dropdown-padding-x;
             // margin-top: var(--spacer-4);
             // margin-left: calc(var(--spacer-4)*-1);
             min-width: $dropdown-menu-min-width;
-            box-shadow: $dropdown-shadow;
+        }
+
+        &__scrollable {
+            max-height: calc(#{$dropdown-menu-max-height} - #{$dropdown-padding-y} * 2);
+            overflow-y: auto;
+            margin: $dropdown-padding-y 0;
+
+            .dropdown__menu__content {
+                padding: 0 $dropdown-padding-x;
+            }
         }
     }
 
@@ -101,7 +115,7 @@
     }
 
     // Arrow
-    &__menu__content:before {
+    &__menu:before {
         content: "";
         position: absolute;
         bottom: 100%;
@@ -115,7 +129,7 @@
 
     // Extended hover area to prevent menu from collapsing when
     // moving mouse from toggle to menu
-    &__menu__content:after {
+    &__menu:after {
         content: "";
         position: absolute;
         left: 0;
@@ -251,7 +265,7 @@
 .dropdown__menu[data-popper-placement="bottom"],
 .dropdown__menu[data-popper-placement="top"] {
     // Arrow
-    .dropdown__menu__content:before {
+    &:before {
         margin-left: calc(var(--spacer-2) * -1);
         left: 50%;
         right: auto;
@@ -261,7 +275,7 @@
 .dropdown__menu[data-popper-placement="bottom-end"],
 .dropdown__menu[data-popper-placement="top-end"] {
     // Arrow
-    .dropdown__menu__content:before {
+    &:before {
         left: auto;
         right: var(--spacer-5);
     }
@@ -275,7 +289,7 @@
 .dropdown__menu[data-popper-placement="top-start"],
 .dropdown__menu[data-popper-placement="top-end"] {
     // Arrow
-    .dropdown__menu__content:before {
+    &:before {
         content: "";
         bottom: auto;
         top: 100%;
@@ -285,7 +299,7 @@
 
     // Extended hover area to prevent menu from collapsing when
     // moving mouse from toggle to menu
-    .dropdown__menu__content:after {
+    &:after {
         bottom: auto;
         top: 100%;
     }
@@ -305,7 +319,7 @@
 .dropdown__menu[data-popper-placement="right-start"],
 .dropdown__menu[data-popper-placement="right-end"] {
     // Arrow
-    .dropdown__menu__content:before {
+    &:before {
         left: auto;
         bottom: auto;
         right: 100%;
@@ -315,7 +329,7 @@
     }
 
     // Extended hover area
-    .dropdown__menu__content:after {
+    &:after {
         left: auto;
         right: 100%;
         bottom: auto;
@@ -326,7 +340,7 @@
 }
 
 .dropdown__menu[data-popper-placement="right-end"] {
-    .dropdown__menu__content:before {
+    &:before {
         top: auto;
         bottom: var(--spacer-5);
     }
