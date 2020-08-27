@@ -15,7 +15,7 @@ class DropdownPreview {
 
             // Item attribute with a preview html
             'itemPreviewImgAttr': 'data-preview-image',
-            'itemPreviewAltAttr': 'data-preview-image',
+            'itemPreviewAltAttr': 'data-preview-alt',
         };
     }
 
