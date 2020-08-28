@@ -1,7 +1,6 @@
 import $ from 'util/jquery';
 import createPlugin from 'jquery-plugin-generator';
 import assign from 'lodash/assign';
-import namespace from 'util/namespace';
 
 class DropdownPreview {
 
@@ -9,27 +8,25 @@ class DropdownPreview {
         return {
 
             // Selectors
-            'previewSelector': '.dropdown__preview',
-            'previewContainerSelector': '.dropdown__preview',
+            'previewSelector': '.js-dropdown-preview',
             'itemSelector': '.dropdown__item',
 
             // Item attribute with a preview html
             'itemPreviewImgAttr': 'data-preview-image',
-            'itemPreviewAltAttr': 'data-preview-alt',
+            'itemPreviewAltAttr': 'data-preview-alt'
         };
     }
 
     constructor($container, opts) {
         this.options = assign({}, this.constructor.Defaults, opts);
-        this.namespace = namespace();
 
         this.$container = $container;
         this.$preview = this.$container.find(this.options.previewSelector);
-        this.$previewContainer = this.$container.find(this.options.previewContainerSelector);
+        this.$image = this.$preview.find('img');
 
         this.$container
-            .on('destroyed', this.destroy.bind(this))
-            .on(`focus.${this.namespace}`, this.options.itemSelector, this.handleShowPreview.bind(this));
+            .on('focus', this.options.itemSelector, this.handleShowPreview.bind(this))
+            .on('hidden.dropdown', this.hidePreview.bind(this));
     }
 
     handleShowPreview(event) {
@@ -46,21 +43,13 @@ class DropdownPreview {
 
     showPreview(imageSrc, imageAlt) {
         this.$preview.removeClass('d-none');
-        this.$previewContainer.html(`
-            <div class="dropdown__preview__img">
-                <img src="${imageSrc}" alt="${imageAlt || ''}">
-            </div>
-        `);
+        this.$image
+            .attr('src', imageSrc)
+            .attr('alt', imageAlt || '');
     }
 
     hidePreview() {
         this.$preview.addClass('d-none');
-        this.$previewContainer.html('');
-    }
-
-    destroy() {
-        this.hidePreview();
-        this.$container.off(`.${this.namespace}`);
     }
 }
 
