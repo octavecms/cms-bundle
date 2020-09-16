@@ -9,6 +9,10 @@ import { animateElement } from 'util/animation/element';
 import setFormValues from 'util/form/set-form-values';
 
 
+// Global variable for collection data
+window.COLLECTION_DATA = window.COLLECTION_DATA || [];
+
+
 /**
  * Collection
  * Allows to add / remove items from the collection list
@@ -27,6 +31,8 @@ class Collection {
 
             'attributeType': 'data-collection-type',
             'attributeHtml': 'data-collection-html',
+            'attributeReference': 'data-collection-reference',
+            'attributeLanguage': 'data-collection-language',
 
             'animationDuration': 200
         };
@@ -76,12 +82,19 @@ class Collection {
      * @param {string} type Item type
      * @param {object|null} values Item values
      * @param {boolean} [silent] Don't trigger any events
+     * @param {JQuery|null} [$reference] Element after which to insert section, default is at the end
      */
-    add (type, values = null, silent = false) {
+    add (type, values = null, silent = false, $reference = null) {
         const info = this.getTypeInfo(type);
         const index = this.counter++;
-        const formatted = info.html.split('__name__').join(index);
-        const $item = $(formatted).appendTo(this.$list);
+        const formatted = info.html.split('__name__').join(index).split('__language__').join(info.language);
+        const $item = $(formatted);
+
+        if ($reference && $reference.length) {
+            $item.insertAfter($reference);
+        } else {
+            $item.appendTo(this.$list);
+        }
 
         // Set values
         if (values) {
@@ -124,9 +137,13 @@ class Collection {
         }
 
         if ($button.length) {
+            // Read collection data from global variable
+            const globalData = window.COLLECTION_DATA ? window.COLLECTION_DATA[type] : null;
+
             return {
                 'type': type,
-                'html': $button.attr(options.attributeHtml),
+                'html': $button.attr(options.attributeHtml) || (globalData ? globalData.html : ''),
+                'language': $button.attr(this.options.attributeLanguage),
             };
         } else {
             return null;
@@ -181,8 +198,10 @@ class Collection {
     handleAddClick (event) {
         const $button = $(event.target).closest(this.options.addButtonSelector);
         const type = $button.attr(this.options.attributeType);
+        const reference = $button.attr(this.options.attributeReference);
+        const $reference = reference ? $(reference).closest(this.options.itemSelector) : null;
 
-        this.add(type);
+        this.add(type, null, false, $reference);
         event.preventDefault();
     }
 

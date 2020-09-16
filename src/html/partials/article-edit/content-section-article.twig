@@ -1,6 +1,70 @@
 {% set namePrefix = namePrefix|default('') %}
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 
+{# Section list which can be inserted #}
+{% set sections = [
+    {'type': 'text', 'text': 'Text'},
+    {'type': 'quote', 'text': 'Quote', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?Quote'},
+    {'type': 'group', 'text': 'Homepage', 'children': [
+        {'type': 'image', 'text': 'Image', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?Image'},
+        {'type': 'image-gallery', 'text': 'Image Gallery', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?ImageGallery'},
+        {'type': 'table', 'text': 'Table', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?Table'}
+    ]},
+    {'type': 'group', 'text': 'About', 'children': [
+        {'type': 'image', 'text': 'Image', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?Image'},
+        {'type': 'image-gallery', 'text': 'Image Gallery', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?ImageGallery'},
+        {'type': 'table', 'text': 'Table', 'preview': '/assets/images/temp/previews/social-responsibility.jpg?Table'}
+    ]},
+] %}
+
+{# Generate HTML for client-side templating, JS will replace __name__ #}
+{% set sectionTextHTML %}
+    {% include 'partials/article-edit/section-article/text.twig' with {
+        'namePrefix': namePrefix ~ '[translations][__language__][content][__name__]',
+        'sectionId': 'section-' ~ random() ~ '-__name__',
+        'sections': sections
+    } %}
+{% endset %}
+{% set sectionQuoteHTML %}
+    {% include 'partials/article-edit/section-article/quote.twig' with {
+        'namePrefix': namePrefix ~ '[translations][__language__][content][__name__]',
+        'sectionId': 'section-' ~ random() ~ '-__name__',
+        'sections': sections
+    } %}
+{% endset %}
+{% set sectionImageHTML %}
+    {% include 'partials/article-edit/section-article/image.twig' with {
+        'namePrefix': namePrefix ~ '[translations][__language__][content][__name__]',
+        'sectionId': 'section-' ~ random() ~ '-__name__',
+        'sections': sections
+    } %}
+{% endset %}
+{% set sectionGalleryHTML %}
+    {% include 'partials/article-edit/section-article/gallery.twig' with {
+        'namePrefix': namePrefix ~ '[translations][__language__][content][__name__]',
+        'sectionId': 'section-' ~ random() ~ '-__name__',
+        'sections': sections
+    } %}
+{% endset %}
+{% set sectionTableHTML %}
+    {% include 'partials/article-edit/section-article/table.twig' with {
+        'namePrefix': namePrefix ~ '[translations][__language__][content][__name__]',
+        'sectionId': 'section-' ~ random() ~ '-__name__',
+        'sections': sections
+    } %}
+{% endset %}
+
+{# Global variable with collection HTML to avoid duplication #}
+<script>
+    window.COLLECTION_DATA = window.COLLECTION_DATA || {};
+    COLLECTION_DATA["text"] =          {"html": {{    sectionTextHTML|json_encode|replace({'<': '\u003C'}) }} };
+    COLLECTION_DATA["quote"] =         {"html": {{   sectionQuoteHTML|json_encode|replace({'<': '\u003C'}) }} };
+    COLLECTION_DATA["image"] =         {"html": {{   sectionImageHTML|json_encode|replace({'<': '\u003C'}) }} };
+    COLLECTION_DATA["image-gallery"] = {"html": {{ sectionGalleryHTML|json_encode|replace({'<': '\u003C'}) }} };
+    COLLECTION_DATA["table"] =         {"html": {{   sectionTableHTML|json_encode|replace({'<': '\u003C'}) }} };
+</script>
+
+
 <div class="card accordion accordion--expanded"
     data-plugin="accordion"
     data-accordion-active-heading-parent-class-name="ui-dark"
@@ -42,60 +106,17 @@
                             {% include 'partials/article-edit/section-article/' ~ section.type ~ '.twig' with {
                                 'namePrefix': sectionNamePrefix ~ '[' ~ order ~']',
                                 'sectionId': null,
-                                'values': {'order': order}|merge(section)
+                                'values': {'order': order}|merge(section),
+                                'sections': sections,
+                                'language': language
                             } %}
                         {% endfor %}
 
                     </div>
                     <footer class="card__footer card__footer--short">
-
-                        {# Generate HTML for client-side templating, JS will replace __name__ #}
-                        {% set sectionTextHTML %}
-                            {% include 'partials/article-edit/section-article/text.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[__name__]',
-                                'sectionId': 'section-' ~ random() ~ '-__name__'
-                            } %}
-                        {% endset %}
-                        {% set sectionQuoteHTML %}
-                            {% include 'partials/article-edit/section-article/quote.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[__name__]',
-                                'sectionId': 'section-' ~ random() ~ '-__name__'
-                            } %}
-                        {% endset %}
-                        {% set sectionImageHTML %}
-                            {% include 'partials/article-edit/section-article/image.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[__name__]',
-                                'sectionId': 'section-' ~ random() ~ '-__name__'
-                            } %}
-                        {% endset %}
-                        {% set sectionGalleryHTML %}
-                            {% include 'partials/article-edit/section-article/gallery.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[__name__]',
-                                'sectionId': 'section-' ~ random() ~ '-__name__'
-                            } %}
-                        {% endset %}
-                        {% set sectionTableHTML %}
-                            {% include 'partials/article-edit/section-article/table.twig' with {
-                                'namePrefix': sectionNamePrefix ~ '[__name__]',
-                                'sectionId': 'section-' ~ random() ~ '-__name__'
-                            } %}
-                        {% endset %}
-
                         {% include 'partials/add-section.twig' with {
-                            'sections': [
-                                {'type': 'text', 'text': 'Text', 'html': sectionTextHTML},
-                                {'type': 'quote', 'text': 'Quote', 'html': sectionQuoteHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'},
-                                {'type': 'group', 'text': 'Homepage', 'children': [
-                                    {'type': 'image', 'text': 'Image', 'html': sectionImageHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'},
-                                    {'type': 'image-gallery', 'text': 'Image Gallery', 'html': sectionGalleryHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'},
-                                    {'type': 'table', 'text': 'Table', 'html': sectionTableHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'}
-                                ]},
-                                {'type': 'group', 'text': 'About', 'children': [
-                                    {'type': 'image', 'text': 'Image', 'html': sectionImageHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'},
-                                    {'type': 'image-gallery', 'text': 'Image Gallery', 'html': sectionGalleryHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'},
-                                    {'type': 'table', 'text': 'Table', 'html': sectionTableHTML, 'preview': '/assets/images/temp/previews/social-responsibility.jpg'}
-                                ]},
-                            ]
+                            'sections': sections,
+                            'language': language
                         } %}
                     </footer>
 

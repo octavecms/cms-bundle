@@ -237,6 +237,15 @@
 
 
 /**
+ * Dropdown menu without arrow
+ */
+
+.dropdown--no-arrow .dropdown__menu:before {
+    display: none;
+}
+
+
+/**
  * Dropdown item styles
  */
 
@@ -393,7 +402,39 @@
  */
 
 .dropdown--left {
+    .dropdown__toggle .icon {
+        transform: rotate(-90deg);
+    }
+}
 
+.dropdown__menu[data-popper-placement="left-start"],
+.dropdown__menu[data-popper-placement="left-end"] {
+    // Arrow
+    &:before {
+        right: auto;
+        bottom: auto;
+        left: 100%;
+        top: var(--spacer-5);
+        border-width: var(--spacer-2) 0 var(--spacer-2) var(--spacer-2);
+        border-color: transparent transparent transparent var(--color-background);
+    }
+
+    // Extended hover area
+    &:after {
+        right: auto;
+        left: 100%;
+        bottom: auto;
+        top: 0;
+        height: 100%;
+        width: var(--spacer-4);
+    }
+}
+
+.dropdown__menu[data-popper-placement="left-end"] {
+    &:before {
+        top: auto;
+        bottom: var(--spacer-5);
+    }
 }
 
 

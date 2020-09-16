@@ -16,13 +16,17 @@
         'title': 'Text',
         'id': sectionId,
         'size': 'small',
-        
+
         'draggable': true,
 
         'withDeleteOption': true,
 
         'withActiveToggle': true,
         'active': values.active|default(false),
+
+        'withInsertSection': sections|length,
+        'sections': sections,
+        'language': language,
 
         'withAccordion': true,
         'expanded': true,
@@ -69,7 +73,7 @@
                     }
                 },
             ]) }}
-        
+
         </div>
     </div>
 </div>

@@ -1,27 +1,25 @@
 {% from 'macros/icon.twig' import icon %}
-{% set text = text|default('Add Section') %}
-{% set sections = sections|default([]) %}
+
+{% set id = id|default('') %}
 {% set language = language|default('en') %}
 
-{% set pages = pages|default(['Homepage', 'About']) %}
-
-{% if sections|length > 1 %}
-    {# Add section dropdown #}
-    {% set uniqueId = 'dropdown-' ~ random() %}
-
-    <div class="dropdown"
-         data-plugin="dropdown dropdownPreview"
-         data-dropdown-placement="top-start"
-         data-dropdown-trigger="click"
+{# "Add Section Below" item and dropdown #}
+<li>
+    <div class="dropdown dropdown--no-arrow"
+        data-plugin="dropdown dropdownPreview"
+        data-dropdown-placement="left-start"
+        data-dropdown-trigger="hover"
+        data-dropdown-reference-selector="#{{ id }}OptionsMenu" {# Arrow points at parent #}
+        data-dropdown-offset='[0, 8]'
     >
-        <button type="button" class="dropdown__toggle btn btn--dropdown btn--pill" aria-expanded="false" id="{{ uniqueId }}">
-            <span class="btn__content">
-                <span>{{ text }}</span>
-                {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+        <a class="dropdown__item dropdown__toggle" aria-expanded="false" id="{{ id }}-add-section" role="button" tabindex="0">
+            <span class="dropdown__item__content">
+                {{ icon('dropdown-add', {width: 16, height: 16}) }}
+                <span>Add Section Below</span>
             </span>
-        </button>
-
-        <div class="dropdown__menu d-none" aria-labelledby="{{ uniqueId }}">
+            {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
+        </a>
+        <div class="dropdown__menu d-none" aria-labelledby="{{ id }}-add-section">
             <div class="dropdown__menu__scrollable scrollbar">
                 <ul class="dropdown__menu__content">
                     {% for section in sections %}
@@ -37,6 +35,8 @@
                                     <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add"
                                         data-collection-type="{{ section.type }}"
                                         data-collection-language="{{ language }}"
+                                        data-collection-reference="#{{ id }}" {# Element after which to insert #}
+
                                         {% if section.preview|default(false) %}
                                             data-preview-image="{{ section.preview }}"
                                             data-preview-alt="{{ section.text }}"
@@ -51,6 +51,8 @@
                                 <a role="button" tabindex="0" class="dropdown__item js-dropdown-close js-collection-add"
                                     data-collection-type="{{ section.type }}"
                                     data-collection-language="{{ language }}"
+                                    data-collection-reference="#{{ id }}" {# Element after which to insert #}
+
                                     {% if section.preview|default(false) %}
                                         data-preview-image="{{ section.preview }}"
                                         data-preview-alt="{{ section.text }}"
@@ -72,14 +74,4 @@
             </div>
         </div>
     </div>
-{% elseif sections|length == 1 %}
-    {# Add single section button #}
-    {% for section in sections %}
-        <button type="button" class="btn btn--tetriary btn--pill js-collection-add" data-collection-type="{{ section.type }}">
-            <span class="btn__content">
-                {{ icon('add-small', {width: 10, height: 10}) }}
-                <span>Add {{ section.text }}</span>
-            </span>
-        </button>
-    {% endfor %}
-{% endif %}
+</li>

@@ -7,7 +7,7 @@ import 'util/animation/jquery.transition';
 import 'util/jquery.destroyed';
 import detect from 'util/detect';
 import namespace from 'util/namespace';
-import { createPopper } from '@popperjs/core';
+import { createPopper, reference } from '@popperjs/core';
 
 
 const MOUSE_LEAVE_DELAY = 200;
@@ -46,6 +46,8 @@ class Dropdown {
             'arrowSelector': '.dropdown__menu__arrow',
             'itemSelector': '.dropdown__item',
             'closeSelector': '.js-dropdown-close',
+
+            'referenceSelector': null,
 
             // Trigger events, either 'click' or 'hover'
             'trigger': 'click',
@@ -95,7 +97,8 @@ class Dropdown {
         }
 
         this.$container = $container;
-        this.$toggle = options.toggle || $container.find(options.menuToggleSelector);
+        this.$toggle = options.toggle || $container.children(options.menuToggleSelector).eq(0);
+        this.$reference = this.$toggle;
         this.$menu = options.menu || $container.children(options.menuSelector);
         this.$menuScrollable = this.$menu.children(options.menuScrollableSelector);
         this.$menuContent = this.$menuScrollable.length ? this.$menuScrollable.children(options.menuContentSelector) : this.$menu.children(options.menuContentSelector);
@@ -115,6 +118,20 @@ class Dropdown {
             options.placement.indexOf('bottom') !== -1 ? 'bottom' :
             options.placement.indexOf('top') !== -1 ? 'top' :
             options.placement.indexOf('left') !== -1 ? 'left' : 'right';
+
+        // Reference element relative to which popover is aligned
+        if (options.referenceSelector) {
+            let $reference = $container.find(options.referenceSelector);
+            if (!$reference.length) {
+                $reference = $container.closest(options.referenceSelector);
+            }
+            if (!$reference.length) {
+                $reference = $(options.referenceSelector);
+            }
+            if ($reference.length) {
+                this.$reference = $reference;
+            }
+        }
 
         // Events
         const $toggle = this.$toggle;
@@ -383,6 +400,33 @@ class Dropdown {
     }
 
     /**
+     * Returns true if dropdown is disabled
+     *
+     * @returns {boolean} True if disabled, otherwise false
+     * @protected
+     */
+    isDisabled () {
+        const $container = this.$container;
+        return $container.hasClass(this.options.classNameDisabled) || $container.prop('disabled');
+    }
+
+    /**
+     * Clean up dropdown
+     *
+     * @protected
+     */
+    handleDestroy () {
+        // Cleanup global events
+        $(window).add(document).off(`.${ this.ns }`);
+    }
+
+
+    /**
+     * Focus / blur items
+     * ------------------------------------------------------------------------
+     */
+
+    /**
      * Focus item element
      *
      * @param {JQuery} $item Item element
@@ -509,42 +553,6 @@ class Dropdown {
         }
     }
 
-    /**
-     * Returns true if dropdown is disabled
-     *
-     * @returns {boolean} True if disabled, otherwise false
-     * @protected
-     */
-    isDisabled () {
-        const $container = this.$container;
-        return $container.hasClass(this.options.classNameDisabled) || $container.prop('disabled');
-    }
-
-    /**
-     * Handle mouseover the item
-     *
-     * @param {object} event Event
-     * @protected
-     */
-    handleItemMouseEnter (event) {
-        const $items = this.getItems();
-        const $item = $(event.target);
-
-        if ($items.index($item) !== -1) {
-            this.focusItem($item);
-        }
-    }
-
-    /**
-     * Clean up dropdown
-     *
-     * @protected
-     */
-    handleDestroy () {
-        // Cleanup global events
-        $(window).add(document).off(`.${ this.ns }`);
-    }
-
 
     /**
      * Keyboard navigation
@@ -604,11 +612,13 @@ class Dropdown {
      */
     handleToggleKey (event) {
         if (!this.open) {
+            console.log('handle toggle', this.position);
+
             if (
                 (this.position === 'bottom' && event.key === 'ArrowDown') ||
                 (this.position === 'top' && event.key === 'ArrowUp') ||
-                (this.position === 'left' && event.key === 'ArrowLeft') ||
-                (this.position === 'right' && event.key === 'ArrowRight') ||
+                (this.position === 'left' && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) ||
+                (this.position === 'right' && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) ||
                 (event.key === 'Enter')
             ) {
                 this.show(event);
@@ -738,7 +748,7 @@ class Dropdown {
             // Show menu for poppoer to be able to read position
             $menu.removeClass('d-none').addClass('is-invisible');
 
-            this.popper = createPopper(this.$toggle.get(0), $menu.get(0), {
+            this.popper = createPopper(this.$reference.get(0), $menu.get(0), {
                 placement: this.options.placement,
                 modifiers: [
                     {
@@ -746,13 +756,15 @@ class Dropdown {
                         options: {
                             offset: ({ placement }) => {
                                 const offset = this.options.offset || (isSubDropdown ? 24 : 16);
+                                const offsetArr = Array.isArray(offset) ? offset : [offset, offset];
 
+                                // @TODO This doesn't seem correct for vertical placement
                                 if (placement.indexOf('start') !== -1) {
-                                    return [-offset, offset];
+                                    return [-offsetArr[0], offsetArr[1]];
                                 } else if (placement.indexOf('end') !== -1) {
-                                    return [offset, offset];
+                                    return [offsetArr[0], offsetArr[1]];
                                 } else {
-                                    return [0, offset];
+                                    return [0, offsetArr[1]];
                                 }
                             },
                         },
@@ -850,6 +862,21 @@ class Dropdown {
             this.mouseLeaveTimer = null;
             this.hide();
         }, MOUSE_LEAVE_DELAY);
+    }
+
+    /**
+     * Handle mouseover the item
+     *
+     * @param {object} event Event
+     * @protected
+     */
+    handleItemMouseEnter (event) {
+        const $items = this.getItems();
+        const $item = $(event.target);
+
+        if ($items.index($item) !== -1) {
+            this.focusItem($item);
+        }
     }
 }
 

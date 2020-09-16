@@ -26,8 +26,11 @@
 {# Show "Delete" option in the dropdown #}
 {% set withDeleteOption = withDeleteOption|default(false) %}
 
+{# Show insert section dropdown #}
+{% set withInsertSection = withInsertSection|default(false) %}
+
 {# Show options dropdown, eg. Delete, ... #}
-{% set withOptions = withActiveToggle or withAccordion or withDeleteOption %}
+{% set withOptions = withActiveToggle or withAccordion or withDeleteOption or withInsertSection %}
 
 {# A text with "1", "2", ... near the header counting list items #}
 {% set withCardListCounter = withCardListCounter|default(false) %}
@@ -114,7 +117,7 @@
                                 {{ icon('more', {width: 14, height: 4}) }}
                             </span></button>
 
-                            <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options">
+                            <div class="dropdown__menu d-none" aria-labelledby="{{ id }}Options" id="{{ id }}OptionsMenu">
                                 <ul class="dropdown__menu__content">
                                     {% if withActiveToggle %}
                                         <li class="dropdown__form form-control-checkbox form-control-checkbox--switch form-control-checkbox--switch--xs js-active-state-label {% if active %}is-checked{% endif %}">
@@ -138,23 +141,12 @@
                                         </li>
                                     {% endif %}
 
-                                    <li>
-                                        <div class="dropdown" data-plugin="dropdown" data-dropdown-placement="right-start" data-dropdown-trigger="hover">
-                                            <a href="#" class="dropdown__item dropdown__toggle" aria-expanded="false" id="{{ id }}-add-section">
-                                                <span class="dropdown__item__content">
-                                                    {{ icon('dropdown-add', {width: 16, height: 16}) }}
-                                                    <span>Add Section Below</span>
-                                                </span>
-                                                {{ icon('dropdown-arrow', {width: 10, height: 10}) }}
-                                            </a>
-                                            <div class="dropdown__menu d-none" aria-labelledby="{{ id }}-add-section">
-                                                <ul class="dropdown__menu__content">
-                                                    <li><a href="#" class="dropdown__item">One</a></li>
-                                                    <li><a href="#" class="dropdown__item">Two</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    {% if withInsertSection %}
+                                        {% include 'partials/section-header/add-section.twig' with {
+                                            'id': id,
+                                            'sections': sections
+                                        } %}
+                                    {% endif %}
 
                                     {% if withDeleteOption %}
                                         <li class="dropdown__divider-min"></li>

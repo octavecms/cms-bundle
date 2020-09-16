@@ -1,6 +1,7 @@
 {% set namePrefix = namePrefix|default('') %}
 {% set sectionId = sectionId|default('section-' ~ random()) %}
 {% set values = values|default({}) %}
+{% set sections = sections|default([]) %}
 
 {% from 'partials/blocks/form_rows.twig' import form_rows %}
 
@@ -15,13 +16,17 @@
         'title': 'Image Gallery',
         'id': sectionId,
         'size': 'small',
-        
+
         'draggable': true,
 
         'withDeleteOption': true,
 
         'withActiveToggle': true,
         'active': values.active|default(false),
+
+        'withInsertSection': sections|length,
+        'sections': sections,
+        'language': language,
 
         'withAccordion': true,
         'expanded': true,
