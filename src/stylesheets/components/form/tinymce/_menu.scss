@@ -9,7 +9,7 @@
     z-index: 1150;
 }
 .tox .tox-menu.tox-collection.tox-collection--list {
-    padding: 0;
+    padding: var(--spacer-3) 0;
 }
 .tox .tox-menu.tox-collection.tox-collection--toolbar {
     padding: 4px;

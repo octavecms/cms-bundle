@@ -10,83 +10,102 @@
     overflow-y: auto;
     padding: 0;
 }
+
 .tox .tox-collection--list .tox-collection__group {
-    border-bottom-width: 0;
-    border-color: #cccccc;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-style: solid;
-    border-top-width: 1px;
-    padding: 4px 0;
+    position: relative;
+    border: 0;
+    padding: var(--spacer) 0;
+
+    &:first-child {
+        margin-top: calc(var(--spacer) * -1);
+    }
+    &:last-child {
+        margin-bottom: calc(var(--spacer) * -1);
+    }
+}
+.tox .tox-collection--list .tox-collection__group + .tox-collection__group{
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: var(--spacer-5);
+        right: var(--spacer-5);
+        border-top: 1px solid var(--color-tetriary);
+    }
 }
 .tox .tox-collection--list .tox-collection__group:first-child {
     border-top-width: 0;
 }
 .tox .tox-collection__group-heading {
     background-color: #e6e6e6;
-    color: rgba(34, 47, 62, 0.7);
+    color: var(--color-heading);
     cursor: default;
     font-size: 12px;
     font-style: normal;
     font-weight: normal;
     margin-bottom: 4px;
     margin-top: -4px;
-    padding: 4px 8px;
     text-transform: none;
     -webkit-touch-callout: none;
     user-select: none;
+
+    padding: 4px var(--spacer-5);
 }
 .tox .tox-collection__item {
     align-items: center;
-    color: #222f3e;
+    color: var(--color-text);
     cursor: pointer;
     display: flex;
     -webkit-touch-callout: none;
     user-select: none;
+    @extend %transition;
 }
 .tox .tox-collection--list .tox-collection__item {
-    padding: 4px 8px;
+    transition-property: color;
+    padding: 4px var(--spacer-5);
 }
 .tox .tox-collection--toolbar .tox-collection__item {
+    transition-property: color;
     border-radius: 3px;
     padding: 4px;
 }
 .tox .tox-collection--grid .tox-collection__item {
+    transition-property: color;
     border-radius: 3px;
     padding: 4px;
 }
 .tox .tox-collection--list .tox-collection__item--enabled {
-    background-color: #fff;
-    color: #222f3e;
+    background-color: transparent;
+    color: var(--color-text);
 }
 .tox .tox-collection--list .tox-collection__item--active {
-    background-color: #dee0e2;
+    background-color: transparent;
 }
 .tox .tox-collection--toolbar .tox-collection__item--enabled {
-    background-color: #c8cbcf;
-    color: #222f3e;
+    background-color: transparent;
+    color: var(--color-text);
 }
 .tox .tox-collection--toolbar .tox-collection__item--active {
-    background-color: #dee0e2;
+    background-color: transparent;
 }
 .tox .tox-collection--grid .tox-collection__item--enabled {
-    background-color: #c8cbcf;
-    color: #222f3e;
+    background-color: transparent;
+    color: var(--color-text);
 }
 .tox .tox-collection--grid .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
-    background-color: #dee0e2;
-    color: #222f3e;
+    background-color: transparent;
+    color: var(--color-heading);
 }
 .tox .tox-collection--list .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
-    color: #222f3e;
+    color: var(--color-heading);
 }
 .tox .tox-collection--toolbar .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
-    color: #222f3e;
+    color: var(--color-heading);
 }
 .tox .tox-collection__item--state-disabled {
     display: none;
     background-color: transparent;
-    color: rgba(34, 47, 62, 0.5);
+    color: var(--color-disabled);
     cursor: not-allowed;
 }
 .tox .tox-collection__item-icon,
@@ -180,7 +199,7 @@
     border-right: 1px solid #cccccc;
 }
 .tox:not([dir=rtl]) .tox-collection--list .tox-collection__item > *:not(:first-child) {
-    margin-left: 8px;
+    margin-left: var(--spacer-2);
 }
 .tox:not([dir=rtl]) .tox-collection--list .tox-collection__item-label:first-child {
     margin-left: 4px;
@@ -196,7 +215,7 @@
     border-left: 1px solid #cccccc;
 }
 .tox[dir=rtl] .tox-collection--list .tox-collection__item > *:not(:first-child) {
-    margin-right: 8px;
+    margin-right: var(--spacer-2);
 }
 .tox[dir=rtl] .tox-collection--list .tox-collection__item-label:first-child {
     margin-right: 4px;
