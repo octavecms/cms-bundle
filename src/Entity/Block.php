@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
@@ -13,9 +14,9 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *     name="octave_page_blocks"
  * )
  */
-class Block implements BlockEntityInterface
+class Block implements BlockEntityInterface, TranslatableInterface
 {
-    use ORMBehaviors\Translatable\Translatable;
+    use ORMBehaviors\Translatable\TranslatableTrait;
     use TranslatableEntityTrait;
     use BlockTrait;
 

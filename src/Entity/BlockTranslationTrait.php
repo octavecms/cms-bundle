@@ -5,6 +5,13 @@ namespace Octave\CMSBundle\Entity;
 trait BlockTranslationTrait
 {
     /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
      */
@@ -15,6 +22,14 @@ trait BlockTranslationTrait
      * @ORM\Column(type="string", length=512, nullable=true)
      */
     private $title;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return string

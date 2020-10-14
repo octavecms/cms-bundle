@@ -2,14 +2,15 @@
 
 namespace Octave\CMSBundle\Model;
 
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class MediaImageTranslation
+class MediaImageTranslation implements TranslationInterface
 {
-    use ORMBehaviors\Translatable\Translation;
+    use ORMBehaviors\Translatable\TranslationTrait;
 
     /** @var string */
     private $title;

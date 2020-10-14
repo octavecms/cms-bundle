@@ -15,12 +15,12 @@
   "require": {
     "php": ">=7.0.1",
     "symfony/flex": "^1.1",
-    "symfony/mime": "4.3.*",
+    "symfony/mime": " ^4.3",
     "sonata-project/admin-bundle": "^3.4",
     "sonata-project/doctrine-orm-admin-bundle": "^3.2",
     "a2lix/translation-form-bundle": "~2.0",
     "friendsofsymfony/ckeditor-bundle": "~2.0",
-    "knplabs/doctrine-behaviors": ">=1.1.0",
+    "knplabs/doctrine-behaviors": "^2.0",
     "friendsofsymfony/user-bundle": "~2.0",
     "octave/sitemap-bundle" : ">=1.1.0",
     "liip/imagine-bundle": "^2.2"

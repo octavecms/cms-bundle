@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
@@ -11,9 +12,16 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  * @ORM\Entity()
  * @ORM\Table(name="octave_page_translations")
  */
-class PageTranslation
+class PageTranslation implements TranslationInterface
 {
-    use ORMBehaviors\Translatable\Translation;
+    use ORMBehaviors\Translatable\TranslationTrait;
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
     /**
      * @var string
@@ -38,6 +46,14 @@ class PageTranslation
      * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
     private $metaDescription;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return string

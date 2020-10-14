@@ -3,7 +3,8 @@
 namespace Octave\CMSBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -13,9 +14,9 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
  *     name="octave_page_versions"
  * )
  */
-class PageVersion
+class PageVersion implements TimestampableInterface
 {
-    use Timestampable;
+    use TimestampableTrait;
 
     /**
      * @ORM\Id

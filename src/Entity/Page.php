@@ -4,6 +4,7 @@ namespace Octave\CMSBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,9 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("path")
  */
-class Page implements Blockable
+class Page implements Blockable, TranslatableInterface
 {
-    use ORMBehaviors\Translatable\Translatable;
+    use ORMBehaviors\Translatable\TranslatableTrait;
     use TranslatableEntityTrait;
 
     /**
