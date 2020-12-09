@@ -56,6 +56,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->booleanNode('handle_xhr_requests')->end()
             ->end();
 
 

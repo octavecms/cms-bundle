@@ -54,6 +54,7 @@ class OctaveCMSExtension extends Extension implements PrependExtensionInterface
         }
 
         $container->setParameter('octave.cms.route_options', $config['route_options'] ?? []);
+        $container->setParameter('octave.cms.handle_xhr_requests', $config['handle_xhr_requests'] ?? false);
     }
 
     /**

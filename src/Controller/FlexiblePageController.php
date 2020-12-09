@@ -146,17 +146,27 @@ class FlexiblePageController extends Controller
 
     /**
      * @param Page $page
+     * @param Request $request
      * @return Response
      * @throws \Exception
      */
-    public function showAction(Page $page)
+    public function showAction(Page $page, Request $request)
     {
+        $blockManager = $this->get('octave.cms.block.manager');
+
+        if ($this->getParameter('octave.cms.handle_xhr_requests') && $request->isXmlHttpRequest()) {
+            $response = new Response();
+            $response->setContent($blockManager->renderPage($page));
+            return $response;
+        }
+
         $template = $page->getBaseTemplate()
             ? $page->getBaseTemplate()
             : $this->getParameter('octave.cms.flexible_page_template');
+
         return $this->render($template, [
             'page' => $page,
-            'content' => $this->get('octave.cms.block.manager')->renderPage($page)
+            'content' => $blockManager->renderPage($page)
         ]);
     }
 }

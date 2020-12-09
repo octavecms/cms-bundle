@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\TextPageType as TextPageForm;
 use Octave\CMSBundle\Page\Type\TextPageType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -107,10 +108,17 @@ class TextPageController extends Controller
 
     /**
      * @param Page $page
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showAction(Page $page)
+    public function showAction(Page $page, Request $request)
     {
+        if ($this->getParameter('octave.cms.handle_xhr_requests') && $request->isXmlHttpRequest()) {
+            $response = new Response();
+            $response->setContent($page->getContent()->translate($request->getLocale())->getText());
+            return $response;
+        }
+
         $template = $page->getContent()->getTemplate()
             ? $page->getContent()->getTemplate()
             : $this->getParameter('octave.cms.text_page_template');
