@@ -19,17 +19,22 @@ class SitemapSource implements SourceInterface
     /* @var string|null */
     protected $host;
 
+    /** @var array */
+    protected $locales;
+
     /**
-     * 
+     *
      * @param RouterInterface $router
      * @param PageRepository $pageRepository
      * @param string|null $host
+     * @param $locales
      */
-    public function __construct(RouterInterface $router, $pageRepository, $host)
+    public function __construct(RouterInterface $router, $pageRepository, $host, $locales)
     {
         $this->router = $router;
         $this->pageRepository = $pageRepository;
         $this->host = rtrim($host, '/');
+        $this->locales = $locales;
     }
 
     /**
@@ -43,10 +48,12 @@ class SitemapSource implements SourceInterface
         $pages = $this->pageRepository->findIncludeInSitemap();
                 
          foreach($pages as $page) {
-            $items[] = new Item(
-                $this->generateUrl($page->getName()),
-                $page->getUpdatedAt()
-            );
+             foreach ($this->locales as $locale) {
+                 $items[] = new Item(
+                     $this->generateUrl($page->getName(), ['_locale' => $locale]),
+                     $page->getUpdatedAt()
+                 );
+             }
         }
 
         return $items;

@@ -83,11 +83,11 @@ class CMSExtension extends AbstractExtension
 
         if ($itemName != 'root') {
             $page = $pageRepository->findOneBy(['name' => $itemName, 'active' => true]);
-            if ($locale) {
-                $page->setCurrentLocale($locale);
-            }
             if (!$page) {
                 throw new \Exception(sprintf('Page with name %s not found', $itemName));
+            }
+            if ($locale) {
+                $page->setCurrentLocale($locale);
             }
         }
         else {
