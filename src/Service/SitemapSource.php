@@ -63,10 +63,10 @@ class SitemapSource implements SourceInterface
      * @param string $name
      * @return string
      */
-    private function generateUrl($name)
+    private function generateUrl($name, $params = [])
     {
         return $this->host
-            ? $this->host . $this->router->generate($name)
-            : $this->router->generate($name, [], UrlGeneratorInterface::ABSOLUTE_URL);
+            ? $this->host . $this->router->generate($name, $params)
+            : $this->router->generate($name, $params, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
