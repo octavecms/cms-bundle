@@ -292,6 +292,7 @@ services:
             - '@router'
             - '@octave.cms.page.repository'
             - '%octave.sitemap.host%'
+            - '%locales%'
         tags:
             - { name: octave.sitemap.source }
 
