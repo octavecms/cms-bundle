@@ -2,6 +2,7 @@
 
 namespace Octave\CMSBundle\Twig;
 
+use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Form\DataTransformer\SimpleFieldDataTransformer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -45,6 +46,7 @@ class CMSExtension extends AbstractExtension
             new TwigFunction('octave_current_page', [$this, 'getCurrentPage']),
             new TwigFunction('octave_get_page', [$this, 'getPage']),
             new TwigFunction('octave_render_blocks', [$this, 'renderBlocks']),
+            new TwigFunction('octave_render_block', [$this, 'renderBlock']),
         ];
     }
 
@@ -145,5 +147,36 @@ class CMSExtension extends AbstractExtension
         }
 
         return $this->container->get('octave.cms.block.manager')->renderBlocks($blocks);
+    }
+
+    /**
+     * @param $blocks
+     * @param $type
+     * @param bool $transform
+     * @return string
+     * @throws \Exception
+     */
+    public function renderBlock($blocks, $type, $transform = false)
+    {
+        $requiredBlock = null;
+
+        if ($transform) {
+
+            $transformer = new SimpleFieldDataTransformer();
+            $blocks = $transformer->transform($blocks);
+        }
+
+        foreach ($blocks as $block) {
+            if ($block instanceof Block && $block->getType() == $type) {
+                $requiredBlock = $block;
+                break;
+            }
+        }
+
+        if (!$requiredBlock) {
+            throw new \Exception(sprintf('Type %s not found in given blocks', $type));
+        }
+
+        return $this->container->get('octave.cms.block.manager')->renderBlock($requiredBlock);
     }
 }

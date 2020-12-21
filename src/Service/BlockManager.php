@@ -1,7 +1,9 @@
 <?php
 
 namespace Octave\CMSBundle\Service;
+
 use Octave\CMSBundle\Entity\Blockable;
+use Octave\CMSBundle\Entity\BlockEntityInterface;
 use Octave\CMSBundle\Entity\BlockTrait;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Octave\CMSBundle\Entity\Page;
@@ -94,21 +96,30 @@ class BlockManager
 
         /** @var BlockTrait $blockEntity */
         foreach ($blocks as $blockEntity) {
-
-            /** @var BlockInterface $blockType */
-            $blockType = $this->blocks[$blockEntity->getType()] ?? null;
-            if (!$blockType) {
-                throw new \Exception(sprintf('Unknown type: %s', $blockEntity->getType()));
-            }
-
-            $blockParameters = array_merge([
-                'content' => $blockType->getContent($blockEntity),
-                'title' => $blockEntity->getTitle()
-            ], $blockType->getTemplateParameters());
-
-            $content .= $this->templating->render($blockType->getContentTemplate(), $blockParameters);
+            $content .= $this->renderBlock($blockEntity);
         }
 
         return $content;
+    }
+
+    /**
+     * @param BlockEntityInterface $block
+     * @return mixed
+     * @throws \Exception
+     */
+    public function renderBlock(BlockEntityInterface $block)
+    {
+        /** @var BlockInterface $blockType */
+        $blockType = $this->blocks[$block->getType()] ?? null;
+        if (!$blockType) {
+            throw new \Exception(sprintf('Unknown type: %s', $block->getType()));
+        }
+
+        $blockParameters = array_merge([
+            'content' => $blockType->getContent($block),
+            'title' => $block->getTitle()
+        ], $blockType->getTemplateParameters());
+
+        return $this->templating->render($blockType->getContentTemplate(), $blockParameters);
     }
 }

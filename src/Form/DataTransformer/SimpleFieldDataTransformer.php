@@ -26,29 +26,40 @@ class SimpleFieldDataTransformer implements DataTransformerInterface
                 continue;
             }
 
-            $block = new Block();
-            $block->setType($item['type']);
-            $block->setOrder($item['order']);
-            $block->setContent($item['content']);
-
-            if (isset($item['translations']) && $item['translations']) {
-
-                foreach ($item['translations'] as $locale => $translationItem) {
-
-                    $translation = new BlockTranslation();
-                    $translation->setLocale($locale);
-                    $translation->setTranslatable($block);
-                    $translation->setTitle($translationItem['title']);
-                    $translation->setContent($translationItem['content']);
-
-                    $block->addTranslation($translation);
-                }
-            }
+            $block = $this->transformItem($item);
 
             $items[$index] = $block;
         }
 
         return $items;
+    }
+
+    /**
+     * @param $item
+     * @return Block
+     */
+    public function transformItem($item)
+    {
+        $block = new Block();
+        $block->setType($item['type']);
+        $block->setOrder($item['order']);
+        $block->setContent($item['content']);
+
+        if (isset($item['translations']) && $item['translations']) {
+
+            foreach ($item['translations'] as $locale => $translationItem) {
+
+                $translation = new BlockTranslation();
+                $translation->setLocale($locale);
+                $translation->setTranslatable($block);
+                $translation->setTitle($translationItem['title']);
+                $translation->setContent($translationItem['content']);
+
+                $block->addTranslation($translation);
+            }
+        }
+
+        return $block;
     }
 
     /**
