@@ -104,10 +104,11 @@ class BlockManager
 
     /**
      * @param BlockEntityInterface $block
+     * @param null $template
      * @return mixed
      * @throws \Exception
      */
-    public function renderBlock(BlockEntityInterface $block)
+    public function renderBlock(BlockEntityInterface $block, $template = null)
     {
         /** @var BlockInterface $blockType */
         $blockType = $this->blocks[$block->getType()] ?? null;
@@ -120,6 +121,6 @@ class BlockManager
             'title' => $block->getTitle()
         ], $blockType->getTemplateParameters());
 
-        return $this->templating->render($blockType->getContentTemplate(), $blockParameters);
+        return $this->templating->render($template ?? $blockType->getContentTemplate(), $blockParameters);
     }
 }

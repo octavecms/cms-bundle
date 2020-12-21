@@ -153,10 +153,11 @@ class CMSExtension extends AbstractExtension
      * @param $blocks
      * @param $type
      * @param bool $transform
+     * @param bool $template
      * @return string
      * @throws \Exception
      */
-    public function renderBlock($blocks, $type, $transform = false)
+    public function renderBlock($blocks, $type, $transform = false, $template = false)
     {
         $requiredBlock = null;
 
@@ -177,6 +178,6 @@ class CMSExtension extends AbstractExtension
             throw new \Exception(sprintf('Type %s not found in given blocks', $type));
         }
 
-        return $this->container->get('octave.cms.block.manager')->renderBlock($requiredBlock);
+        return $this->container->get('octave.cms.block.manager')->renderBlock($requiredBlock, $template);
     }
 }
