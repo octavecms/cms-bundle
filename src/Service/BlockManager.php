@@ -121,6 +121,6 @@ class BlockManager
             'title' => $block->getTitle()
         ], $blockType->getTemplateParameters());
 
-        return $this->templating->render($template ?? $blockType->getContentTemplate(), $blockParameters);
+        return $this->templating->render($template ? $template : $blockType->getContentTemplate(), $blockParameters);
     }
 }
