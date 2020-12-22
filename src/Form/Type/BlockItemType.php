@@ -67,8 +67,7 @@ class BlockItemType extends AbstractType
         else {
 
             $contentOptions = [
-                'label' => false,
-                'locales' => $options['locales']
+                'label' => false
             ];
 
             if ($contentType == MediaGalleryType::class) {
