@@ -40,7 +40,7 @@ class BlocksType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $blockTypes = $this->blockManager->getBlocks();
+        $blockTypes = $this->getBlocks($options['block_types']);
 
         if ($options['allow_add'] && $options['prototype']) {
 
@@ -127,7 +127,34 @@ class BlocksType extends AbstractType
             }
         }
 
-        $view->vars['block_types'] = $this->blockManager->getBlocks();
+        $view->vars['block_types'] = $this->getBlocks($options['block_types']);
+    }
+
+    /**
+     * @param array $blocks
+     * @return array
+     */
+    private function getBlocks(array $blocks)
+    {
+        $blockList = $this->blockManager->getBlocks();
+
+        if (count($blocks) === 0) {
+            return $blockList;
+        }
+
+        $blockTypes = array_filter($blockList, function ($k) use ($blocks) {
+            if (in_array($k, $blocks)) {
+                return true;
+            }
+
+            return false;
+        }, ARRAY_FILTER_USE_KEY);
+
+        if (count($blockTypes) === 0) {
+            return $blockList;
+        }
+
+        return $blockTypes;
     }
 
     /**
