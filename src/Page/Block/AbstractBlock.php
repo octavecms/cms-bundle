@@ -9,6 +9,26 @@ use Octave\CMSBundle\Entity\BlockEntityInterface;
  */
 abstract class AbstractBlock implements BlockInterface
 {
+    /** @var array */
+    protected $blockOptions;
+
+    /**
+     * @return array
+     */
+    public function getBlockOptions()
+    {
+        return $this->blockOptions;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function addBlockOption($name, $value)
+    {
+        $this->blockOptions[$name] = $value;
+    }
+
     /**
      * @return array
      */

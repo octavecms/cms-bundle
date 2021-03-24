@@ -153,13 +153,21 @@
 
         {% for block in form.blocks %}
 
+            {% set blockOptions = [] %}
+            {% if block.vars.data.options is not null %}
+                {% set blockOptions = blockOptions|merge(block.vars.data.options) %}
+            {% endif %}
+            {% if blockTypes[block.vars.data.type].blockOptions is not null %}
+                {% set blockOptions = blockOptions|merge(blockTypes[block.vars.data.type].blockOptions) %}
+            {% endif %}
+
             {% set blockType = block.vars.block_type %}
             {% set blockData = blockTypes[blockType] %}
 
             {% if blockData %}
                 {{ blocks.block_start(blockData.label, collapseBox, freeze) }}
                 {{ form_widget(block) }}
-                {{ blocks.block_end(block.vars.data.options) }}
+                {{ blocks.block_end(blockOptions) }}
             {% endif %}
 
         {% endfor %}
