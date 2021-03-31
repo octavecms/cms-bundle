@@ -42,3 +42,4 @@ publish: Publish
 simple_text_content_translations: Text editor
 label.admin.sitemap: Sitemap
 label.admin.media: Media library
+crud_link: To change the list, follow the <a href="%link%">link</a>

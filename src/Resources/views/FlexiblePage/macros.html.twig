@@ -39,7 +39,7 @@
 {% macro block_end (options) %}
         {% if options and options.crudLink %}
             <div class="alert alert-info">
-                Для изменения списка, пройдите по <a href="{{ path(options.crudLink) }}">ссылке</a>
+                {{ 'crud_link' | trans({'%link%': path(options.crudLink)}, 'OctaveCMSBundle') | raw }}
             </div>
         {% endif %}
         </div>
