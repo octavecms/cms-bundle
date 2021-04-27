@@ -104,7 +104,7 @@
                 </div>
                 <div class="collection-item__content panel-collapse collapse" id="{{ id }}_accordion___name___content">
                     <div class="collection-item__body panel-body">
-                        {{ form_widget(form) }}
+                        {{ form_widget(form.vars.prototype) }}
                     </div>
                 </div>
             </li>
@@ -127,7 +127,7 @@
                             <span class="collection-item__heading__title__text">{{ _self.octave_collection_widget_title(form) }}</span>
                             <span class="collection-item__heading__title__value js-collection-list-item-title">{{ _self.octave_collection_widget_text(item) }}</span>
                         </a>
-                        {% if form.vars.allow_delete %}
+                        {% if form.vars.locked == false and form.vars.allow_delete %}
                             <a class="btn btn-danger js-collection-remove collection-item__heading__remove">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </a>
@@ -143,7 +143,7 @@
             {% endfor %}
         </ul>
 
-        {% if form.vars.allow_add %}
+        {% if form.vars.locked == false and form.vars.allow_add %}
             <div class="btn-group">
                 <a class="btn btn-primary sonata-action-element js-collection-add">
                     <i class="fa fa-plus"></i>
