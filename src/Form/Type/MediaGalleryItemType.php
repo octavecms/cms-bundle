@@ -43,7 +43,10 @@ class MediaGalleryItemType extends AbstractType
         $locales = $options['locales'];
 
         $builder
-            ->add($options['order_name'], HiddenType::class)
+            ->add($options['order_name'], HiddenType::class, [
+                'translation_domain' => 'OctaveCMSBundle',
+                'label' => 'Image'
+            ])
             ->add($options['image_name'], MediaImageType::class);
 
         if ($options['use_translations']) {
@@ -52,7 +55,11 @@ class MediaGalleryItemType extends AbstractType
                     'locales' => $locales,
                     'label' => false,
                     'fields' => [
-                        $options['title_name'] => ['label' => 'Caption', 'required' => false]
+                        $options['title_name'] => [
+                            'label' => 'Caption',
+                            'required' => false,
+                            'translation_domain' => 'OctaveCMSBundle'
+                        ]
                     ]
                 ]);
         }
