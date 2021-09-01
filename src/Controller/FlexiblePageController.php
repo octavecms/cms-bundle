@@ -4,7 +4,6 @@ namespace Octave\CMSBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\Page;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class FlexiblePageController extends Controller
+class FlexiblePageController extends AbstractController
 {
     /**
      * @param Request $request
@@ -103,12 +102,14 @@ class FlexiblePageController extends Controller
                     }
 
                     $em->flush();
+                    $this->warmUpRouteCache();
 
                     return $this->redirectToRoute('sitemap_list');
                 }
             }
             else {
                 $em->flush();
+                $this->warmUpRouteCache();
             }
 
             if (!$isNew) {

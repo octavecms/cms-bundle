@@ -3,7 +3,6 @@
 namespace Octave\CMSBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\TextPageType as TextPageForm;
@@ -13,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class TextPageController extends Controller
+class TextPageController extends AbstractController
 {
     /**
      * @param Request $request
@@ -63,6 +62,7 @@ class TextPageController extends Controller
                 /** @var EntityManager $em */
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
+                $this->warmUpRouteCache();
             }
 
             if ($emptyName) {
@@ -74,6 +74,7 @@ class TextPageController extends Controller
 
             if ($isPublish) {
                 $em->flush();
+                $this->warmUpRouteCache();
 
                 return $this->redirectToRoute('sitemap_list');
             }

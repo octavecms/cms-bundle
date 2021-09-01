@@ -22,6 +22,8 @@ class PageController extends AbstractController
     {
         $pageType = $this->get('octave.cms.page_type.factory')->get($type);
 
+        $this->warmUpRouteCache();
+
         return $this->forward($pageType->getController());
     }
 
@@ -136,6 +138,8 @@ class PageController extends AbstractController
             $em->persist($translation);
             $em->flush();
 
+            $this->warmUpRouteCache();
+
             return new JsonResponse([
                 'status' => true,
                 'data' => $this->get('octave.cms.page.serializer')->toArray($page)
@@ -175,6 +179,8 @@ class PageController extends AbstractController
 
             $em->remove($page);
             $em->flush();
+
+            $this->warmUpRouteCache();
 
             return new JsonResponse(['status' => true]);
         }
@@ -241,6 +247,8 @@ class PageController extends AbstractController
             }
 
             $em->flush();
+
+            $this->warmUpRouteCache();
 
             return new JsonResponse(['status' => true]);
         }

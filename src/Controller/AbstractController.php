@@ -24,4 +24,20 @@ abstract class AbstractController extends Controller
             500
         );
     }
+
+    protected function warmUpRouteCache()
+    {
+        $router = $this->get('router');
+        $filesystem = $this->get('filesystem');
+        $kernel = $this->get('kernel');
+        $cacheDir = $kernel->getCacheDir();
+
+        foreach (array('matcher_cache_class', 'generator_cache_class') as $option) {
+            $className = $router->getOption($option);
+            $cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $className . '.php';
+            $filesystem->remove($cacheFile);
+        }
+
+        $router->warmUp($cacheDir);
+    }
 }

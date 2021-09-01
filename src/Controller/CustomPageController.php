@@ -3,7 +3,6 @@
 namespace Octave\CMSBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\CustomPageType;
@@ -11,7 +10,7 @@ use Octave\CMSBundle\Form\Type\CustomPageType;
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
-class CustomPageController extends Controller
+class CustomPageController extends AbstractController
 {
     /**
      * @param Request $request
@@ -55,6 +54,7 @@ class CustomPageController extends Controller
             $page->setOptions($options);
 
             $em->flush();
+            $this->warmUpRouteCache();
 
             if (!$isNew) {
 
