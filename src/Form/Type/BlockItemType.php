@@ -79,14 +79,7 @@ class BlockItemType extends AbstractType
             $builder->add('content', $contentType, $contentOptions);
 
             if ($options['show_title']) {
-                $builder->add('translations', TranslationsType::class, [
-                    'label' => false,
-                    'locales' => $options['locales'],
-                    'fields' => [
-                        'title' => ['field_type' => TextType::class, 'label' => 'Caption'],
-                        'content' => ['field_type' => HiddenType::class]
-                    ]
-                ]);
+                $builder->add('title', TextType::class, ['label' => 'Caption']);
             }
         }
     }
