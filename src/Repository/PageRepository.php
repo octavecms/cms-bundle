@@ -39,7 +39,8 @@ class PageRepository extends EntityRepository
     public function findActive()
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.active = 1')
+            ->andWhere('p.active = :true')
+            ->setParameter('true', true)
             ->getQuery()
             ->getResult();
     }
@@ -50,8 +51,9 @@ class PageRepository extends EntityRepository
     public function findIncludeInSitemap()
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.active = 1')
-            ->andWhere('p.includeInSitemap = 1')
+            ->andWhere('p.active = :true')
+            ->andWhere('p.includeInSitemap = :true')
+            ->setParameter('true', true)
             ->getQuery()
             ->getResult();
     }
