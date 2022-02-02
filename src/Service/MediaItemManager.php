@@ -2,6 +2,7 @@
 
 namespace Octave\CMSBundle\Service;
 
+use App\Kernel;
 use Octave\CMSBundle\Entity\MediaItem;
 
 /**
@@ -18,7 +19,7 @@ class MediaItemManager
      */
     public function __construct($rootDir)
     {
-        $this->webDir = $rootDir . '/../web';
+        $this->webDir = $rootDir . (Kernel::MAJOR_VERSION >= 4 ? '/../public' : '/../web');
     }
 
     /**

@@ -43,6 +43,44 @@
     </script>
 {% endblock %}
 
+{% block media_file_widget %}
+
+    {% set value = form.vars.value %}
+    {% if form.vars.show_label %}
+        {{ form_label(form) }}
+    {% endif %}
+
+    <div id="{{ id }}_widget" class="form-control-image {% if not value %}form-control-image--empty{% endif %}">
+
+        {{ block('hidden_widget') }}
+
+        <a href="{{ value }}">
+            <div class="form-control-image__preview well well-small">
+                <span class="fa fa-file"></span>
+            </div>
+        </a>
+
+        <div class="form-control-image__content">
+
+            <div class="btn-group">
+                <a class="btn btn-primary sonata-action-element js-image-change">
+                    <span class="form-control-image__not-empty">{{ 'change_image' | trans({}, 'OctaveCMSBundle') }}</span>
+                    <span class="form-control-image__empty">{{ 'select_image' | trans({}, 'OctaveCMSBundle') }}</span>
+                </a>
+                <a class="btn btn-danger sonata-action-element js-image-reset">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $(function () {
+            $('#{{ id }}_widget').image();
+        });
+    </script>
+{% endblock %}
+
 
 {% block media_gallery_widget %}
     <div id="{{ id }}_widget" class="form-control-gallery">
@@ -72,7 +110,7 @@
     </script>
 {% endblock %}
 
-                    
+
 {% block octave_collection_widget %}
     <div id="{{ id }}_widget" class="form-control-collection">
         {% macro octave_collection_widget_title(form) %}
@@ -86,14 +124,14 @@
             <li class="panel panel-default collection-item" id="{{ id }}_accordion___name__">
                 <div class="collection-item__heading panel-heading">
                     <a
-                        class="collection-item__heading__title collapsed"
-                        role="button"
-                        data-toggle="collapse"
-                        data-parent="#{{ id }}_accordion___name__"
-                        aria-expanded="false"
-                        aria-controls="{{ id }}_accordion___name___content"
-                        href="#{{ id }}_accordion___name___content"
-                    >   
+                            class="collection-item__heading__title collapsed"
+                            role="button"
+                            data-toggle="collapse"
+                            data-parent="#{{ id }}_accordion___name__"
+                            aria-expanded="false"
+                            aria-controls="{{ id }}_accordion___name___content"
+                            href="#{{ id }}_accordion___name___content"
+                    >
                         <span class="collection-item__heading__title__icon"></span>
                         <span class="collection-item__heading__title__text">{{ _self.octave_collection_widget_title(form) }}</span>
                         <span class="collection-item__heading__title__value js-collection-list-item-title"></span>
@@ -115,14 +153,14 @@
                 <li class="panel panel-default collection-item" id="{{ id }}_accordion_{{ loop.index0 }}">
                     <div class="collection-item__heading panel-heading">
                         <a
-                            class="collection-item__heading__title collapsed"
-                            role="button"
-                            data-toggle="collapse"
-                            data-parent="#{{ id }}_accordion_{{ loop.index0 }}"
-                            aria-expanded="false"
-                            aria-controls="{{ id }}_accordion_{{ loop.index0 }}_content"
-                            href="#{{ id }}_accordion_{{ loop.index0 }}_content"
-                        >   
+                                class="collection-item__heading__title collapsed"
+                                role="button"
+                                data-toggle="collapse"
+                                data-parent="#{{ id }}_accordion_{{ loop.index0 }}"
+                                aria-expanded="false"
+                                aria-controls="{{ id }}_accordion_{{ loop.index0 }}_content"
+                                href="#{{ id }}_accordion_{{ loop.index0 }}_content"
+                        >
                             <span class="collection-item__heading__title__icon"></span>
                             <span class="collection-item__heading__title__text">{{ _self.octave_collection_widget_title(form) }}</span>
                             <span class="collection-item__heading__title__value js-collection-list-item-title">{{ _self.octave_collection_widget_text(item) }}</span>
@@ -173,8 +211,8 @@
         {% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'OctaveCMSBundle::fields.html.twig' %}
 
         <div class="navbar-blocks"
-            data-widget="navbar-blocks"
-            data-navbar-blocks-sticky="true">
+             data-widget="navbar-blocks"
+             data-navbar-blocks-sticky="true">
 
             <a class="navbar-blocks__previous js-navbar-previous disabled" role="button" aria-disabled="true">
                 <i class="fa fa-chevron-left" aria-hidden="true"></i>

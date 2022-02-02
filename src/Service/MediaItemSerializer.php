@@ -57,8 +57,9 @@ class MediaItemSerializer
         return [
             'id' => $item->getId(),
             'isImage' => $isImage,
-            'icon' => $icon,
+            'icon' => 'fa-file',
             'image' => $item->getPath(),
+            'path' => $item->getPath(),
             'filename' => $item->getName(),
             'parent' => ($item->getCategory()) ? $item->getCategory()->getId() : 'root',
             'width' => $item->getInfoItem('width'),

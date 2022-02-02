@@ -20,16 +20,16 @@
                 <script type="text/template">
                     <li class="media-gridlist-box" data-id="<%= data.id %>">
                         <div class="media-gridlist-box-inner">
-                            <% if (data.image) { %>
-                                <span class="media-gridlist-box-thumbnail">
-                                    <img src="<%= data.image %>" alt="" />
+                            <% if (data.isImage) { %>
+                            <span class="media-gridlist-box-thumbnail">
+                                    <img src="<%= data.path %>" alt="" />
                                 </span>
                             <% } else if (data.icon) { %>
-                                <span class="media-gridlist-box-icon">
+                            <span class="media-gridlist-box-icon">
                                     <span class="fa <%= data.icon %>"></span>
                                 </span>
                             <% } else { %>
-                                <span class="media-gridlist-box-thumbnail"></span>
+                            <span class="media-gridlist-box-thumbnail"></span>
                             <% } %>
 
                             <span class="media-gridlist-box-label">
@@ -43,10 +43,10 @@
                                 <span class="media-gridlist-popover-value"><%= formatSize(data.size) %></span>
                             </p>
                             <% if (data.width || data.height) { %>
-                                <p>
-                                    <label class="media-gridlist-popover-label">{{ 'dimensions' | trans({}, 'OctaveCMSBundle') }}:</label>
-                                    <span class="media-gridlist-popover-value"><%= data.width %>x<%= data.height %></span>
-                                </p>
+                            <p>
+                                <label class="media-gridlist-popover-label">{{ 'dimensions' | trans({}, 'OctaveCMSBundle') }}:</label>
+                                <span class="media-gridlist-popover-value"><%= data.width %>x<%= data.height %></span>
+                            </p>
                             <% } %>
 
                             <p class="media-gridlist-popover-buttons">
@@ -60,13 +60,13 @@
                                 </button>
                             </p>
 
-                            <% if (data.image) { %>
-                                <p class="media-gridlist-popover-buttons">
-                                    <a class="btn btn-primary js-media-download js-selectable-ignore" download="<%= data.filename %>" href="<%= data.image %>">
-                                        <span class="fa fa-download"></span>
-                                        {{ 'download' | trans({}, 'OctaveCMSBundle') }}
-                                    </a>
-                                </p>
+                            <% if (data.path) { %>
+                            <p class="media-gridlist-popover-buttons">
+                                <a class="btn btn-primary js-media-download js-selectable-ignore" download="<%= data.filename %>" href="<%= data.path %>">
+                                    <span class="fa fa-download"></span>
+                                    {{ 'download' | trans({}, 'OctaveCMSBundle') }}
+                                </a>
+                            </p>
                             <% } %>
 
                             {% if selectmode %}
