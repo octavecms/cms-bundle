@@ -278,7 +278,7 @@ services:
             - '%locales%'
         tags:
             - { name: form.type }
-            -
+
     octave.cms.media_file.form_type:
         class: Octave\CMSBundle\Form\Type\MediaFileType
         arguments:
