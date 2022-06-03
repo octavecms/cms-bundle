@@ -20,7 +20,7 @@
     "a2lix/translation-form-bundle": "^3.0",
     "friendsofsymfony/ckeditor-bundle": "~2.0",
     "knplabs/doctrine-behaviors": "^2.0",
-    "friendsofsymfony/user-bundle": "~2.0",
+    "friendsofsymfony/user-bundle": "^3.0",
     "octave/sitemap-bundle" : ">=1.1.0",
     "liip/imagine-bundle": "^2.2"
   },
