@@ -34,5 +34,7 @@ class StorePageVersionCommand extends ContainerAwareCommand
 
         $versionManager = $this->getContainer()->get('octave.cms.page.version.manager');
         $versionManager->storeVersion($page, $version);
+
+        return 0;
     }
 }

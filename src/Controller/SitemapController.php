@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -10,9 +11,9 @@ use Sonata\AdminBundle\Controller\CRUDController;
 class SitemapController extends CRUDController
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function listAction()
+    public function listAction(Request $request): Response
     {
         $pageTypes = $this->get('octave.cms.page.manager')->getAllowedPageTypes();
         $pages = $this->get('octave.cms.page.repository')->getTree(null, true);

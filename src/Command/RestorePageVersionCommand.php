@@ -39,5 +39,7 @@ class RestorePageVersionCommand extends ContainerAwareCommand
 
         $versionManager = $this->getContainer()->get('octave.cms.page.version.manager');
         $versionManager->restoreVersion($page, $number);
+
+        return 0;
     }
 }

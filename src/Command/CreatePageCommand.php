@@ -70,6 +70,8 @@ class CreatePageCommand extends Command
         $this->entityManager->flush();
 
         $output->writeln('The page with path <info>' . $path . '</info> successfully created');
+
+        return 0;
     }
 
     /**

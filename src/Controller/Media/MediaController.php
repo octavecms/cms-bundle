@@ -3,6 +3,8 @@
 namespace Octave\CMSBundle\Controller\Media;
 
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -10,12 +12,11 @@ use Sonata\AdminBundle\Controller\CRUDController;
 class MediaController extends CRUDController
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function listAction()
+    public function listAction(Request $request): Response
     {
         $categories = $this->get('octave.cms.media_category.repository')->getTree();
-        $request = $this->getRequest();
         $currentCategory = $request->get('category', 'root');
 
         $selectMode = $request->get('select_mode');
