@@ -144,7 +144,7 @@ services:
     octave.cms.block.manager:
         class: Octave\CMSBundle\Service\BlockManager
         public: true
-        arguments: ['@templating']
+        arguments: ['@twig']
 
     octave.cms.page_type.factory:
         class: Octave\CMSBundle\Factory\PageTypeFactory
@@ -155,7 +155,7 @@ services:
     octave.cms.image.processor:
         class: Octave\CMSBundle\Service\ImageProcessor
         arguments:
-            - '%kernel.root_dir%'
+            - '%kernel.project_dir%'
             - '%octave.cms.media.upload_dir%'
             - '%octave.cms.media.resized_dir%'
 
@@ -198,14 +198,14 @@ services:
             - '@octave.cms.media_item.repository'
             - '@octave.cms.media_item.manager'
             - '%octave.cms.media.upload_dir%'
-            - '%kernel.root_dir%'
+            - '%kernel.project_dir%'
             - '%octave.cms.media.allowed_mime_types%'
 
     octave.cms.media_item.manager:
         public: true
         class: Octave\CMSBundle\Service\MediaItemManager
         arguments:
-            - '%kernel.root_dir%'
+            - '%kernel.project_dir%'
 
     octave.cms.twig.extension:
         class: Octave\CMSBundle\Twig\CMSExtension
@@ -303,16 +303,36 @@ services:
         tags:
             - { name: octave.sitemap.source }
 
+    sonata.admin.request.fetcher:
+        class: Sonata\AdminBundle\Request\AdminFetcher
+        public: true
+        arguments:
+            - '@sonata.admin.pool'
+
+    # Controller
+    Octave\CMSBundle\Controller\SitemapController:
+        tags:
+            - { name: controller.service_arguments }
+        calls:
+            - [setContainer, ['@service_container']]
+
+    Octave\CMSBundle\Controller\Media\MediaController:
+        tags:
+            - { name: controller.service_arguments }
+        calls:
+            - [setContainer, ['@service_container']]
+
     # Admin
     octave.cms.sitemap.admin:
         class: Octave\CMSBundle\Admin\SitemapAdmin
         tags:
             - name: sonata.admin
+              model_class: Octave\CMSBundle\Entity\Page
+              controller: Octave\CMSBundle\Controller\SitemapController
               manager_type: orm
               group: "CMS"
               label: "label.admin.sitemap"
               label_catalogue: "OctaveCMSBundle"
-        arguments: [~, ~, 'OctaveCMSBundle:Sitemap']
         calls:
             - [ 'setTranslationDomain', ['OctaveCMSBundle']]
 
@@ -324,6 +344,6 @@ services:
               group: "CMS"
               label: "label.admin.media"
               label_catalogue: "SonataAdminBundle"
-        arguments: [~, ~, Octave\CMSBundle\Controller\Media\MediaController]
+        arguments: [~, 'Octave\\CMSBundle\\Entity\\MediaItem', Octave\CMSBundle\Controller\Media\MediaController]
         calls:
             - [ 'setTranslationDomain', ['OctaveCMSBundle']]

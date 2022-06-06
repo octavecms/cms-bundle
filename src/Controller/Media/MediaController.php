@@ -20,11 +20,12 @@ class MediaController extends CRUDController
         $currentCategory = $request->get('category', 'root');
 
         $selectMode = $request->get('select_mode');
-        $template = 'OctaveCMSBundle:Media:list.html.twig';
-        if ($selectMode) $template = 'OctaveCMSBundle:Media:list_raw.html.twig';
+        $template = '@OctaveCMS/Media/list.html.twig';
+        if ($selectMode) $template = '@OctaveCMS/Media/list_raw.html.twig';
 
         return $this->render($template, [
             'current_category_id' => $currentCategory,
+            'admin' => $this->admin,
             'root_category' => [
                 'id' => 'root',
                 'parent' => null,
