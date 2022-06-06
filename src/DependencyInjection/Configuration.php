@@ -15,48 +15,48 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('octave_cms');
+        $treeBuilder = new TreeBuilder('octave_cms');
+        $root = $treeBuilder->getRootNode();
 
         $root
             ->children()
-                ->append($this->createTemplatesNode())
-                ->scalarNode('media_upload_path')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('media_resized_path')->end()
-                ->scalarNode('media_gallery_item_transformer')
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('media_gallery_transformer')
-                    ->cannotBeEmpty()
-                ->end()
-                ->arrayNode('resize_options')
-                    ->useAttributeAsKey('name')
-                    ->arrayPrototype()
-                        ->useAttributeAsKey('name')
-                        ->arrayPrototype()
-                            ->children()
-                                ->scalarNode('width')->end()
-                                ->scalarNode('height')->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode('file_types')
-                    ->scalarPrototype()->end()
-                    ->defaultValue(['gif', 'jpeg', 'jpg', 'png', 'svg', 'xml', 'html'])
-                ->end()
-                ->arrayNode('route_options')
-                    ->arrayPrototype()
-                        ->children()
-                            ->arrayNode('admin_codes')->scalarPrototype()->end()->end()
-                            ->arrayNode('block_types')->scalarPrototype()->end()->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->booleanNode('handle_xhr_requests')->end()
+            ->append($this->createTemplatesNode())
+            ->scalarNode('media_upload_path')
+            ->isRequired()
+            ->cannotBeEmpty()
+            ->end()
+            ->scalarNode('media_resized_path')->end()
+            ->scalarNode('media_gallery_item_transformer')
+            ->cannotBeEmpty()
+            ->end()
+            ->scalarNode('media_gallery_transformer')
+            ->cannotBeEmpty()
+            ->end()
+            ->arrayNode('resize_options')
+            ->useAttributeAsKey('name')
+            ->arrayPrototype()
+            ->useAttributeAsKey('name')
+            ->arrayPrototype()
+            ->children()
+            ->scalarNode('width')->end()
+            ->scalarNode('height')->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+            ->arrayNode('file_types')
+            ->scalarPrototype()->end()
+            ->defaultValue(['gif', 'jpeg', 'jpg', 'png', 'svg', 'xml', 'html'])
+            ->end()
+            ->arrayNode('route_options')
+            ->arrayPrototype()
+            ->children()
+            ->arrayNode('admin_codes')->scalarPrototype()->end()->end()
+            ->arrayNode('block_types')->scalarPrototype()->end()->end()
+            ->end()
+            ->end()
+            ->end()
+            ->booleanNode('handle_xhr_requests')->end()
             ->end();
 
 
@@ -88,7 +88,7 @@ class Configuration implements ConfigurationInterface
      */
     private function createNode($name)
     {
-        return $this->createTreeBuilder()->root($name);
+        return $this->createTreeBuilder($name)->getRootNode();
     }
 
     /**
@@ -96,8 +96,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder.
      */
-    private function createTreeBuilder()
+    private function createTreeBuilder($name)
     {
-        return new TreeBuilder();
+        return new TreeBuilder($name);
     }
 }

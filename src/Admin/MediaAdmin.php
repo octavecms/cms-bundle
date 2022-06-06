@@ -3,7 +3,7 @@
 namespace Octave\CMSBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -17,9 +17,9 @@ class MediaAdmin extends AbstractAdmin
     protected $baseRoutePattern = '/media';
 
     /**
-     * @param RouteCollection $collection
+     * @param RouteCollectionInterface $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->clearExcept(array('list'));
 
