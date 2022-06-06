@@ -2,19 +2,21 @@
     {% import _self as tree %}
 
     <ul{% if root %} class="sonata-tree sonata-tree--small sonata-tree--toggleable media-treeview--scrollable" data-widget="media-treeview"{% endif %}>
-        {% for element in collection if element is not null %}
-            <li>
-                <div class="sonata-tree__item{% if element.id == current_category_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
-                    <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
-                    <a class="sonata-tree__item__edit" href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({category: element.id})) }}">{{ element.name }}</a>
+        {% for element in collection %}
+            {% if element is not null %}
+                <li>
+                    <div class="sonata-tree__item{% if element.id == current_category_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
+                        <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
+                        <a class="sonata-tree__item__edit" href="{{ url(app.request.attributes.get('_route'), app.request.query.all|merge({category: element.id})) }}">{{ element.name }}</a>
 
-                    <div class="media-treeview-drop"></div>
-                </div>
+                        <div class="media-treeview-drop"></div>
+                    </div>
 
-                {% if element.children|length %}
-                    {{ tree.navigate_child(element.children, admin, false, current_category_id, depth + 1) }}
-                {% endif %}
-            </li>
+                    {% if element.children|length %}
+                        {{ tree.navigate_child(element.children, admin, false, current_category_id, depth + 1) }}
+                    {% endif %}
+                </li>
+            {% endif %}
         {% endfor %}
 
         {% if root %}
