@@ -19,8 +19,9 @@ class SitemapController extends CRUDController
         $pageTypes = $this->get('octave.cms.page.manager')->getAllowedPageTypes();
         $pages = $this->get('octave.cms.page.repository')->getTree(null, true);
 
-        return $this->render('OctaveCMSBundle:Sitemap:list.html.twig', [
+        return $this->render('@OctaveCMS/Sitemap/list.html.twig', [
             'page_types' => $pageTypes,
+            'admin' => $this->admin,
             'root_page' => [
                 'id' => 'root',
                 'parent' => null,

@@ -2,28 +2,30 @@
     {% import _self as tree %}
 
     <ul{% if root %} class="sonata-tree sonata-tree--small sonata-tree--toggleable" data-widget="sitemap-treeview"{% endif %}>
-        {% for element in collection if element is not null %}
-            <li>
-                <div class="sonata-tree__item {% if not element.active %} sonata-tree__item--inactive{% endif %}{% if element.id == current_page_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
-                    <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
+        {% for element in collection %}
+            {% if element is not null %}
+                <li>
+                    <div class="sonata-tree__item {% if not element.active %} sonata-tree__item--inactive{% endif %}{% if element.id == current_page_id %} is-active{% endif %}"{% if depth < 2 %} data-treeview-toggled{% endif %} data-id="{{ element.id }}">
+                        <i class="fa fa-caret-right {% if not element.parent and not root %}hidden{% endif %}" data-treeview-toggler></i>
 
-                    {% set path = element.id != 'root' ? path('sitemap_page_edit', {'id': element.id}) : '#' %}
+                        {% set path = element.id != 'root' ? path('sitemap_page_edit', {'id': element.id}) : '#' %}
 
-                    <a class="sonata-tree__item__edit" href="{{ path }}">
-                        {{ element.name }}
-                    </a>
-
-                    {% if not element.readonly %}
-                        <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'OctaveCMSBundle') }}">
-                            <i class="fa  fa-trash-o"></i>
+                        <a class="sonata-tree__item__edit" href="{{ path }}">
+                            {{ element.name }}
                         </a>
-                    {% endif %}
-                </div>
 
-                {% if element.children|length %}
-                    {{ tree.navigate_child(element.children, admin, false, current_page_id, depth + 1) }}
-                {% endif %}
-            </li>
+                        {% if not element.readonly %}
+                            <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'OctaveCMSBundle') }}">
+                                <i class="fa  fa-trash-o"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    {% if element.children|length %}
+                        {{ tree.navigate_child(element.children, admin, false, current_page_id, depth + 1) }}
+                    {% endif %}
+                </li>
+            {% endif %}
         {% endfor %}
 
         {% if root %}
@@ -36,22 +38,22 @@
     <script type="text/template">
         <li>
             <div class="sonata-tree__item <% if (!data.active) { %> sonata-tree__item--inactive<% } %> <% if (currentPageId == data.id) { %> is-active<% } %>" <% if (depth < 2) { %>data-treeview-toggled<% } %> data-id="<%= data.id %>">
-                <i class="fa fa-caret-right <% if (!data.parent && !root) { %>hidden<% } %>" data-treeview-toggler></i>
-                <a class="sonata-tree__item__edit" href="<%= data.edit_url %>"><%= data.name %></a>
+            <i class="fa fa-caret-right <% if (!data.parent && !root) { %>hidden<% } %>" data-treeview-toggler></i>
+            <a class="sonata-tree__item__edit" href="<%= data.edit_url %>"><%= data.name %></a>
 
-                <% if (!data.readonly) { %>
-                    <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'OctaveCMSBundle') }}">
-                        <i class="fa  fa-trash-o"></i>
-                    </a>
-                <% } %>
+            <% if (!data.readonly) { %>
+            <a class="sonata-tree__item__remove" aria-label="{{ 'delete_page' | trans({}, 'OctaveCMSBundle') }}">
+                <i class="fa  fa-trash-o"></i>
+            </a>
+            <% } %>
             </div>
 
             <% if (data.children && data.children.length) { %>
-                <ul>
-                    <% for (var i = 0; i < data.children.length; i++) { %>
-                        <%= template({template: template, data: data.children[i], currentPageId: currentPageId, root: false, depth: depth + 1}) %>
-                    <% } %>
-                </ul>
+            <ul>
+                <% for (var i = 0; i < data.children.length; i++) { %>
+                <%= template({template: template, data: data.children[i], currentPageId: currentPageId, root: false, depth: depth + 1}) %>
+                <% } %>
+            </ul>
             <% } %>
         </li>
     </script>

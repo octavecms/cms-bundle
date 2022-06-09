@@ -1,5 +1,5 @@
-{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
-{% import 'OctaveCMSBundle:Sitemap:treeview.html.twig' as tree %}
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% import '@OctaveCMS/Sitemap/treeview.html.twig' as tree %}
 
 {% block meta_tags %}
     {{ parent() }}
@@ -40,8 +40,8 @@
         </div>
     </div>
 
-    {% include 'OctaveCMSBundle:Sitemap:form.html.twig' %}
-    {% include 'OctaveCMSBundle:Sitemap:error.html.twig' %}
+    {% include '@OctaveCMS/Sitemap/form.html.twig' %}
+    {% include '@OctaveCMS/Sitemap/error.html.twig' %}
 
 {% endblock %}
 
