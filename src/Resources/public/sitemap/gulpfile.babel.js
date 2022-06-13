@@ -1,26 +1,16 @@
-import babelify from 'babelify';
-import browserify from 'browserify';
-import buffer from 'vinyl-buffer';
-import gulp from 'gulp';
-import plugins from 'gulp-load-plugins';
-import source from 'vinyl-source-stream';
-
-
-/* ----------------- */
-/* Development
-/* ----------------- */
-
-gulp.task('development', ['scripts', 'styles'], () => {
-    gulp.watch('./src/styles/**/*.scss', ['styles']);
-    gulp.watch('./src/scripts/**/*.js', ['scripts']);
-});
-
+const babelify = require('babelify');
+const browserify = require('browserify');
+const buffer = require('vinyl-buffer');
+const gulp = require('gulp');
+const plugins = require('gulp-load-plugins');
+const source = require('vinyl-source-stream');
+const sass = require('gulp-sass')(require('sass'));
 
 /* ----------------- */
 /* Scripts
 /* ----------------- */
 
-gulp.task('scripts', () => {
+gulp.task('scripts', function () {
     return browserify({
         'entries': ['./src/scripts/main.js'],
         'debug': true,
@@ -31,26 +21,26 @@ gulp.task('scripts', () => {
         ],
         'transform': [
             babelify.configure({
-                'presets': ['es2015']
+                'presets': ['@babel/preset-env']
             })
         ]
     })
-    .bundle()
-    .on('error', function () {
-        var args = Array.prototype.slice.call(arguments);
+        .bundle()
+        .on('error', function () {
+            var args = Array.prototype.slice.call(arguments);
 
-        plugins().notify.onError({
-            'title': 'Compile Error',
-            'message': '<%= error.message %>'
-        }).apply(this, args);
+            plugins().notify.onError({
+                'title': 'Compile Error',
+                'message': '<%= error.message %>'
+            }).apply(this, args);
 
-        this.emit('end');
-    })
-    .pipe(source('main.js'))
-    .pipe(buffer())
-    .pipe(plugins().sourcemaps.init({'loadMaps': true}))
-    .pipe(plugins().sourcemaps.write('.'))
-    .pipe(gulp.dest('./dist/'));
+            this.emit('end');
+        })
+        .pipe(source('main.js'))
+        .pipe(buffer())
+        .pipe(plugins().sourcemaps.init({'loadMaps': true}))
+        .pipe(plugins().sourcemaps.write('.'))
+        .pipe(gulp.dest('./dist/'));
 });
 
 
@@ -61,7 +51,7 @@ gulp.task('scripts', () => {
 gulp.task('styles', function () {
     return gulp.src('./src/styles/**/*.scss')
         .pipe(plugins().sourcemaps.init())
-        .pipe(plugins().sass().on('error', plugins().sass.logError))
+        .pipe(sass())
         .pipe(plugins().postcss([
             require('autoprefixer')
         ]))
@@ -76,7 +66,7 @@ gulp.task('styles', function () {
 
 gulp.task('cssmin', function () {
     return gulp.src('./src/styles/**/*.scss')
-        .pipe(plugins().sass().on('error', plugins().sass.logError))
+        .pipe(sass())
         .pipe(plugins().postcss([
             require('autoprefixer'),
             require('cssnano')
@@ -104,7 +94,7 @@ gulp.task('jsmin', () => {
         ],
         'transform': [
             babelify.configure({
-                'presets': ['es2015']
+                'presets': ['@babel/preset-env']
             })
         ]
     })
@@ -121,5 +111,11 @@ gulp.task('jsmin', () => {
 /* Taks
 /* ----------------- */
 
-gulp.task('default', ['development']);
-gulp.task('production', ['cssmin', 'jsmin']);
+
+gulp.task('development', gulp.parallel('scripts', 'styles', function developmentWatch () {
+    gulp.watch('./src/styles/**/*.scss', gulp.parallel('styles'));
+    gulp.watch('./src/scripts/**/*.js', gulp.parallel('scripts'));
+}));
+
+gulp.task('default', gulp.series('development'));
+gulp.task('production', gulp.parallel('cssmin', 'jsmin'));
