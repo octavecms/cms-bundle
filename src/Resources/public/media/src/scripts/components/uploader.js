@@ -2,7 +2,6 @@ import debounce from 'lodash/debounce';
 import 'blueimp-file-upload';
 import { setErrorMessage, uploadedFiles, updatedFile } from 'modules/actions';
 
-
 let UID = 0;
 
 

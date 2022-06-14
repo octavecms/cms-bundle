@@ -194,8 +194,12 @@ export default class SitemapTreeView {
     }
 
     cleanupDroppable ($element) {
-        $element.draggable('destroy');
-        $element.droppable('destroy');
+        if ($element.data('uiDraggable')) {
+            $element.draggable('destroy');
+        }
+        if ($element.data('uiDroppable')) {
+            $element.droppable('destroy');
+        }
     }
 
     handleDropOver (e, ui) {

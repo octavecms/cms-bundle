@@ -1,4 +1,5 @@
-import map from 'lodash/map';
+import 'lib/jquery.bridget';
+import 'lib/jquery.ui';
 
 import createStore from 'modules/store';
 
@@ -74,5 +75,5 @@ class Sitemap {
     }
 }
 
-
+console.log($.bridget);
 $.bridget(SITEMAP_NAMESPACE, Sitemap);

@@ -1,3 +1,6 @@
+import 'lib/jquery.bridget';
+import 'lib/jquery.ui';
+
 import map from 'lodash/map';
 
 import createStore from 'modules/store';

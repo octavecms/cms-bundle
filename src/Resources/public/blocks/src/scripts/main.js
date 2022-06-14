@@ -1,3 +1,5 @@
+import 'lib/jquery.bridget';
+import 'lib/jquery.ui';
 import 'lib/jquery.clean-data';
 import 'lib/jquery.initialize';
 

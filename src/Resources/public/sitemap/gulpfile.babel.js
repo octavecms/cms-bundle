@@ -25,6 +25,7 @@ gulp.task('scripts', function () {
             })
         ]
     })
+        .require("./src/scripts/lib/jquery", {expose: "jquery"})
         .bundle()
         .on('error', function () {
             var args = Array.prototype.slice.call(arguments);
@@ -98,6 +99,7 @@ gulp.task('jsmin', () => {
             })
         ]
     })
+        .require("./src/scripts/lib/jquery", {expose: "jquery"})
         .bundle()
         .pipe(source('main.js'))
         .pipe(envs)
