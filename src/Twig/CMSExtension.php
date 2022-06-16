@@ -135,10 +135,10 @@ class CMSExtension extends AbstractExtension
     /**
      * @param $blocks
      * @param bool $transform
+     * @param array $parameters
      * @return string
-     * @throws \Twig\Error\Error
      */
-    public function renderBlocks($blocks, $transform = false)
+    public function renderBlocks($blocks, bool $transform = false, array $parameters = []): string
     {
         if ($transform) {
 
@@ -146,18 +146,19 @@ class CMSExtension extends AbstractExtension
             $blocks = $transformer->transform($blocks);
         }
 
-        return $this->container->get('octave.cms.block.manager')->renderBlocks($blocks);
+        return $this->container->get('octave.cms.block.manager')->renderBlocks($blocks, $parameters);
     }
 
     /**
      * @param $blocks
      * @param $type
      * @param bool $transform
-     * @param bool $template
+     * @param string|null $template
+     * @param array $parameters
      * @return string
      * @throws \Exception
      */
-    public function renderBlock($blocks, $type, $transform = false, $template = false)
+    public function renderBlock($blocks, $type, bool $transform = false, string $template = null, array $parameters = []): string
     {
         $requiredBlock = null;
 
@@ -178,6 +179,6 @@ class CMSExtension extends AbstractExtension
             throw new \Exception(sprintf('Type %s not found in given blocks', $type));
         }
 
-        return $this->container->get('octave.cms.block.manager')->renderBlock($requiredBlock, $template);
+        return $this->container->get('octave.cms.block.manager')->renderBlock($requiredBlock, $template, $parameters);
     }
 }
