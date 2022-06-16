@@ -2,9 +2,9 @@
 
 namespace Octave\CMSBundle\Service;
 
+use Exception;
 use Octave\CMSBundle\Entity\Blockable;
 use Octave\CMSBundle\Entity\BlockEntityInterface;
-use Octave\CMSBundle\Entity\BlockTrait;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Page\Block\BlockInterface;
@@ -73,7 +73,7 @@ class BlockManager
     /**
      * @param Blockable $page
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function renderPage(Blockable $page)
     {
@@ -85,41 +85,37 @@ class BlockManager
     }
 
     /**
-     * @param $blocks
-     * @return string
-     * @throws \Twig\Error\Error
-     * @throws \Exception
+     * @throws Exception
      */
-    public function renderBlocks($blocks)
+    public function renderBlocks($blocks, array $parameters = []): string
     {
         $content = '';
 
-        /** @var BlockTrait $blockEntity */
+        /** @var BlockEntityInterface $blockEntity */
         foreach ($blocks as $blockEntity) {
-            $content .= $this->renderBlock($blockEntity);
+            $content .= $this->renderBlock($blockEntity, $parameters);
         }
 
         return $content;
     }
 
     /**
-     * @param BlockEntityInterface $block
-     * @param null $template
-     * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
-    public function renderBlock(BlockEntityInterface $block, $template = null)
+    public function renderBlock(BlockEntityInterface $block, $template = null, array $parameters = []): string
     {
         /** @var BlockInterface $blockType */
         $blockType = $this->blocks[$block->getType()] ?? null;
         if (!$blockType) {
-            throw new \Exception(sprintf('Unknown type: %s', $block->getType()));
+            throw new Exception(sprintf('Unknown type: %s', $block->getType()));
         }
 
         $blockParameters = array_merge([
             'content' => $blockType->getContent($block),
             'title' => $block->getTitle()
         ], $blockType->getTemplateParameters());
+
+        $blockParameters = array_merge($blockParameters, $parameters);
 
         return $this->templating->render($template ? $template : $blockType->getContentTemplate(), $blockParameters);
     }
