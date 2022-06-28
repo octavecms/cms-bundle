@@ -93,7 +93,7 @@ class BlockManager
 
         /** @var BlockEntityInterface $blockEntity */
         foreach ($blocks as $blockEntity) {
-            $content .= $this->renderBlock($blockEntity, $parameters);
+            $content .= $this->renderBlock($blockEntity, null, $parameters);
         }
 
         return $content;
