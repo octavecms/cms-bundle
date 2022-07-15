@@ -59,7 +59,14 @@ class BlocksList {
 
     generateBlockHTML (html) {
         var index = this.index++;
-        return html.replace(/__name__/g, index);
+
+        // In the string replace only first occurance of the __name__, if there are occurances then
+        // that means id or name is from collection which is inside collection
+        html = html.replace(/([a-z0-9-_[\]]|&#x5D;|&#x5B;)*__name__([a-z0-9-_[\]]|&#x5D;|&#x5B;)*/ig, function (all) {
+            return all.replace('__name__', index);
+        });
+
+        return html;
     }
 
     handleBlockAdd (event, ui) {
