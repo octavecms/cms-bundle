@@ -149,7 +149,11 @@ class CollectionWidget {
 
     _generateItemHTML () {
         var index = this.index++;
-        return this.$list.data('prototype').replace(/__name__/g, index);
+        var html = this.$list.data('prototype');
+
+        html = html.replace(/__name__/g, index);
+
+        return html;
     }
 
     /**
