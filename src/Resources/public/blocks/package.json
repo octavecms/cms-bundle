@@ -42,7 +42,7 @@
   "dependencies": {
     "blueimp-file-upload": "^9.18.0",
     "jquery-bridget": "^3.0.1",
-    "jquery-ui": "^1.13.1",
+    "jquery-ui": "^1.13.2",
     "lodash": "^4.17.4",
     "promise-polyfill": "^6.0.2",
     "redux": "^3.7.2",
