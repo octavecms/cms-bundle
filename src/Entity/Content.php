@@ -29,7 +29,7 @@ class Content implements TranslatableInterface
     /**
      * @var Page
      *
-     * @ORM\OneToOne(targetEntity="Octave\CMSBundle\Entity\Page", inversedBy="content")
+     * @ORM\ManyToOne(targetEntity="Octave\CMSBundle\Entity\Page", inversedBy="content")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $page;
