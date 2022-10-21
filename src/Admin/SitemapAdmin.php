@@ -32,7 +32,7 @@ class SitemapAdmin extends AbstractAdmin
         ]);
 
         $collection->add('page_add', 'page/create', [
-            '_controller' => 'Octave\CMSBundle\Controller\PageControllere:create'
+            '_controller' => 'Octave\CMSBundle\Controller\PageController:create'
         ], [], [], '', [], ['POST']);
 
         $collection->add('page_remove', 'page/remove', [
