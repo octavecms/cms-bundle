@@ -30,7 +30,7 @@ services:
         class: Octave\CMSBundle\Repository\PageRepository
         public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ OctaveCMSBundle:Page ]
+        arguments: [ Octave\CMSBundle\Entity\Page ]
         calls:
             - [ 'setTreeBuilder', ['@octave.cms.page.tree_builder']]
 
@@ -38,13 +38,13 @@ services:
         class: Octave\CMSBundle\Repository\ContentRepository
         public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ OctaveCMSBundle:Content ]
+        arguments: [ Octave\CMSBundle\Entity\Content ]
 
     octave.cms.media_category.repository:
         class: Octave\CMSBundle\Repository\MediaCategoryRepository
         public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ OctaveCMSBundle:MediaCategory ]
+        arguments: [ Octave\CMSBundle\Entity\MediaCategory ]
         calls:
             - [ 'setTreeBuilder', ['@octave.cms.media_category.tree_builder']]
 
@@ -52,13 +52,13 @@ services:
         class: Octave\CMSBundle\Repository\MediaItemRepository
         public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ OctaveCMSBundle:MediaItem ]
+        arguments: [ Octave\CMSBundle\Entity\MediaItem ]
 
     octave.cms.page_version.repository:
         class: Octave\CMSBundle\Repository\PageVersionRepository
         public: true
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ OctaveCMSBundle:PageVersion ]
+        arguments: [ Octave\CMSBundle\Entity\PageVersion ]
 
     # Commands
     octave.cms.page.create.command:
