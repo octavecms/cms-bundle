@@ -5,29 +5,29 @@ namespace Octave\CMSBundle\Service;
 use Exception;
 use Octave\CMSBundle\Entity\Blockable;
 use Octave\CMSBundle\Entity\BlockEntityInterface;
-use Symfony\Bundle\TwigBundle\TwigEngine;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Page\Block\BlockInterface;
 use Octave\CMSBundle\Page\Type\FlexiblePageType;
+use Twig\Environment;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
 class BlockManager
 {
-    /** @var TwigEngine */
-    private $templating;
+    /** @var Environment */
+    private $twig;
 
     /** @var array */
     private $blocks = [];
 
     /**
      * BlockManager constructor.
-     * @param TwigEngine $twigEngine
+     * @param Environment $twig
      */
-    public function __construct(TwigEngine $twigEngine)
+    public function __construct(Environment $twig)
     {
-        $this->templating = $twigEngine;
+        $this->twig = $twig;
     }
 
     /**
@@ -117,6 +117,6 @@ class BlockManager
 
         $blockParameters = array_merge($blockParameters, $parameters);
 
-        return $this->templating->render($template ? $template : $blockType->getContentTemplate(), $blockParameters);
+        return $this->twig->render($template ? $template : $blockType->getContentTemplate(), $blockParameters);
     }
 }

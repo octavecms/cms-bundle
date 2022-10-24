@@ -2,6 +2,8 @@
 
 namespace Octave\CMSBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Octave\CMSBundle\Factory\PageTypeFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -29,19 +31,16 @@ class PageController extends AbstractController
 
     /**
      * @param Request $request
-     * @param null $id
+     * @param Page $page
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function editAction(Request $request, $id = null)
+    public function editAction(Request $request, Page $page)
     {
-        $page = $this->get('octave.cms.page.repository')->find($id);
-        if (!$page) {
-            throw new NotFoundHttpException(sprintf('Unable to find Page entity with id %s', $id));
-        }
+        $pageType = $this->container->get('octave.cms.page_type.factory')->get($page->getType());
 
-        $pageType = $this->get('octave.cms.page_type.factory')->get($page->getType());
-
-        $usePageVersions = $this->getParameter('octave.cms.page_use_versions');
+        $usePageVersions = $this->container->getParameter('octave.cms.page_use_versions');
         $defaultVersion = $usePageVersions ? 'draft' : null;
 
         $version = $request->get('version', $defaultVersion);
@@ -52,13 +51,13 @@ class PageController extends AbstractController
 
         if ($usePageVersions && $version && !$isPublish) {
 
-            $versionRepository = $this->get('octave.cms.page_version.repository');
+            $versionRepository = $this->container->get('octave.cms.page_version.repository');
 
             $pageVersion = $versionRepository->findOneByVersion($page, $version);
             if (!$pageVersion) {
                 $pageVersion = $versionRepository->create($page, $version);
                 $pageVersion->setContent(json_encode($pageType->serialize($page)));
-                $this->getDoctrine()->getManager()->flush($pageVersion);
+                $this->container->get('doctrine.orm.entity_manager')->flush($pageVersion);
             }
             else {
                 $page = $pageType->unserialize($pageVersion);

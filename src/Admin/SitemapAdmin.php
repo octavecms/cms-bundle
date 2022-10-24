@@ -24,23 +24,23 @@ class SitemapAdmin extends AbstractAdmin
         $collection->clearExcept(array('list'));
 
         $collection->add('page_create_type', 'page/create/{type}', [
-            '_controller' => 'Octave\CMSBundle\Controller\PageController:createPage'
+            '_controller' => 'Octave\CMSBundle\Controller\PageController:createPageAction'
         ]);
 
         $collection->add('page_edit', 'page/{id}/edit', [
-            '_controller' => 'Octave\CMSBundle\Controller\PageController:edit'
+            '_controller' => 'Octave\CMSBundle\Controller\PageController:editAction'
         ]);
 
         $collection->add('page_add', 'page/create', [
-            '_controller' => 'Octave\CMSBundle\Controller\PageController:create'
+            '_controller' => 'Octave\CMSBundle\Controller\PageController:createAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('page_remove', 'page/remove', [
-            '_controller' => 'Octave\CMSBundle\Controller\PageController:remove'
+            '_controller' => 'Octave\CMSBundle\Controller\PageController:removeAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('page_move', 'page/move', [
-            '_controller' => 'Octave\CMSBundle\Controller\PageController:move'
+            '_controller' => 'Octave\CMSBundle\Controller\PageController:moveAction'
         ], [], [], '', [], ['POST']);
     }
 }

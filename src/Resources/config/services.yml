@@ -310,6 +310,18 @@ services:
             - '@sonata.admin.pool'
 
     # Controller
+    Octave\CMSBundle\Controller\PageController:
+        tags:
+            - { name: controller.service_arguments }
+        calls:
+            - [setContainer, ['@service_container']]
+
+    Octave\CMSBundle\Controller\FlexiblePageController:
+        tags:
+            - { name: controller.service_arguments }
+        calls:
+            - [setContainer, ['@service_container']]
+
     Octave\CMSBundle\Controller\SitemapController:
         tags:
             - { name: controller.service_arguments }

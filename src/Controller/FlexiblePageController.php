@@ -26,11 +26,11 @@ class FlexiblePageController extends AbstractController
     public function editAction(Request $request, Page $page = null, $version = null)
     {
         $isNew = !$page;
-        $blockManager = $this->get('octave.cms.block.manager');
-        $pageRepository = $this->get('octave.cms.page.repository');
-        $isAdmin = ($this->getParameter('octave.cms.super_admin_role'))
-            ? $this->get('security.authorization_checker')
-                ->isGranted($this->getParameter('octave.cms.super_admin_role'))
+        $blockManager = $this->container->get('octave.cms.block.manager');
+        $pageRepository = $this->container->get('octave.cms.page.repository');
+        $isAdmin = ($this->container->getParameter('octave.cms.super_admin_role'))
+            ? $this->container->get('security.authorization_checker')
+                ->isGranted($this->container->getParameter('octave.cms.super_admin_role'))
             : true;
         $isPublish = $request->get('publish');
 
@@ -44,18 +44,18 @@ class FlexiblePageController extends AbstractController
             $originalBlocks->add($block);
         }
 
-        $pageType = $this->get('octave.cms.page_type.factory')->get($page->getType());
+        $pageType = $this->container->get('octave.cms.page_type.factory')->get($page->getType());
 
         if ($version && $isPublish) {
 
-            $versionRepository = $this->get('octave.cms.page_version.repository');
+            $versionRepository = $this->container->get('octave.cms.page_version.repository');
             $pageVersion = $versionRepository->findOneByVersion($page, $version);
             if ($pageVersion) {
                 $page = $pageType->unserialize($pageVersion);
             }
         }
 
-        $routeOptions = $this->get('octave.cms.page.manager')->getRouteOptions($page->getName());
+        $routeOptions = $this->container->get('octave.cms.page.manager')->getRouteOptions($page->getName());
         $blocks = isset($routeOptions['block_types']) && $routeOptions['block_types']
             ? $blockManager->getBlocksByName($routeOptions['block_types'])
             : $blockManager->getBlocks();
@@ -63,7 +63,7 @@ class FlexiblePageController extends AbstractController
         $form = $this->createForm(FlexiblePageForm::class, $page, [
             'method' => 'post',
             'block_types' => $blocks,
-            'locales' => $this->getParameter('locales'),
+            'locales' => $this->container->getParameter('locales'),
             'is_admin' => $isAdmin
         ]);
         $form->handleRequest($request);
@@ -71,13 +71,13 @@ class FlexiblePageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             /** @var EntityManager $em */
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->container->get('doctrine.orm.entity_manager');
 
             if (!$page->getName()) {
                 $page->setName(sprintf('simple_text_%s', time()));
             }
 
-            $page->setController($this->getParameter('octave.cms.flexible_page_controller'));
+            $page->setController($this->container->getParameter('octave.cms.flexible_page_controller'));
             $page->setOption('id', $page->getId());
 
             /** @var Block $block */
@@ -87,7 +87,7 @@ class FlexiblePageController extends AbstractController
 
             if ($version) {
 
-                $newVersion = $this->get('octave.cms.page.version.manager')->storeVersion($page, $version);
+                $newVersion = $this->container->get('octave.cms.page.version.manager')->storeVersion($page, $version);
 
                 if ($isPublish) {
 
@@ -131,7 +131,7 @@ class FlexiblePageController extends AbstractController
             }
         }
 
-        $freeze = count($page->getBlocks()) && $this->getParameter('octave.cms.freeze_page_blocks_after_creation') &&
+        $freeze = count($page->getBlocks()) && $this->container->getParameter('octave.cms.freeze_page_blocks_after_creation') &&
             !$request->get('unfreeze');
 
         return $this->render('OctaveCMSBundle:FlexiblePage:edit.html.twig', [

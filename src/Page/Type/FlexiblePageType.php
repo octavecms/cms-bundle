@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Page\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Octave\CMSBundle\Controller\FlexiblePageController;
 use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\BlockTranslation;
 use Octave\CMSBundle\Entity\Page;
@@ -28,7 +29,7 @@ class FlexiblePageType extends BasePageType
      */
     public function getController()
     {
-        return 'OctaveCMSBundle:FlexiblePage:edit';
+        return 'Octave\CMSBundle\Controller\FlexiblePageController::editAction';
     }
 
     /**
