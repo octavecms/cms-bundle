@@ -1,10 +1,10 @@
-{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
 
-{% import 'OctaveCMSBundle:FlexiblePage:macros.html.twig' as blocks %}
+{% import '@OctaveCMS/FlexiblePage/macros.html.twig' as blocks %}
 
 {% set blockTypes = form.blocks.vars.block_types %}
 
-{% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'OctaveCMSBundle::fields.html.twig' %}
+{% form_theme form '@SonataAdmin/Form/form_admin_fields.html.twig' '@OctaveCMS/fields.html.twig' %}
 
 {% block sonata_page_content_header %}
 
@@ -147,32 +147,32 @@
 
     {{ blocks.block_list_start(freeze) }}
 
-        <h4 class="blocks-list-empty-message">
-            {{ 'add_block' | trans({}, 'OctaveCMSBundle') }}
-        </h4>
+    <h4 class="blocks-list-empty-message">
+        {{ 'add_block' | trans({}, 'OctaveCMSBundle') }}
+    </h4>
 
-        {% for block in form.blocks %}
+    {% for block in form.blocks %}
 
-            {% set blockOptions = [] %}
-            {% if block.vars.data.options is not null %}
-                {% set blockOptions = blockOptions|merge(block.vars.data.options) %}
-            {% endif %}
-            {% if blockTypes[block.vars.data.type].blockOptions is not null %}
-                {% set blockOptions = blockOptions|merge(blockTypes[block.vars.data.type].blockOptions) %}
-            {% endif %}
+        {% set blockOptions = [] %}
+        {% if block.vars.data.options is not null %}
+            {% set blockOptions = blockOptions|merge(block.vars.data.options) %}
+        {% endif %}
+        {% if blockTypes[block.vars.data.type].blockOptions is not null %}
+            {% set blockOptions = blockOptions|merge(blockTypes[block.vars.data.type].blockOptions) %}
+        {% endif %}
 
-            {% set blockType = block.vars.block_type %}
-            {% set blockData = blockTypes[blockType] %}
+        {% set blockType = block.vars.block_type %}
+        {% set blockData = blockTypes[blockType] %}
 
-            {% if blockData %}
-                {{ blocks.block_start(blockData.label, collapseBox, freeze) }}
-                {{ form_widget(block) }}
-                {{ blocks.block_end(blockOptions) }}
-            {% endif %}
+        {% if blockData %}
+            {{ blocks.block_start(blockData.label, collapseBox, freeze) }}
+            {{ form_widget(block) }}
+            {{ blocks.block_end(blockOptions) }}
+        {% endif %}
 
-        {% endfor %}
+    {% endfor %}
 
-        {% do form.blocks.setRendered() %}
+    {% do form.blocks.setRendered() %}
 
     {{ blocks.block_list_end() }}
 
