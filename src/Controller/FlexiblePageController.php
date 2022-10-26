@@ -155,7 +155,7 @@ class FlexiblePageController extends AbstractController
     {
         $blockManager = $this->get('octave.cms.block.manager');
 
-        if ($this->getParameter('octave.cms.handle_xhr_requests') && $request->isXmlHttpRequest()) {
+        if ($this->container->getParameter('octave.cms.handle_xhr_requests') && $request->isXmlHttpRequest()) {
             $response = new Response();
             $response->setContent($blockManager->renderPage($page));
             return $response;
@@ -163,7 +163,7 @@ class FlexiblePageController extends AbstractController
 
         $template = $page->getBaseTemplate()
             ? $page->getBaseTemplate()
-            : $this->getParameter('octave.cms.flexible_page_template');
+            : $this->container->getParameter('octave.cms.flexible_page_template');
 
         return $this->render($template, [
             'page' => $page,

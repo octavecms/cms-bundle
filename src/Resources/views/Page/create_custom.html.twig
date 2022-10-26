@@ -1,4 +1,4 @@
-{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
 
 {% block javascripts %}
 
@@ -50,7 +50,7 @@
 
 {% block content %}
 
-    {% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' %}
+    {% form_theme form '@SonataAdmin/Form/form_admin_fields.html.twig' %}
 
     {{ form_start(form) }}
     <div class="row">

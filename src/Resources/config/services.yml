@@ -1,17 +1,17 @@
 parameters:
 
     octave.cms.super_admin_role: 'ROLE_SUPER_ADMIN'
-    octave.cms.text_page_controller: 'OctaveCMSBundle:TextPage:show'
-    octave.cms.text_page_template: 'OctaveCMSBundle:TextPage:show.html.twig'
+    octave.cms.text_page_controller: 'Octave\CMSBundle\Controller\TextPageController:showAction'
+    octave.cms.text_page_template: '@@OctaveCMS\TextPage\show.html.twig'
 
-    octave.cms.flexible_page_controller: 'OctaveCMSBundle:FlexiblePage:show'
-    octave.cms.flexible_page_template: 'OctaveCMSBundle:FlexiblePage:show.html.twig'
+    octave.cms.flexible_page_controller: 'Octave\CMSBundle\Controller\FlexiblePageController:showAction'
+    octave.cms.flexible_page_template: '@@OctaveCMS\FlexiblePage\show.html.twig'
 
-    octave.cms.text_line_editor.block.template: 'OctaveCMSBundle:Blocks:text_line_editor.html.twig'
-    octave.cms.text_editor.block.template: 'OctaveCMSBundle:Blocks:text_editor.html.twig'
-    octave.cms.rich_text_editor.block.template: 'OctaveCMSBundle:Blocks:rich_text_editor.html.twig'
-    octave.cms.image.block.template: 'OctaveCMSBundle:Blocks:image.html.twig'
-    octave.cms.gallery.block.template: 'OctaveCMSBundle:Blocks:gallery.html.twig'
+    octave.cms.text_line_editor.block.template: '@@OctaveCMS\Blocks\text_line_editor.html.twig'
+    octave.cms.text_editor.block.template: '@@OctaveCMS\Blocks\text_editor.html.twig'
+    octave.cms.rich_text_editor.block.template: '@@OctaveCMS\Blocks\rich_text_editor.html.twig'
+    octave.cms.image.block.template: '@@OctaveCMS\Blocks\image.html.twig'
+    octave.cms.gallery.block.template: '@@OctaveCMS\Blocks\gallery.html.twig'
 
     octave.cms.page_use_versions: true
     octave.cms.freeze_page_blocks_after_creation: false
@@ -111,17 +111,17 @@ services:
         tags:
             - { name: octave.block.type }
 
-    octave.cms.image.block:
-        class: Octave\CMSBundle\Page\Block\ImageBlock
-        arguments: ['%octave.cms.image.block.template%']
-        tags:
-            - { name: octave.block.type }
-
-    octave.cms.gallery.block:
-        class: Octave\CMSBundle\Page\Block\GalleryBlock
-        arguments: ['%octave.cms.gallery.block.template%']
-        tags:
-            - { name: octave.block.type }
+    #    octave.cms.image.block:
+    #        class: Octave\CMSBundle\Page\Block\ImageBlock
+    #        arguments: ['%octave.cms.image.block.template%']
+    #        tags:
+    #            - { name: octave.block.type }
+    #
+    #    octave.cms.gallery.block:
+    #        class: Octave\CMSBundle\Page\Block\GalleryBlock
+    #        arguments: ['%octave.cms.gallery.block.template%']
+    #        tags:
+    #            - { name: octave.block.type }
 
     # Services
     octave.cms.page.manager:
