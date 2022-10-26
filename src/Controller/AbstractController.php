@@ -32,9 +32,8 @@ abstract class AbstractController extends Controller
         $kernel = $this->get('kernel');
         $cacheDir = $kernel->getCacheDir();
 
-        foreach (array('matcher_cache_class', 'generator_cache_class') as $option) {
-            $className = $router->getOption($option);
-            $cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $className . '.php';
+        foreach (['url_generating_routes', 'url_matching_routes'] as $option) {
+            $cacheFile = $cacheDir . DIRECTORY_SEPARATOR . $option . '.php';
             $filesystem->remove($cacheFile);
         }
 
