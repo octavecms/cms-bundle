@@ -322,6 +322,12 @@ services:
         calls:
             - [setContainer, ['@service_container']]
 
+    Octave\CMSBundle\Controller\CustomPageController:
+        tags:
+            - { name: controller.service_arguments }
+        calls:
+            - [setContainer, ['@service_container']]
+
     Octave\CMSBundle\Controller\SitemapController:
         tags:
             - { name: controller.service_arguments }
