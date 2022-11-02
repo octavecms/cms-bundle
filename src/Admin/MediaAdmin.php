@@ -24,35 +24,35 @@ class MediaAdmin extends AbstractAdmin
         $collection->clearExcept(array('list'));
 
         $collection->add('category_add', 'category/create', [
-            '_controller' => 'OctaveCMSBundle:Media\Category:create'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\CategoryController:createAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('category_remove', 'category/remove', [
-            '_controller' => 'OctaveCMSBundle:Media\Category:remove'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\CategoryController:removeAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('category_move', 'category/move', [
-            '_controller' => 'OctaveCMSBundle:Media\Category:move'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\CategoryController:moveAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_list', 'item/list', [
-            '_controller' => 'OctaveCMSBundle:Media\Item:list'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\ItemController:listAction'
         ]);
 
         $collection->add('item_move', 'item/move', [
-            '_controller' => 'OctaveCMSBundle:Media\Item:move'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\ItemController:moveAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_remove', 'item/remove', [
-            '_controller' => 'OctaveCMSBundle:Media\Item:remove'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\ItemController:removeAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_upload', 'item/upload', [
-            '_controller' => 'OctaveCMSBundle:Media\Item:upload'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\ItemController:uploadAction'
         ], [], [], '', [], ['POST']);
 
         $collection->add('item_replace', 'item/replace', [
-            '_controller' => 'OctaveCMSBundle:Media\Item:replace'
+            '_controller' => 'Octave\CMSBundle\Controller\Media\ItemController:replaceAction'
         ], [], [], '', [], ['POST']);
     }
 }
