@@ -339,13 +339,14 @@ services:
             - { name: controller.service_arguments }
         calls:
             - [setContainer, ['@service_container']]
-            -
+
     Octave\CMSBundle\Controller\Media\ItemController:
 
         tags:
             - { name: controller.service_arguments }
         calls:
             - [setContainer, ['@service_container']]
+
     Octave\CMSBundle\Controller\Media\CategoryController:
         tags:
             - { name: controller.service_arguments }
