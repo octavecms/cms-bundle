@@ -52,11 +52,11 @@ class UploadHelper
      * @param $allowedMimeTypes
      */
     public function __construct(MediaItemRepository $itemRepository, MediaItemManager $mediaItemManager, $uploadDir,
-                                $rootDir, $allowedMimeTypes)
+                                                    $rootDir, $allowedMimeTypes)
     {
         $this->itemRepository = $itemRepository;
         $this->itemManager = $mediaItemManager;
-        $this->uploadPath = $rootDir . '/../public' . $uploadDir . '/';
+        $this->uploadPath = $rootDir . '/public' . $uploadDir . '/';
         $this->webPath = $uploadDir;
         $this->allowedMimeTypes = $allowedMimeTypes;
     }
@@ -91,7 +91,7 @@ class UploadHelper
             $item->setName($newFileName);
             $item->setCategory($category);
             $item->setPath($webPath);
-            $item->setSize($file->getClientSize());
+            $item->setSize($file->getSize());
 
             $filePath = $category
                 ? $this->uploadPath . $category->getId()
