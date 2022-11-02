@@ -20,10 +20,10 @@ class CustomPageController extends AbstractController
     public function editAction(Request $request, Page $page = null)
     {
         $isNew = !$page;
-        $repository = $this->get('octave.cms.page.repository');
-        $isAdmin = ($this->getParameter('octave.cms.super_admin_role'))
-            ? $this->get('security.authorization_checker')
-                ->isGranted($this->getParameter('octave.cms.super_admin_role'))
+        $repository = $this->container->get('octave.cms.page.repository');
+        $isAdmin = ($this->container->getParameter('octave.cms.super_admin_role'))
+            ? $this->container->get('security.authorization_checker')
+                ->isGranted($this->container->getParameter('octave.cms.super_admin_role'))
             : true;
 
         if (!$page) {
@@ -34,7 +34,7 @@ class CustomPageController extends AbstractController
         $form = $this->createForm(CustomPageType::class, $page, [
             'method' => 'post',
             'is_admin' => $isAdmin,
-            'locales' => $this->getParameter('locales')
+            'locales' => $this->container->getParameter('locales')
         ]);
         $form->handleRequest($request);
 
@@ -76,7 +76,7 @@ class CustomPageController extends AbstractController
             }
         }
 
-        return $this->render('OctaveCMSBundle:Page:create_custom.html.twig', [
+        return $this->render('@OctaveCMS/Page/create_custom.html.twig', [
             'form' => $form->createView(),
             'page' => $page,
             'isNew' => $isNew,

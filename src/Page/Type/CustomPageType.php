@@ -22,7 +22,7 @@ class CustomPageType extends BasePageType
      */
     public function getController()
     {
-        return 'OctaveCMSBundle:CustomPage:edit';
+        return 'Octave\CMSBundle\Controller\CustomPageController::editAction';
     }
 
     /**
