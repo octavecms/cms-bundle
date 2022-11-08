@@ -22,7 +22,7 @@
     "browserify": "^13.0.1",
     "cssnano": "^3.10.0",
     "eslint": "^0.18.0",
-    "eslint-loader": "^0.9.0",
+    "eslint-loader": "^4.0.2",
     "eslint-plugin-react": "^2.0.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
