@@ -94,7 +94,7 @@ class Page implements Blockable, TranslatableInterface
 
     /**
      * @var Content
-     * @ORM\OneToMany(targetEntity="Octave\CMSBundle\Entity\Content", mappedBy="page", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Octave\CMSBundle\Entity\Content", mappedBy="page", cascade={"persist"})
      */
     private $content;
 
