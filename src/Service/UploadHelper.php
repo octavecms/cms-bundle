@@ -130,7 +130,7 @@ class UploadHelper
 
         $item->setName($newFileName);
         $item->setPath($webPath);
-        $item->setSize($file->getClientSize());
+        $item->setSize($file->getSize());
 
         $this->setFileInfo($item, $file);
 
