@@ -204,11 +204,11 @@
 
     <div class="form-control-blocks">
 
-        {% import 'OctaveCMSBundle:FlexiblePage:macros.html.twig' as blocks %}
+        {% import '@OctaveCMS/FlexiblePage/macros.html.twig' as blocks %}
 
         {% set blockTypes = form.vars.block_types %}
 
-        {% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' 'OctaveCMSBundle::fields.html.twig' %}
+        {% form_theme form '@SonataAdmin/Form/form_admin_fields.html.twig' '@OctaveCMS/fields.html.twig' %}
 
         <div class="navbar-blocks"
              data-widget="navbar-blocks"
