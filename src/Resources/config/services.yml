@@ -154,6 +154,7 @@ services:
 
     octave.cms.image.processor:
         class: Octave\CMSBundle\Service\ImageProcessor
+        public: true
         arguments:
             - '%kernel.root_dir%'
             - '%octave.cms.media.upload_dir%'

@@ -2,6 +2,8 @@
 
 namespace Octave\CMSBundle\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
  */
@@ -24,7 +26,7 @@ class ImageProcessor
      */
     public function __construct($rootDir, $uploadDir, $resizedDir)
     {
-        $this->uploadPath = $rootDir . '/../web';
+        $this->uploadPath = $rootDir . '/../public';
         $this->tmbPath = $this->uploadPath . $resizedDir;
         $this->tmbWebPath = $resizedDir;
     }
@@ -45,12 +47,18 @@ class ImageProcessor
 
         $imagePath = $this->uploadPath . $path;
 
-        if (!realpath($imagePath)) {
-            throw new \Exception(sprintf('Image not found: %s', $imagePath));
+        $filesystem = new Filesystem();
+
+        if (!$filesystem->exists($imagePath)) {
+            return $path;
+        }
+
+        if (is_dir($imagePath)) {
+            return $path;
         }
 
         if (!file_exists($this->tmbPath)) {
-            throw new \Exception(sprintf('No such directory: %s', $this->tmbPath));
+            $filesystem->mkdir($this->tmbPath);
         }
 
         $tmbPath = realpath($this->tmbPath) . '/' . $tmbFileName;
