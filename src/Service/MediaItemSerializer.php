@@ -10,6 +10,9 @@ use Symfony\Component\Mime\MimeTypes;
  */
 class MediaItemSerializer
 {
+    /** @var ImageProcessor $imageProcessor */
+    protected $imageProcessor;
+
     /** @var string */
     protected $uploadDir;
 
@@ -17,8 +20,9 @@ class MediaItemSerializer
      * MediaItemSerializer constructor.
      * @param $uploadDir
      */
-    public function __construct($uploadDir)
+    public function __construct(ImageProcessor $imageProcessor, $uploadDir)
     {
+        $this->imageProcessor = $imageProcessor;
         $this->uploadDir = $uploadDir;
     }
 
@@ -58,7 +62,7 @@ class MediaItemSerializer
             'id' => $item->getId(),
             'isImage' => $isImage,
             'icon' => 'fa-file',
-            'image' => $item->getPath(),
+            'image' => $this->imageProcessor->resize($item->getPath(), 300, 300),
             'path' => $item->getPath(),
             'filename' => $item->getName(),
             'parent' => ($item->getCategory()) ? $item->getCategory()->getId() : 'root',

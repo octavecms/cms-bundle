@@ -184,6 +184,7 @@ services:
         class: Octave\CMSBundle\Service\MediaItemSerializer
         public: true
         arguments:
+            - '@octave.cms.image.processor'
             - '%kernel.project_dir%'
 
     octave.cms.page.serializer:
