@@ -26,7 +26,7 @@ class ImageProcessor
      */
     public function __construct($rootDir, $uploadDir, $resizedDir)
     {
-        $this->uploadPath = $rootDir . '/../public';
+        $this->uploadPath = $rootDir . '/public';
         $this->tmbPath = $this->uploadPath . $resizedDir;
         $this->tmbWebPath = $resizedDir;
     }
