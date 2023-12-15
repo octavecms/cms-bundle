@@ -10,7 +10,7 @@
         {{ block('hidden_widget') }}
 
         <div class="form-control-image__preview well well-small">
-            <img src="{{ value }}" alt="" class="{% if not value %}hidden{% endif %}" />
+            <img src="{{ value | octave_resize(300, 300) }}" alt="" class="{% if not value %}hidden{% endif %}" />
         </div>
 
         <div class="form-control-image__content">

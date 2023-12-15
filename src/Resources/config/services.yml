@@ -154,6 +154,7 @@ services:
 
     octave.cms.image.processor:
         class: Octave\CMSBundle\Service\ImageProcessor
+        public: true
         arguments:
             - '%kernel.project_dir%'
             - '%octave.cms.media.upload_dir%'
@@ -183,6 +184,7 @@ services:
         class: Octave\CMSBundle\Service\MediaItemSerializer
         public: true
         arguments:
+            - '@octave.cms.image.processor'
             - '%kernel.project_dir%'
 
     octave.cms.page.serializer:
