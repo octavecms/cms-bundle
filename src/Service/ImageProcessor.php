@@ -68,11 +68,11 @@ class ImageProcessor
 
         $mimeType = mime_content_type($imagePath);
 
-        $imagick = new \Imagick(realpath($imagePath));
-
         if (explode('/', $mimeType)[0] !== 'image') {
             return $path;
         }
+
+        $imagick = new \Imagick(realpath($imagePath));
 
         if ($mimeType == 'image/png') {
             $imagick->setBackgroundColor(new \ImagickPixel('transparent'));
