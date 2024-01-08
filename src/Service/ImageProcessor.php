@@ -68,6 +68,10 @@ class ImageProcessor
 
         $mimeType = mime_content_type($imagePath);
 
+        if (explode('/', $mimeType)[0] !== 'image') {
+            return $path;
+        }
+
         $imagick = new \Imagick(realpath($imagePath));
 
         if ($mimeType == 'image/png') {
