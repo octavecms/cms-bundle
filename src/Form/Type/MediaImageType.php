@@ -49,6 +49,7 @@ class MediaImageType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['show_label'] = $options['show_label'];
+        $view->vars['render_translations'] = $options['render_translations'];
     }
 
     /**
@@ -60,7 +61,8 @@ class MediaImageType extends AbstractType
 
         $resolver->setDefaults([
             'locales' => $this->locales,
-            'show_label' => true
+            'show_label' => true,
+            'render_translations' => false,
         ]);
     }
 }

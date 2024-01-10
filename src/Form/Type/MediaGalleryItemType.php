@@ -47,7 +47,9 @@ class MediaGalleryItemType extends AbstractType
                 'translation_domain' => 'OctaveCMSBundle',
                 'label' => 'Image'
             ])
-            ->add($options['image_name'], MediaImageType::class);
+            ->add($options['image_name'], MediaImageType::class, [
+                'render_translations' => true,
+            ]);
 
         if ($options['use_translations']) {
             $builder
