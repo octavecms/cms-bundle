@@ -41,9 +41,9 @@ class ImageWidget {
     }
 
     change (image) {
-        this.$element.toggleClass('form-control-image--empty', !image.image);
-        this.$image.removeClass('hidden').attr('src', image.image);
-        this.$input.val(image.image);
+        this.$element.toggleClass('form-control-image--empty', !image.path && !image.image);
+        this.$image.removeClass('hidden').attr('src', image.image || image.path);
+        this.$input.val(image.path || image.image);
         // this.$caption.val(image.name || image.title || '');
     }
 

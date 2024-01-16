@@ -15,7 +15,7 @@
 
         <div class="form-control-image__content">
 
-            {% if form.parent.translations is defined %}
+            {% if form.parent.translations is defined and form.vars.render_translations %}
                 {{ form_row(form.parent.translations) }}
             {% endif %}
 
