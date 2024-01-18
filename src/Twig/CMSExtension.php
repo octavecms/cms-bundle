@@ -129,6 +129,11 @@ class CMSExtension extends AbstractExtension
      */
     public function resize($path, $width, $height)
     {
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        if ($extension == 'svg') {
+            return $path;
+        }
+
         return $this->container->get('octave.cms.image.processor')->resize($path, $width, $height);
     }
 

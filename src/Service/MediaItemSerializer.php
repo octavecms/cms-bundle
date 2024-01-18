@@ -63,8 +63,9 @@ class MediaItemSerializer
             'id' => $item->getId(),
             'isImage' => $isImage,
             'icon' => 'fa-file',
-            'thumbnail' => $this->imageProcessor->resize($item->getPath(), 300, 300),
-            'image' => $item->getPath(),
+            'image' => $mimeType !== 'image/svg+xml'
+                ? $this->imageProcessor->resize($item->getPath(), 300, 300)
+                : $item->getPath(),
             'path' => $item->getPath(),
             'filename' => $item->getName(),
             'parent' => ($item->getCategory()) ? $item->getCategory()->getId() : 'root',
