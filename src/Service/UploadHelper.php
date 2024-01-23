@@ -300,10 +300,9 @@ class UploadHelper
             ? $this->uploadPath . $category->getId() . '/' . $newFileName
             : $this->uploadPath . $newFileName;
 
-        if (file_exists($newFilePath)) {
-            $newFileName = str_replace('.' . $extension, '', $newFileName);
-            $newFileName = $this->prepareFilename($newFileName . '_' . time() . '.' . $extension);
-        }
+        $newFileName = str_replace('.' . $extension, '', $newFileName);
+        $newFileName = $this->prepareFilename($newFileName . '_' . time() . '.' . $extension);
+
         return $newFileName;
     }
 }
