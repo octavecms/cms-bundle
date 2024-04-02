@@ -2,6 +2,8 @@
 
 namespace Octave\CMSBundle\Form\Type;
 
+use Octave\CMSBundle\Entity\Block;
+use Octave\CMSBundle\Page\Block\BlockInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,8 +12,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Octave\CMSBundle\Entity\Block;
-use Octave\CMSBundle\Page\Block\BlockInterface;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>

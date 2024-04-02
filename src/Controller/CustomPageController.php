@@ -3,9 +3,9 @@
 namespace Octave\CMSBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\CustomPageType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>

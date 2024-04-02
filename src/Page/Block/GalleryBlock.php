@@ -3,7 +3,7 @@
 namespace Octave\CMSBundle\Page\Block;
 
 use Octave\CMSBundle\Entity\BlockEntityInterface;
-use Octave\CMSBundle\Form\Type\MediaGalleryType;
+use Octave\MediaLibraryBundle\Form\Type\MediaGalleryType;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>

@@ -3,10 +3,10 @@
 namespace Octave\CMSBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\TextPageType as TextPageForm;
 use Octave\CMSBundle\Page\Type\TextPageType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

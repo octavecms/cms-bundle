@@ -4,11 +4,11 @@ namespace Octave\CMSBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Octave\CMSBundle\Entity\Content;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Octave\CMSBundle\Entity\Content;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>

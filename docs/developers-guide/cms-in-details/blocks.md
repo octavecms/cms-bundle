@@ -44,20 +44,14 @@ An article has a headline, a date, a short intro, and some body copy.
 ### Block configuration file
 
 First, create `src/AppBundle/Form`, `src/AppBundle/Page/Blocks`, and `app/Resources/views/Blocks` folders. 
-Then create a block configuration file `ArticleType.php` in `src/AppBundle/Form` and copy the below code into the file. 
+Then create a block configuration file `ArticleType.php` in `src/AppBundle/Form` and copy the below code into the file.
 
 ```php
 <?php
 
 namespace AppBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Octave\CMSBundle\Form\DataTransformer\SerializeDataTransformer;
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;use Octave\CMSBundle\Form\DataTransformer\SerializeDataTransformer;use Symfony\Component\Form\AbstractType;use Symfony\Component\Form\Extension\Core\Type\DateType;use Symfony\Component\Form\Extension\Core\Type\TextareaType;use Symfony\Component\Form\Extension\Core\Type\TextType;use Symfony\Component\Form\FormBuilderInterface;
 
 class ArticleType extends AbstractType
 {

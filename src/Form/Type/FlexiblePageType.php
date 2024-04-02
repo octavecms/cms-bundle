@@ -3,13 +3,13 @@
 namespace Octave\CMSBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
+use Octave\CMSBundle\Entity\Page;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Octave\CMSBundle\Entity\Page;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>

@@ -40,20 +40,6 @@ services:
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         arguments: [ Octave\CMSBundle\Entity\Content ]
 
-    octave.cms.media_category.repository:
-        class: Octave\CMSBundle\Repository\MediaCategoryRepository
-        public: true
-        factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ Octave\CMSBundle\Entity\MediaCategory ]
-        calls:
-            - [ 'setTreeBuilder', ['@octave.cms.media_category.tree_builder']]
-
-    octave.cms.media_item.repository:
-        class: Octave\CMSBundle\Repository\MediaItemRepository
-        public: true
-        factory: [ '@doctrine.orm.entity_manager', getRepository ]
-        arguments: [ Octave\CMSBundle\Entity\MediaItem ]
-
     octave.cms.page_version.repository:
         class: Octave\CMSBundle\Repository\PageVersionRepository
         public: true
@@ -152,20 +138,9 @@ services:
         arguments:
             - '@octave.cms.page.manager'
 
-    octave.cms.image.processor:
-        class: Octave\CMSBundle\Service\ImageProcessor
-        public: true
-        arguments:
-            - '%kernel.project_dir%'
-            - '%octave.cms.media.upload_dir%'
-            - '%octave.cms.media.resized_dir%'
-
     octave.cms.text.page.extension.manager:
         class: Octave\CMSBundle\Service\TextPageExtensionManager
         public: true
-
-    octave.cms.media_category.tree_builder:
-        class: Octave\CMSBundle\Service\MediaCategoryTreeBuilder
 
     octave.cms.page.tree_builder:
         class: Octave\CMSBundle\Service\PageTreeBuilder
@@ -180,34 +155,11 @@ services:
         tags:
             - { name: routing.loader }
 
-    octave.cms.media_item.serializer:
-        class: Octave\CMSBundle\Service\MediaItemSerializer
-        public: true
-        arguments:
-            - '@octave.cms.image.processor'
-            - '%kernel.project_dir%'
-
     octave.cms.page.serializer:
         class: Octave\CMSBundle\Service\PageSerializer
         public: true
         arguments:
             - '@router'
-
-    octave.cms.media_upload.helper:
-        class: Octave\CMSBundle\Service\UploadHelper
-        public: true
-        arguments:
-            - '@octave.cms.media_item.repository'
-            - '@octave.cms.media_item.manager'
-            - '%octave.cms.media.upload_dir%'
-            - '%kernel.project_dir%'
-            - '%octave.cms.media.allowed_mime_types%'
-
-    octave.cms.media_item.manager:
-        public: true
-        class: Octave\CMSBundle\Service\MediaItemManager
-        arguments:
-            - '%kernel.project_dir%'
 
     octave.cms.twig.extension:
         class: Octave\CMSBundle\Twig\CMSExtension
@@ -216,25 +168,6 @@ services:
             - '@service_container'
         tags:
             - { name: twig.extension }
-
-    octave.cms.media_gallery_item.data_transformer.default:
-        class: Octave\CMSBundle\Form\DataTransformer\MediaGalleryItemDataTransformer
-        arguments: ['%locales%']
-
-    octave.cms.media_image.data_transformer:
-        class: Octave\CMSBundle\Form\DataTransformer\MediaImageDataTransformer
-        arguments: ['%locales%']
-
-    octave.cms.media_gallery.data_transformer.default:
-        class: Octave\CMSBundle\Form\DataTransformer\MediaGalleryDataTransformer
-
-    octave.cms.media_gallery_item.form_type:
-        class: Octave\CMSBundle\Form\Type\MediaGalleryItemType
-        arguments:
-            - '@octave.cms.media_gallery_item.data_transformer'
-            - '%locales%'
-        tags:
-            - { name: form.type }
 
     octave.cms.block_collection.form_type:
         class: Octave\CMSBundle\Form\Type\BlockCollectionType
@@ -262,28 +195,6 @@ services:
         class: Octave\CMSBundle\Form\Type\BlocksType
         arguments:
             - '@octave.cms.block.manager'
-            - '%locales%'
-        tags:
-            - { name: form.type }
-
-    octave.cms.media_gallery.form_type:
-        class: Octave\CMSBundle\Form\Type\MediaGalleryType
-        arguments:
-            - '@octave.cms.media_gallery.data_transformer'
-            - '%locales%'
-        tags:
-            - { name: form.type }
-
-    octave.cms.media_image.form_type:
-        class: Octave\CMSBundle\Form\Type\MediaImageType
-        arguments:
-            - '%locales%'
-        tags:
-            - { name: form.type }
-
-    octave.cms.media_file.form_type:
-        class: Octave\CMSBundle\Form\Type\MediaFileType
-        arguments:
             - '%locales%'
         tags:
             - { name: form.type }
@@ -336,25 +247,6 @@ services:
         calls:
             - [setContainer, ['@service_container']]
 
-    Octave\CMSBundle\Controller\Media\MediaController:
-        tags:
-            - { name: controller.service_arguments }
-        calls:
-            - [setContainer, ['@service_container']]
-
-    Octave\CMSBundle\Controller\Media\ItemController:
-
-        tags:
-            - { name: controller.service_arguments }
-        calls:
-            - [setContainer, ['@service_container']]
-
-    Octave\CMSBundle\Controller\Media\CategoryController:
-        tags:
-            - { name: controller.service_arguments }
-        calls:
-            - [setContainer, ['@service_container']]
-
     # Admin
     octave.cms.sitemap.admin:
         class: Octave\CMSBundle\Admin\SitemapAdmin
@@ -366,17 +258,5 @@ services:
               group: "CMS"
               label: "label.admin.sitemap"
               label_catalogue: "OctaveCMSBundle"
-        calls:
-            - [ 'setTranslationDomain', ['OctaveCMSBundle']]
-
-    octave.cms.media.admin:
-        class: Octave\CMSBundle\Admin\MediaAdmin
-        tags:
-            - name: sonata.admin
-              manager_type: orm
-              group: "CMS"
-              label: "label.admin.media"
-              label_catalogue: "SonataAdminBundle"
-        arguments: [~, 'Octave\\CMSBundle\\Entity\\MediaItem', Octave\CMSBundle\Controller\Media\MediaController]
         calls:
             - [ 'setTranslationDomain', ['OctaveCMSBundle']]

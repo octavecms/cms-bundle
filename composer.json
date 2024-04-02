@@ -12,6 +12,12 @@
       "role": "Developer"
     }
   ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://git.videinfra.net/vig-bundles/media-library-bundle.git"
+    }
+  ],
   "require": {
     "php": ">=7.4.0",
     "symfony/flex": "^1.1",
@@ -21,6 +27,7 @@
     "friendsofsymfony/ckeditor-bundle": "~2.0",
     "knplabs/doctrine-behaviors": "^2.0",
     "friendsofsymfony/user-bundle": "^3.0",
+    "octave/media-library-bundle": "dev-main",
     "octave/sitemap-bundle" : ">=2.0.0",
     "liip/imagine-bundle": "^2.2"
   },

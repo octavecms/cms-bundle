@@ -2,12 +2,12 @@
 
 namespace Octave\CMSBundle\Form\Type;
 
+use Octave\CMSBundle\Form\DataTransformer\JSONDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType as BaseCollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Octave\CMSBundle\Form\DataTransformer\JSONDataTransformer;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 

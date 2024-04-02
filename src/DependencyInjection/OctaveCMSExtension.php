@@ -38,13 +38,6 @@ class OctaveCMSExtension extends Extension implements PrependExtensionInterface
             $container->setParameter('octave.cms.media.resized_dir', $config['media_resized_path']);
         }
 
-        $container->addAliases([
-            'octave.cms.media_gallery_item.data_transformer' => $config['media_gallery_item_transformer']
-                ?? 'octave.cms.media_gallery_item.data_transformer.default',
-            'octave.cms.media_gallery.data_transformer' => $config['media_gallery_transformer']
-                ?? 'octave.cms.media_gallery.data_transformer.default'
-        ]);
-
         if (isset($config['resize_options'])) {
             $container->setParameter('octave.cms.media.resize_options', $config['resize_options']);
         }

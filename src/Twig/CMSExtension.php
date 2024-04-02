@@ -51,16 +51,6 @@ class CMSExtension extends AbstractExtension
     }
 
     /**
-     * @return array
-     */
-    public function getFilters()
-    {
-        return [
-            new TwigFilter('octave_resize', [$this, 'resize'])
-        ];
-    }
-
-    /**
      * @param $name
      * @return bool
      */
@@ -118,23 +108,6 @@ class CMSExtension extends AbstractExtension
     {
         $pageManager = $this->container->get('octave.cms.page.manager');
         return isset($pageManager->getPages()[$routeName]) ? $pageManager->getPages()[$routeName] : null;
-    }
-
-    /**
-     * @param $path
-     * @param $width
-     * @param $height
-     * @return string
-     * @throws \Exception
-     */
-    public function resize($path, $width, $height)
-    {
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
-        if ($extension == 'svg') {
-            return $path;
-        }
-
-        return $this->container->get('octave.cms.image.processor')->resize($path, $width, $height);
     }
 
     /**

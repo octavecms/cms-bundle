@@ -4,11 +4,11 @@ namespace Octave\CMSBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Entity\Block;
 use Octave\CMSBundle\Entity\Page;
 use Octave\CMSBundle\Form\Type\FlexiblePageType as FlexiblePageForm;
 use Octave\CMSBundle\Page\Type\FlexiblePageType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

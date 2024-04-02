@@ -3,12 +3,13 @@
 namespace Octave\CMSBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
+use Octave\MediaLibraryBundle\Form\Type\MediaImageType;
+use Octave\MediaLibraryBundle\Model\MediaImage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Octave\CMSBundle\Model\MediaImage;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>

@@ -1,9 +1,0 @@
-{
-    "status": 1,
-    "data": {
-        "id": "folderid",
-        "name": "Name of the new folder",
-        "parent": "bbb",
-        "children": []
-    }
-}
