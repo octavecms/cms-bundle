@@ -179,7 +179,7 @@ services:
     octave.cms.block_image.form_type:
         class: Octave\CMSBundle\Form\Type\BlockImageType
         arguments:
-            - '@octave.cms.media_image.data_transformer'
+            - '@octave.media.media_image.data_transformer'
             - '%locales%'
         tags:
             - { name: form.type }
