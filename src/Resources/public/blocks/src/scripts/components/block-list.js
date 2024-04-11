@@ -60,9 +60,16 @@ class BlocksList {
     generateBlockHTML (html) {
         var index = this.index++;
 
+        // Since it's possible that inside block items will collections
+        // for each place where we have "__name__" we need to replace only first occurance
+        // &#x5B; === [
+        // &#x5D; === ]
+        // &amp;&#x23;x5B&#x3B; === [ double encoded
+        // &amp;&#x23;x5D&#x3B; === ] double encoded
+
         // In the string replace only first occurance of the __name__, if there are occurances then
         // that means id or name is from collection which is inside collection
-        html = html.replace(/([a-z0-9-_[\]]|&#x5D;|&#x5B;)*__name__([a-z0-9-_[\]]|&#x5D;|&#x5B;)*/ig, function (all) {
+        html = html.replace(/([a-z0-9-_\[\]]|&#x5D;|&#x5B;|&amp;&#x23;x5B&#x3B;|&amp;&#x23;x5D&#x3B;)*__name__([a-z0-9-_\[\]]|&#x5D;|&#x5B;|&amp;&#x23;x5B&#x3B;|&amp;&#x23;x5D&#x3B;)*/ig, function (all) {
             return all.replace('__name__', index);
         });
 

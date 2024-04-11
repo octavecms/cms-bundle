@@ -93,7 +93,8 @@ class CollectionWidget {
                 index = Math.max(index, Math.max.apply(Math, numbers));
             });
         } else {
-            index = this.$list.children().length - 1;
+            // Index could be starting from 1 on backend
+            index = this.$list.children().length;
         }
 
         return index + 1;
@@ -158,8 +159,13 @@ class CollectionWidget {
         // for each place where we have "__name__" we need to replace only first occurance
         // &#x5B; === [
         // &#x5D; === ]
-        html = html.replace(/([a-z0-9-_\[\]]|&#x5B;|&#x5D;)*__name__([a-z0-9-_\[\]]|&#x5B;|&#x5D;)*/g, function (match) {
-            return match.replace('__name__', index);
+        // &amp;&#x23;x5B&#x3B; === [ double encoded
+        // &amp;&#x23;x5D&#x3B; === ] double encoded
+        
+        // In the string replace only first occurance of the __name__, if there are occurances then
+        // that means id or name is from collection which is inside collection
+        html = html.replace(/([a-z0-9-_\[\]]|&#x5D;|&#x5B;|&amp;&#x23;x5B&#x3B;|&amp;&#x23;x5D&#x3B;)*__name__([a-z0-9-_\[\]]|&#x5D;|&#x5B;|&amp;&#x23;x5B&#x3B;|&amp;&#x23;x5D&#x3B;)*/ig, function (all) {
+            return all.replace('__name__', index);
         });
 
         return html;
