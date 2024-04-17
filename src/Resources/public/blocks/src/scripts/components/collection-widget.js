@@ -1,12 +1,10 @@
 import $ from 'lib/jquery';
-import map from 'lodash/map';
-
+import { getItemMaxIndex, validateItemIndex, REGEX_NAME } from './util/item-index';
 
 const NAMESPACE = 'collection';
 
 const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[position]"]';
 
-const REGEX_MATCH_NUMBERS = /\d+/g;
 
 const SELECTOR_LIST = '.js-collection-list';
 const SELECTOR_LIST_TITLE = '.js-collection-list-item-title';
@@ -36,7 +34,7 @@ class CollectionWidget {
         const $button  = this.$button  = $element.find(SELECTOR_ADD).not(this.$list.find(SELECTOR_ADD));
 
         // Item counter
-        this.index = this.options.orderCssSelector ? this._getMaxIndex() : $list.children().length;
+        this.index = getItemMaxIndex($list, this.options.orderCssSelector) + 1;
 
         // Sortable list
         $list
@@ -79,25 +77,6 @@ class CollectionWidget {
     _handleOrder () {
         this._updateBlockOrder();
         this._reinitializeCKEditors();
-    }
-
-    _getMaxIndex () {
-        const $inputs = this.$list.find(this.options.orderCssSelector);
-        let   index   = 0;
-
-        if ($inputs.length) {
-            $inputs.each((i, input) => {
-                const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
-                const numbers = map(names, name => parseInt(name, 10));
-    
-                index = Math.max(index, Math.max.apply(Math, numbers));
-            });
-        } else {
-            // Index could be starting from 1 on backend
-            index = this.$list.children().length;
-        }
-
-        return index + 1;
     }
 
     _updateList () {
@@ -152,19 +131,17 @@ class CollectionWidget {
     }
 
     _generateItemHTML () {
-        var index = this.index++;
-        var html = this.$list.data('prototype');
+        let html = this.$list.data('prototype');
+        let index = this.index++;
 
-        // Since it's possible that inside collection items will other collections
-        // for each place where we have "__name__" we need to replace only first occurance
-        // &#x5B; === [
-        // &#x5D; === ]
-        // &amp;&#x23;x5B&#x3B; === [ double encoded
-        // &amp;&#x23;x5D&#x3B; === ] double encoded
-        
+        // Prevent index collisions if element names / indexes are not in sequence or doesn't start with 1
+        while (!validateItemIndex(this.$list, index, html)) {
+            index = this.index++
+        }
+
         // In the string replace only first occurance of the __name__, if there are occurances then
         // that means id or name is from collection which is inside collection
-        html = html.replace(/([a-z0-9-_\[\]]|&#x5D;|&#x5B;|&amp;&#x23;x5B&#x3B;|&amp;&#x23;x5D&#x3B;)*__name__([a-z0-9-_\[\]]|&#x5D;|&#x5B;|&amp;&#x23;x5B&#x3B;|&amp;&#x23;x5D&#x3B;)*/ig, function (all) {
+        html = html.replace(REGEX_NAME, function (all) {
             return all.replace('__name__', index);
         });
 
