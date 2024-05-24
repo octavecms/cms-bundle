@@ -1,5 +1,5 @@
 import $ from 'lib/jquery';
-import map from 'lodash/map';
+import { getItemMaxIndex, validateItemIndex, REGEX_NAME } from './util/item-index';
 
 
 const BLOCKS_LIST_SELECTOR     = '[data-widget="blocks-list"]';
@@ -13,7 +13,7 @@ const REGEX_MATCH_NUMBERS = /\d+/g;
 class BlocksList {
     constructor ($container) {
         this.$container = $container;
-        this.index = this._getMaxIndex();
+        this.index = getItemMaxIndex($container, ORDER_INPUT_CSS_SELECTOR) + 1;
 
         $container
             .addClass('blocks-list')
@@ -28,20 +28,6 @@ class BlocksList {
             });
 
             $container.on('click', '[data-widget="block-remove"]', this.handleBlockRemove.bind(this));
-    }
-
-    _getMaxIndex () {
-        const $inputs = this.$container.find(ORDER_INPUT_CSS_SELECTOR);
-        let   index   = 0;
-
-        $inputs.each((i, input) => {
-            const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
-            const numbers = map(names, name => parseInt(name, 10));
-
-            index = Math.max(index, Math.max.apply(Math, numbers));
-        });
-
-        return index + 1;
     }
 
     updateList () {
@@ -60,9 +46,14 @@ class BlocksList {
     generateBlockHTML (html) {
         var index = this.index++;
 
+        // Prevent index collisions if element names / indexes are not in sequence or doesn't start with 1
+        while (!validateItemIndex(this.$container, index, html)) {
+            index = this.index++
+        }
+
         // In the string replace only first occurance of the __name__, if there are occurances then
         // that means id or name is from collection which is inside collection
-        html = html.replace(/([a-z0-9-_[\]]|&#x5D;|&#x5B;)*__name__([a-z0-9-_[\]]|&#x5D;|&#x5B;)*/ig, function (all) {
+        html = html.replace(REGEX_NAME, function (all) {
             return all.replace('__name__', index);
         });
 
