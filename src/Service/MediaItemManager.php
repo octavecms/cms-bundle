@@ -19,7 +19,7 @@ class MediaItemManager
      */
     public function __construct($rootDir)
     {
-        $this->webDir = $rootDir . (Kernel::MAJOR_VERSION >= 4 ? '/../public' : '/../web');
+        $this->webDir = $rootDir . (Kernel::MAJOR_VERSION >= 4 ? '/public' : '/../web');
     }
 
     /**

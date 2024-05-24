@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Octave\CMSBundle\Entity\MediaCategory;
 use Octave\CMSBundle\Entity\MediaItem;
 use Octave\CMSBundle\Repository\MediaItemRepository;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * @author Igor Lukashov <igor.lukashov@octavecms.com>
@@ -24,6 +25,9 @@ class UploadHelper
 
     /** @var string */
     private $webPath;
+
+    /** @var string */
+    private $transliteration;
 
     /** @var array */
     private $allowedMimeTypes = [
@@ -50,15 +54,17 @@ class UploadHelper
      * @param $uploadDir
      * @param $rootDir
      * @param $allowedMimeTypes
+     * @param $transliteration
      */
     public function __construct(MediaItemRepository $itemRepository, MediaItemManager $mediaItemManager, $uploadDir,
-                                                    $rootDir, $allowedMimeTypes)
+                                                    $rootDir, $allowedMimeTypes, $transliteration)
     {
         $this->itemRepository = $itemRepository;
         $this->itemManager = $mediaItemManager;
         $this->uploadPath = $rootDir . '/public' . $uploadDir . '/';
         $this->webPath = $uploadDir;
         $this->allowedMimeTypes = $allowedMimeTypes;
+        $this->transliteration = $transliteration;
     }
 
     /**
@@ -273,9 +279,15 @@ class UploadHelper
      */
     private function prepareFilename($filename)
     {
-        $filename = strtolower(preg_replace('/[^A-Za-z0-9 _ .-]/', '', $filename));
+        $filename = strtolower(preg_replace('/[^\w_ .]+/u', '', $filename));
 
-        return str_replace(' ', '', $filename);
+        if ($this->transliteration) {
+            $slugger = new AsciiSlugger(null, ['.' => '.']);
+            $filename = $slugger->slug($filename);
+            $filename = strtolower($filename);
+        }
+
+        return str_replace(' ', '_', $filename);
     }
 
     /**
@@ -289,19 +301,14 @@ class UploadHelper
 
     /**
      * @param UploadedFile $file
-     * @param MediaCategory $category
-     * @return mixed|string
+     * @param MediaCategory|null $category
+     * @return string
      */
     private function getNewFilename(UploadedFile $file, MediaCategory $category = null)
     {
         $extension = $file->getClientOriginalExtension();
-        $newFileName = $this->prepareFilename($file->getClientOriginalName());
-        $newFilePath = $category
-            ? $this->uploadPath . $category->getId() . '/' . $newFileName
-            : $this->uploadPath . $newFileName;
-
-        $newFileName = str_replace('.' . $extension, '', $newFileName);
-        $newFileName = $this->prepareFilename($newFileName . '_' . time() . '.' . $extension);
+        $filename = str_replace('.' . $extension, '', $file->getClientOriginalName());
+        $newFileName = $this->prepareFilename($filename) . '_' . time() . '.' . $extension;
 
         return $newFileName;
     }

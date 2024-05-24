@@ -202,6 +202,7 @@ services:
             - '%octave.cms.media.upload_dir%'
             - '%kernel.project_dir%'
             - '%octave.cms.media.allowed_mime_types%'
+            - '%octave.cms.media_transliteration%'
 
     octave.cms.media_item.manager:
         public: true
