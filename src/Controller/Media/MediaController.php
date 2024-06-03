@@ -31,7 +31,27 @@ class MediaController extends CRUDController
                 'parent' => null,
                 'name' => 'Default Category',
                 'children' => $categories
-            ]
+            ],
+            'uploadMaxSize' => $this->getMaxPostSizeInBytes(),
         ]);
+    }
+
+    private function getMaxPostSizeInBytes()
+    {
+        $uploadMaxSize = ini_get('post_max_size');
+
+        $value = (int) $uploadMaxSize;
+        $unit = strtoupper(substr($uploadMaxSize, -1));
+
+        switch ($unit) {
+            case 'K':
+                $value *= 1024;
+                break;
+            case 'M':
+                $value *= 1024 * 1024;
+                break;
+        }
+
+        return $value;
     }
 }

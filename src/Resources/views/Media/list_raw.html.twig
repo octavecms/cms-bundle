@@ -46,7 +46,7 @@
             'root': {{ root_category|json_encode|raw }}
         },
         'categoryId': {{ current_category_id|default(root_category.id)|json_encode|raw }},
-        // 'uploadMaxFilesize': 0, // @TODO Size in bytes
+        'uploadMaxFilesize': {{ uploadMaxSize }},
     };
 </script>
 <script src="{{ asset('bundles/octavecms/media/dist/main.js') }}"></script>
