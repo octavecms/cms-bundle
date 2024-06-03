@@ -56,9 +56,6 @@ class MediaStandalone {
         const store = this.store = createStore({'multiselect': this.options.multiselect});
         const $element = this.$element;
 
-        // @TODO Remove, this is for debug only
-        window.store = store;
-
         const $treeView = this.$treeView = $element.find(SELECTOR_TREE_VIEW);
         this.treeView = new MediaTreeView($treeView, {'store': store});
 

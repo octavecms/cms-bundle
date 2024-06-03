@@ -1,5 +1,7 @@
 import debounce from 'lodash/debounce';
 import 'blueimp-file-upload';
+import 'blueimp-file-upload/js/jquery.fileupload-process';
+import 'blueimp-file-upload/js/jquery.fileupload-validate';
 import { setErrorMessage, uploadedFiles, updatedFile } from 'modules/actions';
 
 let UID = 0;
@@ -24,10 +26,12 @@ class Uploader {
         this.updateDropZones = debounce(this.updateDropZones, 60);
         this.create();
     }
-
+    
     setOptions (options) {
         this.options = $.extend(this.options, options);
         this.store   = this.options.store;
+
+        this.$input.fileupload('option', 'maxFileSize', this.store.getState().uploadMaxFilesize);
     }
 
     create () {
@@ -39,14 +43,13 @@ class Uploader {
             error: this.handleFileUploadError.bind(this),
             progressall: this.handleFileUploadProgress.bind(this),
             submit: this.handleFileSubmit.bind(this),
-            add: this.handleFileUpload.bind(this)
+            processalways: this.handleFileUpload.bind(this),
         });
-
+            
         // Disable global drag / drop of files
         $(document).bind('dragover', this.handleDropZoneDragOver.bind(this));
         $(document).bind('drop dragover', this.handleGlobalDragOver.bind(this));
     }
-
 
     /*
      * Upload progress
@@ -142,22 +145,26 @@ class Uploader {
      * to the request
      */
     handleFileUpload (e, data) {
-        let info = null;
+        if (data.files.error) {
+            this.store.dispatch(setErrorMessage(data.files[0].error));
+        } else {
+            let info = null;
 
-        if (!data.files[0].uploading) {
-            data.files[0].uploading = true; // Prevent duplicate request
-
-            if (data.info) {
-                // Uploading using a "Browse" button, data is passed in using data.info
-                info = data.info;
-            } else if (this.activeUploadZone) {
-                // Uploading file using drag and drop, data is in uploadZone map
-                info = this.uploadZones[this.activeUploadZone];
-            }
-
-            if (info) {
-                data.formData = (typeof info === 'function' ? info() : info);
-                data.submit();
+            if (!data.files[0].uploading) {
+                data.files[0].uploading = true; // Prevent duplicate request
+    
+                if (data.info) {
+                    // Uploading using a "Browse" button, data is passed in using data.info
+                    info = data.info;
+                } else if (this.activeUploadZone) {
+                    // Uploading file using drag and drop, data is in uploadZone map
+                    info = this.uploadZones[this.activeUploadZone];
+                }
+    
+                if (info) {
+                    data.formData = (typeof info === 'function' ? info() : info);
+                    data.submit();
+                }
             }
         }
     }

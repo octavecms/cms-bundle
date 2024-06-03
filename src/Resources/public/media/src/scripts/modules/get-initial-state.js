@@ -82,7 +82,10 @@ export default function (state) {
         'error': {
             'visible': false,
             'message': '' 
-        }
+        },
+
+        // Max file upload size
+        'uploadMaxFilesize': null
     }, window.MEDIA_INITIAL_STATE, state));
 
     // Validate and set categoryId
