@@ -84,9 +84,7 @@ class UploadHelper
         /** @var UploadedFile $file */
         foreach ($files as $file) {
 
-            if (!$this->validateFile($file)) {
-                throw new \Exception(sprintf('Invalid file %s', $file->getClientOriginalName()));
-            }
+            $this->validateFile($file);
 
             $newFileName = $this->getNewFilename($file, $category);
             $webPath = $category
@@ -124,9 +122,7 @@ class UploadHelper
      */
     public function replace(UploadedFile $file, MediaItem $item)
     {
-        if (!$this->validateFile($file)) {
-            throw new \Exception(sprintf('Invalid file %s', $file->getClientOriginalName()));
-        }
+        $this->validateFile($file);
 
         $this->itemManager->deleteItemFile($item);
         $newFileName = $this->getNewFilename($file, $item->getCategory());
@@ -260,17 +256,20 @@ class UploadHelper
 
     /**
      * @param UploadedFile $file
-     * @return bool
+     * @return void
+     * @throws \Exception
      */
     private function validateFile(UploadedFile $file)
     {
         $mimeType = $this->getFileMimeType($file);
 
         if (!in_array($mimeType, $this->allowedMimeTypes)) {
-            return false;
+            throw new \Exception(sprintf('Invalid file %s', $file->getClientOriginalName()));
         }
 
-        return true;
+        if ($file->getSize() > $this->getMaxUploadSize()) {
+            throw new \Exception(sprintf('Maximum size exceeded for file %s', $file->getClientOriginalName()));
+        }
     }
 
     /**
@@ -311,5 +310,24 @@ class UploadHelper
         $newFileName = $this->prepareFilename($filename) . '_' . time() . '.' . $extension;
 
         return $newFileName;
+    }
+
+    private function getMaxUploadSize()
+    {
+        $uploadMaxSize = ini_get('upload_max_filesize');
+
+        $value = (int) $uploadMaxSize;
+        $unit = strtoupper(substr($uploadMaxSize, -1));
+
+        switch ($unit) {
+            case 'K':
+                $value *= 1024;
+                break;
+            case 'M':
+                $value *= 1024 * 1024;
+                break;
+        }
+
+        return $value;
     }
 }

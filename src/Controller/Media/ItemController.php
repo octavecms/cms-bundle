@@ -3,6 +3,7 @@
 namespace Octave\CMSBundle\Controller\Media;
 
 use Psr\Log\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Octave\CMSBundle\Controller\AbstractController;
@@ -145,7 +146,7 @@ class ItemController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function uploadAction(Request $request)
+    public function uploadAction(Request $request, LoggerInterface $logger)
     {
         try {
             /** @var EntityManager $em */
@@ -172,6 +173,7 @@ class ItemController extends AbstractController
             ]);
         }
         catch (\Exception $e) {
+            $logger->error($e->getMessage());
             return $this->generateJsonErrorResponse($e);
         }
     }
