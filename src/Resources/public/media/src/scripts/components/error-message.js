@@ -20,6 +20,19 @@ export default class ErrorMessage {
         store.subscribePath('error.visible', this.handleVisibilityChange.bind(this));
 
         $container.on('hidden.bs.modal', this.handleModalClose.bind(this));
+
+        this.fixElementPosition();
+    }
+
+    /**
+     * Fix .modal() breaking stuff if error modal is inside the media modal
+     * @protected
+     */
+    fixElementPosition () {
+        const $parent = this.$container.parent().closest('.modal');
+        if ($parent.length) {
+            this.$container.insertAfter($parent);
+        }
     }
 
     handleModalClose () {
