@@ -62,9 +62,26 @@ class Uploader {
         this.store.dispatch(uploadedFiles(uploadComplete));
     }
 
+    /**
+     * Handle response error
+     * @param {object} response Request response
+     * @protected
+     */
     handleFileUploadError (response) {
         if (response.responseJSON && response.responseJSON.message) {
             this.store.dispatch(setErrorMessage(response.responseJSON.message));
+        }
+    }
+
+    /**
+     * Handle validation error
+     * @param {object} e Event
+     * @param {object} data Data
+     * @protected
+     */
+    handleFileUpload (e, data) {
+        if (data.files.error) {
+            this.store.dispatch(setErrorMessage(data.files[0].error));
         }
     }
 
@@ -98,6 +115,28 @@ class Uploader {
         this.$progress.addClass('media-gridlist-progress--hidden');
     }
 
+    /**
+     * Change url
+     */
+    handleFileSubmit (e, data) {
+        // For file replace we use different url
+        data.url = data.info && data.info.replace ? API_ENDPOINTS.filesReplace : API_ENDPOINTS.filesUpload;
+
+        // Before file uploaded we want to add additional data to the request
+        let info = null;
+
+        if (data.info) {
+            // Uploading using a "Browse" button, data is passed in using data.info
+            info = data.info;
+        } else if (this.activeUploadZone) {
+            // Uploading file using drag and drop, data is in uploadZone map
+            info = this.uploadZones[this.activeUploadZone];
+        }
+
+        if (info) {
+            data.formData = (typeof info === 'function' ? info() : info);
+        }
+    }
 
     /*
      * Drag / drop zones
@@ -130,43 +169,6 @@ class Uploader {
         const $dropZones = this.$dropZones;
         this.dropTimeout = null;
         $dropZones.removeClass('dropzone--in dropzone--hover');
-    }
-
-    /**
-     * Change url
-     */
-    handleFileSubmit (e, data) {
-        // For file replace we use different url
-        data.url = data.info && data.info.replace ? API_ENDPOINTS.filesReplace : API_ENDPOINTS.filesUpload;
-    }
-
-    /**
-     * Before file uploaded we want to add additional data
-     * to the request
-     */
-    handleFileUpload (e, data) {
-        if (data.files.error) {
-            this.store.dispatch(setErrorMessage(data.files[0].error));
-        } else {
-            let info = null;
-
-            if (!data.files[0].uploading) {
-                data.files[0].uploading = true; // Prevent duplicate request
-    
-                if (data.info) {
-                    // Uploading using a "Browse" button, data is passed in using data.info
-                    info = data.info;
-                } else if (this.activeUploadZone) {
-                    // Uploading file using drag and drop, data is in uploadZone map
-                    info = this.uploadZones[this.activeUploadZone];
-                }
-    
-                if (info) {
-                    data.formData = (typeof info === 'function' ? info() : info);
-                    data.submit();
-                }
-            }
-        }
     }
 
 
