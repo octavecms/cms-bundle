@@ -203,6 +203,8 @@ services:
             - '%kernel.project_dir%'
             - '%octave.cms.media.allowed_mime_types%'
             - '%octave.cms.media_transliteration%'
+            - '%octave.cms.media_max_width%'
+            - '%octave.cms.media_max_height%'
 
     octave.cms.media_item.manager:
         public: true

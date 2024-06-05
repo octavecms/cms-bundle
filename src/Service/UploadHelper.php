@@ -2,11 +2,13 @@
 
 namespace Octave\CMSBundle\Service;
 
+use Imagick;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Octave\CMSBundle\Entity\MediaCategory;
 use Octave\CMSBundle\Entity\MediaItem;
 use Octave\CMSBundle\Repository\MediaItemRepository;
+use Symfony\Component\Process\Process;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
@@ -28,6 +30,12 @@ class UploadHelper
 
     /** @var string */
     private $transliteration;
+
+    /** @var int */
+    private $maxWidth;
+
+    /** @var int */
+    private $maxHeight;
 
     /** @var array */
     private $allowedMimeTypes = [
@@ -57,7 +65,7 @@ class UploadHelper
      * @param $transliteration
      */
     public function __construct(MediaItemRepository $itemRepository, MediaItemManager $mediaItemManager, $uploadDir,
-                                                    $rootDir, $allowedMimeTypes, $transliteration)
+                                                    $rootDir, $allowedMimeTypes, $transliteration, $maxWidth, $maxHeight)
     {
         $this->itemRepository = $itemRepository;
         $this->itemManager = $mediaItemManager;
@@ -65,6 +73,8 @@ class UploadHelper
         $this->webPath = $uploadDir;
         $this->allowedMimeTypes = $allowedMimeTypes;
         $this->transliteration = $transliteration;
+        $this->maxWidth = $maxWidth;
+        $this->maxHeight = $maxHeight;
     }
 
     /**
@@ -269,6 +279,24 @@ class UploadHelper
 
         if ($file->getSize() > $this->getMaxUploadSize()) {
             throw new \Exception(sprintf('Maximum size exceeded for file %s', $file->getClientOriginalName()));
+        }
+
+        $imageinfo = getimagesize($file->getPathname());
+
+        if (!isset($imageinfo[0]) || !isset($imageinfo[1])) {
+            throw new \Exception(sprintf('Invalid image %s', $file->getClientOriginalName()));
+        }
+
+        if ($imageinfo[0] === 0 || $imageinfo[1] === 0) {
+            throw new \Exception(sprintf('Invalid image %s', $file->getClientOriginalName()));
+        }
+
+        if ($this->maxWidth && $this->maxWidth > 0 && $imageinfo[0] > $this->maxWidth) {
+            throw new \Exception(sprintf('Maximum width exceeded for image %s', $file->getClientOriginalName()));
+        }
+
+        if ($this->maxHeight && $this->maxHeight > 0 && $imageinfo[1] > $this->maxHeight) {
+            throw new \Exception(sprintf('Maximum height exceeded for image %s', $file->getClientOriginalName()));
         }
     }
 
