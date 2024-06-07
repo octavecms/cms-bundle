@@ -23,6 +23,11 @@ parameters:
 
     octave.sitemap.host: ~
 
+    octave.cms.media_max_width: '%env(CMS_MEDIA_MAX_WIDTH)%'
+    'env(CMS_MEDIA_MAX_WIDTH)': '5000'
+    octave.cms.media_max_height: '%env(CMS_MEDIA_MAX_HEIGHT)%'
+    'env(CMS_MEDIA_MAX_HEIGHT)': '5000'
+
 services:
 
     # Repositories
