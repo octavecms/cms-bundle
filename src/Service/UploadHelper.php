@@ -283,20 +283,22 @@ class UploadHelper
 
         $imageinfo = getimagesize($file->getPathname());
 
-        if (!isset($imageinfo[0]) || !isset($imageinfo[1])) {
-            throw new \Exception(sprintf('Invalid image %s', $file->getClientOriginalName()));
-        }
+        if ($imageinfo) {
+            if (!isset($imageinfo[0]) || !isset($imageinfo[1])) {
+                throw new \Exception(sprintf('Invalid image %s', $file->getClientOriginalName()));
+            }
 
-        if ($imageinfo[0] === 0 || $imageinfo[1] === 0) {
-            throw new \Exception(sprintf('Invalid image %s', $file->getClientOriginalName()));
-        }
+            if ($imageinfo[0] === 0 || $imageinfo[1] === 0) {
+                throw new \Exception(sprintf('Invalid image %s', $file->getClientOriginalName()));
+            }
 
-        if ($this->maxWidth && $this->maxWidth > 0 && $imageinfo[0] > $this->maxWidth) {
-            throw new \Exception(sprintf('Maximum width exceeded for image %s', $file->getClientOriginalName()));
-        }
+            if ($this->maxWidth && $this->maxWidth > 0 && $imageinfo[0] > $this->maxWidth) {
+                throw new \Exception(sprintf('Maximum width exceeded for image %s', $file->getClientOriginalName()));
+            }
 
-        if ($this->maxHeight && $this->maxHeight > 0 && $imageinfo[1] > $this->maxHeight) {
-            throw new \Exception(sprintf('Maximum height exceeded for image %s', $file->getClientOriginalName()));
+            if ($this->maxHeight && $this->maxHeight > 0 && $imageinfo[1] > $this->maxHeight) {
+                throw new \Exception(sprintf('Maximum height exceeded for image %s', $file->getClientOriginalName()));
+            }
         }
     }
 
