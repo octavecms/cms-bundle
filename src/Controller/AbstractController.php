@@ -39,5 +39,10 @@ abstract class AbstractController extends Controller
         }
 
         $router->warmUp($cacheDir);
+
+        if ($this->container->has('octave.redis.helper')) {
+            $redis = $this->get('octave.redis.helper');
+            $redis->flushAll();
+        }
     }
 }
