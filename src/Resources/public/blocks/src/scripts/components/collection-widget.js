@@ -1,15 +1,15 @@
 import $ from 'lib/jquery';
-
-import map from 'lodash/map';
-import each from 'lodash/each';
-
+import { getItemMaxIndex, validateItemIndex, REGEX_NAME } from './util/item-index';
 
 const NAMESPACE = 'collection';
 
 const ORDER_INPUT_CSS_SELECTOR = 'input[type="hidden"][name*="[position]"]';
 
-const REGEX_MATCH_NUMBERS = /\d+/g;
 
+const SELECTOR_LIST = '.js-collection-list';
+const SELECTOR_LIST_TITLE = '.js-collection-list-item-title';
+const SELECTOR_ADD = '.js-collection-add';
+const SELECTOR_REMOVE = '.js-collection-remove';
 
 class CollectionWidget {
 
@@ -28,11 +28,13 @@ class CollectionWidget {
 
     _init () {
         const $element = this.$element;
-        const $list    = this.$list    = $element.find('.js-collection-list');
-        const $button  = this.$button  = $element.find('.js-collection-add');
+        const $list    = this.$list    = $element.find(SELECTOR_LIST).not($element.find(SELECTOR_LIST + ' ' + SELECTOR_LIST));
+
+        // Find button, but no sub-list button
+        const $button  = this.$button  = $element.find(SELECTOR_ADD).not(this.$list.find(SELECTOR_ADD));
 
         // Item counter
-        this.index = this.options.orderCssSelector ? this._getMaxIndex() : $list.children().length;
+        this.index = getItemMaxIndex($list, this.options.orderCssSelector) + 1;
 
         // Sortable list
         $list
@@ -48,7 +50,7 @@ class CollectionWidget {
         $button.on(`click.${ NAMESPACE }`, this._handleAddItem.bind(this));
 
         // "Remove" button click
-        $list.on(`click.${ NAMESPACE }`, '.js-collection-remove', this._handleRemoveItem.bind(this));
+        $list.on(`click.${ NAMESPACE }`, SELECTOR_REMOVE, this._handleRemoveItem.bind(this));
 
         // When this whole widget is removed from DOM trigger 'destroy'
         $element.on(`remove.${ NAMESPACE }`, this.destroy.bind(this));
@@ -68,7 +70,6 @@ class CollectionWidget {
         this.$element = this.$list = this.$button = this.options = null;
     }
 
-
     /**
      * Order
      */
@@ -76,24 +77,6 @@ class CollectionWidget {
     _handleOrder () {
         this._updateBlockOrder();
         this._reinitializeCKEditors();
-    }
-
-    _getMaxIndex () {
-        const $inputs = this.$list.find(this.options.orderCssSelector);
-        let   index   = 0;
-
-        if ($inputs.length) {
-            $inputs.each((i, input) => {
-                const names   = $(input).attr('name').match(REGEX_MATCH_NUMBERS);
-                const numbers = map(names, name => parseInt(name, 10));
-    
-                index = Math.max(index, Math.max.apply(Math, numbers));
-            });
-        } else {
-            index = this.$list.children().length - 1;
-        }
-
-        return index + 1;
     }
 
     _updateList () {
@@ -138,7 +121,7 @@ class CollectionWidget {
      * Add item
      */
 
-    _handleAddItem () {
+    _handleAddItem (event) {
         const $html = $(this._generateItemHTML());
         this.$list.append($html);
         this.$list.find('script[type="text/javascript"]').remove();
@@ -148,10 +131,19 @@ class CollectionWidget {
     }
 
     _generateItemHTML () {
-        var index = this.index++;
-        var html = this.$list.data('prototype');
+        let html = this.$list.data('prototype');
+        let index = this.index++;
 
-        html = html.replace(/__name__/g, index);
+        // Prevent index collisions if element names / indexes are not in sequence or doesn't start with 1
+        while (!validateItemIndex(this.$list, index, html)) {
+            index = this.index++
+        }
+
+        // In the string replace only first occurance of the __name__, if there are occurances then
+        // that means id or name is from collection which is inside collection
+        html = html.replace(REGEX_NAME, function (all) {
+            return all.replace('__name__', index);
+        });
 
         return html;
     }
@@ -161,9 +153,12 @@ class CollectionWidget {
      */
 
     _handleRemoveItem (e) {
-        const $item = $(e.target).closest('.js-collection-list > li');
-        $item.remove();
-        this._updateList();
+        if (this._validateItem(e.target)) {
+            const $item = $(e.target).closest(SELECTOR_LIST + ' > li');
+
+            $item.remove();
+            this._updateList();
+        }
     }
 
     /**
@@ -171,12 +166,19 @@ class CollectionWidget {
      */
 
     _handleCollapseItem (e) {
-        const $item = $(e.target).closest('.js-collection-list > li');
-        this._updateListItemTitle($item);
+        if (this._validateItem(e.target)) {
+            const $item = $(e.target).closest(SELECTOR_LIST + ' > li');
+            this._updateListItemTitle($item);
+        }
     }
     _updateListItemTitle ($item) {
-        const $title = $item.find('.js-collection-list-item-title');
-        $title.text(this._getListItemTitle($item));
+        if (this._validateItem($item)) {
+            // Make sure we pick only title for this collection item, not all titles inside
+            // the sub-collection (if such exists)
+            const $subtitles = $item.find(SELECTOR_LIST + ' ' + SELECTOR_LIST_TITLE);
+            const $title = $item.find(SELECTOR_LIST_TITLE).not($subtitles);
+            $title.text(this._getListItemTitle($item));
+        }
     }
 
     _getListItemTitle ($item) {
@@ -214,6 +216,21 @@ class CollectionWidget {
         }
 
         return '';
+    }
+
+    /**
+     * Validate event target
+     * Returns true if target is somewhere inside collection item
+     * Returns false if target is outside collection item or if it's inside sub-collection item
+     * 
+     * @param {jQuery|HTMLElement} target Target
+     * @returns {boolean}
+     */
+    _validateItem (target) {
+        const $list = $(target).closest(SELECTOR_LIST);
+
+        // Make sure it's not sub collection widget
+        return this.$list.is($list);
     }
 }
 

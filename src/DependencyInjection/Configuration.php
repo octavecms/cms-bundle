@@ -57,6 +57,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->end()
             ->booleanNode('handle_xhr_requests')->end()
+            ->booleanNode('media_transliteration')->end()
             ->end();
 
 
