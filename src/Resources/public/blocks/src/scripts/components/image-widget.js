@@ -14,6 +14,7 @@ class ImageWidget {
         this.options = $.extend(true, this.constructor.defaultOptions, this.options, options);
 
         this._init();
+        this._initValidation();
     }
 
     _init () {
@@ -32,7 +33,28 @@ class ImageWidget {
 
         this.$input   = $element.find('input[type="hidden"]');
         this.$caption = $element.find('input[type="text"]');
+        this.$preview = $element.find('.js-image-preview');
         this.$image   = $element.find('img');
+        this.$required = null;
+    }
+
+    _initValidation () {
+        if (this.$input.prop('required')) {
+            this.$required = $('<input type="checkbox" tabindex="-1" />').appendTo(this.$preview);
+            this._updateValidation();
+        }
+    }
+
+    _updateValidation () {
+        if (this.$required) {
+            const isEmpty = !this.$input.val();
+
+            if (isEmpty) {
+                this.$required.get(0).setCustomValidity('Please select an image.');
+            } else {
+                this.$required.get(0).setCustomValidity('');
+            }
+        }
     }
 
     destroy () {
@@ -41,10 +63,12 @@ class ImageWidget {
     }
 
     change (image) {
-        this.$element.toggleClass('form-control-image--empty', !image.path && !image.image);
+        const isEmpty = !image.path && !image.image;
+        this.$element.toggleClass('form-control-image--empty', isEmpty);
         this.$image.removeClass('hidden').attr('src', image.image || image.path);
         this.$input.val(image.path || image.image);
         // this.$caption.val(image.name || image.title || '');
+        this._updateValidation();
     }
 
     _handleImageChange (images) {
@@ -56,6 +80,7 @@ class ImageWidget {
         this.$image.addClass('hidden').attr('src', '');
         this.$input.val('');
         this.$caption.val('');
+        this._updateValidation();
     }
 }
 

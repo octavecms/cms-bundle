@@ -10,6 +10,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
 
         img {
             display: block;
@@ -30,6 +31,14 @@
     textarea {
         resize: vertical;
         width: 100%;
+    }
+    // Fake checkbox, it's used to show error when image input is "required"
+    input[type="checkbox"] {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: auto;
+        opacity: 0;
     }
 
     .form-control-image__empty,

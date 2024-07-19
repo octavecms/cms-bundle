@@ -9,7 +9,7 @@
 
         {{ block('hidden_widget') }}
 
-        <div class="form-control-image__preview well well-small">
+        <div class="form-control-image__preview js-image-preview well well-small">
             <img src="{{ value | octave_resize(300, 300) }}" alt="" class="{% if not value %}hidden{% endif %}" />
         </div>
 
@@ -57,7 +57,7 @@
         {{ block('hidden_widget') }}
 
         <a href="{{ value }}">
-            <div class="form-control-image__preview well well-small">
+            <div class="form-control-image__preview js-image-preview well well-small">
                 <span class="fa fa-file"></span>
             </div>
         </a>
