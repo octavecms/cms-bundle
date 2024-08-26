@@ -33,7 +33,7 @@ class SitemapSource implements SourceInterface
     {
         $this->router = $router;
         $this->pageRepository = $pageRepository;
-        $this->host = rtrim($host, '/');
+        $this->host = $host ? rtrim($host, '/') : null;
         $this->locales = $locales;
     }
 
@@ -41,12 +41,12 @@ class SitemapSource implements SourceInterface
      * @return array
      */
     public function getItems()
-    {   
+    {
         $items = [];
-        
+
         /* @var array */
         $pages = $this->pageRepository->findIncludeInSitemap();
-                
+
          foreach($pages as $page) {
              foreach ($this->locales as $locale) {
                  $items[] = new Item(
