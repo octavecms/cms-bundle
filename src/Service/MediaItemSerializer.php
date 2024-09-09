@@ -48,6 +48,7 @@ class MediaItemSerializer
      */
     public function toArray(MediaItem $item)
     {
+        $mimeType = null;
         try {
             $mimeTypes = new MimeTypes();
             $mimeType = $mimeTypes->guessMimeType($this->uploadDir . '/public' . $item->getPath());
@@ -62,7 +63,9 @@ class MediaItemSerializer
             'id' => $item->getId(),
             'isImage' => $isImage,
             'icon' => 'fa-file',
-            'thumbnail' => $this->imageProcessor->resize($item->getPath(), 300, 300),
+            'thumbnail' => $isImage && $mimeType !== 'image/svg+xml'
+                ? $this->imageProcessor->resize($item->getPath(), 300, 300)
+                : $item->getPath(),
             'image' => $item->getPath(),
             'path' => $item->getPath(),
             'filename' => $item->getName(),
