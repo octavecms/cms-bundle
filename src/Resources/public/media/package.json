@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "blueimp-file-upload": "^9.18.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "promise-polyfill": "^6.0.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
